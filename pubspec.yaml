@@ -14,15 +14,8 @@ dependencies:
 
   cupertino_icons: ^1.0.2
 
-  flutter_svg: ^0.22.0
   google_fonts: ^2.0.0
-  email_validator: ^2.0.1
-  image_picker: ^0.7.4
-  extended_image: ^4.0.1
-  image: ^3.0.2
-  intl_phone_number_input: ^0.7.0+2
-  debounce_throttle: ^2.0.0
-  uuid: ^3.0.4
+  universal_platform: ^1.0.0+1
   flutter_icons:
     git:
       url: https://github.com/adarsh-technocrat/flutter-icons
@@ -31,7 +24,7 @@ dependencies:
   zapdart:
     git:
       url: https://github.com/zap-me/zapdart.git
-      ref: 18a0b0a45a7fc96ae9fea094dd202009ffe7edfb
+      ref: d8d7f23b9899cff4d09317242fff03587862098e
     #path: ../zapdart
 
 dev_dependencies:

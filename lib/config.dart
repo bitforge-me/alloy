@@ -1,3 +1,4 @@
+import 'package:universal_platform/universal_platform.dart';
 // uncomment if you need to override the app theme
 //import 'package:flutter/material.dart';
 //import 'package:google_fonts/google_fonts.dart';
@@ -23,8 +24,22 @@ const List<String>? PreferredMobileCountries = [
 const bool RequireAddress = true;
 const String? GooglePlaceApiKeyIOS = null;
 const String? GooglePlaceApiKeyAndroid = null;
+const String? GooglePlaceApiKeyWeb = null;
 const String? LocationIqApiKeyIOS = 'pk.e53109b5fdcb2dfd00bbc57c8b713d79';
 const String? LocationIqApiKeyAndroid = 'pk.e53109b5fdcb2dfd00bbc57c8b713d79';
+const String? LocationIqApiKeyWeb = 'pk.e53109b5fdcb2dfd00bbc57c8b713d79';
+
+String? googlePlaceApiKey() {
+  if (UniversalPlatform.isAndroid) return GooglePlaceApiKeyAndroid;
+  if (UniversalPlatform.isIOS) return GooglePlaceApiKeyIOS;
+  return GooglePlaceApiKeyWeb;
+}
+
+String? locationIqApiKey() {
+  if (UniversalPlatform.isAndroid) return LocationIqApiKeyIOS;
+  if (UniversalPlatform.isIOS) return LocationIqApiKeyAndroid;
+  return LocationIqApiKeyWeb;
+}
 
 void initConfig() {
   overrideTheme();

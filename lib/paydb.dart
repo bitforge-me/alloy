@@ -1,15 +1,13 @@
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
-import 'package:decimal/decimal.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:email_validator/email_validator.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/hmac.dart';
+import 'package:zapdart/account_forms.dart';
 
 import 'config.dart';
 import 'prefs.dart';
@@ -27,36 +25,6 @@ enum PayDbError { None, Network, Auth }
 
 enum PayDbPermission { receive, balance, history, transfer, issue }
 enum PayDbRole { admin, proposer, authorizer }
-
-class AccountRegistration {
-  final String firstName;
-  final String lastName;
-  final String email;
-  final String mobileNumber;
-  final String address;
-  final String currentPassword;
-  final String newPassword;
-  final String? photo;
-  final String? photoType;
-
-  AccountRegistration(
-      this.firstName,
-      this.lastName,
-      this.email,
-      this.mobileNumber,
-      this.address,
-      this.currentPassword,
-      this.newPassword,
-      this.photo,
-      this.photoType);
-}
-
-class AccountRequestApiKey {
-  final String email;
-  final String deviceName;
-
-  AccountRequestApiKey(this.email, this.deviceName);
-}
 
 class UserInfo {
   final String email;
@@ -152,43 +120,6 @@ Future<http.Response?> postAndCatch(String url, String body,
     print(e);
     return null;
   }
-}
-
-Widget paydbAccountImage(String? imgString, String? imgType,
-    {double size = 70,
-    double borderRadius = 10,
-    double dropShadowOffsetX = 0,
-    double dropShadowOffsetY = 3,
-    double dropShadowSpreadRadius = 5,
-    double dropShadowBlurRadius = 7}) {
-  if (imgString != null && imgString.isNotEmpty) {
-    if (imgType == 'raster')
-      // if image is raster then apply corner radius and drop shadow
-      return Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(borderRadius),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: dropShadowSpreadRadius,
-                blurRadius: dropShadowBlurRadius,
-                offset: Offset(dropShadowOffsetX, dropShadowOffsetY),
-              )
-            ],
-          ),
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(borderRadius),
-              //TODO: BoxFit.cover should not be necesary if the crop aspect ratio is 1/1 (*shrug*)
-              child: Image.memory(
-                base64Decode(imgString),
-                width: size,
-                height: size,
-                fit: BoxFit.cover,
-              )));
-    if (imgType == 'svg')
-      return SvgPicture.string(imgString, width: size, height: size);
-  }
-  return SvgPicture.asset('assets/user.svg', width: size, height: size);
 }
 
 Future<String?> paydbServer() async {

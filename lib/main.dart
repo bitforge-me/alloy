@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
 import 'package:zapdart/utils.dart';
+import 'package:zapdart/account_forms.dart';
 
 import 'paydb.dart';
-import 'account_forms.dart';
 import 'config.dart';
 
 void main() {
@@ -72,9 +72,15 @@ class _MyHomePageState extends State<MyHomePage> {
     reg = await Navigator.push<AccountRegistration>(
       context,
       MaterialPageRoute(
-          builder: (context) => AccountRegisterForm(reg,
-              showMobileNumber: RequireMobileNumber,
-              showAddress: RequireAddress)),
+          builder: (context) => AccountRegisterForm(
+                reg,
+                showMobileNumber: RequireMobileNumber,
+                initialMobileCountry: InitialMobileCountry,
+                preferredMobileCountries: PreferredMobileCountries,
+                showAddress: RequireAddress,
+                googlePlaceApiKey: googlePlaceApiKey(),
+                locationIqApiKey: locationIqApiKey(),
+              )),
     );
     if (reg != null) {
       var res = await paydbUserRegister(reg);
