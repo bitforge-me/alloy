@@ -1,0 +1,26 @@
+# This is a basic workflow to help you get started with Actions
+
+name: flutter
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.0.X'
+      - run: flutter pub get
+      - run: flutter test
+      - run: flutter dartfmt -n --set-exit-if-changed lib
+      - run: flutter analyze 
+      - uses: erickzanardo/flutter-gh-pages@v6
