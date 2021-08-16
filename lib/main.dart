@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
@@ -10,7 +11,7 @@ import 'config.dart';
 import 'prefs.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(Phoenix(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -108,6 +109,32 @@ class _MyHomePageState extends State<MyHomePage> {
     return null;
   }
 
+  Future<Acct?> _paydbApiKeyClaim(
+      BuildContext context, AccountRequestApiKey req, String token,
+      {silent: false}) async {
+    var result = await paydbApiKeyClaim(token);
+    switch (result.error) {
+      case PayDbError.Auth:
+        if (!silent)
+          await alert(context, 'Authentication not valid',
+              'The login details you entered are not valid');
+        break;
+      case PayDbError.Network:
+        if (!silent)
+          await alert(context, 'Network error',
+              'A network error occured when trying to login');
+        break;
+      case PayDbError.None:
+        // write api key
+        if (result.apikey != null) {
+          await Prefs.paydbApiKeySet(result.apikey!.token);
+          await Prefs.paydbApiSecretSet(result.apikey!.secret);
+        }
+        return Acct(req.email, result.apikey?.token);
+    }
+    return null;
+  }
+
   Future<void> _register() async {
     AccountRegistration? reg;
     reg = await Navigator.push<AccountRegistration>(
@@ -168,19 +195,45 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _loginWithEmail() async {
-    alert(context, 'not yet implemented', '...');
+    // request api key form
+    var devName = await deviceName();
+    var req = await Navigator.push<AccountRequestApiKey>(
+      context,
+      MaterialPageRoute(
+          builder: (context) => AccountRequestApiKeyForm(devName)),
+    );
+    if (req == null) return;
+    var result = await paydbApiKeyRequest(req.email, req.deviceName);
+    switch (result.error) {
+      case PayDbError.Auth:
+      case PayDbError.Network:
+        await alert(context, 'Network error',
+            'A network error occured when trying to login');
+        break;
+      case PayDbError.None:
+        assert(result.token != null);
+        Acct? acct;
+        var cancelled = false;
+        showAlertDialog(context, 'waiting for you to confirm the email...',
+            showCancel: true, onCancel: () => cancelled = true);
+        while (acct == null && !cancelled) {
+          await Future.delayed(Duration(seconds: 5));
+          // claim api key
+          acct = await _paydbApiKeyClaim(context, req, result.token!,
+              silent: true);
+        }
+        Navigator.pop(context);
+        setState(() => _acct = acct);
+    }
   }
 
   Future<void> _logout() async {
-    alert(context, 'not yet implemented', '...');
-  }
-
-  Future<void> _resetPrefs() async {
-    alert(context, 'not yet implemented', '...');
+    await Prefs.nukeAll();
+    Phoenix.rebirth(context);
   }
 
   Future<void> _retryAuth() async {
-    alert(context, 'not yet implemented', '...');
+    _initApi();
   }
 
   @override
@@ -222,7 +275,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Visibility(
               visible: _invalidAuth,
               child: RoundedButton(
-                  _resetPrefs, ZapWhite, ZapBlue, ZapBlueGradient, 'Reset',
+                  _logout, ZapWhite, ZapBlue, ZapBlueGradient, 'Reset',
                   holePunch: true, width: 300),
             ),
             Visibility(
