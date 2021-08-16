@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:zapdart/prefhelper.dart';
 
 import 'config.dart';
