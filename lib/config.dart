@@ -6,6 +6,8 @@ import 'package:universal_platform/universal_platform.dart';
 
 import 'package:zapdart/colors.dart';
 
+const AppTitle = 'CryptoFe';
+
 // the default testnet value
 const TestnetDefault = true;
 
