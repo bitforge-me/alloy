@@ -48,7 +48,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Acct? _acct;
+  UserInfo? _userInfo;
   bool _invalidAuth = false;
   bool _retry = false;
 
@@ -60,8 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _initApi() async {
     if (await Prefs.hasPaydbApiKey()) {
-      var apiKey = await Prefs.paydbApiKeyGet();
-      String? email;
+      UserInfo? userInfo;
       showAlertDialog(context, 'getting account info...');
       var result = await paydbUserInfo();
       Navigator.pop(context);
@@ -76,10 +75,10 @@ class _MyHomePageState extends State<MyHomePage> {
           setState(() => _retry = true);
           break;
         case PayDbError.None:
-          email = result.info?.email;
+          userInfo = result.info;
           break;
       }
-      setState(() => _acct = Acct(email, apiKey));
+      setState(() => _userInfo = userInfo);
     }
   }
 
@@ -174,7 +173,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 silent: true);
           }
           Navigator.pop(context);
-          setState(() => _acct = acct);
+          _initApi();
           break;
       }
     }
@@ -191,7 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
     showAlertDialog(context, 'logging in..');
     var acct = await _paydbLogin(context, login);
     Navigator.pop(context);
-    setState(() => _acct = acct);
+    if (acct != null) _initApi();
   }
 
   Future<void> _loginWithEmail() async {
@@ -223,7 +222,7 @@ class _MyHomePageState extends State<MyHomePage> {
               silent: true);
         }
         Navigator.pop(context);
-        setState(() => _acct = acct);
+        if (acct != null) _initApi();
     }
   }
 
@@ -246,28 +245,28 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('Email: ${_acct?.email}'),
-            Text('API KEY: ${_acct?.apiKey}'),
+            accountImage(_userInfo?.photo, _userInfo?.photoType),
+            Text('Email: ${_userInfo?.email}'),
             Visibility(
-              visible: _acct == null,
+              visible: _userInfo == null,
               child: RoundedButton(
                   _register, ZapWhite, ZapBlue, ZapBlueGradient, 'Register',
                   holePunch: true, width: 300),
             ),
             Visibility(
-              visible: _acct == null,
+              visible: _userInfo == null,
               child: RoundedButton(
                   _login, ZapWhite, ZapBlue, ZapBlueGradient, 'Login',
                   holePunch: true, width: 300),
             ),
             Visibility(
-              visible: _acct == null,
+              visible: _userInfo == null,
               child: RoundedButton(_loginWithEmail, ZapWhite, ZapBlue,
                   ZapBlueGradient, 'Login with email link (lost password)',
                   holePunch: true, width: 300),
             ),
             Visibility(
-              visible: _acct != null,
+              visible: _userInfo != null,
               child: RoundedButton(
                   _logout, ZapWhite, ZapBlue, ZapBlueGradient, 'Logout',
                   holePunch: true, width: 300),
