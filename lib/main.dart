@@ -9,6 +9,7 @@ import 'package:zapdart/account_forms.dart';
 import 'paydb.dart';
 import 'config.dart';
 import 'prefs.dart';
+import 'markets.dart';
 
 void main() {
   runApp(Phoenix(child: MyApp()));
@@ -235,6 +236,24 @@ class _MyHomePageState extends State<MyHomePage> {
     _initApi();
   }
 
+  Future<void> _assets() async {
+    showAlertDialog(context, 'querying..');
+    var res = await zcAssets();
+    Navigator.pop(context);
+    if (res.error == PayDbError.None)
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => AssetScreen(res.assets)));
+  }
+
+  Future<void> _markets() async {
+    showAlertDialog(context, 'querying..');
+    var res = await zcMarkets();
+    Navigator.pop(context);
+    if (res.error == PayDbError.None)
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => MarketScreen(res.markets)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -269,6 +288,18 @@ class _MyHomePageState extends State<MyHomePage> {
               visible: _userInfo != null,
               child: RoundedButton(
                   _logout, ZapWhite, ZapBlue, ZapBlueGradient, 'Logout',
+                  holePunch: true, width: 300),
+            ),
+            Visibility(
+              visible: _userInfo != null,
+              child: RoundedButton(
+                  _assets, ZapWhite, ZapBlue, ZapBlueGradient, 'Assets',
+                  holePunch: true, width: 300),
+            ),
+            Visibility(
+              visible: _userInfo != null,
+              child: RoundedButton(
+                  _markets, ZapWhite, ZapBlue, ZapBlueGradient, 'Markets',
                   holePunch: true, width: 300),
             ),
             Visibility(

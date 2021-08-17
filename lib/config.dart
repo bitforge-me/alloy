@@ -14,7 +14,7 @@ const TestnetDefault = true;
 // PayDB settings
 const String? PayDBServerMainnet = null;
 const String? PayDBServerTestnet =
-    'https://premio-demo.caprover.acuerdo.dev/paydb/';
+    'https://zap-crypto-be.caprover.acuerdo.dev/paydb/';
 // registration
 const bool RequireMobileNumber = true;
 const String? InitialMobileCountry = 'NZ';

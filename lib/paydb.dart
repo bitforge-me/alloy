@@ -100,6 +100,69 @@ class PayDbRewardCategoriesResult {
   PayDbRewardCategoriesResult(this.categories, this.error);
 }
 
+class ZcAsset {
+  final String symbol;
+  final String name;
+  final String coinType;
+  final String status;
+  final int minConfs;
+  final String message;
+
+  ZcAsset(this.symbol, this.name, this.coinType, this.status, this.minConfs,
+      this.message);
+
+  static List<ZcAsset> parseAssets(String data) {
+    List<ZcAsset> assets = [];
+    var list = jsonDecode(data)['assets'];
+    for (var item in list)
+      assets.add(ZcAsset(item['symbol'], item['name'], item['coin_type'],
+          item['status'], item['min_confs'], item['message']));
+    return assets;
+  }
+}
+
+class ZcAssetResult {
+  final List<ZcAsset> assets;
+  final PayDbError error;
+
+  ZcAssetResult(this.assets, this.error);
+}
+
+class ZcMarket {
+  final String symbol;
+  final String baseSymbol;
+  final String quoteSymbol;
+  final int precision;
+  final String status;
+  final String minTrade;
+  final String message;
+
+  ZcMarket(this.symbol, this.baseSymbol, this.quoteSymbol, this.precision,
+      this.status, this.minTrade, this.message);
+
+  static List<ZcMarket> parseAssets(String data) {
+    List<ZcMarket> markets = [];
+    var list = jsonDecode(data)['markets'];
+    for (var item in list)
+      markets.add(ZcMarket(
+          item['symbol'],
+          item['base_symbol'],
+          item['quote_symbol'],
+          item['precision'],
+          item['status'],
+          item['min_trade'],
+          item['message']));
+    return markets;
+  }
+}
+
+class ZcMarketResult {
+  final List<ZcMarket> markets;
+  final PayDbError error;
+
+  ZcMarketResult(this.markets, this.error);
+}
+
 Future<http.Response?> postAndCatch(String url, String body,
     {Map<String, String>? extraHeaders}) async {
   try {
@@ -466,4 +529,54 @@ Future<PayDbError> paydbRewardCreate(String reason, String category,
   } else if (response.statusCode == 400) return PayDbError.Auth;
   print(response.statusCode);
   return PayDbError.Network;
+}
+
+Future<ZcAssetResult> zcAssets() async {
+  List<ZcAsset> assets = [];
+  var baseUrl = await _server();
+  if (baseUrl == null) return ZcAssetResult(assets, PayDbError.Network);
+  var url = baseUrl + "assets";
+  var apikey = await Prefs.paydbApiKeyGet();
+  var apisecret = await Prefs.paydbApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var body = jsonEncode({
+    "api_key": apikey,
+    "nonce": nonce,
+  });
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null) return ZcAssetResult(assets, PayDbError.Network);
+  if (response.statusCode == 200) {
+    return ZcAssetResult(ZcAsset.parseAssets(response.body), PayDbError.None);
+  } else if (response.statusCode == 400)
+    return ZcAssetResult(assets, PayDbError.Auth);
+  print(response.statusCode);
+  return ZcAssetResult(assets, PayDbError.Network);
+}
+
+Future<ZcMarketResult> zcMarkets() async {
+  List<ZcMarket> markets = [];
+  var baseUrl = await _server();
+  if (baseUrl == null) return ZcMarketResult(markets, PayDbError.Network);
+  var url = baseUrl + "markets";
+  var apikey = await Prefs.paydbApiKeyGet();
+  var apisecret = await Prefs.paydbApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var body = jsonEncode({
+    "api_key": apikey,
+    "nonce": nonce,
+  });
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null) return ZcMarketResult(markets, PayDbError.Network);
+  if (response.statusCode == 200) {
+    return ZcMarketResult(ZcMarket.parseAssets(response.body), PayDbError.None);
+  } else if (response.statusCode == 400)
+    return ZcMarketResult(markets, PayDbError.Auth);
+  print(response.statusCode);
+  return ZcMarketResult(markets, PayDbError.Network);
 }
