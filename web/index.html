@@ -13,8 +13,23 @@
 
   <title>zap_crypto_fe</title>
   <link rel="manifest" href="manifest.json">
+
+  <style>
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+  </style>
 </head>
 <body>
+  <img class="loading" src="Spinner-1s-211px.svg" />
   <!-- Phone number validation script
        https://pub.dev/packages/intl_phone_number_input#web-support -->
   <script src="assets/packages/libphonenumber_plugin/js/libphonenumber.js"></script>
