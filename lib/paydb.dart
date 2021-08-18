@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:email_validator/email_validator.dart';
+import 'package:decimal/decimal.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/hmac.dart';
@@ -140,7 +141,7 @@ class ZcMarket {
   ZcMarket(this.symbol, this.baseSymbol, this.quoteSymbol, this.precision,
       this.status, this.minTrade, this.message);
 
-  static List<ZcMarket> parseAssets(String data) {
+  static List<ZcMarket> parseMarkets(String data) {
     List<ZcMarket> markets = [];
     var list = jsonDecode(data)['markets'];
     for (var item in list)
@@ -161,6 +162,44 @@ class ZcMarketResult {
   final PayDbError error;
 
   ZcMarketResult(this.markets, this.error);
+}
+
+class ZcRate {
+  final Decimal quantity;
+  final Decimal rate;
+
+  ZcRate(this.quantity, this.rate);
+}
+
+class ZcOrderbook {
+  final List<ZcRate> bids;
+  final List<ZcRate> asks;
+
+  ZcOrderbook(this.bids, this.asks);
+
+  static ZcOrderbook parse(String data) {
+    List<ZcRate> bids = [];
+    List<ZcRate> asks = [];
+    var orderbook = jsonDecode(data)['order_book'];
+    for (var item in orderbook['bid'])
+      bids.add(
+          ZcRate(Decimal.parse(item['quantity']), Decimal.parse(item['rate'])));
+    for (var item in orderbook['ask'])
+      asks.add(
+          ZcRate(Decimal.parse(item['quantity']), Decimal.parse(item['rate'])));
+    return ZcOrderbook(bids, asks);
+  }
+
+  static ZcOrderbook empty() {
+    return ZcOrderbook([], []);
+  }
+}
+
+class ZcOrderbookResult {
+  final ZcOrderbook orderbook;
+  final PayDbError error;
+
+  ZcOrderbookResult(this.orderbook, this.error);
 }
 
 Future<http.Response?> postAndCatch(String url, String body,
@@ -574,9 +613,33 @@ Future<ZcMarketResult> zcMarkets() async {
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
   if (response == null) return ZcMarketResult(markets, PayDbError.Network);
   if (response.statusCode == 200) {
-    return ZcMarketResult(ZcMarket.parseAssets(response.body), PayDbError.None);
+    return ZcMarketResult(
+        ZcMarket.parseMarkets(response.body), PayDbError.None);
   } else if (response.statusCode == 400)
     return ZcMarketResult(markets, PayDbError.Auth);
   print(response.statusCode);
   return ZcMarketResult(markets, PayDbError.Network);
+}
+
+Future<ZcOrderbookResult> zcOrderbook(String symbol) async {
+  var baseUrl = await _server();
+  if (baseUrl == null)
+    return ZcOrderbookResult(ZcOrderbook.empty(), PayDbError.Network);
+  var url = baseUrl + "order_book";
+  var apikey = await Prefs.paydbApiKeyGet();
+  var apisecret = await Prefs.paydbApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var body = jsonEncode({"api_key": apikey, "nonce": nonce, "symbol": symbol});
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null)
+    return ZcOrderbookResult(ZcOrderbook.empty(), PayDbError.Network);
+  if (response.statusCode == 200) {
+    return ZcOrderbookResult(ZcOrderbook.parse(response.body), PayDbError.None);
+  } else if (response.statusCode == 400)
+    return ZcOrderbookResult(ZcOrderbook.empty(), PayDbError.Auth);
+  print(response.statusCode);
+  return ZcOrderbookResult(ZcOrderbook.empty(), PayDbError.Network);
 }
