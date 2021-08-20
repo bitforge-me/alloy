@@ -17,6 +17,9 @@ dependencies:
   google_fonts: ^2.0.0
   universal_platform: ^1.0.0+1
   flutter_phoenix: ^1.0.0
+  bs58check: ^1.0.2
+  bech32: ^0.2.1
+  web3dart: ^2.2.0
   flutter_icons:
     git:
       url: https://github.com/adarsh-technocrat/flutter-icons

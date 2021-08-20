@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
 
 import 'package:zapdart/utils.dart';
+import 'package:zapdart/widgets.dart';
 
 import 'paydb.dart';
+import 'cryptocurrency.dart';
+import 'prefs.dart';
 
 class AssetScreen extends StatelessWidget {
   final List<ZcAsset> assets;
@@ -37,66 +40,122 @@ class QuoteScreen extends StatefulWidget {
 }
 
 class _QuoteScreenState extends State<QuoteScreen> {
-  final amountController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _amountController = TextEditingController();
+  final _withdrawalAddressController = TextEditingController();
 
   var _quote = '-';
+  var _amount = Decimal.zero;
+  var _address = '-';
+  var _testnet = true;
 
   @override
   void initState() {
     super.initState();
 
     // Start listening to changes.
-    amountController.addListener(_updateQuote);
+    _amountController.addListener(_updateQuote);
+    _withdrawalAddressController.addListener(_updateAddress);
+
+    // get testnet
+    Prefs.testnetGet().then((value) => _testnet = value);
+  }
+
+  Decimal _calcTotalPrice(Decimal amount) {
+    var filled = Decimal.zero;
+    var totalPrice = Decimal.zero;
+    var n = 0;
+    while (amount > filled) {
+      if (n >= widget.orderbook.asks.length) {
+        return Decimal.fromInt(-1);
+      }
+      var rate = widget.orderbook.asks[n].rate;
+      var quantity = widget.orderbook.asks[n].quantity;
+      var quantityToUse = quantity;
+      if (quantityToUse > amount - filled) quantityToUse = amount - filled;
+      filled += quantityToUse;
+      totalPrice += quantityToUse * rate;
+      if (filled == amount) {
+        return totalPrice;
+      }
+      n++;
+    }
+    return Decimal.fromInt(-1);
   }
 
   void _updateQuote() {
     var quote = '-';
-    var value = Decimal.tryParse(amountController.text);
+    var amount = Decimal.zero;
+    var value = Decimal.tryParse(_amountController.text);
     if (value != null && value > Decimal.zero) {
-      var filled = Decimal.zero;
-      var totalPrice = Decimal.zero;
-      var n = 0;
-      while (value > filled) {
-        if (n >= widget.orderbook.asks.length) {
-          quote = 'not enough liquidity';
-          break;
-        }
-        var rate = widget.orderbook.asks[n].rate;
-        var quantity = widget.orderbook.asks[n].quantity;
-        var quantityToUse = quantity;
-        if (quantityToUse > value - filled) quantityToUse = value - filled;
-        filled += quantityToUse;
-        totalPrice += quantityToUse * rate;
-        if (filled == value) {
-          quote =
-              '$value ${widget.market.baseSymbol} = $totalPrice ${widget.market.quoteSymbol}';
-          break;
-        }
-        n++;
-      }
+      amount = value;
+      var totalPrice = _calcTotalPrice(value);
+      if (totalPrice < Decimal.zero)
+        quote = 'not enough liquidity';
+      else
+        quote =
+            '$value ${widget.market.baseSymbol} = $totalPrice ${widget.market.quoteSymbol}';
     }
-    setState(() => _quote = quote);
+    setState(() {
+      _quote = quote;
+      _amount = amount;
+    });
+  }
+
+  void _updateAddress() {
+    var addr = '-';
+    var res = addressValidate(
+        widget.market.baseSymbol, _testnet, _withdrawalAddressController.text);
+    if (res.result) addr = _withdrawalAddressController.text;
+    setState(() => _address = addr);
+  }
+
+  void _orderCreate() {
+    if (_formKey.currentState == null) return;
+    if (_formKey.currentState!.validate()) {
+      alert(context, 'oops', 'not yet implemented!');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Form(
-            child: Column(children: [
-      TextFormField(
-          controller: amountController,
-          decoration: InputDecoration(labelText: 'Amount'),
-          keyboardType: TextInputType.number,
-          validator: (value) {
-            if (value == null) return 'Please enter a value';
-            var d = Decimal.tryParse(value);
-            if (d == null) return 'Invalid value';
-            if (d <= Decimal.fromInt(0))
-              return 'Please enter a value greater then 0';
-            return null;
-          }),
-      Text(_quote)
-    ])));
+            key: _formKey,
+            child: Container(
+                padding: EdgeInsets.all(10),
+                child: Column(children: [
+                  Text(_quote),
+                  Text('Send $_amount to $_address'),
+                  TextFormField(
+                      controller: _amountController,
+                      decoration: InputDecoration(labelText: 'Amount'),
+                      keyboardType: TextInputType.numberWithOptions(
+                          signed: false, decimal: true),
+                      validator: (value) {
+                        if (value == null) return 'Please enter a value';
+                        var d = Decimal.tryParse(value);
+                        if (d == null) return 'Invalid value';
+                        if (d <= Decimal.fromInt(0))
+                          return 'Please enter a value greater then 0';
+                        if (_calcTotalPrice(d) < Decimal.fromInt(0))
+                          return 'Insufficient liquidity';
+                        return null;
+                      }),
+                  TextFormField(
+                      controller: _withdrawalAddressController,
+                      decoration: InputDecoration(labelText: 'Wallet Address'),
+                      keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value == null) return 'Please enter a value';
+                        var res = addressValidate(
+                            widget.market.baseSymbol, _testnet, value);
+                        if (!res.result) return res.reason;
+                        return null;
+                      }),
+                  raisedButton(
+                      onPressed: _orderCreate, child: Text('Create Order'))
+                ]))));
   }
 }
 
