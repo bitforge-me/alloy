@@ -29,6 +29,68 @@ class AssetScreen extends StatelessWidget {
   }
 }
 
+class OrderScreen extends StatelessWidget {
+  final ZcBrokerOrder order;
+  final String? paymentUrl;
+
+  OrderScreen(this.order, this.paymentUrl);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: ListView(children: [
+      ListTile(title: Text('ID'), subtitle: Text('${order.token}')),
+      ListTile(title: Text('Market'), subtitle: Text('${order.market}')),
+      ListTile(
+          title: Text('Amount'),
+          subtitle: Text('${order.baseAmount} ${order.baseAsset}')),
+      ListTile(
+          title: Text('Price'),
+          subtitle: Text('${order.quoteAmount} ${order.quoteAsset}')),
+      ListTile(title: Text('Date'), subtitle: Text('${order.date}')),
+      ListTile(title: Text('Expiry'), subtitle: Text('${order.expiry}')),
+      ListTile(title: Text('Recipient'), subtitle: Text('${order.recipient}')),
+      ListTile(title: Text('Status'), subtitle: Text('${order.status}')),
+      paymentUrl != null
+          ? ListTile(title: Text('Payment URL'), subtitle: Text('$paymentUrl'))
+          : SizedBox(),
+    ]));
+  }
+}
+
+class OrdersScreen extends StatefulWidget {
+  final List<ZcBrokerOrder> orders;
+
+  OrdersScreen(this.orders);
+
+  @override
+  State<OrdersScreen> createState() => _OrdersScreenState();
+}
+
+class _OrdersScreenState extends State<OrdersScreen> {
+  Future<void> _orderTap(ZcBrokerOrder order) async {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => OrderScreen(order, null)));
+  }
+
+  Widget _listItem(BuildContext context, int n) {
+    var order = widget.orders[n];
+    return ListTile(
+        title: Text('${order.token}'),
+        subtitle: Text(
+            'market: ${order.market}, amount: ${order.baseAmount} ${order.baseAsset}'),
+        onTap: () => _orderTap(order));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ListView.builder(
+          itemBuilder: _listItem, itemCount: widget.orders.length),
+    );
+  }
+}
+
 class QuoteScreen extends StatefulWidget {
   final ZcMarket market;
   final ZcOrderbook orderbook;
@@ -110,10 +172,20 @@ class _QuoteScreenState extends State<QuoteScreen> {
     setState(() => _address = addr);
   }
 
-  void _orderCreate() {
+  void _orderCreate() async {
     if (_formKey.currentState == null) return;
     if (_formKey.currentState!.validate()) {
-      alert(context, 'oops', 'not yet implemented!');
+      showAlertDialog(context, 'creating order..');
+      var res = await zcOrderCreate(
+          widget.market.symbol, ZcMarketSide.bid, _amount, _address);
+      Navigator.pop(context);
+      if (res.error == PayDbError.None) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OrderScreen(res.order, res.paymentUrl)));
+      } else
+        alert(context, 'error', 'failed to create order');
     }
   }
 

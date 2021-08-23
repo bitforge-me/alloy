@@ -9,12 +9,12 @@ import 'package:zapdart/colors.dart';
 const AppTitle = 'CryptoFe';
 
 // the default testnet value
-const TestnetDefault = true;
+const TestnetDefault = false;
 
 // PayDB settings
-const String? PayDBServerMainnet = null;
-const String? PayDBServerTestnet =
+const String? PayDBServerMainnet =
     'https://zap-crypto-be.caprover.acuerdo.dev/paydb/';
+const String? PayDBServerTestnet = null;
 // registration
 const bool RequireMobileNumber = true;
 const String? InitialMobileCountry = 'NZ';

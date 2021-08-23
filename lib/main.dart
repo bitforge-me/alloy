@@ -254,6 +254,15 @@ class _MyHomePageState extends State<MyHomePage> {
           MaterialPageRoute(builder: (context) => MarketScreen(res.markets)));
   }
 
+  Future<void> _orders() async {
+    showAlertDialog(context, 'querying..');
+    var res = await zcOrderList(0, 1000);
+    Navigator.pop(context);
+    if (res.error == PayDbError.None)
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => OrdersScreen(res.orders)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -300,6 +309,12 @@ class _MyHomePageState extends State<MyHomePage> {
               visible: _userInfo != null,
               child: RoundedButton(
                   _markets, ZapWhite, ZapBlue, ZapBlueGradient, 'Markets',
+                  holePunch: true, width: 300),
+            ),
+            Visibility(
+              visible: _userInfo != null,
+              child: RoundedButton(
+                  _orders, ZapWhite, ZapBlue, ZapBlueGradient, 'Orders',
                   holePunch: true, width: 300),
             ),
             Visibility(

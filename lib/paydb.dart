@@ -108,17 +108,23 @@ class ZcAsset {
   final String status;
   final int minConfs;
   final String message;
+  final int decimals;
 
   ZcAsset(this.symbol, this.name, this.coinType, this.status, this.minConfs,
-      this.message);
+      this.message, this.decimals);
 
-  static List<ZcAsset> parseAssets(String data) {
-    List<ZcAsset> assets = [];
-    var list = jsonDecode(data)['assets'];
-    for (var item in list)
-      assets.add(ZcAsset(item['symbol'], item['name'], item['coin_type'],
-          item['status'], item['min_confs'], item['message']));
-    return assets;
+  static List<ZcAsset> parseAssets(dynamic assets) {
+    List<ZcAsset> assetList = [];
+    for (var item in assets)
+      assetList.add(ZcAsset(
+          item['symbol'],
+          item['name'],
+          item['coin_type'],
+          item['status'],
+          item['min_confs'],
+          item['message'],
+          item['decimals']));
+    return assetList;
   }
 }
 
@@ -127,6 +133,11 @@ class ZcAssetResult {
   final PayDbError error;
 
   ZcAssetResult(this.assets, this.error);
+
+  static ZcAssetResult parse(String data) {
+    var assets = ZcAsset.parseAssets(jsonDecode(data)['assets']);
+    return ZcAssetResult(assets, PayDbError.None);
+  }
 }
 
 class ZcMarket {
@@ -141,11 +152,10 @@ class ZcMarket {
   ZcMarket(this.symbol, this.baseSymbol, this.quoteSymbol, this.precision,
       this.status, this.minTrade, this.message);
 
-  static List<ZcMarket> parseMarkets(String data) {
-    List<ZcMarket> markets = [];
-    var list = jsonDecode(data)['markets'];
-    for (var item in list)
-      markets.add(ZcMarket(
+  static List<ZcMarket> parseMarkets(dynamic markets) {
+    List<ZcMarket> marketList = [];
+    for (var item in markets)
+      marketList.add(ZcMarket(
           item['symbol'],
           item['base_symbol'],
           item['quote_symbol'],
@@ -153,7 +163,7 @@ class ZcMarket {
           item['status'],
           item['min_trade'],
           item['message']));
-    return markets;
+    return marketList;
   }
 }
 
@@ -162,6 +172,11 @@ class ZcMarketResult {
   final PayDbError error;
 
   ZcMarketResult(this.markets, this.error);
+
+  static ZcMarketResult parse(String data) {
+    var markets = ZcMarket.parseMarkets(jsonDecode(data)['markets']);
+    return ZcMarketResult(markets, PayDbError.None);
+  }
 }
 
 class ZcRate {
@@ -200,6 +215,84 @@ class ZcOrderbookResult {
   final PayDbError error;
 
   ZcOrderbookResult(this.orderbook, this.error);
+}
+
+enum ZcMarketSide { bid, ask }
+
+class ZcBrokerOrder {
+  final String token;
+  final DateTime date;
+  final DateTime expiry;
+  final String market;
+  final String baseAsset;
+  final String quoteAsset;
+  final Decimal baseAmount;
+  final Decimal quoteAmount;
+  final String recipient;
+  final String status;
+
+  ZcBrokerOrder(
+      this.token,
+      this.date,
+      this.expiry,
+      this.market,
+      this.baseAsset,
+      this.quoteAsset,
+      this.baseAmount,
+      this.quoteAmount,
+      this.recipient,
+      this.status);
+
+  static ZcBrokerOrder parse(dynamic data) {
+    var date = DateTime.parse(data['date']);
+    var expiry = DateTime.parse(data['expiry']);
+    var baseAmount = Decimal.parse(data['base_amount_dec']);
+    var quoteAmount = Decimal.parse(data['quote_amount_dec']);
+    return ZcBrokerOrder(
+        data['token'],
+        date,
+        expiry,
+        data['market'],
+        data['base_asset'],
+        data['quote_asset'],
+        baseAmount,
+        quoteAmount,
+        data['recipient'],
+        data['status']);
+  }
+
+  static ZcBrokerOrder empty() {
+    return ZcBrokerOrder('', DateTime.now(), DateTime.now(), '', '', '',
+        Decimal.zero, Decimal.zero, '', '');
+  }
+}
+
+class ZcBrokerOrderResult {
+  final ZcBrokerOrder order;
+  final String? paymentUrl;
+  final PayDbError error;
+
+  ZcBrokerOrderResult(this.order, this.paymentUrl, this.error);
+
+  static ZcBrokerOrderResult parse(String data) {
+    var json = jsonDecode(data);
+    ZcBrokerOrder order = ZcBrokerOrder.parse(json['broker_order']);
+    return ZcBrokerOrderResult(order, json['payment_url'], PayDbError.None);
+  }
+}
+
+class ZcBrokerOrdersResult {
+  final List<ZcBrokerOrder> orders;
+  final PayDbError error;
+
+  ZcBrokerOrdersResult(this.orders, this.error);
+
+  static ZcBrokerOrdersResult parse(String data) {
+    List<ZcBrokerOrder> orderList = [];
+    var orders = jsonDecode(data)['broker_orders'];
+    for (var item in orders) orderList.add(ZcBrokerOrder.parse(item));
+    return ZcBrokerOrdersResult(orderList, PayDbError.None);
+  }
 }
 
 Future<http.Response?> postAndCatch(String url, String body,
@@ -588,7 +681,7 @@ Future<ZcAssetResult> zcAssets() async {
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
   if (response == null) return ZcAssetResult(assets, PayDbError.Network);
   if (response.statusCode == 200) {
-    return ZcAssetResult(ZcAsset.parseAssets(response.body), PayDbError.None);
+    return ZcAssetResult.parse(response.body);
   } else if (response.statusCode == 400)
     return ZcAssetResult(assets, PayDbError.Auth);
   print(response.statusCode);
@@ -613,8 +706,7 @@ Future<ZcMarketResult> zcMarkets() async {
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
   if (response == null) return ZcMarketResult(markets, PayDbError.Network);
   if (response.statusCode == 200) {
-    return ZcMarketResult(
-        ZcMarket.parseMarkets(response.body), PayDbError.None);
+    return ZcMarketResult.parse(response.body);
   } else if (response.statusCode == 400)
     return ZcMarketResult(markets, PayDbError.Auth);
   print(response.statusCode);
@@ -642,4 +734,57 @@ Future<ZcOrderbookResult> zcOrderbook(String symbol) async {
     return ZcOrderbookResult(ZcOrderbook.empty(), PayDbError.Auth);
   print(response.statusCode);
   return ZcOrderbookResult(ZcOrderbook.empty(), PayDbError.Network);
+}
+
+Future<ZcBrokerOrderResult> zcOrderCreate(
+    String market, ZcMarketSide side, Decimal amount, String recipient) async {
+  var baseUrl = await _server();
+  if (baseUrl == null)
+    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), null, PayDbError.Network);
+  var url = baseUrl + "broker_order_create";
+  var apikey = await Prefs.paydbApiKeyGet();
+  var apisecret = await Prefs.paydbApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var body = jsonEncode({
+    "api_key": apikey,
+    "nonce": nonce,
+    "market": market,
+    "side": describeEnum(side),
+    "amount_dec": amount.toString(),
+    "recipient": recipient
+  });
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null)
+    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), null, PayDbError.Network);
+  if (response.statusCode == 200) {
+    return ZcBrokerOrderResult.parse(response.body);
+  } else if (response.statusCode == 400)
+    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), null, PayDbError.Auth);
+  print(response.statusCode);
+  return ZcBrokerOrderResult(ZcBrokerOrder.empty(), null, PayDbError.Network);
+}
+
+Future<ZcBrokerOrdersResult> zcOrderList(int offset, int limit) async {
+  var baseUrl = await _server();
+  if (baseUrl == null) return ZcBrokerOrdersResult([], PayDbError.Network);
+  var url = baseUrl + "broker_orders";
+  var apikey = await Prefs.paydbApiKeyGet();
+  var apisecret = await Prefs.paydbApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var body = jsonEncode(
+      {"api_key": apikey, "nonce": nonce, "offset": offset, "limit": limit});
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null) return ZcBrokerOrdersResult([], PayDbError.Network);
+  if (response.statusCode == 200) {
+    return ZcBrokerOrdersResult.parse(response.body);
+  } else if (response.statusCode == 400)
+    return ZcBrokerOrdersResult([], PayDbError.Auth);
+  print(response.statusCode);
+  return ZcBrokerOrdersResult([], PayDbError.Network);
 }
