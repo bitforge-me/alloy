@@ -219,6 +219,23 @@ class ZcOrderbookResult {
 
 enum ZcMarketSide { bid, ask }
 
+enum ZcOrderStatus {
+  none,
+  created,
+  ready,
+  incoming,
+  confirmed,
+  payment_pending,
+  completed,
+  expired,
+  cancelled
+}
+
+extension EnumEx on String {
+  ZcOrderStatus toEnum() =>
+      ZcOrderStatus.values.firstWhere((d) => describeEnum(d) == toLowerCase());
+}
+
 class ZcBrokerOrder {
   final String token;
   final DateTime date;
@@ -229,7 +246,7 @@ class ZcBrokerOrder {
   final Decimal baseAmount;
   final Decimal quoteAmount;
   final String recipient;
-  final String status;
+  final ZcOrderStatus status;
   final String? paymentUrl;
 
   ZcBrokerOrder(
@@ -250,6 +267,7 @@ class ZcBrokerOrder {
     var expiry = DateTime.parse(data['expiry']);
     var baseAmount = Decimal.parse(data['base_amount_dec']);
     var quoteAmount = Decimal.parse(data['quote_amount_dec']);
+    var status = (data['status'] as String).toEnum();
     return ZcBrokerOrder(
         data['token'],
         date,
@@ -260,13 +278,13 @@ class ZcBrokerOrder {
         baseAmount,
         quoteAmount,
         data['recipient'],
-        data['status'],
+        status,
         data['payment_url']);
   }
 
   static ZcBrokerOrder empty() {
     return ZcBrokerOrder('', DateTime.now(), DateTime.now(), '', '', '',
-        Decimal.zero, Decimal.zero, '', '', null);
+        Decimal.zero, Decimal.zero, '', ZcOrderStatus.none, null);
   }
 }
 
@@ -756,6 +774,52 @@ Future<ZcBrokerOrderResult> zcOrderCreate(
     "amount_dec": amount.toString(),
     "recipient": recipient
   });
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null)
+    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), PayDbError.Network);
+  if (response.statusCode == 200) {
+    return ZcBrokerOrderResult.parse(response.body);
+  } else if (response.statusCode == 400)
+    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), PayDbError.Auth);
+  print(response.statusCode);
+  return ZcBrokerOrderResult(ZcBrokerOrder.empty(), PayDbError.Network);
+}
+
+Future<ZcBrokerOrderResult> zcOrderAccept(String token) async {
+  var baseUrl = await _server();
+  if (baseUrl == null)
+    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), PayDbError.Network);
+  var url = baseUrl + "broker_order_accept";
+  var apikey = await Prefs.paydbApiKeyGet();
+  var apisecret = await Prefs.paydbApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var body = jsonEncode({"api_key": apikey, "nonce": nonce, "token": token});
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null)
+    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), PayDbError.Network);
+  if (response.statusCode == 200) {
+    return ZcBrokerOrderResult.parse(response.body);
+  } else if (response.statusCode == 400)
+    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), PayDbError.Auth);
+  print(response.statusCode);
+  return ZcBrokerOrderResult(ZcBrokerOrder.empty(), PayDbError.Network);
+}
+
+Future<ZcBrokerOrderResult> zcOrderStatus(String token) async {
+  var baseUrl = await _server();
+  if (baseUrl == null)
+    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), PayDbError.Network);
+  var url = baseUrl + "broker_order_status";
+  var apikey = await Prefs.paydbApiKeyGet();
+  var apisecret = await Prefs.paydbApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var body = jsonEncode({"api_key": apikey, "nonce": nonce, "token": token});
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});

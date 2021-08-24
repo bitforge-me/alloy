@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
@@ -30,36 +31,74 @@ class AssetScreen extends StatelessWidget {
   }
 }
 
-class OrderScreen extends StatelessWidget {
+class OrderScreen extends StatefulWidget {
   final ZcBrokerOrder order;
 
   OrderScreen(this.order);
 
-  void _launchURL(String url) async =>
+  @override
+  State<OrderScreen> createState() => _OrderScreenState(order);
+}
+
+class _OrderScreenState extends State<OrderScreen> {
+  ZcBrokerOrder _order;
+
+  _OrderScreenState(this._order);
+
+  Future<void> _accept() async {
+    showAlertDialog(context, 'accepting..');
+    var res = await zcOrderAccept(_order.token);
+    Navigator.pop(context);
+    if (res.error == PayDbError.None)
+      setState(() => _order = res.order);
+    else
+      alert(context, 'error', 'failed to accept order');
+  }
+
+  Future<void> _update() async {
+    showAlertDialog(context, 'updating..');
+    var res = await zcOrderStatus(_order.token);
+    Navigator.pop(context);
+    if (res.error == PayDbError.None)
+      setState(() => _order = res.order);
+    else
+      alert(context, 'error', 'failed to update order status');
+  }
+
+  void _launchURL(String? url) async {
+    if (url != null)
       await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(children: [
-      ListTile(title: Text('ID'), subtitle: Text('${order.token}')),
-      ListTile(title: Text('Market'), subtitle: Text('${order.market}')),
+      ListTile(title: Text('ID'), subtitle: Text('${_order.token}')),
+      ListTile(title: Text('Market'), subtitle: Text('${_order.market}')),
       ListTile(
           title: Text('Amount'),
-          subtitle: Text('${order.baseAmount} ${order.baseAsset}')),
+          subtitle: Text('${_order.baseAmount} ${_order.baseAsset}')),
       ListTile(
           title: Text('Price'),
-          subtitle: Text('${order.quoteAmount} ${order.quoteAsset}')),
-      ListTile(title: Text('Date'), subtitle: Text('${order.date}')),
-      ListTile(title: Text('Expiry'), subtitle: Text('${order.expiry}')),
-      ListTile(title: Text('Recipient'), subtitle: Text('${order.recipient}')),
-      ListTile(title: Text('Status'), subtitle: Text('${order.status}')),
-      order.paymentUrl != null
+          subtitle: Text('${_order.quoteAmount} ${_order.quoteAsset}')),
+      ListTile(title: Text('Date'), subtitle: Text('${_order.date}')),
+      ListTile(title: Text('Expiry'), subtitle: Text('${_order.expiry}')),
+      ListTile(title: Text('Recipient'), subtitle: Text('${_order.recipient}')),
+      ListTile(
+          title: Text('Status'),
+          subtitle: Text('${describeEnum(_order.status)}')),
+      _order.paymentUrl != null
           ? ListTile(
               title: Text('Payment URL'),
-              subtitle: Text('$order.paymentUrl'),
-              onTap: () => _launchURL(order.paymentUrl!))
+              subtitle: Text('${_order.paymentUrl}'),
+              onTap: () => _launchURL(_order.paymentUrl))
           : SizedBox(),
+      _order.status == ZcOrderStatus.created
+          ? ListTile(
+              title: raisedButton(onPressed: _accept, child: Text('Accept')))
+          : SizedBox(),
+      ListTile(title: raisedButton(onPressed: _update, child: Text('Update'))),
     ]));
   }
 }
@@ -75,8 +114,8 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   Future<void> _orderTap(ZcBrokerOrder order) async {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => OrderScreen(order)));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => OrderScreen(order)));
   }
 
   Widget _listItem(BuildContext context, int n) {
@@ -186,10 +225,8 @@ class _QuoteScreenState extends State<QuoteScreen> {
           widget.market.symbol, ZcMarketSide.bid, _amount, _address);
       Navigator.pop(context);
       if (res.error == PayDbError.None) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => OrderScreen(res.order)));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => OrderScreen(res.order)));
       } else
         alert(context, 'error', 'failed to create order');
     }
