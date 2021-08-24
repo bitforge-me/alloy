@@ -20,6 +20,7 @@ dependencies:
   bs58check: ^1.0.2
   bech32: ^0.2.1
   web3dart: ^2.2.0
+  url_launcher: ^6.0.9
   flutter_icons:
     git:
       url: https://github.com/adarsh-technocrat/flutter-icons

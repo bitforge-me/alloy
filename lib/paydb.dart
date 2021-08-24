@@ -230,6 +230,7 @@ class ZcBrokerOrder {
   final Decimal quoteAmount;
   final String recipient;
   final String status;
+  final String? paymentUrl;
 
   ZcBrokerOrder(
       this.token,
@@ -241,7 +242,8 @@ class ZcBrokerOrder {
       this.baseAmount,
       this.quoteAmount,
       this.recipient,
-      this.status);
+      this.status,
+      this.paymentUrl);
 
   static ZcBrokerOrder parse(dynamic data) {
     var date = DateTime.parse(data['date']);
@@ -258,26 +260,26 @@ class ZcBrokerOrder {
         baseAmount,
         quoteAmount,
         data['recipient'],
-        data['status']);
+        data['status'],
+        data['payment_url']);
   }
 
   static ZcBrokerOrder empty() {
     return ZcBrokerOrder('', DateTime.now(), DateTime.now(), '', '', '',
-        Decimal.zero, Decimal.zero, '', '');
+        Decimal.zero, Decimal.zero, '', '', null);
   }
 }
 
 class ZcBrokerOrderResult {
   final ZcBrokerOrder order;
-  final String? paymentUrl;
   final PayDbError error;
 
-  ZcBrokerOrderResult(this.order, this.paymentUrl, this.error);
+  ZcBrokerOrderResult(this.order, this.error);
 
   static ZcBrokerOrderResult parse(String data) {
     var json = jsonDecode(data);
     ZcBrokerOrder order = ZcBrokerOrder.parse(json['broker_order']);
-    return ZcBrokerOrderResult(order, json['payment_url'], PayDbError.None);
+    return ZcBrokerOrderResult(order, PayDbError.None);
   }
 }
 
@@ -740,7 +742,7 @@ Future<ZcBrokerOrderResult> zcOrderCreate(
     String market, ZcMarketSide side, Decimal amount, String recipient) async {
   var baseUrl = await _server();
   if (baseUrl == null)
-    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), null, PayDbError.Network);
+    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), PayDbError.Network);
   var url = baseUrl + "broker_order_create";
   var apikey = await Prefs.paydbApiKeyGet();
   var apisecret = await Prefs.paydbApiSecretGet();
@@ -758,13 +760,13 @@ Future<ZcBrokerOrderResult> zcOrderCreate(
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
   if (response == null)
-    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), null, PayDbError.Network);
+    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), PayDbError.Network);
   if (response.statusCode == 200) {
     return ZcBrokerOrderResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), null, PayDbError.Auth);
+    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), PayDbError.Auth);
   print(response.statusCode);
-  return ZcBrokerOrderResult(ZcBrokerOrder.empty(), null, PayDbError.Network);
+  return ZcBrokerOrderResult(ZcBrokerOrder.empty(), PayDbError.Network);
 }
 
 Future<ZcBrokerOrdersResult> zcOrderList(int offset, int limit) async {

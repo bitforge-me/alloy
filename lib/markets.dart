@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
@@ -31,9 +32,11 @@ class AssetScreen extends StatelessWidget {
 
 class OrderScreen extends StatelessWidget {
   final ZcBrokerOrder order;
-  final String? paymentUrl;
 
-  OrderScreen(this.order, this.paymentUrl);
+  OrderScreen(this.order);
+
+  void _launchURL(String url) async =>
+      await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +54,11 @@ class OrderScreen extends StatelessWidget {
       ListTile(title: Text('Expiry'), subtitle: Text('${order.expiry}')),
       ListTile(title: Text('Recipient'), subtitle: Text('${order.recipient}')),
       ListTile(title: Text('Status'), subtitle: Text('${order.status}')),
-      paymentUrl != null
-          ? ListTile(title: Text('Payment URL'), subtitle: Text('$paymentUrl'))
+      order.paymentUrl != null
+          ? ListTile(
+              title: Text('Payment URL'),
+              subtitle: Text('$order.paymentUrl'),
+              onTap: () => _launchURL(order.paymentUrl!))
           : SizedBox(),
     ]));
   }
@@ -70,7 +76,7 @@ class OrdersScreen extends StatefulWidget {
 class _OrdersScreenState extends State<OrdersScreen> {
   Future<void> _orderTap(ZcBrokerOrder order) async {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => OrderScreen(order, null)));
+        MaterialPageRoute(builder: (context) => OrderScreen(order)));
   }
 
   Widget _listItem(BuildContext context, int n) {
@@ -183,7 +189,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => OrderScreen(res.order, res.paymentUrl)));
+                builder: (context) => OrderScreen(res.order)));
       } else
         alert(context, 'error', 'failed to create order');
     }
