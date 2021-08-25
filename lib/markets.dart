@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
+import 'package:zapdart/colors.dart';
 
 import 'paydb.dart';
 import 'cryptocurrency.dart';
@@ -123,7 +124,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
     return ListTile(
         title: Text('${order.token}'),
         subtitle: Text(
-            'market: ${order.market}, amount: ${order.baseAmount} ${order.baseAsset}'),
+            'market: ${order.market}, amount: ${order.baseAmount} ${order.baseAsset}, status: ${describeEnum(order.status)}',
+            style: order.status == ZcOrderStatus.expired ||
+                    order.status == ZcOrderStatus.cancelled
+                ? TextStyle(color: ZapBlackLight)
+                : order.status == ZcOrderStatus.created ||
+                        order.status == ZcOrderStatus.ready
+                    ? null
+                    : TextStyle(color: ZapGreen)),
         onTap: () => _orderTap(order));
   }
 
