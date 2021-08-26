@@ -30,7 +30,7 @@ ValidateResult addressValidate(String symbol, bool testnet, String address) {
       // try bech32
       try {
         var addr = segwit.decode(address);
-        if (testnet && addr.hrp == 'tb1' || !testnet && addr.hrp == 'bc1')
+        if (testnet && addr.hrp == 'tb' || !testnet && addr.hrp == 'bc')
           return ValidateResult(true, null);
         else
           return ValidateResult(false, 'invalid address version');
