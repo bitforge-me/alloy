@@ -145,6 +145,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 }
 
+class QuoteTotalPrice {
+  final Decimal amount;
+  final String? errMsg;
+
+  QuoteTotalPrice(this.amount, this.errMsg);
+}
+
 class QuoteScreen extends StatefulWidget {
   final ZcMarket market;
   final ZcOrderbook orderbook;
@@ -177,13 +184,16 @@ class _QuoteScreenState extends State<QuoteScreen> {
     Prefs.testnetGet().then((value) => _testnet = value);
   }
 
-  Decimal _calcTotalPrice(Decimal amount) {
+  QuoteTotalPrice _calcTotalPrice(Decimal amount) {
+    if (amount < widget.orderbook.minOrder)
+      return QuoteTotalPrice(Decimal.zero, 'amount too low');
+
     var filled = Decimal.zero;
     var totalPrice = Decimal.zero;
     var n = 0;
     while (amount > filled) {
       if (n >= widget.orderbook.asks.length) {
-        return Decimal.fromInt(-1);
+        break;
       }
       var rate = widget.orderbook.asks[n].rate;
       var quantity = widget.orderbook.asks[n].quantity;
@@ -192,11 +202,15 @@ class _QuoteScreenState extends State<QuoteScreen> {
       filled += quantityToUse;
       totalPrice += quantityToUse * rate;
       if (filled == amount) {
-        return totalPrice;
+        return QuoteTotalPrice(
+            totalPrice *
+                (Decimal.one +
+                    widget.orderbook.brokerFee / Decimal.fromInt(100)),
+            null);
       }
       n++;
     }
-    return Decimal.fromInt(-1);
+    return QuoteTotalPrice(Decimal.zero, 'not enough liquidity');
   }
 
   void _updateQuote() {
@@ -206,11 +220,11 @@ class _QuoteScreenState extends State<QuoteScreen> {
     if (value != null && value > Decimal.zero) {
       amount = value;
       var totalPrice = _calcTotalPrice(value);
-      if (totalPrice < Decimal.zero)
-        quote = 'not enough liquidity';
+      if (totalPrice.errMsg != null)
+        quote = totalPrice.errMsg!;
       else
         quote =
-            '$value ${widget.market.baseSymbol} = $totalPrice ${widget.market.quoteSymbol}';
+            '$value ${widget.market.baseSymbol} = ${totalPrice.amount} ${widget.market.quoteSymbol}';
     }
     setState(() {
       _quote = quote;
@@ -262,8 +276,8 @@ class _QuoteScreenState extends State<QuoteScreen> {
                         if (d == null) return 'Invalid value';
                         if (d <= Decimal.fromInt(0))
                           return 'Please enter a value greater then 0';
-                        if (_calcTotalPrice(d) < Decimal.fromInt(0))
-                          return 'Insufficient liquidity';
+                        var totalPrice = _calcTotalPrice(d);
+                        if (totalPrice.errMsg != null) return totalPrice.errMsg;
                         return null;
                       }),
                   TextFormField(
@@ -309,8 +323,7 @@ class _MarketScreenState extends State<MarketScreen> {
     var market = widget.markets[n];
     return ListTile(
         title: Text('${market.symbol}'),
-        subtitle:
-            Text('status: ${market.status}, min trade: ${market.minTrade}'),
+        subtitle: Text('status: ${market.status}'),
         onTap: () => _marketTap(market));
   }
 

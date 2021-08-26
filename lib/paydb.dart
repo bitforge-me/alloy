@@ -175,24 +175,29 @@ class ZcRate {
 class ZcOrderbook {
   final List<ZcRate> bids;
   final List<ZcRate> asks;
+  final Decimal minOrder;
+  final Decimal brokerFee;
 
-  ZcOrderbook(this.bids, this.asks);
+  ZcOrderbook(this.bids, this.asks, this.minOrder, this.brokerFee);
 
   static ZcOrderbook parse(String data) {
     List<ZcRate> bids = [];
     List<ZcRate> asks = [];
-    var orderbook = jsonDecode(data)['order_book'];
+    var json = jsonDecode(data);
+    var orderbook = json['order_book'];
+    var minOrder = Decimal.parse(json['min_order']);
+    var brokerFee = Decimal.parse(json['broker_fee']);
     for (var item in orderbook['bid'])
       bids.add(
           ZcRate(Decimal.parse(item['quantity']), Decimal.parse(item['rate'])));
     for (var item in orderbook['ask'])
       asks.add(
           ZcRate(Decimal.parse(item['quantity']), Decimal.parse(item['rate'])));
-    return ZcOrderbook(bids, asks);
+    return ZcOrderbook(bids, asks, minOrder, brokerFee);
   }
 
   static ZcOrderbook empty() {
-    return ZcOrderbook([], []);
+    return ZcOrderbook([], [], Decimal.zero, Decimal.zero);
   }
 }
 
