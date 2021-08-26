@@ -50,20 +50,21 @@ class _OrderScreenState extends State<OrderScreen> {
     showAlertDialog(context, 'accepting..');
     var res = await zcOrderAccept(_order.token);
     Navigator.pop(context);
-    if (res.error == PayDbError.None)
+    if (res.error.type == ErrorType.None)
       setState(() => _order = res.order);
     else
-      alert(context, 'error', 'failed to accept order');
+      alert(context, 'error', 'failed to accept order (${res.error.msg})');
   }
 
   Future<void> _update() async {
     showAlertDialog(context, 'updating..');
     var res = await zcOrderStatus(_order.token);
     Navigator.pop(context);
-    if (res.error == PayDbError.None)
+    if (res.error.type == ErrorType.None)
       setState(() => _order = res.order);
     else
-      alert(context, 'error', 'failed to update order status');
+      alert(
+          context, 'error', 'failed to update order status (${res.error.msg})');
   }
 
   void _launchURL(String? url) async {
@@ -232,11 +233,11 @@ class _QuoteScreenState extends State<QuoteScreen> {
       var res = await zcOrderCreate(
           widget.market.symbol, ZcMarketSide.bid, _amount, _address);
       Navigator.pop(context);
-      if (res.error == PayDbError.None) {
+      if (res.error.type == ErrorType.None) {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => OrderScreen(res.order)));
       } else
-        alert(context, 'error', 'failed to create order');
+        alert(context, 'error', 'failed to create order (${res.error.msg})');
     }
   }
 
@@ -296,7 +297,7 @@ class _MarketScreenState extends State<MarketScreen> {
     showAlertDialog(context, 'querying..');
     var res = await zcOrderbook(market.symbol);
     Navigator.pop(context);
-    if (res.error == PayDbError.None) {
+    if (res.error.type == ErrorType.None) {
       Navigator.push(
           context,
           MaterialPageRoute(

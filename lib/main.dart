@@ -65,17 +65,16 @@ class _MyHomePageState extends State<MyHomePage> {
       showAlertDialog(context, 'getting account info...');
       var result = await paydbUserInfo();
       Navigator.pop(context);
-      switch (result.error) {
-        case PayDbError.Auth:
-          alert(context, 'Authentication not valid',
-              'Your stored credentials are not valid');
+      switch (result.error.type) {
+        case ErrorType.Auth:
+          alert(context, 'Authentication failed', result.error.msg);
           setState(() => _invalidAuth = true);
           break;
-        case PayDbError.Network:
+        case ErrorType.Network:
           alert(context, 'Network error', 'A network error occured');
           setState(() => _retry = true);
           break;
-        case PayDbError.None:
+        case ErrorType.None:
           userInfo = result.info;
           break;
       }
@@ -87,18 +86,18 @@ class _MyHomePageState extends State<MyHomePage> {
       {bool silent: false}) async {
     var devName = await deviceName();
     var result = await paydbApiKeyCreate(login.email, login.password, devName);
-    switch (result.error) {
-      case PayDbError.Auth:
+    switch (result.error.type) {
+      case ErrorType.Auth:
         if (!silent)
-          await alert(context, 'Authentication not valid',
-              'The login details you entered are not valid');
+          await alert(context, 'Authentication failed',
+              'The login details you entered are not valid (${result.error.msg})');
         break;
-      case PayDbError.Network:
+      case ErrorType.Network:
         if (!silent)
           await alert(context, 'Network error',
               'A network error occured when trying to login');
         break;
-      case PayDbError.None:
+      case ErrorType.None:
         // write api key
         if (result.apikey != null) {
           await Prefs.paydbApiKeySet(result.apikey!.token);
@@ -113,18 +112,18 @@ class _MyHomePageState extends State<MyHomePage> {
       BuildContext context, AccountRequestApiKey req, String token,
       {silent: false}) async {
     var result = await paydbApiKeyClaim(token);
-    switch (result.error) {
-      case PayDbError.Auth:
+    switch (result.error.type) {
+      case ErrorType.Auth:
         if (!silent)
           await alert(context, 'Authentication not valid',
-              'The login details you entered are not valid');
+              'The login details you entered are not valid (${result.error.msg})');
         break;
-      case PayDbError.Network:
+      case ErrorType.Network:
         if (!silent)
           await alert(context, 'Network error',
               'A network error occured when trying to login');
         break;
-      case PayDbError.None:
+      case ErrorType.None:
         // write api key
         if (result.apikey != null) {
           await Prefs.paydbApiKeySet(result.apikey!.token);
@@ -152,16 +151,16 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     if (reg != null) {
       var res = await paydbUserRegister(reg);
-      switch (res) {
-        case PayDbError.Auth:
+      switch (res.type) {
+        case ErrorType.Auth:
           await alert(context, 'Authorisation error',
-              'An authorisation error occured when trying to register (user may already exist)');
+              'An authorisation error occured when trying to register (${res.msg})');
           break;
-        case PayDbError.Network:
+        case ErrorType.Network:
           await alert(context, 'Network error',
               'A network error occured when trying to register');
           break;
-        case PayDbError.None:
+        case ErrorType.None:
           var cancelled = false;
           Acct? acct;
           showAlertDialog(context, 'waiting for you to confirm the email...',
@@ -204,13 +203,13 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     if (req == null) return;
     var result = await paydbApiKeyRequest(req.email, req.deviceName);
-    switch (result.error) {
-      case PayDbError.Auth:
-      case PayDbError.Network:
+    switch (result.error.type) {
+      case ErrorType.Auth:
+      case ErrorType.Network:
         await alert(context, 'Network error',
             'A network error occured when trying to login');
         break;
-      case PayDbError.None:
+      case ErrorType.None:
         assert(result.token != null);
         Acct? acct;
         var cancelled = false;
@@ -240,7 +239,7 @@ class _MyHomePageState extends State<MyHomePage> {
     showAlertDialog(context, 'querying..');
     var res = await zcAssets();
     Navigator.pop(context);
-    if (res.error == PayDbError.None)
+    if (res.error.type == ErrorType.None)
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => AssetScreen(res.assets)));
   }
@@ -249,7 +248,7 @@ class _MyHomePageState extends State<MyHomePage> {
     showAlertDialog(context, 'querying..');
     var res = await zcMarkets();
     Navigator.pop(context);
-    if (res.error == PayDbError.None)
+    if (res.error.type == ErrorType.None)
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => MarketScreen(res.markets)));
   }
@@ -258,7 +257,7 @@ class _MyHomePageState extends State<MyHomePage> {
     showAlertDialog(context, 'querying..');
     var res = await zcOrderList(0, 1000);
     Navigator.pop(context);
-    if (res.error == PayDbError.None)
+    if (res.error.type == ErrorType.None)
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => OrdersScreen(res.orders)));
   }
