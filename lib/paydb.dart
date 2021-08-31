@@ -187,10 +187,10 @@ class ZcOrderbook {
     var orderbook = json['order_book'];
     var minOrder = Decimal.parse(json['min_order']);
     var brokerFee = Decimal.parse(json['broker_fee']);
-    for (var item in orderbook['bid'])
+    for (var item in orderbook['bids'])
       bids.add(
           ZcRate(Decimal.parse(item['quantity']), Decimal.parse(item['rate'])));
-    for (var item in orderbook['ask'])
+    for (var item in orderbook['asks'])
       asks.add(
           ZcRate(Decimal.parse(item['quantity']), Decimal.parse(item['rate'])));
     return ZcOrderbook(bids, asks, minOrder, brokerFee);
@@ -216,7 +216,7 @@ enum ZcOrderStatus {
   ready,
   incoming,
   confirmed,
-  payment_pending,
+  withdraw,
   completed,
   expired,
   cancelled
