@@ -37,8 +37,15 @@ class AssetScreen extends StatelessWidget {
     return ListTile(
         title: Text('${asset.symbol}'),
         leading: SvgPicture.network(findSvg('${asset.symbol}'), width: 32, height: 32),
-        subtitle: Text(
-            'name: ${asset.name}, status: ${asset.status}, minimum confirmations: ${asset.minConfs}'));
+        //subtitle: Text('name: ${asset.name}, status: ${asset.status}, minimum confirmations: ${asset.minConfs}'),
+        subtitle: Row(
+          children: <Widget>[
+            Text('name: ${asset.name}, status: ${asset.status}, minimum confirmations: ${asset.minConfs}'),
+            FlatButton(child: Text('deposit'), onPressed: (){}),
+            FlatButton(child: Text('send'), onPressed: (){}),
+          ],
+        ),
+    );
   }
 
   @override
