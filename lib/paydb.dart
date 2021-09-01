@@ -54,9 +54,28 @@ class UserInfo {
   final String? photoType;
   final Iterable<PayDbPermission> permissions;
   final Iterable<PayDbRole> roles;
+  final bool kycValidated;
+  final String? kycUrl;
 
   UserInfo(this.email, this.balance, this.photo, this.photoType,
-      this.permissions, this.roles);
+      this.permissions, this.roles, this.kycValidated, this.kycUrl);
+
+  UserInfo replace({String? newKycUrl}) {
+    // get current
+    var email = this.email;
+    var balance = this.balance;
+    var photo = this.photo;
+    var photoType = this.photoType;
+    var permissions = this.permissions;
+    var roles = this.roles;
+    var kycValidated = this.kycValidated;
+    var kycUrl = this.kycUrl;
+    // get replacements
+    if (newKycUrl != null) kycUrl = newKycUrl;
+    // return new object
+    return UserInfo(email, balance, photo, photoType, permissions, roles,
+        kycValidated, kycUrl);
+  }
 }
 
 class UserInfoResult {
@@ -85,6 +104,13 @@ class PayDbApiKeyRequestResult {
   final ZcError error;
 
   PayDbApiKeyRequestResult(this.token, this.error);
+}
+
+class ZcKycRequestCreateResult {
+  final String? kycUrl;
+  final ZcError error;
+
+  ZcKycRequestCreateResult(this.kycUrl, this.error);
 }
 
 class ZcAsset {
@@ -438,8 +464,15 @@ Future<UserInfoResult> paydbUserInfo({String? email}) async {
     for (var roleName in jsnObj["roles"])
       for (var role in PayDbRole.values)
         if (describeEnum(role) == roleName) roles.add(role);
-    var info = UserInfo(jsnObj["email"], jsnObj["balance"], jsnObj["photo"],
-        jsnObj["photo_type"], perms, roles);
+    var info = UserInfo(
+        jsnObj["email"],
+        jsnObj["balance"],
+        jsnObj["photo"],
+        jsnObj["photo_type"],
+        perms,
+        roles,
+        jsnObj["kyc_validated"],
+        jsnObj["kyc_url"]);
     return UserInfoResult(info, ZcError.none());
   } else if (response.statusCode == 400)
     return UserInfoResult(null, ZcError.auth(response.body));
@@ -536,6 +569,29 @@ Future<ZcError> paydbUserUpdatePhoto(String? photo, String? photoType) async {
   } else if (response.statusCode == 400) return ZcError.auth(response.body);
   print(response.statusCode);
   return ZcError.network();
+}
+
+Future<ZcKycRequestCreateResult> zcKycRequestCreate() async {
+  var baseUrl = await _server();
+  if (baseUrl == null) return ZcKycRequestCreateResult(null, ZcError.network());
+  var url = baseUrl + "user_kyc_request_create";
+  var apikey = await Prefs.paydbApiKeyGet();
+  var apisecret = await Prefs.paydbApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var body = jsonEncode({"api_key": apikey, "nonce": nonce});
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null)
+    return ZcKycRequestCreateResult(null, ZcError.network());
+  if (response.statusCode == 200) {
+    var jsnObj = json.decode(response.body);
+    return ZcKycRequestCreateResult(jsnObj['kyc_url'], ZcError.none());
+  } else if (response.statusCode == 400)
+    return ZcKycRequestCreateResult(null, ZcError.auth(response.body));
+  print(response.statusCode);
+  return ZcKycRequestCreateResult(null, ZcError.network());
 }
 
 Future<ZcAssetResult> zcAssets() async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
@@ -262,6 +263,25 @@ class _MyHomePageState extends State<MyHomePage> {
           MaterialPageRoute(builder: (context) => OrdersScreen(res.orders)));
   }
 
+  Future<void> _kycRequestCreate() async {
+    showAlertDialog(context, 'creating kyc validation request..');
+    var res = await zcKycRequestCreate();
+    Navigator.pop(context);
+    if (res.error.type == ErrorType.None)
+      setState(() {
+        if (_userInfo != null) {
+          _userInfo = _userInfo!.replace(newKycUrl: res.kycUrl);
+          _kycUrlLaunch();
+        }
+      });
+  }
+
+  Future<void> _kycUrlLaunch() async {
+    await canLaunch(_userInfo!.kycUrl!)
+        ? await launch(_userInfo!.kycUrl!)
+        : throw 'Could not launch ${_userInfo?.kycUrl}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -274,6 +294,21 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             accountImage(_userInfo?.photo, _userInfo?.photoType),
             Text('Email: ${_userInfo?.email}'),
+            Text('Validated: ${_userInfo?.kycValidated}'),
+            Visibility(
+              visible: _userInfo != null && _userInfo?.kycUrl == null,
+              child: RoundedButton(_kycRequestCreate, ZapWhite, ZapBlue,
+                  ZapBlueGradient, 'Validate KYC',
+                  holePunch: true, width: 300),
+            ),
+            Visibility(
+              visible: _userInfo != null &&
+                  _userInfo?.kycUrl != null &&
+                  !_userInfo!.kycValidated,
+              child: RoundedButton(_kycUrlLaunch, ZapWhite, ZapBlue,
+                  ZapBlueGradient, 'Validate KYC',
+                  holePunch: true, width: 300),
+            ),
             Visibility(
               visible: _userInfo == null,
               child: RoundedButton(
