@@ -11,6 +11,7 @@ import 'paydb.dart';
 import 'cryptocurrency.dart';
 import 'prefs.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'withdraw.dart';
 
 
 String findSvg(assetSymbol) {
@@ -42,7 +43,15 @@ class AssetScreen extends StatelessWidget {
           children: <Widget>[
             Text('name: ${asset.name}, status: ${asset.status}, minimum confirmations: ${asset.minConfs}'),
             FlatButton(child: Text('deposit'), onPressed: (){}),
-            FlatButton(child: Text('send'), onPressed: (){}),
+            FlatButton(child: Text('send'), onPressed: (){
+	      Navigator.pop(context);
+		Navigator.push(
+		    context,
+		    MaterialPageRoute(
+			builder: (context) => WithdrawalScreen(),
+                    )
+                );
+            }),
           ],
         ),
     );
