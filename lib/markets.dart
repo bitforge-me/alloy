@@ -44,8 +44,8 @@ class AssetScreen extends StatelessWidget {
         children: <Widget>[
           Text(
               'name: ${asset.name}, status: ${asset.status}, minimum confirmations: ${asset.minConfs}'),
-          FlatButton(child: Text('deposit'), onPressed: () {}),
-          FlatButton(
+          TextButton(child: Text('deposit'), onPressed: () {}),
+          TextButton(
               child: Text('send'),
               onPressed: () {
                 Navigator.pop(context);
