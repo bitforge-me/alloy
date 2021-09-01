@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -18,44 +17,41 @@ class WithdrawalScreen extends StatefulWidget {
   State<WithdrawalScreen> createState() => _WithdrawalScreenState();
 }
 
-class
-_WithdrawalScreenState extends State<WithdrawalScreen> {
+class _WithdrawalScreenState extends State<WithdrawalScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController sendAddress = TextEditingController();
   TextEditingController sendAmount = TextEditingController();
   Widget build(BuildContext context) {
-    return
-Scaffold(body: Form(
+    return Scaffold(
+        body: Form(
       key: _formKey,
       child: Column(
         children: <Widget>[
           Text("amount"),
           TextFormField(
             controller: sendAmount,
-	    validator: (value) {
-	      if (value == null || value.isEmpty) {
-		return "please enter an amount";
-	      }
-	    },
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "please enter an amount";
+              }
+            },
           ),
           Text("address"),
           TextFormField(
-	    controller: sendAddress,
-	    validator: (value) {
-	      if (value == null || value.isEmpty) {
-		return "please enter an address";
-	      }
-	    },
-
-          ), 
+            controller: sendAddress,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "please enter an address";
+              }
+            },
+          ),
           FlatButton(
-            child:Text("OK"),
-	    onPressed: () async {
-	      if (_formKey.currentState!.validate()) {
-		Navigator.of(context, rootNavigator: true)
-		    .pop();
-	      }
-	    },
+            child: Text("OK"),
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                Navigator.of(context, rootNavigator: true).pop();
+              }
+            },
           ),
         ],
       ),

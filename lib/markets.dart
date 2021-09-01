@@ -13,20 +13,20 @@ import 'prefs.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'withdraw.dart';
 
-
 String findSvg(assetSymbol) {
   String svgRes = "";
-  switch(assetSymbol) {
+  switch (assetSymbol) {
     case "BTC":
-      svgRes = "https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg";
+      svgRes =
+          "https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg";
       break;
     case "ETH":
-      svgRes = "https://upload.wikimedia.org/wikipedia/commons/0/05/Ethereum_logo_2014.svg";
+      svgRes =
+          "https://upload.wikimedia.org/wikipedia/commons/0/05/Ethereum_logo_2014.svg";
       break;
-  } 
+  }
   return svgRes;
 }
-
 
 class AssetScreen extends StatelessWidget {
   final List<ZcAsset> assets;
@@ -36,24 +36,27 @@ class AssetScreen extends StatelessWidget {
   Widget _listItem(BuildContext context, int n) {
     var asset = assets[n];
     return ListTile(
-        title: Text('${asset.symbol}'),
-        leading: SvgPicture.network(findSvg('${asset.symbol}'), width: 32, height: 32),
-        //subtitle: Text('name: ${asset.name}, status: ${asset.status}, minimum confirmations: ${asset.minConfs}'),
-        subtitle: Row(
-          children: <Widget>[
-            Text('name: ${asset.name}, status: ${asset.status}, minimum confirmations: ${asset.minConfs}'),
-            FlatButton(child: Text('deposit'), onPressed: (){}),
-            FlatButton(child: Text('send'), onPressed: (){
-	      Navigator.pop(context);
-		Navigator.push(
-		    context,
-		    MaterialPageRoute(
-			builder: (context) => WithdrawalScreen(),
-                    )
-                );
-            }),
-          ],
-        ),
+      title: Text('${asset.symbol}'),
+      leading:
+          SvgPicture.network(findSvg('${asset.symbol}'), width: 32, height: 32),
+      //subtitle: Text('name: ${asset.name}, status: ${asset.status}, minimum confirmations: ${asset.minConfs}'),
+      subtitle: Row(
+        children: <Widget>[
+          Text(
+              'name: ${asset.name}, status: ${asset.status}, minimum confirmations: ${asset.minConfs}'),
+          FlatButton(child: Text('deposit'), onPressed: () {}),
+          FlatButton(
+              child: Text('send'),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WithdrawalScreen(),
+                    ));
+              }),
+        ],
+      ),
     );
   }
 
@@ -157,7 +160,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
     var order = widget.orders[n];
     return ListTile(
         title: Text('${order.token}'),
-        leading: SvgPicture.network(findSvg('${order.baseAsset}'), width: 32, height: 32),
+        leading: SvgPicture.network(findSvg('${order.baseAsset}'),
+            width: 32, height: 32),
         subtitle: Text(
             'market: ${order.market}, amount: ${order.baseAmount} ${order.baseAsset}, status: ${describeEnum(order.status)}',
             style: order.status == ZcOrderStatus.expired ||
@@ -357,7 +361,8 @@ class _MarketScreenState extends State<MarketScreen> {
     var market = widget.markets[n];
     return ListTile(
         title: Text('${market.symbol}'),
-        leading: SvgPicture.network(findSvg('${market.baseSymbol}'), width: 32, height: 32),
+        leading: SvgPicture.network(findSvg('${market.baseSymbol}'),
+            width: 32, height: 32),
         subtitle: Text('status: ${market.status}'),
         onTap: () => _marketTap(market));
   }
