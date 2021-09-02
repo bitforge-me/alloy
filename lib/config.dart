@@ -13,7 +13,7 @@ const TestnetDefault = false;
 
 // PayDB settings
 const String? PayDBServerMainnet =
-    'https://zap-crypto-be.caprover.acuerdo.dev/paydb/';
+    'https://zap-crypto-be.caprover.acuerdo.dev/';
 const String? PayDBServerTestnet = null;
 // registration
 const bool RequireMobileNumber = true;

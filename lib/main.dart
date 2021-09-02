@@ -11,6 +11,7 @@ import 'paydb.dart';
 import 'config.dart';
 import 'prefs.dart';
 import 'markets.dart';
+import 'websocket.dart';
 
 void main() {
   runApp(Phoenix(child: MyApp()));
@@ -49,7 +50,8 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
+  SocketEvents _socketEvents = SocketEvents();
   UserInfo? _userInfo;
   bool _invalidAuth = false;
   bool _retry = false;
@@ -58,6 +60,13 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _initApi();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print("App lifestyle state changed: $state");
+    if (state == AppLifecycleState.resumed)
+      _socketEvents.connect(_websocketCallback); // reconnect websocket
   }
 
   Future<void> _initApi() async {
@@ -77,10 +86,15 @@ class _MyHomePageState extends State<MyHomePage> {
           break;
         case ErrorType.None:
           userInfo = result.info;
+          _socketEvents.connect(_websocketCallback); // connect websocket
           break;
       }
       setState(() => _userInfo = userInfo);
     }
+  }
+
+  void _websocketCallback(String event, String msg) {
+    alert(context, event, msg);
   }
 
   Future<Acct?> _paydbLogin(BuildContext context, AccountLogin login,

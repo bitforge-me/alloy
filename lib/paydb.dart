@@ -12,10 +12,13 @@ import 'package:zapdart/account_forms.dart';
 
 import 'config.dart';
 import 'prefs.dart';
+import 'utils.dart';
 
 Future<String?> _server() async {
   var testnet = await Prefs.testnetGet();
-  return testnet ? PayDBServerTestnet : PayDBServerMainnet;
+  var baseUrl = testnet ? PayDBServerTestnet : PayDBServerMainnet;
+  if (baseUrl != null) baseUrl = baseUrl + 'paydb/';
+  return baseUrl;
 }
 
 enum ErrorType { None, Network, Auth }
@@ -453,7 +456,7 @@ Future<UserInfoResult> paydbUserInfo({String? email}) async {
   var apikey = await Prefs.paydbApiKeyGet();
   var apisecret = await Prefs.paydbApiSecretGet();
   checkApiKey(apikey, apisecret);
-  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce, "email": email});
   var sig = createHmacSig(apisecret!, body);
   var response =
@@ -485,7 +488,7 @@ Future<ZcError> paydbUserResetPassword() async {
   var apikey = await Prefs.paydbApiKeyGet();
   var apisecret = await Prefs.paydbApiSecretGet();
   checkApiKey(apikey, apisecret);
-  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce});
   var sig = createHmacSig(apisecret!, body);
   var response =
@@ -505,7 +508,7 @@ Future<ZcError> paydbUserUpdateEmail(String email) async {
   var apikey = await Prefs.paydbApiKeyGet();
   var apisecret = await Prefs.paydbApiSecretGet();
   checkApiKey(apikey, apisecret);
-  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce, "email": email});
   var sig = createHmacSig(apisecret!, body);
   var response =
@@ -526,7 +529,7 @@ Future<ZcError> paydbUserUpdatePassword(
   var apikey = await Prefs.paydbApiKeyGet();
   var apisecret = await Prefs.paydbApiSecretGet();
   checkApiKey(apikey, apisecret);
-  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var nonce = nextNonce();
   var body = jsonEncode({
     "api_key": apikey,
     "nonce": nonce,
@@ -551,7 +554,7 @@ Future<ZcError> paydbUserUpdatePhoto(String? photo, String? photoType) async {
   var apikey = await Prefs.paydbApiKeyGet();
   var apisecret = await Prefs.paydbApiSecretGet();
   checkApiKey(apikey, apisecret);
-  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var nonce = nextNonce();
   var body = jsonEncode({
     "api_key": apikey,
     "nonce": nonce,
@@ -576,7 +579,7 @@ Future<ZcKycRequestCreateResult> zcKycRequestCreate() async {
   var apikey = await Prefs.paydbApiKeyGet();
   var apisecret = await Prefs.paydbApiSecretGet();
   checkApiKey(apikey, apisecret);
-  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce});
   var sig = createHmacSig(apisecret!, body);
   var response =
@@ -600,7 +603,7 @@ Future<ZcAssetResult> zcAssets() async {
   var apikey = await Prefs.paydbApiKeyGet();
   var apisecret = await Prefs.paydbApiSecretGet();
   checkApiKey(apikey, apisecret);
-  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var nonce = nextNonce();
   var body = jsonEncode({
     "api_key": apikey,
     "nonce": nonce,
@@ -625,7 +628,7 @@ Future<ZcMarketResult> zcMarkets() async {
   var apikey = await Prefs.paydbApiKeyGet();
   var apisecret = await Prefs.paydbApiSecretGet();
   checkApiKey(apikey, apisecret);
-  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var nonce = nextNonce();
   var body = jsonEncode({
     "api_key": apikey,
     "nonce": nonce,
@@ -650,7 +653,7 @@ Future<ZcOrderbookResult> zcOrderbook(String symbol) async {
   var apikey = await Prefs.paydbApiKeyGet();
   var apisecret = await Prefs.paydbApiSecretGet();
   checkApiKey(apikey, apisecret);
-  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce, "symbol": symbol});
   var sig = createHmacSig(apisecret!, body);
   var response =
@@ -674,7 +677,7 @@ Future<ZcBrokerOrderResult> zcOrderCreate(
   var apikey = await Prefs.paydbApiKeyGet();
   var apisecret = await Prefs.paydbApiSecretGet();
   checkApiKey(apikey, apisecret);
-  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var nonce = nextNonce();
   var body = jsonEncode({
     "api_key": apikey,
     "nonce": nonce,
@@ -705,7 +708,7 @@ Future<ZcBrokerOrderResult> zcOrderAccept(String token) async {
   var apikey = await Prefs.paydbApiKeyGet();
   var apisecret = await Prefs.paydbApiSecretGet();
   checkApiKey(apikey, apisecret);
-  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce, "token": token});
   var sig = createHmacSig(apisecret!, body);
   var response =
@@ -729,7 +732,7 @@ Future<ZcBrokerOrderResult> zcOrderStatus(String token) async {
   var apikey = await Prefs.paydbApiKeyGet();
   var apisecret = await Prefs.paydbApiSecretGet();
   checkApiKey(apikey, apisecret);
-  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce, "token": token});
   var sig = createHmacSig(apisecret!, body);
   var response =
@@ -752,7 +755,7 @@ Future<ZcBrokerOrdersResult> zcOrderList(int offset, int limit) async {
   var apikey = await Prefs.paydbApiKeyGet();
   var apisecret = await Prefs.paydbApiSecretGet();
   checkApiKey(apikey, apisecret);
-  var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
+  var nonce = nextNonce();
   var body = jsonEncode(
       {"api_key": apikey, "nonce": nonce, "offset": offset, "limit": limit});
   var sig = createHmacSig(apisecret!, body);
