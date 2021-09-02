@@ -13,13 +13,13 @@ import 'prefs.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 String findSvg(assetSymbol) {
-  String svgRes = "";
+  String svgRes = '';
   switch (assetSymbol) {
-    case "BTC":
-      svgRes = "images/Bitcoin.svg";
+    case 'BTC':
+      svgRes = 'images/Bitcoin.svg';
       break;
-    case "ETH":
-      svgRes = "images/Ethereum.svg";
+    case 'ETH':
+      svgRes = 'images/Ethereum.svg';
       break;
   }
   return svgRes;
