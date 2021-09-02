@@ -49,7 +49,6 @@ class ZcError {
 
 class UserInfo {
   final String email;
-  final int balance;
   final String? photo;
   final String? photoType;
   final Iterable<PayDbPermission> permissions;
@@ -57,13 +56,12 @@ class UserInfo {
   final bool kycValidated;
   final String? kycUrl;
 
-  UserInfo(this.email, this.balance, this.photo, this.photoType,
-      this.permissions, this.roles, this.kycValidated, this.kycUrl);
+  UserInfo(this.email, this.photo, this.photoType, this.permissions, this.roles,
+      this.kycValidated, this.kycUrl);
 
   UserInfo replace({String? newKycUrl}) {
     // get current
     var email = this.email;
-    var balance = this.balance;
     var photo = this.photo;
     var photoType = this.photoType;
     var permissions = this.permissions;
@@ -73,8 +71,8 @@ class UserInfo {
     // get replacements
     if (newKycUrl != null) kycUrl = newKycUrl;
     // return new object
-    return UserInfo(email, balance, photo, photoType, permissions, roles,
-        kycValidated, kycUrl);
+    return UserInfo(
+        email, photo, photoType, permissions, roles, kycValidated, kycUrl);
   }
 }
 
@@ -202,9 +200,12 @@ class ZcOrderbook {
   final List<ZcRate> bids;
   final List<ZcRate> asks;
   final Decimal minOrder;
+  final Decimal baseAssetWithdrawFee;
+  final Decimal quoteAssetWithdrawFee;
   final Decimal brokerFee;
 
-  ZcOrderbook(this.bids, this.asks, this.minOrder, this.brokerFee);
+  ZcOrderbook(this.bids, this.asks, this.minOrder, this.baseAssetWithdrawFee,
+      this.quoteAssetWithdrawFee, this.brokerFee);
 
   static ZcOrderbook parse(String data) {
     List<ZcRate> bids = [];
@@ -212,6 +213,8 @@ class ZcOrderbook {
     var json = jsonDecode(data);
     var orderbook = json['order_book'];
     var minOrder = Decimal.parse(json['min_order']);
+    var baseAssetWithdrawFee = Decimal.parse(json['base_asset_withdraw_fee']);
+    var quoteAssetWithdrawFee = Decimal.parse(json['quote_asset_withdraw_fee']);
     var brokerFee = Decimal.parse(json['broker_fee']);
     for (var item in orderbook['bids'])
       bids.add(
@@ -219,11 +222,13 @@ class ZcOrderbook {
     for (var item in orderbook['asks'])
       asks.add(
           ZcRate(Decimal.parse(item['quantity']), Decimal.parse(item['rate'])));
-    return ZcOrderbook(bids, asks, minOrder, brokerFee);
+    return ZcOrderbook(bids, asks, minOrder, baseAssetWithdrawFee,
+        quoteAssetWithdrawFee, brokerFee);
   }
 
   static ZcOrderbook empty() {
-    return ZcOrderbook([], [], Decimal.zero, Decimal.zero);
+    return ZcOrderbook(
+        [], [], Decimal.zero, Decimal.zero, Decimal.zero, Decimal.zero);
   }
 }
 
@@ -464,15 +469,8 @@ Future<UserInfoResult> paydbUserInfo({String? email}) async {
     for (var roleName in jsnObj["roles"])
       for (var role in PayDbRole.values)
         if (describeEnum(role) == roleName) roles.add(role);
-    var info = UserInfo(
-        jsnObj["email"],
-        jsnObj["balance"],
-        jsnObj["photo"],
-        jsnObj["photo_type"],
-        perms,
-        roles,
-        jsnObj["kyc_validated"],
-        jsnObj["kyc_url"]);
+    var info = UserInfo(jsnObj["email"], jsnObj["photo"], jsnObj["photo_type"],
+        perms, roles, jsnObj["kyc_validated"], jsnObj["kyc_url"]);
     return UserInfoResult(info, ZcError.none());
   } else if (response.statusCode == 400)
     return UserInfoResult(null, ZcError.auth(response.body));

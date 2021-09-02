@@ -184,24 +184,26 @@ class _QuoteScreenState extends State<QuoteScreen> {
     Prefs.testnetGet().then((value) => _testnet = value);
   }
 
-  QuoteTotalPrice _calcTotalPrice(Decimal amount) {
+  QuoteTotalPrice _bidQuoteAmount(Decimal amount) {
     if (amount < widget.orderbook.minOrder)
       return QuoteTotalPrice(Decimal.zero, 'amount too low');
 
+    var amountTotal = amount + widget.orderbook.baseAssetWithdrawFee;
     var filled = Decimal.zero;
     var totalPrice = Decimal.zero;
     var n = 0;
-    while (amount > filled) {
+    while (amountTotal > filled) {
       if (n >= widget.orderbook.asks.length) {
         break;
       }
       var rate = widget.orderbook.asks[n].rate;
       var quantity = widget.orderbook.asks[n].quantity;
       var quantityToUse = quantity;
-      if (quantityToUse > amount - filled) quantityToUse = amount - filled;
+      if (quantityToUse > amountTotal - filled)
+        quantityToUse = amountTotal - filled;
       filled += quantityToUse;
       totalPrice += quantityToUse * rate;
-      if (filled == amount) {
+      if (filled == amountTotal) {
         return QuoteTotalPrice(
             totalPrice *
                 (Decimal.one +
@@ -219,7 +221,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
     var value = Decimal.tryParse(_amountController.text);
     if (value != null && value > Decimal.zero) {
       amount = value;
-      var totalPrice = _calcTotalPrice(value);
+      var totalPrice = _bidQuoteAmount(value);
       if (totalPrice.errMsg != null)
         quote = totalPrice.errMsg!;
       else
@@ -276,7 +278,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                         if (d == null) return 'Invalid value';
                         if (d <= Decimal.fromInt(0))
                           return 'Please enter a value greater then 0';
-                        var totalPrice = _calcTotalPrice(d);
+                        var totalPrice = _bidQuoteAmount(d);
                         if (totalPrice.errMsg != null) return totalPrice.errMsg;
                         return null;
                       }),
