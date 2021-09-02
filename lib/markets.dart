@@ -17,12 +17,10 @@ String findSvg(assetSymbol) {
   String svgRes = "";
   switch (assetSymbol) {
     case "BTC":
-      svgRes =
-          "https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg";
+      svgRes = "images/Bitcoin.svg";
       break;
     case "ETH":
-      svgRes =
-          "https://upload.wikimedia.org/wikipedia/commons/0/05/Ethereum_logo_2014.svg";
+      svgRes = "images/Ethereum.svg";
       break;
   }
   return svgRes;
