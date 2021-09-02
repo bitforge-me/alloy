@@ -21,6 +21,9 @@ String findSvg(assetSymbol) {
     case 'ETH':
       svgRes = 'assets/crypto_icons/Ethereum.svg';
       break;
+    default:
+      svgRes = 'assets/crypto_icons/Default.svg';
+      break;
   }
   return svgRes;
 }
@@ -141,7 +144,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     var order = widget.orders[n];
     return ListTile(
         title: Text('${order.token}'),
-        leading: SvgPicture.network(findSvg('${order.baseAsset}'),
+        leading: SvgPicture.asset(findSvg('${order.baseAsset}'),
             width: 32, height: 32),
         subtitle: Text(
             'market: ${order.market}, amount: ${order.baseAmount} ${order.baseAsset}, status: ${describeEnum(order.status)}',
@@ -342,7 +345,7 @@ class _MarketScreenState extends State<MarketScreen> {
     var market = widget.markets[n];
     return ListTile(
         title: Text('${market.symbol}'),
-        leading: SvgPicture.network(findSvg('${market.baseSymbol}'),
+        leading: SvgPicture.asset(findSvg('${market.baseSymbol}'),
             width: 32, height: 32),
         subtitle: Text('status: ${market.status}'),
         onTap: () => _marketTap(market));
