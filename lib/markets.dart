@@ -16,10 +16,10 @@ String findSvg(assetSymbol) {
   String svgRes = '';
   switch (assetSymbol) {
     case 'BTC':
-      svgRes = 'images/Bitcoin.svg';
+      svgRes = 'assets/crypto_icons/Bitcoin.svg';
       break;
     case 'ETH':
-      svgRes = 'images/Ethereum.svg';
+      svgRes = 'assets/crypto_icons/Ethereum.svg';
       break;
   }
   return svgRes;
@@ -35,7 +35,7 @@ class AssetScreen extends StatelessWidget {
     return ListTile(
       title: Text('${asset.symbol}'),
       leading:
-          SvgPicture.network(findSvg('${asset.symbol}'), width: 32, height: 32),
+          SvgPicture.asset(findSvg('${asset.symbol}'), width: 32, height: 32),
       subtitle: Text(
           'name: ${asset.name}, status: ${asset.status}, minimum confirmations: ${asset.minConfs}'),
     );
