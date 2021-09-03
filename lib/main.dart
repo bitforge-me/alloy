@@ -51,7 +51,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
-  SocketEvents _socketEvents = SocketEvents();
+  Websocket _websocket = Websocket();
   UserInfo? _userInfo;
   bool _invalidAuth = false;
   bool _retry = false;
@@ -64,9 +64,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    print("App lifestyle state changed: $state");
+    print('App lifestyle state changed: $state');
     if (state == AppLifecycleState.resumed)
-      _socketEvents.connect(_websocketCallback); // reconnect websocket
+      _websocket.connect(); // reconnect websocket
   }
 
   Future<void> _initApi() async {
@@ -86,15 +86,21 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           break;
         case ErrorType.None:
           userInfo = result.info;
-          _socketEvents.connect(_websocketCallback); // connect websocket
+          _websocket.wsEvent.subscribe(_websocketEvent);
+          _websocket.connect(); // connect websocket
           break;
       }
       setState(() => _userInfo = userInfo);
     }
   }
 
-  void _websocketCallback(String event, String msg) {
-    alert(context, event, msg);
+  void _websocketEvent(WsEventArgs? args) {
+    if (args == null) return;
+    if (args.event == WebsocketEvent.userInfoUpdate) {
+      var info = UserInfo.parse(args.msg);
+      setState(() => _userInfo = info);
+      flushbarMsg(context, 'user updated');
+    }
   }
 
   Future<Acct?> _paydbLogin(BuildContext context, AccountLogin login,
@@ -264,8 +270,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     var res = await zcMarkets();
     Navigator.pop(context);
     if (res.error.type == ErrorType.None)
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => MarketScreen(res.markets)));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MarketScreen(res.markets, _websocket)));
   }
 
   Future<void> _orders() async {
@@ -273,27 +281,21 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     var res = await zcOrderList(0, 1000);
     Navigator.pop(context);
     if (res.error.type == ErrorType.None)
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => OrdersScreen(res.orders)));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => OrdersScreen(res.orders, _websocket)));
   }
 
   Future<void> _kycRequestCreate() async {
     showAlertDialog(context, 'creating kyc validation request..');
     var res = await zcKycRequestCreate();
     Navigator.pop(context);
-    if (res.error.type == ErrorType.None)
-      setState(() {
-        if (_userInfo != null) {
-          _userInfo = _userInfo!.replace(newKycUrl: res.kycUrl);
-          _kycUrlLaunch();
-        }
-      });
+    if (res.error.type == ErrorType.None) _urlLaunch(res.kycUrl!);
   }
 
-  Future<void> _kycUrlLaunch() async {
-    await canLaunch(_userInfo!.kycUrl!)
-        ? await launch(_userInfo!.kycUrl!)
-        : throw 'Could not launch ${_userInfo?.kycUrl}';
+  Future<void> _urlLaunch(String url) async {
+    await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
   }
 
   @override
@@ -319,8 +321,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               visible: _userInfo != null &&
                   _userInfo?.kycUrl != null &&
                   !_userInfo!.kycValidated,
-              child: RoundedButton(_kycUrlLaunch, ZapWhite, ZapBlue,
-                  ZapBlueGradient, 'Validate KYC',
+              child: RoundedButton(() => _urlLaunch(_userInfo!.kycUrl!),
+                  ZapWhite, ZapBlue, ZapBlueGradient, 'Validate KYC',
                   holePunch: true, width: 300),
             ),
             Visibility(

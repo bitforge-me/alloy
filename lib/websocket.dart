@@ -1,14 +1,20 @@
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:event/event.dart';
 
 import 'package:zapdart/hmac.dart';
 
-import 'paydb.dart';
 import 'prefs.dart';
 import 'config.dart';
 import 'utils.dart';
 
-typedef UserInfoCallback = void Function(UserInfo userInfo);
-typedef MessageCallback = void Function(String event, String msg);
+enum WebsocketEvent { none, userInfoUpdate, brokerOrderNew, brokerOrderUpdate }
+
+class WsEventArgs extends EventArgs {
+  WebsocketEvent event;
+  String msg;
+
+  WsEventArgs(this.event, this.msg);
+}
 
 Future<String?> _server() async {
   var testnet = await Prefs.testnetGet();
@@ -17,19 +23,23 @@ Future<String?> _server() async {
   return baseUrl;
 }
 
-class SocketEvents {
+class Websocket {
   IO.Socket? _socket;
-  MessageCallback? _callback;
+  final wsEvent = Event<WsEventArgs>();
 
-  Future<void> connect(MessageCallback callback) async {
-    _callback = callback;
+  Future<void> connect() async {
     // create socket to receive events
     _socket?.close();
     _socket = await _socketCreate();
   }
 
   void call(String event, String msg) {
-    if (_callback != null) _callback!(event, msg);
+    var wevent = WebsocketEvent.none;
+    if (event == 'user_info_update') wevent = WebsocketEvent.userInfoUpdate;
+    if (event == 'broker_order_new') wevent = WebsocketEvent.brokerOrderNew;
+    if (event == 'broker_order_update')
+      wevent = WebsocketEvent.brokerOrderUpdate;
+    wsEvent.broadcast(WsEventArgs(wevent, msg));
   }
 
   Future<IO.Socket> _socketCreate() async {
@@ -63,6 +73,10 @@ class SocketEvents {
     });
     socket.on('user_info_update', (data) {
       call('user_info_update', data);
+      print(data);
+    });
+    socket.on('broker_order_new', (data) {
+      call('broker_order_new', data);
       print(data);
     });
     socket.on('broker_order_update', (data) {

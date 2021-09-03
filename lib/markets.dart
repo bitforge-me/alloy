@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/foundation.dart';
+import 'dart:convert';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
@@ -10,6 +11,7 @@ import 'package:zapdart/colors.dart';
 import 'paydb.dart';
 import 'cryptocurrency.dart';
 import 'prefs.dart';
+import 'websocket.dart';
 
 class AssetScreen extends StatelessWidget {
   final List<ZcAsset> assets;
@@ -34,8 +36,9 @@ class AssetScreen extends StatelessWidget {
 
 class OrderScreen extends StatefulWidget {
   final ZcBrokerOrder order;
+  final Websocket websocket;
 
-  OrderScreen(this.order);
+  OrderScreen(this.order, this.websocket);
 
   @override
   State<OrderScreen> createState() => _OrderScreenState(order);
@@ -43,13 +46,41 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   ZcBrokerOrder _order;
+  var processOrderUpdates = true;
 
   _OrderScreenState(this._order);
 
+  @override
+  void initState() {
+    super.initState();
+    widget.websocket.wsEvent.subscribe(_websocketEvent);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.websocket.wsEvent.unsubscribe(_websocketEvent);
+  }
+
+  void _websocketEvent(WsEventArgs? args) {
+    if (!processOrderUpdates) return;
+    if (args == null) return;
+    if (args.event == WebsocketEvent.brokerOrderUpdate) {
+      var newOrder = ZcBrokerOrder.parse(jsonDecode(args.msg));
+      if (_order.token == newOrder.token) {
+        setState(() => _order = newOrder);
+        flushbarMsg(context,
+            'broker order updated ${newOrder.token} - ${newOrder.status}');
+      }
+    }
+  }
+
   Future<void> _accept() async {
+    processOrderUpdates = false;
     showAlertDialog(context, 'accepting..');
     var res = await zcOrderAccept(_order.token);
     Navigator.pop(context);
+    processOrderUpdates = true;
     if (res.error.type == ErrorType.None)
       setState(() => _order = res.order);
     else
@@ -57,9 +88,11 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   Future<void> _update() async {
+    processOrderUpdates = false;
     showAlertDialog(context, 'updating..');
     var res = await zcOrderStatus(_order.token);
     Navigator.pop(context);
+    processOrderUpdates = true;
     if (res.error.type == ErrorType.None)
       setState(() => _order = res.order);
     else
@@ -100,28 +133,75 @@ class _OrderScreenState extends State<OrderScreen> {
           ? ListTile(
               title: raisedButton(onPressed: _accept, child: Text('Accept')))
           : SizedBox(),
-      ListTile(title: raisedButton(onPressed: _update, child: Text('Update'))),
+      _order.status != ZcOrderStatus.expired &&
+              _order.status != ZcOrderStatus.cancelled &&
+              _order.status != ZcOrderStatus.completed
+          ? ListTile(
+              title: raisedButton(onPressed: _update, child: Text('Update')))
+          : SizedBox(),
     ]));
   }
 }
 
 class OrdersScreen extends StatefulWidget {
   final List<ZcBrokerOrder> orders;
+  final Websocket websocket;
 
-  OrdersScreen(this.orders);
+  OrdersScreen(this.orders, this.websocket);
 
   @override
-  State<OrdersScreen> createState() => _OrdersScreenState();
+  State<OrdersScreen> createState() => _OrdersScreenState(orders);
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
+  List<ZcBrokerOrder> _orders;
+
+  _OrdersScreenState(this._orders);
+
+  @override
+  void initState() {
+    super.initState();
+    widget.websocket.wsEvent.subscribe(_websocketEvent);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.websocket.wsEvent.unsubscribe(_websocketEvent);
+  }
+
+  void _websocketEvent(WsEventArgs? args) {
+    if (args == null) return;
+    if (args.event == WebsocketEvent.brokerOrderNew) {
+      var newOrder = ZcBrokerOrder.parse(jsonDecode(args.msg));
+      _orders.insert(0, newOrder);
+      setState(() => _orders = _orders);
+      flushbarMsg(context,
+          'broker order created ${newOrder.token} - ${newOrder.status}');
+    }
+    if (args.event == WebsocketEvent.brokerOrderUpdate) {
+      var newOrders = <ZcBrokerOrder>[];
+      var newOrder = ZcBrokerOrder.parse(jsonDecode(args.msg));
+      for (var order in _orders)
+        if (order.token == newOrder.token)
+          newOrders.add(newOrder);
+        else
+          newOrders.add(order);
+      setState(() => _orders = newOrders);
+      flushbarMsg(context,
+          'broker order updated ${newOrder.token} - ${newOrder.status}');
+    }
+  }
+
   Future<void> _orderTap(ZcBrokerOrder order) async {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => OrderScreen(order)));
+        context,
+        MaterialPageRoute(
+            builder: (context) => OrderScreen(order, widget.websocket)));
   }
 
   Widget _listItem(BuildContext context, int n) {
-    var order = widget.orders[n];
+    var order = _orders[n];
     return ListTile(
         title: Text('${order.token}'),
         subtitle: Text(
@@ -139,8 +219,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-          itemBuilder: _listItem, itemCount: widget.orders.length),
+      body: ListView.builder(itemBuilder: _listItem, itemCount: _orders.length),
     );
   }
 }
@@ -155,8 +234,9 @@ class QuoteTotalPrice {
 class QuoteScreen extends StatefulWidget {
   final ZcMarket market;
   final ZcOrderbook orderbook;
+  final Websocket websocket;
 
-  QuoteScreen(this.market, this.orderbook);
+  QuoteScreen(this.market, this.orderbook, this.websocket);
 
   @override
   State<QuoteScreen> createState() => _QuoteScreenState();
@@ -250,8 +330,11 @@ class _QuoteScreenState extends State<QuoteScreen> {
           widget.market.symbol, ZcMarketSide.bid, _amount, _address);
       Navigator.pop(context);
       if (res.error.type == ErrorType.None) {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => OrderScreen(res.order)));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    OrderScreen(res.order, widget.websocket)));
       } else
         alert(context, 'error', 'failed to create order (${res.error.msg})');
     }
@@ -301,8 +384,9 @@ class _QuoteScreenState extends State<QuoteScreen> {
 
 class MarketScreen extends StatefulWidget {
   final List<ZcMarket> markets;
+  final Websocket websocket;
 
-  MarketScreen(this.markets);
+  MarketScreen(this.markets, this.websocket);
 
   @override
   State<MarketScreen> createState() => _MarketScreenState();
@@ -317,7 +401,8 @@ class _MarketScreenState extends State<MarketScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => QuoteScreen(market, res.orderbook)));
+              builder: (context) =>
+                  QuoteScreen(market, res.orderbook, widget.websocket)));
     }
   }
 

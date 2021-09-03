@@ -54,7 +54,7 @@ class UserInfo {
   final String email;
   final String? photo;
   final String? photoType;
-  final Iterable<PayDbPermission> permissions;
+  final Iterable<PayDbPermission>? permissions;
   final Iterable<PayDbRole> roles;
   final bool kycValidated;
   final String? kycUrl;
@@ -62,20 +62,30 @@ class UserInfo {
   UserInfo(this.email, this.photo, this.photoType, this.permissions, this.roles,
       this.kycValidated, this.kycUrl);
 
-  UserInfo replace({String? newKycUrl}) {
-    // get current
-    var email = this.email;
-    var photo = this.photo;
-    var photoType = this.photoType;
+  UserInfo replace(UserInfo info) {
+    // selectively replace permissions because websocket events do not include the permissions field
     var permissions = this.permissions;
-    var roles = this.roles;
-    var kycValidated = this.kycValidated;
-    var kycUrl = this.kycUrl;
-    // get replacements
-    if (newKycUrl != null) kycUrl = newKycUrl;
-    // return new object
-    return UserInfo(
-        email, photo, photoType, permissions, roles, kycValidated, kycUrl);
+    if (info.permissions != null) permissions = info.permissions;
+    return UserInfo(info.email, info.photo, info.photoType, permissions,
+        info.roles, info.kycValidated, info.kycUrl);
+  }
+
+  static UserInfo parse(String data) {
+    var jsnObj = json.decode(data);
+    // check for permissions field because websocket events do not include this field
+    List<PayDbPermission>? perms;
+    if (jsnObj.containsKey('permissions')) {
+      perms = [];
+      for (var permName in jsnObj['permissions'])
+        for (var perm in PayDbPermission.values)
+          if (describeEnum(perm) == permName) perms.add(perm);
+    }
+    var roles = <PayDbRole>[];
+    for (var roleName in jsnObj['roles'])
+      for (var role in PayDbRole.values)
+        if (describeEnum(role) == roleName) roles.add(role);
+    return UserInfo(jsnObj['email'], jsnObj['photo'], jsnObj['photo_type'],
+        perms, roles, jsnObj['kyc_validated'], jsnObj['kyc_url']);
   }
 }
 
@@ -250,6 +260,7 @@ enum ZcOrderStatus {
   ready,
   incoming,
   confirmed,
+  exchange,
   withdraw,
   completed,
   expired,
@@ -463,17 +474,7 @@ Future<UserInfoResult> paydbUserInfo({String? email}) async {
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
   if (response == null) return UserInfoResult(null, ZcError.network());
   if (response.statusCode == 200) {
-    var jsnObj = json.decode(response.body);
-    var perms = <PayDbPermission>[];
-    for (var permName in jsnObj["permissions"])
-      for (var perm in PayDbPermission.values)
-        if (describeEnum(perm) == permName) perms.add(perm);
-    var roles = <PayDbRole>[];
-    for (var roleName in jsnObj["roles"])
-      for (var role in PayDbRole.values)
-        if (describeEnum(role) == roleName) roles.add(role);
-    var info = UserInfo(jsnObj["email"], jsnObj["photo"], jsnObj["photo_type"],
-        perms, roles, jsnObj["kyc_validated"], jsnObj["kyc_url"]);
+    var info = UserInfo.parse(response.body);
     return UserInfoResult(info, ZcError.none());
   } else if (response.statusCode == 400)
     return UserInfoResult(null, ZcError.auth(response.body));

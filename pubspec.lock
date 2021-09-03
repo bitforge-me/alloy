@@ -274,6 +274,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.3"
+  event:
+    dependency: "direct main"
+    description:
+      name: event
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.5"
   extended_image:
     dependency: transitive
     description:
