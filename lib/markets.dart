@@ -29,6 +29,9 @@ class AssetScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Assets'),
+      ),
       body: ListView.builder(itemBuilder: _listItem, itemCount: assets.length),
     );
   }
@@ -108,38 +111,44 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          title: Text('Order ${_order.token}'),
+        ),
         body: ListView(children: [
-      ListTile(title: Text('ID'), subtitle: Text('${_order.token}')),
-      ListTile(title: Text('Market'), subtitle: Text('${_order.market}')),
-      ListTile(
-          title: Text('Amount'),
-          subtitle: Text('${_order.baseAmount} ${_order.baseAsset}')),
-      ListTile(
-          title: Text('Price'),
-          subtitle: Text('${_order.quoteAmount} ${_order.quoteAsset}')),
-      ListTile(title: Text('Date'), subtitle: Text('${_order.date}')),
-      ListTile(title: Text('Expiry'), subtitle: Text('${_order.expiry}')),
-      ListTile(title: Text('Recipient'), subtitle: Text('${_order.recipient}')),
-      ListTile(
-          title: Text('Status'),
-          subtitle: Text('${describeEnum(_order.status)}')),
-      _order.paymentUrl != null
-          ? ListTile(
-              title: Text('Payment URL'),
-              subtitle: Text('${_order.paymentUrl}'),
-              onTap: () => _launchURL(_order.paymentUrl))
-          : SizedBox(),
-      _order.status == ZcOrderStatus.created
-          ? ListTile(
-              title: raisedButton(onPressed: _accept, child: Text('Accept')))
-          : SizedBox(),
-      _order.status != ZcOrderStatus.expired &&
-              _order.status != ZcOrderStatus.cancelled &&
-              _order.status != ZcOrderStatus.completed
-          ? ListTile(
-              title: raisedButton(onPressed: _update, child: Text('Update')))
-          : SizedBox(),
-    ]));
+          ListTile(title: Text('ID'), subtitle: Text('${_order.token}')),
+          ListTile(title: Text('Market'), subtitle: Text('${_order.market}')),
+          ListTile(
+              title: Text('Amount'),
+              subtitle: Text('${_order.baseAmount} ${_order.baseAsset}')),
+          ListTile(
+              title: Text('Price'),
+              subtitle: Text('${_order.quoteAmount} ${_order.quoteAsset}')),
+          ListTile(title: Text('Date'), subtitle: Text('${_order.date}')),
+          ListTile(title: Text('Expiry'), subtitle: Text('${_order.expiry}')),
+          ListTile(
+              title: Text('Recipient'), subtitle: Text('${_order.recipient}')),
+          ListTile(
+              title: Text('Status'),
+              subtitle: Text('${describeEnum(_order.status)}')),
+          _order.paymentUrl != null
+              ? ListTile(
+                  title: Text('Payment URL'),
+                  subtitle: Text('${_order.paymentUrl}'),
+                  onTap: () => _launchURL(_order.paymentUrl))
+              : SizedBox(),
+          _order.status == ZcOrderStatus.created
+              ? ListTile(
+                  title:
+                      raisedButton(onPressed: _accept, child: Text('Accept')))
+              : SizedBox(),
+          _order.status != ZcOrderStatus.expired &&
+                  _order.status != ZcOrderStatus.cancelled &&
+                  _order.status != ZcOrderStatus.completed
+              ? ListTile(
+                  title:
+                      raisedButton(onPressed: _update, child: Text('Update')))
+              : SizedBox(),
+        ]));
   }
 }
 
@@ -219,6 +228,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Orders'),
+      ),
       body: ListView.builder(itemBuilder: _listItem, itemCount: _orders.length),
     );
   }
@@ -343,6 +355,9 @@ class _QuoteScreenState extends State<QuoteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          title: Text('Create Order'),
+        ),
         body: Form(
             key: _formKey,
             child: Container(
@@ -417,6 +432,9 @@ class _MarketScreenState extends State<MarketScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Markets'),
+      ),
       body: ListView.builder(
           itemBuilder: _listItem, itemCount: widget.markets.length),
     );

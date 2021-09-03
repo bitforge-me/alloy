@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
         textTheme: ZapTextThemer(Theme.of(context).textTheme),
         primaryTextTheme: ZapTextThemer(Theme.of(context).textTheme),
       ),
+      debugShowCheckedModeBanner: false,
       home: MyHomePage(title: AppTitle),
     );
   }
@@ -78,13 +79,23 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       switch (result.error.type) {
         case ErrorType.Auth:
           alert(context, 'Authentication failed', result.error.msg);
-          setState(() => _invalidAuth = true);
+          setState(() {
+            _invalidAuth = true;
+            _retry = false;
+          });
           break;
         case ErrorType.Network:
           alert(context, 'Network error', 'A network error occured');
-          setState(() => _retry = true);
+          setState(() {
+            _retry = true;
+            _invalidAuth = false;
+          });
           break;
         case ErrorType.None:
+          setState(() {
+            _invalidAuth = false;
+            _retry = false;
+          });
           userInfo = result.info;
           _websocket.wsEvent.subscribe(_websocketEvent);
           _websocket.connect(); // connect websocket
@@ -303,14 +314,26 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: _userInfo != null
+            ? [
+                IconButton(
+                    icon: const Icon(Icons.logout),
+                    tooltip: 'Logout',
+                    onPressed: _logout)
+              ]
+            : [],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             accountImage(_userInfo?.photo, _userInfo?.photoType),
-            Text('Email: ${_userInfo?.email}'),
-            Text('Validated: ${_userInfo?.kycValidated}'),
+            Visibility(
+                visible: _userInfo != null,
+                child: Text('Email: ${_userInfo?.email}')),
+            Visibility(
+                visible: _userInfo != null,
+                child: Text('Validated: ${_userInfo?.kycValidated}')),
             Visibility(
               visible: _userInfo != null && _userInfo?.kycUrl == null,
               child: RoundedButton(_kycRequestCreate, ZapWhite, ZapBlue,
@@ -341,12 +364,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               visible: _userInfo == null,
               child: RoundedButton(_loginWithEmail, ZapWhite, ZapBlue,
                   ZapBlueGradient, 'Login with email link (lost password)',
-                  holePunch: true, width: 300),
-            ),
-            Visibility(
-              visible: _userInfo != null,
-              child: RoundedButton(
-                  _logout, ZapWhite, ZapBlue, ZapBlueGradient, 'Logout',
                   holePunch: true, width: 300),
             ),
             Visibility(
