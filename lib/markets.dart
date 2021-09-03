@@ -34,8 +34,7 @@ class AssetScreen extends StatelessWidget {
     var asset = assets[n];
     return ListTile(
       title: Text('${asset.symbol}'),
-      leading:
-          SvgPicture.asset(findSvg('${asset.symbol}'), width: 32, height: 32),
+      leading: SvgPicture.asset(findSvg(asset.symbol), width: 32, height: 32),
       subtitle: Text(
           'name: ${asset.name}, status: ${asset.status}, minimum confirmations: ${asset.minConfs}'),
     );
@@ -141,8 +140,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
     var order = widget.orders[n];
     return ListTile(
         title: Text('${order.token}'),
-        leading: SvgPicture.asset(findSvg('${order.baseAsset}'),
-            width: 32, height: 32),
+        leading:
+            SvgPicture.asset(findSvg(order.baseAsset), width: 32, height: 32),
         subtitle: Text(
             'market: ${order.market}, amount: ${order.baseAmount} ${order.baseAsset}, status: ${describeEnum(order.status)}',
             style: order.status == ZcOrderStatus.expired ||
@@ -342,8 +341,8 @@ class _MarketScreenState extends State<MarketScreen> {
     var market = widget.markets[n];
     return ListTile(
         title: Text('${market.symbol}'),
-        leading: SvgPicture.asset(findSvg('${market.baseSymbol}'),
-            width: 32, height: 32),
+        leading:
+            SvgPicture.asset(findSvg(market.baseSymbol), width: 32, height: 32),
         subtitle: Text('status: ${market.status}'),
         onTap: () => _marketTap(market));
   }
