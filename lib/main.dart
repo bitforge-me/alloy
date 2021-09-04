@@ -313,7 +313,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Row(mainAxisAlignment: MainAxisAlignment.center,
+          children: [Image.asset(AppLogo), SizedBox(width: 10), Text(widget.title)]
+        ),
         actions: _userInfo != null
             ? [
                 IconButton(
