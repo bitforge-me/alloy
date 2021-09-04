@@ -7,7 +7,7 @@ import 'package:universal_platform/universal_platform.dart';
 import 'package:zapdart/colors.dart';
 
 const AppTitle = 'CryptoFe';
-const AppLogo = 'logo.png';
+const AppLogo = 'assets/logo.png';
 
 // the default testnet value
 const TestnetDefault = false;
