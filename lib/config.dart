@@ -13,8 +13,7 @@ const AppLogo = 'logo.png';
 const TestnetDefault = false;
 
 // Zap Crypto settings
-const String? ZcServerMainnet =
-    'https://zap-crypto-be.caprover.acuerdo.dev/';
+const String? ZcServerMainnet = 'https://zap-crypto-be.caprover.acuerdo.dev/';
 const String? ZcServerTestnet = null;
 // registration
 const bool RequireMobileNumber = true;

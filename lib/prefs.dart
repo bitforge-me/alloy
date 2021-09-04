@@ -1,7 +1,6 @@
 import 'package:zapdart/prefhelper.dart';
 
 import 'config.dart';
-import 'zapcrypto.dart';
 
 class Prefs {
   static Future<String> getKeyNetworkSpecific(String key) async {

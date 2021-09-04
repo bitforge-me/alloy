@@ -250,8 +250,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         while (acct == null && !cancelled) {
           await Future.delayed(Duration(seconds: 5));
           // claim api key
-          acct = await _zcApiKeyClaim(context, req, result.token!,
-              silent: true);
+          acct =
+              await _zcApiKeyClaim(context, req, result.token!, silent: true);
         }
         Navigator.pop(context);
         if (acct != null) _initApi();
@@ -313,9 +313,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(mainAxisAlignment: MainAxisAlignment.center,
-          children: [Image.asset(AppLogo), SizedBox(width: 10), Text(widget.title)]
-        ),
+        title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Image.asset(AppLogo),
+          SizedBox(width: 10),
+          Text(widget.title)
+        ]),
         actions: _userInfo != null
             ? [
                 IconButton(

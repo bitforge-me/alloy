@@ -425,8 +425,7 @@ Future<ZcApiKeyRequestResult> zcApiKeyRequest(
   var url = baseUrl + "api_key_request";
   var body = jsonEncode({"email": email, "device_name": deviceName});
   var response = await postAndCatch(url, body);
-  if (response == null)
-    return ZcApiKeyRequestResult(null, ZcError.network());
+  if (response == null) return ZcApiKeyRequestResult(null, ZcError.network());
   if (response.statusCode == 200) {
     var jsnObj = json.decode(response.body);
     var token = jsnObj["token"];
