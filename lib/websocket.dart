@@ -18,7 +18,7 @@ class WsEventArgs extends EventArgs {
 
 Future<String?> _server() async {
   var testnet = await Prefs.testnetGet();
-  var baseUrl = testnet ? PayDBServerTestnet : PayDBServerMainnet;
+  var baseUrl = testnet ? ZcServerTestnet : ZcServerMainnet;
   if (baseUrl != null) baseUrl = baseUrl + 'events';
   return baseUrl;
 }
@@ -44,8 +44,8 @@ class Websocket {
 
   Future<IO.Socket> _socketCreate() async {
     var baseUrl = await _server();
-    var apikey = await Prefs.paydbApiKeyGet();
-    var apisecret = await Prefs.paydbApiSecretGet();
+    var apikey = await Prefs.zcApiKeyGet();
+    var apisecret = await Prefs.zcApiSecretGet();
     var nonce = nextNonce();
 
     var socket = IO.io(baseUrl, <String, dynamic>{

@@ -7,7 +7,7 @@ import 'package:zapdart/widgets.dart';
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/account_forms.dart';
 
-import 'paydb.dart';
+import 'zapcrypto.dart';
 import 'config.dart';
 import 'prefs.dart';
 import 'markets.dart';
@@ -71,10 +71,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   Future<void> _initApi() async {
-    if (await Prefs.hasPaydbApiKey()) {
+    if (await Prefs.hasZcApiKey()) {
       UserInfo? userInfo;
       showAlertDialog(context, 'getting account info...');
-      var result = await paydbUserInfo();
+      var result = await zcUserInfo();
       Navigator.pop(context);
       switch (result.error.type) {
         case ErrorType.Auth:
@@ -114,10 +114,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     }
   }
 
-  Future<Acct?> _paydbLogin(BuildContext context, AccountLogin login,
+  Future<Acct?> _zcLogin(BuildContext context, AccountLogin login,
       {bool silent: false}) async {
     var devName = await deviceName();
-    var result = await paydbApiKeyCreate(login.email, login.password, devName);
+    var result = await zcApiKeyCreate(login.email, login.password, devName);
     switch (result.error.type) {
       case ErrorType.Auth:
         if (!silent)
@@ -132,18 +132,18 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       case ErrorType.None:
         // write api key
         if (result.apikey != null) {
-          await Prefs.paydbApiKeySet(result.apikey!.token);
-          await Prefs.paydbApiSecretSet(result.apikey!.secret);
+          await Prefs.zcApiKeySet(result.apikey!.token);
+          await Prefs.zcApiSecretSet(result.apikey!.secret);
         }
         return Acct(login.email, result.apikey?.token);
     }
     return null;
   }
 
-  Future<Acct?> _paydbApiKeyClaim(
+  Future<Acct?> _zcApiKeyClaim(
       BuildContext context, AccountRequestApiKey req, String token,
       {silent: false}) async {
-    var result = await paydbApiKeyClaim(token);
+    var result = await zcApiKeyClaim(token);
     switch (result.error.type) {
       case ErrorType.Auth:
         if (!silent)
@@ -158,8 +158,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       case ErrorType.None:
         // write api key
         if (result.apikey != null) {
-          await Prefs.paydbApiKeySet(result.apikey!.token);
-          await Prefs.paydbApiSecretSet(result.apikey!.secret);
+          await Prefs.zcApiKeySet(result.apikey!.token);
+          await Prefs.zcApiSecretSet(result.apikey!.secret);
         }
         return Acct(req.email, result.apikey?.token);
     }
@@ -182,7 +182,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               )),
     );
     if (reg != null) {
-      var res = await paydbUserRegister(reg);
+      var res = await zcUserRegister(reg);
       switch (res.type) {
         case ErrorType.Auth:
           await alert(context, 'Authorisation error',
@@ -200,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           while (acct == null && !cancelled) {
             await Future.delayed(Duration(seconds: 5));
             // save account if login successful
-            acct = await _paydbLogin(
+            acct = await _zcLogin(
                 context, AccountLogin(reg.email, reg.newPassword),
                 silent: true);
           }
@@ -220,7 +220,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     if (login == null) return;
     // save account if login successful
     showAlertDialog(context, 'logging in..');
-    var acct = await _paydbLogin(context, login);
+    var acct = await _zcLogin(context, login);
     Navigator.pop(context);
     if (acct != null) _initApi();
   }
@@ -234,7 +234,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           builder: (context) => AccountRequestApiKeyForm(devName)),
     );
     if (req == null) return;
-    var result = await paydbApiKeyRequest(req.email, req.deviceName);
+    var result = await zcApiKeyRequest(req.email, req.deviceName);
     switch (result.error.type) {
       case ErrorType.Auth:
       case ErrorType.Network:
@@ -250,7 +250,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         while (acct == null && !cancelled) {
           await Future.delayed(Duration(seconds: 5));
           // claim api key
-          acct = await _paydbApiKeyClaim(context, req, result.token!,
+          acct = await _zcApiKeyClaim(context, req, result.token!,
               silent: true);
         }
         Navigator.pop(context);

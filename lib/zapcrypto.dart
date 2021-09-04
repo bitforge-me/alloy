@@ -3,7 +3,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:email_validator/email_validator.dart';
 import 'package:decimal/decimal.dart';
 
 import 'package:zapdart/utils.dart';
@@ -16,15 +15,15 @@ import 'utils.dart';
 
 Future<String?> _server() async {
   var testnet = await Prefs.testnetGet();
-  var baseUrl = testnet ? PayDBServerTestnet : PayDBServerMainnet;
-  if (baseUrl != null) baseUrl = baseUrl + 'paydb/';
+  var baseUrl = testnet ? ZcServerTestnet : ZcServerMainnet;
+  if (baseUrl != null) baseUrl = baseUrl + 'apiv1/';
   return baseUrl;
 }
 
 enum ErrorType { None, Network, Auth }
 
-enum PayDbPermission { receive, balance, history, transfer, issue }
-enum PayDbRole { admin, proposer, authorizer }
+enum ZcPermission { receive, balance, history, transfer, issue }
+enum ZcRole { admin, proposer, authorizer }
 
 class ZcError {
   final ErrorType type;
@@ -54,8 +53,8 @@ class UserInfo {
   final String email;
   final String? photo;
   final String? photoType;
-  final Iterable<PayDbPermission>? permissions;
-  final Iterable<PayDbRole> roles;
+  final Iterable<ZcPermission>? permissions;
+  final Iterable<ZcRole> roles;
   final bool kycValidated;
   final String? kycUrl;
 
@@ -73,16 +72,16 @@ class UserInfo {
   static UserInfo parse(String data) {
     var jsnObj = json.decode(data);
     // check for permissions field because websocket events do not include this field
-    List<PayDbPermission>? perms;
+    List<ZcPermission>? perms;
     if (jsnObj.containsKey('permissions')) {
       perms = [];
       for (var permName in jsnObj['permissions'])
-        for (var perm in PayDbPermission.values)
+        for (var perm in ZcPermission.values)
           if (describeEnum(perm) == permName) perms.add(perm);
     }
-    var roles = <PayDbRole>[];
+    var roles = <ZcRole>[];
     for (var roleName in jsnObj['roles'])
-      for (var role in PayDbRole.values)
+      for (var role in ZcRole.values)
         if (describeEnum(role) == roleName) roles.add(role);
     return UserInfo(jsnObj['email'], jsnObj['photo'], jsnObj['photo_type'],
         perms, roles, jsnObj['kyc_validated'], jsnObj['kyc_url']);
@@ -96,25 +95,25 @@ class UserInfoResult {
   UserInfoResult(this.info, this.error);
 }
 
-class PayDbApiKey {
+class ZcApiKey {
   final String token;
   final String secret;
 
-  PayDbApiKey(this.token, this.secret);
+  ZcApiKey(this.token, this.secret);
 }
 
-class PayDbApiKeyResult {
-  final PayDbApiKey? apikey;
+class ZcApiKeyResult {
+  final ZcApiKey? apikey;
   final ZcError error;
 
-  PayDbApiKeyResult(this.apikey, this.error);
+  ZcApiKeyResult(this.apikey, this.error);
 }
 
-class PayDbApiKeyRequestResult {
+class ZcApiKeyRequestResult {
   final String? token;
   final ZcError error;
 
-  PayDbApiKeyRequestResult(this.token, this.error);
+  ZcApiKeyRequestResult(this.token, this.error);
 }
 
 class ZcKycRequestCreateResult {
@@ -373,16 +372,11 @@ Future<http.Response?> postAndCatch(String url, String body,
   }
 }
 
-Future<String?> paydbServer() async {
+Future<String?> zcServer() async {
   return await _server();
 }
 
-String? paydbParseRecipient(String value) {
-  if (EmailValidator.validate(value)) return value;
-  return null;
-}
-
-Future<ZcError> paydbUserRegister(AccountRegistration reg) async {
+Future<ZcError> zcUserRegister(AccountRegistration reg) async {
   var baseUrl = await _server();
   if (baseUrl == null) return ZcError.network();
   var url = baseUrl + "user_register";
@@ -405,67 +399,67 @@ Future<ZcError> paydbUserRegister(AccountRegistration reg) async {
   return ZcError.network();
 }
 
-Future<PayDbApiKeyResult> paydbApiKeyCreate(
+Future<ZcApiKeyResult> zcApiKeyCreate(
     String email, String password, String deviceName) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return PayDbApiKeyResult(null, ZcError.network());
+  if (baseUrl == null) return ZcApiKeyResult(null, ZcError.network());
   var url = baseUrl + "api_key_create";
   var body = jsonEncode(
       {"email": email, "password": password, "device_name": deviceName});
   var response = await postAndCatch(url, body);
-  if (response == null) return PayDbApiKeyResult(null, ZcError.network());
+  if (response == null) return ZcApiKeyResult(null, ZcError.network());
   if (response.statusCode == 200) {
     var jsnObj = json.decode(response.body);
-    var info = PayDbApiKey(jsnObj["token"], jsnObj["secret"]);
-    return PayDbApiKeyResult(info, ZcError.none());
+    var info = ZcApiKey(jsnObj["token"], jsnObj["secret"]);
+    return ZcApiKeyResult(info, ZcError.none());
   } else if (response.statusCode == 400)
-    return PayDbApiKeyResult(null, ZcError.auth(response.body));
+    return ZcApiKeyResult(null, ZcError.auth(response.body));
   print(response.statusCode);
-  return PayDbApiKeyResult(null, ZcError.network());
+  return ZcApiKeyResult(null, ZcError.network());
 }
 
-Future<PayDbApiKeyRequestResult> paydbApiKeyRequest(
+Future<ZcApiKeyRequestResult> zcApiKeyRequest(
     String email, String deviceName) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return PayDbApiKeyRequestResult(null, ZcError.network());
+  if (baseUrl == null) return ZcApiKeyRequestResult(null, ZcError.network());
   var url = baseUrl + "api_key_request";
   var body = jsonEncode({"email": email, "device_name": deviceName});
   var response = await postAndCatch(url, body);
   if (response == null)
-    return PayDbApiKeyRequestResult(null, ZcError.network());
+    return ZcApiKeyRequestResult(null, ZcError.network());
   if (response.statusCode == 200) {
     var jsnObj = json.decode(response.body);
     var token = jsnObj["token"];
-    return PayDbApiKeyRequestResult(token, ZcError.none());
+    return ZcApiKeyRequestResult(token, ZcError.none());
   } else if (response.statusCode == 400)
-    return PayDbApiKeyRequestResult(null, ZcError.auth(response.body));
+    return ZcApiKeyRequestResult(null, ZcError.auth(response.body));
   print(response.statusCode);
-  return PayDbApiKeyRequestResult(null, ZcError.network());
+  return ZcApiKeyRequestResult(null, ZcError.network());
 }
 
-Future<PayDbApiKeyResult> paydbApiKeyClaim(String token) async {
+Future<ZcApiKeyResult> zcApiKeyClaim(String token) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return PayDbApiKeyResult(null, ZcError.network());
+  if (baseUrl == null) return ZcApiKeyResult(null, ZcError.network());
   var url = baseUrl + "api_key_claim";
   var body = jsonEncode({"token": token});
   var response = await postAndCatch(url, body);
-  if (response == null) return PayDbApiKeyResult(null, ZcError.network());
+  if (response == null) return ZcApiKeyResult(null, ZcError.network());
   if (response.statusCode == 200) {
     var jsnObj = json.decode(response.body);
-    var info = PayDbApiKey(jsnObj["token"], jsnObj["secret"]);
-    return PayDbApiKeyResult(info, ZcError.none());
+    var info = ZcApiKey(jsnObj["token"], jsnObj["secret"]);
+    return ZcApiKeyResult(info, ZcError.none());
   } else if (response.statusCode == 400)
-    return PayDbApiKeyResult(null, ZcError.auth(response.body));
+    return ZcApiKeyResult(null, ZcError.auth(response.body));
   print(response.statusCode);
-  return PayDbApiKeyResult(null, ZcError.network());
+  return ZcApiKeyResult(null, ZcError.network());
 }
 
-Future<UserInfoResult> paydbUserInfo({String? email}) async {
+Future<UserInfoResult> zcUserInfo({String? email}) async {
   var baseUrl = await _server();
   if (baseUrl == null) return UserInfoResult(null, ZcError.network());
   var url = baseUrl + "user_info";
-  var apikey = await Prefs.paydbApiKeyGet();
-  var apisecret = await Prefs.paydbApiSecretGet();
+  var apikey = await Prefs.zcApiKeyGet();
+  var apisecret = await Prefs.zcApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce, "email": email});
@@ -482,12 +476,12 @@ Future<UserInfoResult> paydbUserInfo({String? email}) async {
   return UserInfoResult(null, ZcError.network());
 }
 
-Future<ZcError> paydbUserResetPassword() async {
+Future<ZcError> zcUserResetPassword() async {
   var baseUrl = await _server();
   if (baseUrl == null) return ZcError.network();
   var url = baseUrl + "user_reset_password";
-  var apikey = await Prefs.paydbApiKeyGet();
-  var apisecret = await Prefs.paydbApiSecretGet();
+  var apikey = await Prefs.zcApiKeyGet();
+  var apisecret = await Prefs.zcApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce});
@@ -502,12 +496,12 @@ Future<ZcError> paydbUserResetPassword() async {
   return ZcError.network();
 }
 
-Future<ZcError> paydbUserUpdateEmail(String email) async {
+Future<ZcError> zcUserUpdateEmail(String email) async {
   var baseUrl = await _server();
   if (baseUrl == null) return ZcError.network();
   var url = baseUrl + "user_update_email";
-  var apikey = await Prefs.paydbApiKeyGet();
-  var apisecret = await Prefs.paydbApiSecretGet();
+  var apikey = await Prefs.zcApiKeyGet();
+  var apisecret = await Prefs.zcApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce, "email": email});
@@ -522,13 +516,13 @@ Future<ZcError> paydbUserUpdateEmail(String email) async {
   return ZcError.network();
 }
 
-Future<ZcError> paydbUserUpdatePassword(
+Future<ZcError> zcUserUpdatePassword(
     String currentPassword, String newPassword) async {
   var baseUrl = await _server();
   if (baseUrl == null) return ZcError.network();
   var url = baseUrl + "user_update_password";
-  var apikey = await Prefs.paydbApiKeyGet();
-  var apisecret = await Prefs.paydbApiSecretGet();
+  var apikey = await Prefs.zcApiKeyGet();
+  var apisecret = await Prefs.zcApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({
@@ -548,12 +542,12 @@ Future<ZcError> paydbUserUpdatePassword(
   return ZcError.network();
 }
 
-Future<ZcError> paydbUserUpdatePhoto(String? photo, String? photoType) async {
+Future<ZcError> zcUserUpdatePhoto(String? photo, String? photoType) async {
   var baseUrl = await _server();
   if (baseUrl == null) return ZcError.network();
   var url = baseUrl + "user_update_photo";
-  var apikey = await Prefs.paydbApiKeyGet();
-  var apisecret = await Prefs.paydbApiSecretGet();
+  var apikey = await Prefs.zcApiKeyGet();
+  var apisecret = await Prefs.zcApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({
@@ -577,8 +571,8 @@ Future<ZcKycRequestCreateResult> zcKycRequestCreate() async {
   var baseUrl = await _server();
   if (baseUrl == null) return ZcKycRequestCreateResult(null, ZcError.network());
   var url = baseUrl + "user_kyc_request_create";
-  var apikey = await Prefs.paydbApiKeyGet();
-  var apisecret = await Prefs.paydbApiSecretGet();
+  var apikey = await Prefs.zcApiKeyGet();
+  var apisecret = await Prefs.zcApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce});
@@ -601,8 +595,8 @@ Future<ZcAssetResult> zcAssets() async {
   var baseUrl = await _server();
   if (baseUrl == null) return ZcAssetResult(assets, ZcError.network());
   var url = baseUrl + "assets";
-  var apikey = await Prefs.paydbApiKeyGet();
-  var apisecret = await Prefs.paydbApiSecretGet();
+  var apikey = await Prefs.zcApiKeyGet();
+  var apisecret = await Prefs.zcApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({
@@ -626,8 +620,8 @@ Future<ZcMarketResult> zcMarkets() async {
   var baseUrl = await _server();
   if (baseUrl == null) return ZcMarketResult(markets, ZcError.network());
   var url = baseUrl + "markets";
-  var apikey = await Prefs.paydbApiKeyGet();
-  var apisecret = await Prefs.paydbApiSecretGet();
+  var apikey = await Prefs.zcApiKeyGet();
+  var apisecret = await Prefs.zcApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({
@@ -651,8 +645,8 @@ Future<ZcOrderbookResult> zcOrderbook(String symbol) async {
   if (baseUrl == null)
     return ZcOrderbookResult(ZcOrderbook.empty(), ZcError.network());
   var url = baseUrl + "order_book";
-  var apikey = await Prefs.paydbApiKeyGet();
-  var apisecret = await Prefs.paydbApiSecretGet();
+  var apikey = await Prefs.zcApiKeyGet();
+  var apisecret = await Prefs.zcApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce, "symbol": symbol});
@@ -675,8 +669,8 @@ Future<ZcBrokerOrderResult> zcOrderCreate(
   if (baseUrl == null)
     return ZcBrokerOrderResult(ZcBrokerOrder.empty(), ZcError.network());
   var url = baseUrl + "broker_order_create";
-  var apikey = await Prefs.paydbApiKeyGet();
-  var apisecret = await Prefs.paydbApiSecretGet();
+  var apikey = await Prefs.zcApiKeyGet();
+  var apisecret = await Prefs.zcApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({
@@ -706,8 +700,8 @@ Future<ZcBrokerOrderResult> zcOrderAccept(String token) async {
   if (baseUrl == null)
     return ZcBrokerOrderResult(ZcBrokerOrder.empty(), ZcError.network());
   var url = baseUrl + "broker_order_accept";
-  var apikey = await Prefs.paydbApiKeyGet();
-  var apisecret = await Prefs.paydbApiSecretGet();
+  var apikey = await Prefs.zcApiKeyGet();
+  var apisecret = await Prefs.zcApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce, "token": token});
@@ -730,8 +724,8 @@ Future<ZcBrokerOrderResult> zcOrderStatus(String token) async {
   if (baseUrl == null)
     return ZcBrokerOrderResult(ZcBrokerOrder.empty(), ZcError.network());
   var url = baseUrl + "broker_order_status";
-  var apikey = await Prefs.paydbApiKeyGet();
-  var apisecret = await Prefs.paydbApiSecretGet();
+  var apikey = await Prefs.zcApiKeyGet();
+  var apisecret = await Prefs.zcApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce, "token": token});
@@ -753,8 +747,8 @@ Future<ZcBrokerOrdersResult> zcOrderList(int offset, int limit) async {
   var baseUrl = await _server();
   if (baseUrl == null) return ZcBrokerOrdersResult([], ZcError.network());
   var url = baseUrl + "broker_orders";
-  var apikey = await Prefs.paydbApiKeyGet();
-  var apisecret = await Prefs.paydbApiSecretGet();
+  var apikey = await Prefs.zcApiKeyGet();
+  var apisecret = await Prefs.zcApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode(

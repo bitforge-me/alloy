@@ -8,7 +8,7 @@ import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
 import 'package:zapdart/colors.dart';
 
-import 'paydb.dart';
+import 'zapcrypto.dart';
 import 'cryptocurrency.dart';
 import 'prefs.dart';
 import 'websocket.dart';

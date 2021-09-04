@@ -11,10 +11,10 @@ const AppTitle = 'CryptoFe';
 // the default testnet value
 const TestnetDefault = false;
 
-// PayDB settings
-const String? PayDBServerMainnet =
+// Zap Crypto settings
+const String? ZcServerMainnet =
     'https://zap-crypto-be.caprover.acuerdo.dev/';
-const String? PayDBServerTestnet = null;
+const String? ZcServerTestnet = null;
 // registration
 const bool RequireMobileNumber = true;
 const String? InitialMobileCountry = 'NZ';
