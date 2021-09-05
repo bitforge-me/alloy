@@ -50,3 +50,8 @@ ValidateResult addressValidate(String symbol, bool testnet, String address) {
       return ValidateResult(false, '$symbol not known');
   }
 }
+
+ValidateResult bankValidate(String address) {
+  //TODO - implement me
+  return ValidateResult(true, null);
+}

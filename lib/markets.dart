@@ -27,8 +27,9 @@ String findSvg(String asset) {
   return svgRes;
 }
 
-Widget assetIcon(String asset) {
+Widget assetIcon(String asset, {EdgeInsetsGeometry? margin}) {
   return Container(
+      margin: margin,
       width: 32,
       height: 32,
       child: Center(child: SvgPicture.asset(findSvg(asset))));
@@ -96,7 +97,7 @@ class _OrderScreenState extends State<OrderScreen> {
       if (_order.token == newOrder.token) {
         setState(() => _order = newOrder);
         flushbarMsg(context,
-            'broker order updated ${newOrder.token} - ${newOrder.status}');
+            'broker order updated ${newOrder.token} - ${describeEnum(newOrder.status)}');
       }
     }
   }
@@ -136,10 +137,13 @@ class _OrderScreenState extends State<OrderScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Order ${_order.token}'),
+          actions: [assetIcon(_order.baseAsset, margin: EdgeInsets.all(10))],
         ),
         body: ListView(children: [
-          ListTile(title: Text('ID'), subtitle: Text('${_order.token}')),
           ListTile(title: Text('Market'), subtitle: Text('${_order.market}')),
+          ListTile(
+              title: Text('Action'),
+              subtitle: Text('${marketSideNice(_order.side)}')),
           ListTile(
               title: Text('Amount'),
               subtitle: Text('${_order.baseAmount} ${_order.baseAsset}')),
@@ -147,7 +151,11 @@ class _OrderScreenState extends State<OrderScreen> {
               title: Text('Price'),
               subtitle: Text('${_order.quoteAmount} ${_order.quoteAsset}')),
           ListTile(title: Text('Date'), subtitle: Text('${_order.date}')),
-          ListTile(title: Text('Expiry'), subtitle: Text('${_order.expiry}')),
+          _order.status == BeOrderStatus.created ||
+                  _order.status == BeOrderStatus.ready
+              ? ListTile(
+                  title: Text('Expiry'), subtitle: Text('${_order.expiry}'))
+              : SizedBox(),
           ListTile(
               title: Text('Recipient'), subtitle: Text('${_order.recipient}')),
           ListTile(
@@ -209,7 +217,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
       _orders.insert(0, newOrder);
       setState(() => _orders = _orders);
       flushbarMsg(context,
-          'broker order created ${newOrder.token} - ${newOrder.status}');
+          'broker order created ${newOrder.token} - ${describeEnum(newOrder.status)}');
     }
     if (args.event == WebsocketEvent.brokerOrderUpdate) {
       var newOrders = <BeBrokerOrder>[];
@@ -221,7 +229,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           newOrders.add(order);
       setState(() => _orders = newOrders);
       flushbarMsg(context,
-          'broker order updated ${newOrder.token} - ${newOrder.status}');
+          'broker order updated ${newOrder.token} - ${describeEnum(newOrder.status)}');
     }
   }
 
@@ -238,7 +246,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         title: Text('${order.token}'),
         leading: assetIcon(order.baseAsset),
         subtitle: Text(
-            'market: ${order.market}, amount: ${order.baseAmount} ${order.baseAsset}, status: ${describeEnum(order.status)}',
+            '${order.market}, ${marketSideNice(order.side)}, ${order.baseAmount} ${order.baseAsset}, ${describeEnum(order.status)}',
             style: order.status == BeOrderStatus.expired ||
                     order.status == BeOrderStatus.cancelled
                 ? TextStyle(color: ZapBlackLight)
@@ -282,11 +290,14 @@ class _QuoteScreenState extends State<QuoteScreen> {
   final _formKey = GlobalKey<FormState>();
   final _amountController = TextEditingController();
   final _withdrawalAddressController = TextEditingController();
+  final _withdrawalBankController = TextEditingController();
 
   var _quote = '-';
   var _amount = Decimal.zero;
+  var _side = BeMarketSide.bid;
   var _address = '-';
-  var _testnet = true;
+  var _bank = '-';
+  var _testnet = false;
 
   @override
   void initState() {
@@ -295,6 +306,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
     // Start listening to changes.
     _amountController.addListener(_updateQuote);
     _withdrawalAddressController.addListener(_updateAddress);
+    _withdrawalBankController.addListener(_updateBank);
 
     // get testnet
     Prefs.testnetGet().then((value) => _testnet = value);
@@ -331,18 +343,41 @@ class _QuoteScreenState extends State<QuoteScreen> {
     return QuoteTotalPrice(Decimal.zero, 'not enough liquidity');
   }
 
+  QuoteTotalPrice _askQuoteAmount(Decimal amount) {
+    if (amount < widget.orderbook.minOrder)
+      return QuoteTotalPrice(Decimal.zero, 'amount too low');
+
+    // TODO - implement me
+    return QuoteTotalPrice(Decimal.one, null);
+  }
+
+  void _updateSide(BeMarketSide side) {
+    setState(() {
+      _side = side;
+      _updateQuote();
+    });
+  }
+
   void _updateQuote() {
     var quote = '-';
     var amount = Decimal.zero;
     var value = Decimal.tryParse(_amountController.text);
     if (value != null && value > Decimal.zero) {
       amount = value;
-      var totalPrice = _bidQuoteAmount(value);
+      QuoteTotalPrice totalPrice;
+      switch (_side) {
+        case BeMarketSide.bid:
+          totalPrice = _bidQuoteAmount(value);
+          break;
+        case BeMarketSide.ask:
+          totalPrice = _askQuoteAmount(value);
+          break;
+      }
       if (totalPrice.errMsg != null)
         quote = totalPrice.errMsg!;
       else
         quote =
-            '$value ${widget.market.baseSymbol} = ${totalPrice.amount} ${widget.market.quoteSymbol}';
+            '$value ${widget.market.baseAsset} = ${totalPrice.amount} ${widget.market.quoteAsset}';
     }
     setState(() {
       _quote = quote;
@@ -353,17 +388,24 @@ class _QuoteScreenState extends State<QuoteScreen> {
   void _updateAddress() {
     var addr = '-';
     var res = addressValidate(
-        widget.market.baseSymbol, _testnet, _withdrawalAddressController.text);
+        widget.market.baseAsset, _testnet, _withdrawalAddressController.text);
     if (res.result) addr = _withdrawalAddressController.text;
     setState(() => _address = addr);
+  }
+
+  void _updateBank() {
+    var bank = '-';
+    var res = bankValidate(_withdrawalBankController.text);
+    if (res.result) bank = _withdrawalBankController.text;
+    setState(() => _bank = bank);
   }
 
   void _orderCreate() async {
     if (_formKey.currentState == null) return;
     if (_formKey.currentState!.validate()) {
       showAlertDialog(context, 'creating order..');
-      var res = await beOrderCreate(
-          widget.market.symbol, BeMarketSide.bid, _amount, _address);
+      var res =
+          await beOrderCreate(widget.market.symbol, _side, _amount, _address);
       Navigator.pop(context);
       if (res.error.type == ErrorType.None) {
         Navigator.push(
@@ -381,6 +423,9 @@ class _QuoteScreenState extends State<QuoteScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Create Order'),
+          actions: [
+            assetIcon(widget.market.baseAsset, margin: EdgeInsets.all(10))
+          ],
         ),
         body: Form(
             key: _formKey,
@@ -388,33 +433,68 @@ class _QuoteScreenState extends State<QuoteScreen> {
                 padding: EdgeInsets.all(10),
                 child: Column(children: [
                   Text(_quote),
-                  Text('Send $_amount to $_address'),
+                  Text(
+                      'Send $_amount to ${_side == BeMarketSide.bid ? _address : _bank}'),
+                  DropdownButtonFormField<BeMarketSide>(
+                      value: _side,
+                      items: BeMarketSide.values
+                          .map((e) => DropdownMenuItem<BeMarketSide>(
+                              value: e, child: Text(marketSideNice(e))))
+                          .toList(),
+                      onChanged: (value) => _updateSide(value!)),
                   TextFormField(
                       controller: _amountController,
                       decoration: InputDecoration(labelText: 'Amount'),
                       keyboardType: TextInputType.numberWithOptions(
                           signed: false, decimal: true),
                       validator: (value) {
-                        if (value == null) return 'Please enter a value';
+                        if (value == null || value.isEmpty)
+                          return 'Please enter a value';
                         var d = Decimal.tryParse(value);
                         if (d == null) return 'Invalid value';
                         if (d <= Decimal.fromInt(0))
                           return 'Please enter a value greater then 0';
-                        var totalPrice = _bidQuoteAmount(d);
+                        QuoteTotalPrice totalPrice;
+                        switch (_side) {
+                          case BeMarketSide.bid:
+                            totalPrice = _bidQuoteAmount(d);
+                            break;
+                          case BeMarketSide.ask:
+                            totalPrice = _askQuoteAmount(d);
+                            break;
+                        }
                         if (totalPrice.errMsg != null) return totalPrice.errMsg;
                         return null;
                       }),
-                  TextFormField(
-                      controller: _withdrawalAddressController,
-                      decoration: InputDecoration(labelText: 'Wallet Address'),
-                      keyboardType: TextInputType.text,
-                      validator: (value) {
-                        if (value == null) return 'Please enter a value';
-                        var res = addressValidate(
-                            widget.market.baseSymbol, _testnet, value);
-                        if (!res.result) return res.reason;
-                        return null;
-                      }),
+                  Visibility(
+                      visible: _side == BeMarketSide.bid,
+                      child: TextFormField(
+                          controller: _withdrawalAddressController,
+                          decoration:
+                              InputDecoration(labelText: 'Wallet Address'),
+                          keyboardType: TextInputType.text,
+                          validator: (value) {
+                            if (value == null || value.isEmpty)
+                              return 'Please enter a value';
+                            var res = addressValidate(
+                                widget.market.baseAsset, _testnet, value);
+                            if (!res.result) return res.reason;
+                            return null;
+                          })),
+                  Visibility(
+                      visible: _side == BeMarketSide.ask,
+                      child: TextFormField(
+                          controller: _withdrawalBankController,
+                          decoration:
+                              InputDecoration(labelText: 'Bank Account'),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value == null || value.isEmpty)
+                              return 'Please enter a value';
+                            var res = bankValidate(value);
+                            if (!res.result) return res.reason;
+                            return null;
+                          })),
                   raisedButton(
                       onPressed: _orderCreate, child: Text('Create Order'))
                 ]))));
@@ -449,7 +529,7 @@ class _MarketScreenState extends State<MarketScreen> {
     var market = widget.markets[n];
     return ListTile(
         title: Text('${market.symbol}'),
-        leading: assetIcon(market.baseSymbol),
+        leading: assetIcon(market.baseAsset),
         subtitle: Text('status: ${market.status}'),
         onTap: () => _marketTap(market));
   }

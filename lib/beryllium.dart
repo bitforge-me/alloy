@@ -198,14 +198,14 @@ class BeAssetResult {
 
 class BeMarket {
   final String symbol;
-  final String baseSymbol;
-  final String quoteSymbol;
+  final String baseAsset;
+  final String quoteAsset;
   final int precision;
   final String status;
   final String minTrade;
   final String message;
 
-  BeMarket(this.symbol, this.baseSymbol, this.quoteSymbol, this.precision,
+  BeMarket(this.symbol, this.baseAsset, this.quoteAsset, this.precision,
       this.status, this.minTrade, this.message);
 
   static List<BeMarket> parseMarkets(dynamic markets) {
@@ -213,8 +213,8 @@ class BeMarket {
     for (var item in markets)
       marketList.add(BeMarket(
           item['symbol'],
-          item['base_symbol'],
-          item['quote_symbol'],
+          item['base_asset'],
+          item['quote_asset'],
           item['precision'],
           item['status'],
           item['min_trade'],
@@ -287,6 +287,15 @@ class BeOrderbookResult {
 
 enum BeMarketSide { bid, ask }
 
+String marketSideNice(BeMarketSide side) {
+  switch (side) {
+    case BeMarketSide.ask:
+      return 'Sell';
+    case BeMarketSide.bid:
+      return 'Buy';
+  }
+}
+
 enum BeOrderStatus {
   none,
   created,
@@ -301,7 +310,10 @@ enum BeOrderStatus {
 }
 
 extension EnumEx on String {
-  BeOrderStatus toEnum() =>
+  BeMarketSide toEnumSide() =>
+      BeMarketSide.values.firstWhere((d) => describeEnum(d) == toLowerCase());
+
+  BeOrderStatus toEnumStatus() =>
       BeOrderStatus.values.firstWhere((d) => describeEnum(d) == toLowerCase());
 }
 
@@ -310,6 +322,7 @@ class BeBrokerOrder {
   final DateTime date;
   final DateTime expiry;
   final String market;
+  final BeMarketSide side;
   final String baseAsset;
   final String quoteAsset;
   final Decimal baseAmount;
@@ -323,6 +336,7 @@ class BeBrokerOrder {
       this.date,
       this.expiry,
       this.market,
+      this.side,
       this.baseAsset,
       this.quoteAsset,
       this.baseAmount,
@@ -334,14 +348,16 @@ class BeBrokerOrder {
   static BeBrokerOrder parse(dynamic data) {
     var date = DateTime.parse(data['date']);
     var expiry = DateTime.parse(data['expiry']);
+    var side = (data['side'] as String).toEnumSide();
     var baseAmount = Decimal.parse(data['base_amount_dec']);
     var quoteAmount = Decimal.parse(data['quote_amount_dec']);
-    var status = (data['status'] as String).toEnum();
+    var status = (data['status'] as String).toEnumStatus();
     return BeBrokerOrder(
         data['token'],
         date,
         expiry,
         data['market'],
+        side,
         data['base_asset'],
         data['quote_asset'],
         baseAmount,
@@ -352,8 +368,19 @@ class BeBrokerOrder {
   }
 
   static BeBrokerOrder empty() {
-    return BeBrokerOrder('', DateTime.now(), DateTime.now(), '', '', '',
-        Decimal.zero, Decimal.zero, '', BeOrderStatus.none, null);
+    return BeBrokerOrder(
+        '',
+        DateTime.now(),
+        DateTime.now(),
+        '',
+        BeMarketSide.bid,
+        '',
+        '',
+        Decimal.zero,
+        Decimal.zero,
+        '',
+        BeOrderStatus.none,
+        null);
   }
 }
 
