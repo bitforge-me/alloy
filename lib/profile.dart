@@ -111,7 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(height: 5)
           ]),
           ListTile(
-              leading: Icon(Icons.manage_accounts),
+              leading: Icon(Icons.account_circle),
               onTap: _updateProfile,
               title: Text('Update Profile')),
           ListTile(
