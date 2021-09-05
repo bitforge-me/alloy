@@ -7,10 +7,11 @@ import 'package:zapdart/widgets.dart';
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/account_forms.dart';
 
-import 'paydb.dart';
+import 'zapcrypto.dart';
 import 'config.dart';
 import 'prefs.dart';
 import 'markets.dart';
+import 'websocket.dart';
 
 void main() {
   runApp(Phoenix(child: MyApp()));
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         textTheme: ZapTextThemer(Theme.of(context).textTheme),
         primaryTextTheme: ZapTextThemer(Theme.of(context).textTheme),
       ),
+      debugShowCheckedModeBanner: false,
       home: MyHomePage(title: AppTitle),
     );
   }
@@ -49,7 +51,8 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
+  Websocket _websocket = Websocket();
   UserInfo? _userInfo;
   bool _invalidAuth = false;
   bool _retry = false;
@@ -60,33 +63,61 @@ class _MyHomePageState extends State<MyHomePage> {
     _initApi();
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print('App lifestyle state changed: $state');
+    if (state == AppLifecycleState.resumed)
+      _websocket.connect(); // reconnect websocket
+  }
+
   Future<void> _initApi() async {
-    if (await Prefs.hasPaydbApiKey()) {
+    if (await Prefs.hasZcApiKey()) {
       UserInfo? userInfo;
       showAlertDialog(context, 'getting account info...');
-      var result = await paydbUserInfo();
+      var result = await zcUserInfo();
       Navigator.pop(context);
       switch (result.error.type) {
         case ErrorType.Auth:
           alert(context, 'Authentication failed', result.error.msg);
-          setState(() => _invalidAuth = true);
+          setState(() {
+            _invalidAuth = true;
+            _retry = false;
+          });
           break;
         case ErrorType.Network:
           alert(context, 'Network error', 'A network error occured');
-          setState(() => _retry = true);
+          setState(() {
+            _retry = true;
+            _invalidAuth = false;
+          });
           break;
         case ErrorType.None:
+          setState(() {
+            _invalidAuth = false;
+            _retry = false;
+          });
           userInfo = result.info;
+          _websocket.wsEvent.subscribe(_websocketEvent);
+          _websocket.connect(); // connect websocket
           break;
       }
       setState(() => _userInfo = userInfo);
     }
   }
 
-  Future<Acct?> _paydbLogin(BuildContext context, AccountLogin login,
+  void _websocketEvent(WsEventArgs? args) {
+    if (args == null) return;
+    if (args.event == WebsocketEvent.userInfoUpdate) {
+      var info = UserInfo.parse(args.msg);
+      setState(() => _userInfo = info);
+      flushbarMsg(context, 'user updated');
+    }
+  }
+
+  Future<Acct?> _zcLogin(BuildContext context, AccountLogin login,
       {bool silent: false}) async {
     var devName = await deviceName();
-    var result = await paydbApiKeyCreate(login.email, login.password, devName);
+    var result = await zcApiKeyCreate(login.email, login.password, devName);
     switch (result.error.type) {
       case ErrorType.Auth:
         if (!silent)
@@ -101,18 +132,18 @@ class _MyHomePageState extends State<MyHomePage> {
       case ErrorType.None:
         // write api key
         if (result.apikey != null) {
-          await Prefs.paydbApiKeySet(result.apikey!.token);
-          await Prefs.paydbApiSecretSet(result.apikey!.secret);
+          await Prefs.zcApiKeySet(result.apikey!.token);
+          await Prefs.zcApiSecretSet(result.apikey!.secret);
         }
         return Acct(login.email, result.apikey?.token);
     }
     return null;
   }
 
-  Future<Acct?> _paydbApiKeyClaim(
+  Future<Acct?> _zcApiKeyClaim(
       BuildContext context, AccountRequestApiKey req, String token,
       {silent: false}) async {
-    var result = await paydbApiKeyClaim(token);
+    var result = await zcApiKeyClaim(token);
     switch (result.error.type) {
       case ErrorType.Auth:
         if (!silent)
@@ -127,8 +158,8 @@ class _MyHomePageState extends State<MyHomePage> {
       case ErrorType.None:
         // write api key
         if (result.apikey != null) {
-          await Prefs.paydbApiKeySet(result.apikey!.token);
-          await Prefs.paydbApiSecretSet(result.apikey!.secret);
+          await Prefs.zcApiKeySet(result.apikey!.token);
+          await Prefs.zcApiSecretSet(result.apikey!.secret);
         }
         return Acct(req.email, result.apikey?.token);
     }
@@ -151,7 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
               )),
     );
     if (reg != null) {
-      var res = await paydbUserRegister(reg);
+      var res = await zcUserRegister(reg);
       switch (res.type) {
         case ErrorType.Auth:
           await alert(context, 'Authorisation error',
@@ -169,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
           while (acct == null && !cancelled) {
             await Future.delayed(Duration(seconds: 5));
             // save account if login successful
-            acct = await _paydbLogin(
+            acct = await _zcLogin(
                 context, AccountLogin(reg.email, reg.newPassword),
                 silent: true);
           }
@@ -189,7 +220,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (login == null) return;
     // save account if login successful
     showAlertDialog(context, 'logging in..');
-    var acct = await _paydbLogin(context, login);
+    var acct = await _zcLogin(context, login);
     Navigator.pop(context);
     if (acct != null) _initApi();
   }
@@ -203,7 +234,7 @@ class _MyHomePageState extends State<MyHomePage> {
           builder: (context) => AccountRequestApiKeyForm(devName)),
     );
     if (req == null) return;
-    var result = await paydbApiKeyRequest(req.email, req.deviceName);
+    var result = await zcApiKeyRequest(req.email, req.deviceName);
     switch (result.error.type) {
       case ErrorType.Auth:
       case ErrorType.Network:
@@ -219,8 +250,8 @@ class _MyHomePageState extends State<MyHomePage> {
         while (acct == null && !cancelled) {
           await Future.delayed(Duration(seconds: 5));
           // claim api key
-          acct = await _paydbApiKeyClaim(context, req, result.token!,
-              silent: true);
+          acct =
+              await _zcApiKeyClaim(context, req, result.token!, silent: true);
         }
         Navigator.pop(context);
         if (acct != null) _initApi();
@@ -250,8 +281,10 @@ class _MyHomePageState extends State<MyHomePage> {
     var res = await zcMarkets();
     Navigator.pop(context);
     if (res.error.type == ErrorType.None)
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => MarketScreen(res.markets)));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MarketScreen(res.markets, _websocket)));
   }
 
   Future<void> _orders() async {
@@ -259,42 +292,52 @@ class _MyHomePageState extends State<MyHomePage> {
     var res = await zcOrderList(0, 1000);
     Navigator.pop(context);
     if (res.error.type == ErrorType.None)
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => OrdersScreen(res.orders)));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => OrdersScreen(res.orders, _websocket)));
   }
 
   Future<void> _kycRequestCreate() async {
     showAlertDialog(context, 'creating kyc validation request..');
     var res = await zcKycRequestCreate();
     Navigator.pop(context);
-    if (res.error.type == ErrorType.None)
-      setState(() {
-        if (_userInfo != null) {
-          _userInfo = _userInfo!.replace(newKycUrl: res.kycUrl);
-          _kycUrlLaunch();
-        }
-      });
+    if (res.error.type == ErrorType.None) _urlLaunch(res.kycUrl!);
   }
 
-  Future<void> _kycUrlLaunch() async {
-    await canLaunch(_userInfo!.kycUrl!)
-        ? await launch(_userInfo!.kycUrl!)
-        : throw 'Could not launch ${_userInfo?.kycUrl}';
+  Future<void> _urlLaunch(String url) async {
+    await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Image.asset(AppLogo),
+          SizedBox(width: 10),
+          Text(widget.title)
+        ]),
+        actions: _userInfo != null
+            ? [
+                IconButton(
+                    icon: const Icon(Icons.logout),
+                    tooltip: 'Logout',
+                    onPressed: _logout)
+              ]
+            : [],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             accountImage(_userInfo?.photo, _userInfo?.photoType),
-            Text('Email: ${_userInfo?.email}'),
-            Text('Validated: ${_userInfo?.kycValidated}'),
+            Visibility(
+                visible: _userInfo != null,
+                child: Text('Email: ${_userInfo?.email}')),
+            Visibility(
+                visible: _userInfo != null,
+                child: Text('Validated: ${_userInfo?.kycValidated}')),
             Visibility(
               visible: _userInfo != null && _userInfo?.kycUrl == null,
               child: RoundedButton(_kycRequestCreate, ZapWhite, ZapBlue,
@@ -305,8 +348,8 @@ class _MyHomePageState extends State<MyHomePage> {
               visible: _userInfo != null &&
                   _userInfo?.kycUrl != null &&
                   !_userInfo!.kycValidated,
-              child: RoundedButton(_kycUrlLaunch, ZapWhite, ZapBlue,
-                  ZapBlueGradient, 'Validate KYC',
+              child: RoundedButton(() => _urlLaunch(_userInfo!.kycUrl!),
+                  ZapWhite, ZapBlue, ZapBlueGradient, 'Validate KYC',
                   holePunch: true, width: 300),
             ),
             Visibility(
@@ -325,12 +368,6 @@ class _MyHomePageState extends State<MyHomePage> {
               visible: _userInfo == null,
               child: RoundedButton(_loginWithEmail, ZapWhite, ZapBlue,
                   ZapBlueGradient, 'Login with email link (lost password)',
-                  holePunch: true, width: 300),
-            ),
-            Visibility(
-              visible: _userInfo != null,
-              child: RoundedButton(
-                  _logout, ZapWhite, ZapBlue, ZapBlueGradient, 'Logout',
                   holePunch: true, width: 300),
             ),
             Visibility(

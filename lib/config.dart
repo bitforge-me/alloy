@@ -7,14 +7,14 @@ import 'package:universal_platform/universal_platform.dart';
 import 'package:zapdart/colors.dart';
 
 const AppTitle = 'CryptoFe';
+const AppLogo = 'assets/logo.png';
 
 // the default testnet value
 const TestnetDefault = false;
 
-// PayDB settings
-const String? PayDBServerMainnet =
-    'https://zap-crypto-be.caprover.acuerdo.dev/paydb/';
-const String? PayDBServerTestnet = null;
+// Zap Crypto settings
+const String? ZcServerMainnet = 'https://zap-crypto-be.caprover.acuerdo.dev/';
+const String? ZcServerTestnet = null;
 // registration
 const bool RequireMobileNumber = true;
 const String? InitialMobileCountry = 'NZ';

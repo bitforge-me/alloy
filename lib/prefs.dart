@@ -1,24 +1,6 @@
 import 'package:zapdart/prefhelper.dart';
 
 import 'config.dart';
-import 'paydb.dart';
-
-class PayDbAccount {
-  final String email;
-  final String? photo;
-  final String? photoType;
-  final Iterable<PayDbPermission> permissions;
-  final Iterable<PayDbRole> roles;
-
-  PayDbAccount(
-      this.email, this.photo, this.photoType, this.permissions, this.roles);
-  PayDbAccount.empty()
-      : email = '',
-        photo = null,
-        photoType = null,
-        permissions = [],
-        roles = [];
-}
 
 class Prefs {
   static Future<String> getKeyNetworkSpecific(String key) async {
@@ -50,28 +32,28 @@ class Prefs {
     await prefs.setBool("testnet", value);
   }
 
-  static Future<String?> paydbApiKeyGet() async {
-    return await getStringNetworkSpecific("paydb_apikey", null);
+  static Future<String?> zcApiKeyGet() async {
+    return await getStringNetworkSpecific("zc_apikey", null);
   }
 
-  static Future<bool> paydbApiKeySet(String? value) async {
-    await setStringNetworkSpecific("paydb_apikey", value);
+  static Future<bool> zcApiKeySet(String? value) async {
+    await setStringNetworkSpecific("zc_apikey", value);
     return true;
   }
 
-  static Future<String?> paydbApiSecretGet() async {
-    return await getStringNetworkSpecific("paydb_apisecret", null);
+  static Future<String?> zcApiSecretGet() async {
+    return await getStringNetworkSpecific("zc_apisecret", null);
   }
 
-  static Future<bool> paydbApiSecretSet(String? value) async {
-    await setStringNetworkSpecific("paydb_apisecret", value);
+  static Future<bool> zcApiSecretSet(String? value) async {
+    await setStringNetworkSpecific("zc_apisecret", value);
     return true;
   }
 
-  static Future<bool> hasPaydbApiKey() async {
-    var apikey = await Prefs.paydbApiKeyGet();
+  static Future<bool> hasZcApiKey() async {
+    var apikey = await Prefs.zcApiKeyGet();
     if (apikey == null || apikey.isEmpty) return false;
-    var apisecret = await Prefs.paydbApiSecretGet();
+    var apisecret = await Prefs.zcApiSecretGet();
     if (apisecret == null || apisecret.isEmpty) return false;
     return true;
   }
