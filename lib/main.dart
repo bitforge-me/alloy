@@ -116,6 +116,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     if (args == null) return;
     if (args.event == WebsocketEvent.userInfoUpdate) {
       var info = UserInfo.parse(args.msg);
+      if (info.email != _userInfo?.email)
+        _websocket.connect(); // reconnect websocket
       setState(() => _userInfo = info);
       flushbarMsg(context, 'user updated');
     }
@@ -316,8 +318,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   Future<void> _profile() async {
-    await Navigator.push(context,
-        MaterialPageRoute(builder: (context) => ProfileScreen(_userInfo!)));
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ProfileScreen(_websocket, _userInfo!)));
   }
 
   Future<void> _kycRequestCreate() async {
