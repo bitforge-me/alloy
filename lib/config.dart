@@ -6,8 +6,9 @@ import 'package:universal_platform/universal_platform.dart';
 
 import 'package:zapdart/colors.dart';
 
-const AppTitle = 'CryptoFe';
+const AppTitle = 'Alloy';
 const AppLogo = 'assets/logo.png';
+const SupportUrl = 'https://support.crypto.zap.me/';
 
 // the default testnet value
 const TestnetDefault = false;

@@ -12,6 +12,7 @@ import 'config.dart';
 import 'prefs.dart';
 import 'markets.dart';
 import 'websocket.dart';
+import 'profile.dart';
 
 void main() {
   runApp(Phoenix(child: MyApp()));
@@ -264,9 +265,19 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     }
   }
 
+  Future<void> _support() async {
+    if (_userInfo != null)
+      await _urlLaunch(
+          '$SupportUrl?email=${Uri.encodeQueryComponent(_userInfo!.email)}');
+    else
+      await _urlLaunch(SupportUrl);
+  }
+
   Future<void> _logout() async {
-    await Prefs.nukeAll();
-    Phoenix.rebirth(context);
+    if (await askYesNo(context, 'Are you sure you want to logout?')) {
+      await Prefs.nukeAll();
+      Phoenix.rebirth(context);
+    }
   }
 
   Future<void> _retryAuth() async {
@@ -302,6 +313,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           context,
           MaterialPageRoute(
               builder: (context) => OrdersScreen(res.orders, _websocket)));
+  }
+
+  Future<void> _profile() async {
+    await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => ProfileScreen(_userInfo!)));
   }
 
   Future<void> _kycRequestCreate() async {
@@ -366,9 +382,17 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   },
                 )),
             ListTile(
+                leading: Icon(Icons.account_circle),
+                title: const Text('Profile'),
+                onTap: _profile),
+            ListTile(
                 leading: Icon(Icons.view_list),
                 title: const Text('Orders'),
                 onTap: _orders),
+            ListTile(
+                leading: Icon(Icons.contact_support),
+                title: const Text('Support'),
+                onTap: _support),
             ListTile(
                 leading: Icon(Icons.logout),
                 title: const Text('Logout'),
@@ -396,6 +420,12 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               visible: _userInfo == null,
               child: RoundedButton(_loginWithEmail, ZapWhite, ZapBlue,
                   ZapBlueGradient, 'Lost Password',
+                  holePunch: true, width: 200),
+            ),
+            Visibility(
+              visible: _userInfo == null,
+              child: RoundedButton(
+                  _support, ZapWhite, ZapBlue, ZapBlueGradient, 'Support',
                   holePunch: true, width: 200),
             ),
             Visibility(

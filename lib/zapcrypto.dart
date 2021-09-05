@@ -50,6 +50,10 @@ class ZcError {
 }
 
 class UserInfo {
+  final String? firstName;
+  final String? lastName;
+  final String? mobileNumber;
+  final String? address;
   final String email;
   final String? photo;
   final String? photoType;
@@ -58,15 +62,35 @@ class UserInfo {
   final bool kycValidated;
   final String? kycUrl;
 
-  UserInfo(this.email, this.photo, this.photoType, this.permissions, this.roles,
-      this.kycValidated, this.kycUrl);
+  UserInfo(
+      this.firstName,
+      this.lastName,
+      this.mobileNumber,
+      this.address,
+      this.email,
+      this.photo,
+      this.photoType,
+      this.permissions,
+      this.roles,
+      this.kycValidated,
+      this.kycUrl);
 
   UserInfo replace(UserInfo info) {
     // selectively replace permissions because websocket events do not include the permissions field
     var permissions = this.permissions;
     if (info.permissions != null) permissions = info.permissions;
-    return UserInfo(info.email, info.photo, info.photoType, permissions,
-        info.roles, info.kycValidated, info.kycUrl);
+    return UserInfo(
+        info.firstName,
+        info.lastName,
+        info.mobileNumber,
+        info.address,
+        info.email,
+        info.photo,
+        info.photoType,
+        permissions,
+        info.roles,
+        info.kycValidated,
+        info.kycUrl);
   }
 
   static UserInfo parse(String data) {
@@ -83,8 +107,18 @@ class UserInfo {
     for (var roleName in jsnObj['roles'])
       for (var role in ZcRole.values)
         if (describeEnum(role) == roleName) roles.add(role);
-    return UserInfo(jsnObj['email'], jsnObj['photo'], jsnObj['photo_type'],
-        perms, roles, jsnObj['kyc_validated'], jsnObj['kyc_url']);
+    return UserInfo(
+        jsnObj['first_name'],
+        jsnObj['last_name'],
+        jsnObj['mobile_number'],
+        jsnObj['address'],
+        jsnObj['email'],
+        jsnObj['photo'],
+        jsnObj['photo_type'],
+        perms,
+        roles,
+        jsnObj['kyc_validated'],
+        jsnObj['kyc_url']);
   }
 }
 

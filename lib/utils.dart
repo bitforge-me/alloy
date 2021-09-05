@@ -6,3 +6,8 @@ int nextNonce() {
   lastNonce = nonce;
   return nonce;
 }
+
+String vs(String? s) {
+  if (s != null) return s;
+  return '';
+}
