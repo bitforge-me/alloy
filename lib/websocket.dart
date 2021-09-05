@@ -44,8 +44,8 @@ class Websocket {
 
   Future<IO.Socket> _socketCreate() async {
     var baseUrl = await _server();
-    var apikey = await Prefs.zcApiKeyGet();
-    var apisecret = await Prefs.zcApiSecretGet();
+    var apikey = await Prefs.beApiKeyGet();
+    var apisecret = await Prefs.beApiSecretGet();
     var nonce = nextNonce();
 
     var socket = IO.io(baseUrl, <String, dynamic>{

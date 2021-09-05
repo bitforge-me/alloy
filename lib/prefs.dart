@@ -32,28 +32,28 @@ class Prefs {
     await prefs.setBool("testnet", value);
   }
 
-  static Future<String?> zcApiKeyGet() async {
-    return await getStringNetworkSpecific("zc_apikey", null);
+  static Future<String?> beApiKeyGet() async {
+    return await getStringNetworkSpecific("be_apikey", null);
   }
 
-  static Future<bool> zcApiKeySet(String? value) async {
-    await setStringNetworkSpecific("zc_apikey", value);
+  static Future<bool> beApiKeySet(String? value) async {
+    await setStringNetworkSpecific("be_apikey", value);
     return true;
   }
 
-  static Future<String?> zcApiSecretGet() async {
-    return await getStringNetworkSpecific("zc_apisecret", null);
+  static Future<String?> beApiSecretGet() async {
+    return await getStringNetworkSpecific("be_apisecret", null);
   }
 
-  static Future<bool> zcApiSecretSet(String? value) async {
-    await setStringNetworkSpecific("zc_apisecret", value);
+  static Future<bool> beApiSecretSet(String? value) async {
+    await setStringNetworkSpecific("be_apisecret", value);
     return true;
   }
 
   static Future<bool> hasZcApiKey() async {
-    var apikey = await Prefs.zcApiKeyGet();
+    var apikey = await Prefs.beApiKeyGet();
     if (apikey == null || apikey.isEmpty) return false;
-    var apisecret = await Prefs.zcApiSecretGet();
+    var apisecret = await Prefs.beApiSecretGet();
     if (apisecret == null || apisecret.isEmpty) return false;
     return true;
   }

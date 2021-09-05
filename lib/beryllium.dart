@@ -22,29 +22,29 @@ Future<String?> _server() async {
 
 enum ErrorType { None, Network, Auth }
 
-enum ZcPermission { receive, balance, history, transfer, issue }
-enum ZcRole { admin, proposer, authorizer }
+enum BePermission { receive, balance, history, transfer, issue }
+enum BeRole { admin, proposer, authorizer }
 
-class ZcError {
+class BeError {
   final ErrorType type;
   final String msg;
 
-  ZcError(this.type, this.msg);
+  BeError(this.type, this.msg);
 
-  static ZcError none() {
-    return ZcError(ErrorType.None, 'no error');
+  static BeError none() {
+    return BeError(ErrorType.None, 'no error');
   }
 
-  static ZcError network() {
-    return ZcError(ErrorType.Network, 'network error');
+  static BeError network() {
+    return BeError(ErrorType.Network, 'network error');
   }
 
-  static ZcError auth(String msg) {
+  static BeError auth(String msg) {
     try {
       var json = jsonDecode(msg);
-      return ZcError(ErrorType.Auth, json['message']);
+      return BeError(ErrorType.Auth, json['message']);
     } catch (_) {
-      return ZcError(ErrorType.Auth, msg);
+      return BeError(ErrorType.Auth, msg);
     }
   }
 }
@@ -57,8 +57,8 @@ class UserInfo {
   final String email;
   final String? photo;
   final String? photoType;
-  final Iterable<ZcPermission>? permissions;
-  final Iterable<ZcRole> roles;
+  final Iterable<BePermission>? permissions;
+  final Iterable<BeRole> roles;
   final bool kycValidated;
   final String? kycUrl;
 
@@ -96,16 +96,16 @@ class UserInfo {
   static UserInfo parse(String data) {
     var jsnObj = json.decode(data);
     // check for permissions field because websocket events do not include this field
-    List<ZcPermission>? perms;
+    List<BePermission>? perms;
     if (jsnObj.containsKey('permissions')) {
       perms = [];
       for (var permName in jsnObj['permissions'])
-        for (var perm in ZcPermission.values)
+        for (var perm in BePermission.values)
           if (describeEnum(perm) == permName) perms.add(perm);
     }
-    var roles = <ZcRole>[];
+    var roles = <BeRole>[];
     for (var roleName in jsnObj['roles'])
-      for (var role in ZcRole.values)
+      for (var role in BeRole.values)
         if (describeEnum(role) == roleName) roles.add(role);
     return UserInfo(
         jsnObj['first_name'],
@@ -124,40 +124,40 @@ class UserInfo {
 
 class UserInfoResult {
   final UserInfo? info;
-  final ZcError error;
+  final BeError error;
 
   UserInfoResult(this.info, this.error);
 }
 
-class ZcApiKey {
+class BeApiKey {
   final String token;
   final String secret;
 
-  ZcApiKey(this.token, this.secret);
+  BeApiKey(this.token, this.secret);
 }
 
-class ZcApiKeyResult {
-  final ZcApiKey? apikey;
-  final ZcError error;
+class BeApiKeyResult {
+  final BeApiKey? apikey;
+  final BeError error;
 
-  ZcApiKeyResult(this.apikey, this.error);
+  BeApiKeyResult(this.apikey, this.error);
 }
 
-class ZcApiKeyRequestResult {
+class BeApiKeyRequestResult {
   final String? token;
-  final ZcError error;
+  final BeError error;
 
-  ZcApiKeyRequestResult(this.token, this.error);
+  BeApiKeyRequestResult(this.token, this.error);
 }
 
-class ZcKycRequestCreateResult {
+class BeKycRequestCreateResult {
   final String? kycUrl;
-  final ZcError error;
+  final BeError error;
 
-  ZcKycRequestCreateResult(this.kycUrl, this.error);
+  BeKycRequestCreateResult(this.kycUrl, this.error);
 }
 
-class ZcAsset {
+class BeAsset {
   final String symbol;
   final String name;
   final String coinType;
@@ -166,13 +166,13 @@ class ZcAsset {
   final String message;
   final int decimals;
 
-  ZcAsset(this.symbol, this.name, this.coinType, this.status, this.minConfs,
+  BeAsset(this.symbol, this.name, this.coinType, this.status, this.minConfs,
       this.message, this.decimals);
 
-  static List<ZcAsset> parseAssets(dynamic assets) {
-    List<ZcAsset> assetList = [];
+  static List<BeAsset> parseAssets(dynamic assets) {
+    List<BeAsset> assetList = [];
     for (var item in assets)
-      assetList.add(ZcAsset(
+      assetList.add(BeAsset(
           item['symbol'],
           item['name'],
           item['coin_type'],
@@ -184,19 +184,19 @@ class ZcAsset {
   }
 }
 
-class ZcAssetResult {
-  final List<ZcAsset> assets;
-  final ZcError error;
+class BeAssetResult {
+  final List<BeAsset> assets;
+  final BeError error;
 
-  ZcAssetResult(this.assets, this.error);
+  BeAssetResult(this.assets, this.error);
 
-  static ZcAssetResult parse(String data) {
-    var assets = ZcAsset.parseAssets(jsonDecode(data)['assets']);
-    return ZcAssetResult(assets, ZcError.none());
+  static BeAssetResult parse(String data) {
+    var assets = BeAsset.parseAssets(jsonDecode(data)['assets']);
+    return BeAssetResult(assets, BeError.none());
   }
 }
 
-class ZcMarket {
+class BeMarket {
   final String symbol;
   final String baseSymbol;
   final String quoteSymbol;
@@ -205,13 +205,13 @@ class ZcMarket {
   final String minTrade;
   final String message;
 
-  ZcMarket(this.symbol, this.baseSymbol, this.quoteSymbol, this.precision,
+  BeMarket(this.symbol, this.baseSymbol, this.quoteSymbol, this.precision,
       this.status, this.minTrade, this.message);
 
-  static List<ZcMarket> parseMarkets(dynamic markets) {
-    List<ZcMarket> marketList = [];
+  static List<BeMarket> parseMarkets(dynamic markets) {
+    List<BeMarket> marketList = [];
     for (var item in markets)
-      marketList.add(ZcMarket(
+      marketList.add(BeMarket(
           item['symbol'],
           item['base_symbol'],
           item['quote_symbol'],
@@ -223,39 +223,39 @@ class ZcMarket {
   }
 }
 
-class ZcMarketResult {
-  final List<ZcMarket> markets;
-  final ZcError error;
+class BeMarketResult {
+  final List<BeMarket> markets;
+  final BeError error;
 
-  ZcMarketResult(this.markets, this.error);
+  BeMarketResult(this.markets, this.error);
 
-  static ZcMarketResult parse(String data) {
-    var markets = ZcMarket.parseMarkets(jsonDecode(data)['markets']);
-    return ZcMarketResult(markets, ZcError.none());
+  static BeMarketResult parse(String data) {
+    var markets = BeMarket.parseMarkets(jsonDecode(data)['markets']);
+    return BeMarketResult(markets, BeError.none());
   }
 }
 
-class ZcRate {
+class BeRate {
   final Decimal quantity;
   final Decimal rate;
 
-  ZcRate(this.quantity, this.rate);
+  BeRate(this.quantity, this.rate);
 }
 
-class ZcOrderbook {
-  final List<ZcRate> bids;
-  final List<ZcRate> asks;
+class BeOrderbook {
+  final List<BeRate> bids;
+  final List<BeRate> asks;
   final Decimal minOrder;
   final Decimal baseAssetWithdrawFee;
   final Decimal quoteAssetWithdrawFee;
   final Decimal brokerFee;
 
-  ZcOrderbook(this.bids, this.asks, this.minOrder, this.baseAssetWithdrawFee,
+  BeOrderbook(this.bids, this.asks, this.minOrder, this.baseAssetWithdrawFee,
       this.quoteAssetWithdrawFee, this.brokerFee);
 
-  static ZcOrderbook parse(String data) {
-    List<ZcRate> bids = [];
-    List<ZcRate> asks = [];
+  static BeOrderbook parse(String data) {
+    List<BeRate> bids = [];
+    List<BeRate> asks = [];
     var json = jsonDecode(data);
     var orderbook = json['order_book'];
     var minOrder = Decimal.parse(json['min_order']);
@@ -264,30 +264,30 @@ class ZcOrderbook {
     var brokerFee = Decimal.parse(json['broker_fee']);
     for (var item in orderbook['bids'])
       bids.add(
-          ZcRate(Decimal.parse(item['quantity']), Decimal.parse(item['rate'])));
+          BeRate(Decimal.parse(item['quantity']), Decimal.parse(item['rate'])));
     for (var item in orderbook['asks'])
       asks.add(
-          ZcRate(Decimal.parse(item['quantity']), Decimal.parse(item['rate'])));
-    return ZcOrderbook(bids, asks, minOrder, baseAssetWithdrawFee,
+          BeRate(Decimal.parse(item['quantity']), Decimal.parse(item['rate'])));
+    return BeOrderbook(bids, asks, minOrder, baseAssetWithdrawFee,
         quoteAssetWithdrawFee, brokerFee);
   }
 
-  static ZcOrderbook empty() {
-    return ZcOrderbook(
+  static BeOrderbook empty() {
+    return BeOrderbook(
         [], [], Decimal.zero, Decimal.zero, Decimal.zero, Decimal.zero);
   }
 }
 
-class ZcOrderbookResult {
-  final ZcOrderbook orderbook;
-  final ZcError error;
+class BeOrderbookResult {
+  final BeOrderbook orderbook;
+  final BeError error;
 
-  ZcOrderbookResult(this.orderbook, this.error);
+  BeOrderbookResult(this.orderbook, this.error);
 }
 
-enum ZcMarketSide { bid, ask }
+enum BeMarketSide { bid, ask }
 
-enum ZcOrderStatus {
+enum BeOrderStatus {
   none,
   created,
   ready,
@@ -301,11 +301,11 @@ enum ZcOrderStatus {
 }
 
 extension EnumEx on String {
-  ZcOrderStatus toEnum() =>
-      ZcOrderStatus.values.firstWhere((d) => describeEnum(d) == toLowerCase());
+  BeOrderStatus toEnum() =>
+      BeOrderStatus.values.firstWhere((d) => describeEnum(d) == toLowerCase());
 }
 
-class ZcBrokerOrder {
+class BeBrokerOrder {
   final String token;
   final DateTime date;
   final DateTime expiry;
@@ -315,10 +315,10 @@ class ZcBrokerOrder {
   final Decimal baseAmount;
   final Decimal quoteAmount;
   final String recipient;
-  final ZcOrderStatus status;
+  final BeOrderStatus status;
   final String? paymentUrl;
 
-  ZcBrokerOrder(
+  BeBrokerOrder(
       this.token,
       this.date,
       this.expiry,
@@ -331,13 +331,13 @@ class ZcBrokerOrder {
       this.status,
       this.paymentUrl);
 
-  static ZcBrokerOrder parse(dynamic data) {
+  static BeBrokerOrder parse(dynamic data) {
     var date = DateTime.parse(data['date']);
     var expiry = DateTime.parse(data['expiry']);
     var baseAmount = Decimal.parse(data['base_amount_dec']);
     var quoteAmount = Decimal.parse(data['quote_amount_dec']);
     var status = (data['status'] as String).toEnum();
-    return ZcBrokerOrder(
+    return BeBrokerOrder(
         data['token'],
         date,
         expiry,
@@ -351,36 +351,36 @@ class ZcBrokerOrder {
         data['payment_url']);
   }
 
-  static ZcBrokerOrder empty() {
-    return ZcBrokerOrder('', DateTime.now(), DateTime.now(), '', '', '',
-        Decimal.zero, Decimal.zero, '', ZcOrderStatus.none, null);
+  static BeBrokerOrder empty() {
+    return BeBrokerOrder('', DateTime.now(), DateTime.now(), '', '', '',
+        Decimal.zero, Decimal.zero, '', BeOrderStatus.none, null);
   }
 }
 
-class ZcBrokerOrderResult {
-  final ZcBrokerOrder order;
-  final ZcError error;
+class BeBrokerOrderResult {
+  final BeBrokerOrder order;
+  final BeError error;
 
-  ZcBrokerOrderResult(this.order, this.error);
+  BeBrokerOrderResult(this.order, this.error);
 
-  static ZcBrokerOrderResult parse(String data) {
+  static BeBrokerOrderResult parse(String data) {
     var json = jsonDecode(data);
-    ZcBrokerOrder order = ZcBrokerOrder.parse(json['broker_order']);
-    return ZcBrokerOrderResult(order, ZcError.none());
+    BeBrokerOrder order = BeBrokerOrder.parse(json['broker_order']);
+    return BeBrokerOrderResult(order, BeError.none());
   }
 }
 
-class ZcBrokerOrdersResult {
-  final List<ZcBrokerOrder> orders;
-  final ZcError error;
+class BeBrokerOrdersResult {
+  final List<BeBrokerOrder> orders;
+  final BeError error;
 
-  ZcBrokerOrdersResult(this.orders, this.error);
+  BeBrokerOrdersResult(this.orders, this.error);
 
-  static ZcBrokerOrdersResult parse(String data) {
-    List<ZcBrokerOrder> orderList = [];
+  static BeBrokerOrdersResult parse(String data) {
+    List<BeBrokerOrder> orderList = [];
     var orders = jsonDecode(data)['broker_orders'];
-    for (var item in orders) orderList.add(ZcBrokerOrder.parse(item));
-    return ZcBrokerOrdersResult(orderList, ZcError.none());
+    for (var item in orders) orderList.add(BeBrokerOrder.parse(item));
+    return BeBrokerOrdersResult(orderList, BeError.none());
   }
 }
 
@@ -406,13 +406,13 @@ Future<http.Response?> postAndCatch(String url, String body,
   }
 }
 
-Future<String?> zcServer() async {
+Future<String?> beServer() async {
   return await _server();
 }
 
-Future<ZcError> zcUserRegister(AccountRegistration reg) async {
+Future<BeError> beUserRegister(AccountRegistration reg) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return ZcError.network();
+  if (baseUrl == null) return BeError.network();
   var url = baseUrl + "user_register";
   var body = jsonEncode({
     "first_name": reg.firstName,
@@ -425,137 +425,137 @@ Future<ZcError> zcUserRegister(AccountRegistration reg) async {
     "photo_type": reg.photoType
   });
   var response = await postAndCatch(url, body);
-  if (response == null) return ZcError.network();
+  if (response == null) return BeError.network();
   if (response.statusCode == 200) {
-    return ZcError.none();
-  } else if (response.statusCode == 400) return ZcError.auth(response.body);
+    return BeError.none();
+  } else if (response.statusCode == 400) return BeError.auth(response.body);
   print(response.statusCode);
-  return ZcError.network();
+  return BeError.network();
 }
 
-Future<ZcApiKeyResult> zcApiKeyCreate(
+Future<BeApiKeyResult> beApiKeyCreate(
     String email, String password, String deviceName) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return ZcApiKeyResult(null, ZcError.network());
+  if (baseUrl == null) return BeApiKeyResult(null, BeError.network());
   var url = baseUrl + "api_key_create";
   var body = jsonEncode(
       {"email": email, "password": password, "device_name": deviceName});
   var response = await postAndCatch(url, body);
-  if (response == null) return ZcApiKeyResult(null, ZcError.network());
+  if (response == null) return BeApiKeyResult(null, BeError.network());
   if (response.statusCode == 200) {
     var jsnObj = json.decode(response.body);
-    var info = ZcApiKey(jsnObj["token"], jsnObj["secret"]);
-    return ZcApiKeyResult(info, ZcError.none());
+    var info = BeApiKey(jsnObj["token"], jsnObj["secret"]);
+    return BeApiKeyResult(info, BeError.none());
   } else if (response.statusCode == 400)
-    return ZcApiKeyResult(null, ZcError.auth(response.body));
+    return BeApiKeyResult(null, BeError.auth(response.body));
   print(response.statusCode);
-  return ZcApiKeyResult(null, ZcError.network());
+  return BeApiKeyResult(null, BeError.network());
 }
 
-Future<ZcApiKeyRequestResult> zcApiKeyRequest(
+Future<BeApiKeyRequestResult> beApiKeyRequest(
     String email, String deviceName) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return ZcApiKeyRequestResult(null, ZcError.network());
+  if (baseUrl == null) return BeApiKeyRequestResult(null, BeError.network());
   var url = baseUrl + "api_key_request";
   var body = jsonEncode({"email": email, "device_name": deviceName});
   var response = await postAndCatch(url, body);
-  if (response == null) return ZcApiKeyRequestResult(null, ZcError.network());
+  if (response == null) return BeApiKeyRequestResult(null, BeError.network());
   if (response.statusCode == 200) {
     var jsnObj = json.decode(response.body);
     var token = jsnObj["token"];
-    return ZcApiKeyRequestResult(token, ZcError.none());
+    return BeApiKeyRequestResult(token, BeError.none());
   } else if (response.statusCode == 400)
-    return ZcApiKeyRequestResult(null, ZcError.auth(response.body));
+    return BeApiKeyRequestResult(null, BeError.auth(response.body));
   print(response.statusCode);
-  return ZcApiKeyRequestResult(null, ZcError.network());
+  return BeApiKeyRequestResult(null, BeError.network());
 }
 
-Future<ZcApiKeyResult> zcApiKeyClaim(String token) async {
+Future<BeApiKeyResult> beApiKeyClaim(String token) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return ZcApiKeyResult(null, ZcError.network());
+  if (baseUrl == null) return BeApiKeyResult(null, BeError.network());
   var url = baseUrl + "api_key_claim";
   var body = jsonEncode({"token": token});
   var response = await postAndCatch(url, body);
-  if (response == null) return ZcApiKeyResult(null, ZcError.network());
+  if (response == null) return BeApiKeyResult(null, BeError.network());
   if (response.statusCode == 200) {
     var jsnObj = json.decode(response.body);
-    var info = ZcApiKey(jsnObj["token"], jsnObj["secret"]);
-    return ZcApiKeyResult(info, ZcError.none());
+    var info = BeApiKey(jsnObj["token"], jsnObj["secret"]);
+    return BeApiKeyResult(info, BeError.none());
   } else if (response.statusCode == 400)
-    return ZcApiKeyResult(null, ZcError.auth(response.body));
+    return BeApiKeyResult(null, BeError.auth(response.body));
   print(response.statusCode);
-  return ZcApiKeyResult(null, ZcError.network());
+  return BeApiKeyResult(null, BeError.network());
 }
 
-Future<UserInfoResult> zcUserInfo({String? email}) async {
+Future<UserInfoResult> beUserInfo({String? email}) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return UserInfoResult(null, ZcError.network());
+  if (baseUrl == null) return UserInfoResult(null, BeError.network());
   var url = baseUrl + "user_info";
-  var apikey = await Prefs.zcApiKeyGet();
-  var apisecret = await Prefs.zcApiSecretGet();
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce, "email": email});
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return UserInfoResult(null, ZcError.network());
+  if (response == null) return UserInfoResult(null, BeError.network());
   if (response.statusCode == 200) {
     var info = UserInfo.parse(response.body);
-    return UserInfoResult(info, ZcError.none());
+    return UserInfoResult(info, BeError.none());
   } else if (response.statusCode == 400)
-    return UserInfoResult(null, ZcError.auth(response.body));
+    return UserInfoResult(null, BeError.auth(response.body));
   print(response.statusCode);
-  return UserInfoResult(null, ZcError.network());
+  return UserInfoResult(null, BeError.network());
 }
 
-Future<ZcError> zcUserResetPassword() async {
+Future<BeError> beUserResetPassword() async {
   var baseUrl = await _server();
-  if (baseUrl == null) return ZcError.network();
+  if (baseUrl == null) return BeError.network();
   var url = baseUrl + "user_reset_password";
-  var apikey = await Prefs.zcApiKeyGet();
-  var apisecret = await Prefs.zcApiSecretGet();
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce});
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return ZcError.network();
+  if (response == null) return BeError.network();
   if (response.statusCode == 200) {
-    return ZcError.none();
-  } else if (response.statusCode == 400) return ZcError.auth(response.body);
+    return BeError.none();
+  } else if (response.statusCode == 400) return BeError.auth(response.body);
   print(response.statusCode);
-  return ZcError.network();
+  return BeError.network();
 }
 
-Future<ZcError> zcUserUpdateEmail(String email) async {
+Future<BeError> beUserUpdateEmail(String email) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return ZcError.network();
+  if (baseUrl == null) return BeError.network();
   var url = baseUrl + "user_update_email";
-  var apikey = await Prefs.zcApiKeyGet();
-  var apisecret = await Prefs.zcApiSecretGet();
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce, "email": email});
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return ZcError.network();
+  if (response == null) return BeError.network();
   if (response.statusCode == 200) {
-    return ZcError.none();
-  } else if (response.statusCode == 400) return ZcError.auth(response.body);
+    return BeError.none();
+  } else if (response.statusCode == 400) return BeError.auth(response.body);
   print(response.statusCode);
-  return ZcError.network();
+  return BeError.network();
 }
 
-Future<ZcError> zcUserUpdatePassword(
+Future<BeError> beUserUpdatePassword(
     String currentPassword, String newPassword) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return ZcError.network();
+  if (baseUrl == null) return BeError.network();
   var url = baseUrl + "user_update_password";
-  var apikey = await Prefs.zcApiKeyGet();
-  var apisecret = await Prefs.zcApiSecretGet();
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({
@@ -567,20 +567,20 @@ Future<ZcError> zcUserUpdatePassword(
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return ZcError.network();
+  if (response == null) return BeError.network();
   if (response.statusCode == 200) {
-    return ZcError.none();
-  } else if (response.statusCode == 400) return ZcError.auth(response.body);
+    return BeError.none();
+  } else if (response.statusCode == 400) return BeError.auth(response.body);
   print(response.statusCode);
-  return ZcError.network();
+  return BeError.network();
 }
 
-Future<ZcError> zcUserUpdatePhoto(String? photo, String? photoType) async {
+Future<BeError> beUserUpdatePhoto(String? photo, String? photoType) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return ZcError.network();
+  if (baseUrl == null) return BeError.network();
   var url = baseUrl + "user_update_photo";
-  var apikey = await Prefs.zcApiKeyGet();
-  var apisecret = await Prefs.zcApiSecretGet();
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({
@@ -592,20 +592,20 @@ Future<ZcError> zcUserUpdatePhoto(String? photo, String? photoType) async {
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return ZcError.network();
+  if (response == null) return BeError.network();
   if (response.statusCode == 200) {
-    return ZcError.none();
-  } else if (response.statusCode == 400) return ZcError.auth(response.body);
+    return BeError.none();
+  } else if (response.statusCode == 400) return BeError.auth(response.body);
   print(response.statusCode);
-  return ZcError.network();
+  return BeError.network();
 }
 
-Future<ZcKycRequestCreateResult> zcKycRequestCreate() async {
+Future<BeKycRequestCreateResult> beKycRequestCreate() async {
   var baseUrl = await _server();
-  if (baseUrl == null) return ZcKycRequestCreateResult(null, ZcError.network());
+  if (baseUrl == null) return BeKycRequestCreateResult(null, BeError.network());
   var url = baseUrl + "user_kyc_request_create";
-  var apikey = await Prefs.zcApiKeyGet();
-  var apisecret = await Prefs.zcApiSecretGet();
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce});
@@ -613,23 +613,23 @@ Future<ZcKycRequestCreateResult> zcKycRequestCreate() async {
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
   if (response == null)
-    return ZcKycRequestCreateResult(null, ZcError.network());
+    return BeKycRequestCreateResult(null, BeError.network());
   if (response.statusCode == 200) {
     var jsnObj = json.decode(response.body);
-    return ZcKycRequestCreateResult(jsnObj['kyc_url'], ZcError.none());
+    return BeKycRequestCreateResult(jsnObj['kyc_url'], BeError.none());
   } else if (response.statusCode == 400)
-    return ZcKycRequestCreateResult(null, ZcError.auth(response.body));
+    return BeKycRequestCreateResult(null, BeError.auth(response.body));
   print(response.statusCode);
-  return ZcKycRequestCreateResult(null, ZcError.network());
+  return BeKycRequestCreateResult(null, BeError.network());
 }
 
-Future<ZcAssetResult> zcAssets() async {
-  List<ZcAsset> assets = [];
+Future<BeAssetResult> beAssets() async {
+  List<BeAsset> assets = [];
   var baseUrl = await _server();
-  if (baseUrl == null) return ZcAssetResult(assets, ZcError.network());
+  if (baseUrl == null) return BeAssetResult(assets, BeError.network());
   var url = baseUrl + "assets";
-  var apikey = await Prefs.zcApiKeyGet();
-  var apisecret = await Prefs.zcApiSecretGet();
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({
@@ -639,22 +639,22 @@ Future<ZcAssetResult> zcAssets() async {
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return ZcAssetResult(assets, ZcError.network());
+  if (response == null) return BeAssetResult(assets, BeError.network());
   if (response.statusCode == 200) {
-    return ZcAssetResult.parse(response.body);
+    return BeAssetResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return ZcAssetResult(assets, ZcError.auth(response.body));
+    return BeAssetResult(assets, BeError.auth(response.body));
   print(response.statusCode);
-  return ZcAssetResult(assets, ZcError.network());
+  return BeAssetResult(assets, BeError.network());
 }
 
-Future<ZcMarketResult> zcMarkets() async {
-  List<ZcMarket> markets = [];
+Future<BeMarketResult> beMarkets() async {
+  List<BeMarket> markets = [];
   var baseUrl = await _server();
-  if (baseUrl == null) return ZcMarketResult(markets, ZcError.network());
+  if (baseUrl == null) return BeMarketResult(markets, BeError.network());
   var url = baseUrl + "markets";
-  var apikey = await Prefs.zcApiKeyGet();
-  var apisecret = await Prefs.zcApiSecretGet();
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({
@@ -664,22 +664,22 @@ Future<ZcMarketResult> zcMarkets() async {
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return ZcMarketResult(markets, ZcError.network());
+  if (response == null) return BeMarketResult(markets, BeError.network());
   if (response.statusCode == 200) {
-    return ZcMarketResult.parse(response.body);
+    return BeMarketResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return ZcMarketResult(markets, ZcError.auth(response.body));
+    return BeMarketResult(markets, BeError.auth(response.body));
   print(response.statusCode);
-  return ZcMarketResult(markets, ZcError.network());
+  return BeMarketResult(markets, BeError.network());
 }
 
-Future<ZcOrderbookResult> zcOrderbook(String symbol) async {
+Future<BeOrderbookResult> beOrderbook(String symbol) async {
   var baseUrl = await _server();
   if (baseUrl == null)
-    return ZcOrderbookResult(ZcOrderbook.empty(), ZcError.network());
+    return BeOrderbookResult(BeOrderbook.empty(), BeError.network());
   var url = baseUrl + "order_book";
-  var apikey = await Prefs.zcApiKeyGet();
-  var apisecret = await Prefs.zcApiSecretGet();
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce, "symbol": symbol});
@@ -687,23 +687,23 @@ Future<ZcOrderbookResult> zcOrderbook(String symbol) async {
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
   if (response == null)
-    return ZcOrderbookResult(ZcOrderbook.empty(), ZcError.network());
+    return BeOrderbookResult(BeOrderbook.empty(), BeError.network());
   if (response.statusCode == 200) {
-    return ZcOrderbookResult(ZcOrderbook.parse(response.body), ZcError.none());
+    return BeOrderbookResult(BeOrderbook.parse(response.body), BeError.none());
   } else if (response.statusCode == 400)
-    return ZcOrderbookResult(ZcOrderbook.empty(), ZcError.auth(response.body));
+    return BeOrderbookResult(BeOrderbook.empty(), BeError.auth(response.body));
   print(response.statusCode);
-  return ZcOrderbookResult(ZcOrderbook.empty(), ZcError.network());
+  return BeOrderbookResult(BeOrderbook.empty(), BeError.network());
 }
 
-Future<ZcBrokerOrderResult> zcOrderCreate(
-    String market, ZcMarketSide side, Decimal amount, String recipient) async {
+Future<BeBrokerOrderResult> beOrderCreate(
+    String market, BeMarketSide side, Decimal amount, String recipient) async {
   var baseUrl = await _server();
   if (baseUrl == null)
-    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), ZcError.network());
+    return BeBrokerOrderResult(BeBrokerOrder.empty(), BeError.network());
   var url = baseUrl + "broker_order_create";
-  var apikey = await Prefs.zcApiKeyGet();
-  var apisecret = await Prefs.zcApiSecretGet();
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({
@@ -718,23 +718,23 @@ Future<ZcBrokerOrderResult> zcOrderCreate(
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
   if (response == null)
-    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), ZcError.network());
+    return BeBrokerOrderResult(BeBrokerOrder.empty(), BeError.network());
   if (response.statusCode == 200) {
-    return ZcBrokerOrderResult.parse(response.body);
+    return BeBrokerOrderResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return ZcBrokerOrderResult(
-        ZcBrokerOrder.empty(), ZcError.auth(response.body));
+    return BeBrokerOrderResult(
+        BeBrokerOrder.empty(), BeError.auth(response.body));
   print(response.statusCode);
-  return ZcBrokerOrderResult(ZcBrokerOrder.empty(), ZcError.network());
+  return BeBrokerOrderResult(BeBrokerOrder.empty(), BeError.network());
 }
 
-Future<ZcBrokerOrderResult> zcOrderAccept(String token) async {
+Future<BeBrokerOrderResult> beOrderAccept(String token) async {
   var baseUrl = await _server();
   if (baseUrl == null)
-    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), ZcError.network());
+    return BeBrokerOrderResult(BeBrokerOrder.empty(), BeError.network());
   var url = baseUrl + "broker_order_accept";
-  var apikey = await Prefs.zcApiKeyGet();
-  var apisecret = await Prefs.zcApiSecretGet();
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce, "token": token});
@@ -742,23 +742,23 @@ Future<ZcBrokerOrderResult> zcOrderAccept(String token) async {
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
   if (response == null)
-    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), ZcError.network());
+    return BeBrokerOrderResult(BeBrokerOrder.empty(), BeError.network());
   if (response.statusCode == 200) {
-    return ZcBrokerOrderResult.parse(response.body);
+    return BeBrokerOrderResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return ZcBrokerOrderResult(
-        ZcBrokerOrder.empty(), ZcError.auth(response.body));
+    return BeBrokerOrderResult(
+        BeBrokerOrder.empty(), BeError.auth(response.body));
   print(response.statusCode);
-  return ZcBrokerOrderResult(ZcBrokerOrder.empty(), ZcError.network());
+  return BeBrokerOrderResult(BeBrokerOrder.empty(), BeError.network());
 }
 
-Future<ZcBrokerOrderResult> zcOrderStatus(String token) async {
+Future<BeBrokerOrderResult> beOrderStatus(String token) async {
   var baseUrl = await _server();
   if (baseUrl == null)
-    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), ZcError.network());
+    return BeBrokerOrderResult(BeBrokerOrder.empty(), BeError.network());
   var url = baseUrl + "broker_order_status";
-  var apikey = await Prefs.zcApiKeyGet();
-  var apisecret = await Prefs.zcApiSecretGet();
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce, "token": token});
@@ -766,22 +766,22 @@ Future<ZcBrokerOrderResult> zcOrderStatus(String token) async {
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
   if (response == null)
-    return ZcBrokerOrderResult(ZcBrokerOrder.empty(), ZcError.network());
+    return BeBrokerOrderResult(BeBrokerOrder.empty(), BeError.network());
   if (response.statusCode == 200) {
-    return ZcBrokerOrderResult.parse(response.body);
+    return BeBrokerOrderResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return ZcBrokerOrderResult(
-        ZcBrokerOrder.empty(), ZcError.auth(response.body));
+    return BeBrokerOrderResult(
+        BeBrokerOrder.empty(), BeError.auth(response.body));
   print(response.statusCode);
-  return ZcBrokerOrderResult(ZcBrokerOrder.empty(), ZcError.network());
+  return BeBrokerOrderResult(BeBrokerOrder.empty(), BeError.network());
 }
 
-Future<ZcBrokerOrdersResult> zcOrderList(int offset, int limit) async {
+Future<BeBrokerOrdersResult> beOrderList(int offset, int limit) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return ZcBrokerOrdersResult([], ZcError.network());
+  if (baseUrl == null) return BeBrokerOrdersResult([], BeError.network());
   var url = baseUrl + "broker_orders";
-  var apikey = await Prefs.zcApiKeyGet();
-  var apisecret = await Prefs.zcApiSecretGet();
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode(
@@ -789,11 +789,11 @@ Future<ZcBrokerOrdersResult> zcOrderList(int offset, int limit) async {
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return ZcBrokerOrdersResult([], ZcError.network());
+  if (response == null) return BeBrokerOrdersResult([], BeError.network());
   if (response.statusCode == 200) {
-    return ZcBrokerOrdersResult.parse(response.body);
+    return BeBrokerOrdersResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return ZcBrokerOrdersResult([], ZcError.auth(response.body));
+    return BeBrokerOrdersResult([], BeError.auth(response.body));
   print(response.statusCode);
-  return ZcBrokerOrdersResult([], ZcError.network());
+  return BeBrokerOrdersResult([], BeError.network());
 }

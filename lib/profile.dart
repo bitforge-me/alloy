@@ -4,7 +4,7 @@ import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
 import 'package:zapdart/account_forms.dart';
 
-import 'zapcrypto.dart';
+import 'beryllium.dart';
 import 'utils.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -49,7 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (newReg != null) {
       if (newReg.email != reg.email) {
         showAlertDialog(context, 'sending update email request..');
-        var result = await zcUserUpdateEmail(newReg.email);
+        var result = await beUserUpdateEmail(newReg.email);
         Navigator.of(context).pop();
         if (result.type == ErrorType.None)
           flushbarMsg(context, 'update email request created');
@@ -61,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
       if (newReg.photo != reg.photo) {
         showAlertDialog(context, 'updating photo..');
-        var result = await zcUserUpdatePhoto(newReg.photo, newReg.photoType);
+        var result = await beUserUpdatePhoto(newReg.photo, newReg.photoType);
         Navigator.of(context).pop();
         if (result.type == ErrorType.None) {
           flushbarMsg(context, 'update photo completed');
@@ -71,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
       if (newReg.currentPassword.isNotEmpty && newReg.newPassword.isNotEmpty) {
         showAlertDialog(context, 'updating password..');
-        var result = await zcUserUpdatePassword(
+        var result = await beUserUpdatePassword(
             newReg.currentPassword, newReg.newPassword);
         Navigator.of(context).pop();
         if (result.type == ErrorType.None) {
@@ -87,7 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _resetPassword() async {
     showAlertDialog(context, 'requesting password reset..');
-    var result = await zcUserResetPassword();
+    var result = await beUserResetPassword();
     Navigator.of(context).pop();
     if (result.type == ErrorType.None) {
       flushbarMsg(context, 'password reset request sent (check email)');

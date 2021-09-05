@@ -7,7 +7,7 @@ import 'package:zapdart/widgets.dart';
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/account_forms.dart';
 
-import 'zapcrypto.dart';
+import 'beryllium.dart';
 import 'config.dart';
 import 'prefs.dart';
 import 'markets.dart';
@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     if (await Prefs.hasZcApiKey()) {
       UserInfo? userInfo;
       showAlertDialog(context, 'getting account info...');
-      var result = await zcUserInfo();
+      var result = await beUserInfo();
       Navigator.pop(context);
       switch (result.error.type) {
         case ErrorType.Auth:
@@ -121,10 +121,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     }
   }
 
-  Future<Acct?> _zcLogin(BuildContext context, AccountLogin login,
+  Future<Acct?> _beLogin(BuildContext context, AccountLogin login,
       {bool silent: false}) async {
     var devName = await deviceName();
-    var result = await zcApiKeyCreate(login.email, login.password, devName);
+    var result = await beApiKeyCreate(login.email, login.password, devName);
     switch (result.error.type) {
       case ErrorType.Auth:
         if (!silent)
@@ -139,18 +139,18 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       case ErrorType.None:
         // write api key
         if (result.apikey != null) {
-          await Prefs.zcApiKeySet(result.apikey!.token);
-          await Prefs.zcApiSecretSet(result.apikey!.secret);
+          await Prefs.beApiKeySet(result.apikey!.token);
+          await Prefs.beApiSecretSet(result.apikey!.secret);
         }
         return Acct(login.email, result.apikey?.token);
     }
     return null;
   }
 
-  Future<Acct?> _zcApiKeyClaim(
+  Future<Acct?> _beApiKeyClaim(
       BuildContext context, AccountRequestApiKey req, String token,
       {silent: false}) async {
-    var result = await zcApiKeyClaim(token);
+    var result = await beApiKeyClaim(token);
     switch (result.error.type) {
       case ErrorType.Auth:
         if (!silent)
@@ -165,8 +165,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       case ErrorType.None:
         // write api key
         if (result.apikey != null) {
-          await Prefs.zcApiKeySet(result.apikey!.token);
-          await Prefs.zcApiSecretSet(result.apikey!.secret);
+          await Prefs.beApiKeySet(result.apikey!.token);
+          await Prefs.beApiSecretSet(result.apikey!.secret);
         }
         return Acct(req.email, result.apikey?.token);
     }
@@ -189,7 +189,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               )),
     );
     if (reg != null) {
-      var res = await zcUserRegister(reg);
+      var res = await beUserRegister(reg);
       switch (res.type) {
         case ErrorType.Auth:
           await alert(context, 'Authorisation error',
@@ -207,7 +207,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           while (acct == null && !cancelled) {
             await Future.delayed(Duration(seconds: 5));
             // save account if login successful
-            acct = await _zcLogin(
+            acct = await _beLogin(
                 context, AccountLogin(reg.email, reg.newPassword),
                 silent: true);
           }
@@ -227,7 +227,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     if (login == null) return;
     // save account if login successful
     showAlertDialog(context, 'logging in..');
-    var acct = await _zcLogin(context, login);
+    var acct = await _beLogin(context, login);
     Navigator.pop(context);
     if (acct != null) _initApi();
   }
@@ -241,7 +241,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           builder: (context) => AccountRequestApiKeyForm(devName)),
     );
     if (req == null) return;
-    var result = await zcApiKeyRequest(req.email, req.deviceName);
+    var result = await beApiKeyRequest(req.email, req.deviceName);
     switch (result.error.type) {
       case ErrorType.Auth:
       case ErrorType.Network:
@@ -258,7 +258,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           await Future.delayed(Duration(seconds: 5));
           // claim api key
           acct =
-              await _zcApiKeyClaim(context, req, result.token!, silent: true);
+              await _beApiKeyClaim(context, req, result.token!, silent: true);
         }
         Navigator.pop(context);
         if (acct != null) _initApi();
@@ -286,7 +286,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   Future<void> _assets() async {
     showAlertDialog(context, 'querying..');
-    var res = await zcAssets();
+    var res = await beAssets();
     Navigator.pop(context);
     if (res.error.type == ErrorType.None)
       Navigator.push(context,
@@ -295,7 +295,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   Future<void> _markets() async {
     showAlertDialog(context, 'querying..');
-    var res = await zcMarkets();
+    var res = await beMarkets();
     Navigator.pop(context);
     if (res.error.type == ErrorType.None)
       Navigator.push(
@@ -306,7 +306,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   Future<void> _orders() async {
     showAlertDialog(context, 'querying..');
-    var res = await zcOrderList(0, 1000);
+    var res = await beOrderList(0, 1000);
     Navigator.pop(context);
     if (res.error.type == ErrorType.None)
       Navigator.push(
@@ -322,7 +322,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   Future<void> _kycRequestCreate() async {
     showAlertDialog(context, 'creating kyc validation request..');
-    var res = await zcKycRequestCreate();
+    var res = await beKycRequestCreate();
     Navigator.pop(context);
     if (res.error.type == ErrorType.None) _urlLaunch(res.kycUrl!);
   }

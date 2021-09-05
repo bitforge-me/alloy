@@ -8,13 +8,13 @@ import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
 import 'package:zapdart/colors.dart';
 
-import 'zapcrypto.dart';
+import 'beryllium.dart';
 import 'cryptocurrency.dart';
 import 'prefs.dart';
 import 'websocket.dart';
 
 class AssetScreen extends StatelessWidget {
-  final List<ZcAsset> assets;
+  final List<BeAsset> assets;
 
   AssetScreen(this.assets);
 
@@ -38,7 +38,7 @@ class AssetScreen extends StatelessWidget {
 }
 
 class OrderScreen extends StatefulWidget {
-  final ZcBrokerOrder order;
+  final BeBrokerOrder order;
   final Websocket websocket;
 
   OrderScreen(this.order, this.websocket);
@@ -48,7 +48,7 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
-  ZcBrokerOrder _order;
+  BeBrokerOrder _order;
   var processOrderUpdates = true;
 
   _OrderScreenState(this._order);
@@ -69,7 +69,7 @@ class _OrderScreenState extends State<OrderScreen> {
     if (!processOrderUpdates) return;
     if (args == null) return;
     if (args.event == WebsocketEvent.brokerOrderUpdate) {
-      var newOrder = ZcBrokerOrder.parse(jsonDecode(args.msg));
+      var newOrder = BeBrokerOrder.parse(jsonDecode(args.msg));
       if (_order.token == newOrder.token) {
         setState(() => _order = newOrder);
         flushbarMsg(context,
@@ -81,7 +81,7 @@ class _OrderScreenState extends State<OrderScreen> {
   Future<void> _accept() async {
     processOrderUpdates = false;
     showAlertDialog(context, 'accepting..');
-    var res = await zcOrderAccept(_order.token);
+    var res = await beOrderAccept(_order.token);
     Navigator.pop(context);
     processOrderUpdates = true;
     if (res.error.type == ErrorType.None)
@@ -93,7 +93,7 @@ class _OrderScreenState extends State<OrderScreen> {
   Future<void> _update() async {
     processOrderUpdates = false;
     showAlertDialog(context, 'updating..');
-    var res = await zcOrderStatus(_order.token);
+    var res = await beOrderStatus(_order.token);
     Navigator.pop(context);
     processOrderUpdates = true;
     if (res.error.type == ErrorType.None)
@@ -136,14 +136,14 @@ class _OrderScreenState extends State<OrderScreen> {
                   subtitle: Text('${_order.paymentUrl}'),
                   onTap: () => _launchURL(_order.paymentUrl))
               : SizedBox(),
-          _order.status == ZcOrderStatus.created
+          _order.status == BeOrderStatus.created
               ? ListTile(
                   title:
                       raisedButton(onPressed: _accept, child: Text('Accept')))
               : SizedBox(),
-          _order.status != ZcOrderStatus.expired &&
-                  _order.status != ZcOrderStatus.cancelled &&
-                  _order.status != ZcOrderStatus.completed
+          _order.status != BeOrderStatus.expired &&
+                  _order.status != BeOrderStatus.cancelled &&
+                  _order.status != BeOrderStatus.completed
               ? ListTile(
                   title:
                       raisedButton(onPressed: _update, child: Text('Update')))
@@ -153,7 +153,7 @@ class _OrderScreenState extends State<OrderScreen> {
 }
 
 class OrdersScreen extends StatefulWidget {
-  final List<ZcBrokerOrder> orders;
+  final List<BeBrokerOrder> orders;
   final Websocket websocket;
 
   OrdersScreen(this.orders, this.websocket);
@@ -163,7 +163,7 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
-  List<ZcBrokerOrder> _orders;
+  List<BeBrokerOrder> _orders;
 
   _OrdersScreenState(this._orders);
 
@@ -182,15 +182,15 @@ class _OrdersScreenState extends State<OrdersScreen> {
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.brokerOrderNew) {
-      var newOrder = ZcBrokerOrder.parse(jsonDecode(args.msg));
+      var newOrder = BeBrokerOrder.parse(jsonDecode(args.msg));
       _orders.insert(0, newOrder);
       setState(() => _orders = _orders);
       flushbarMsg(context,
           'broker order created ${newOrder.token} - ${newOrder.status}');
     }
     if (args.event == WebsocketEvent.brokerOrderUpdate) {
-      var newOrders = <ZcBrokerOrder>[];
-      var newOrder = ZcBrokerOrder.parse(jsonDecode(args.msg));
+      var newOrders = <BeBrokerOrder>[];
+      var newOrder = BeBrokerOrder.parse(jsonDecode(args.msg));
       for (var order in _orders)
         if (order.token == newOrder.token)
           newOrders.add(newOrder);
@@ -202,7 +202,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     }
   }
 
-  Future<void> _orderTap(ZcBrokerOrder order) async {
+  Future<void> _orderTap(BeBrokerOrder order) async {
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -215,11 +215,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
         title: Text('${order.token}'),
         subtitle: Text(
             'market: ${order.market}, amount: ${order.baseAmount} ${order.baseAsset}, status: ${describeEnum(order.status)}',
-            style: order.status == ZcOrderStatus.expired ||
-                    order.status == ZcOrderStatus.cancelled
+            style: order.status == BeOrderStatus.expired ||
+                    order.status == BeOrderStatus.cancelled
                 ? TextStyle(color: ZapBlackLight)
-                : order.status == ZcOrderStatus.created ||
-                        order.status == ZcOrderStatus.ready
+                : order.status == BeOrderStatus.created ||
+                        order.status == BeOrderStatus.ready
                     ? null
                     : TextStyle(color: ZapGreen)),
         onTap: () => _orderTap(order));
@@ -244,8 +244,8 @@ class QuoteTotalPrice {
 }
 
 class QuoteScreen extends StatefulWidget {
-  final ZcMarket market;
-  final ZcOrderbook orderbook;
+  final BeMarket market;
+  final BeOrderbook orderbook;
   final Websocket websocket;
 
   QuoteScreen(this.market, this.orderbook, this.websocket);
@@ -338,8 +338,8 @@ class _QuoteScreenState extends State<QuoteScreen> {
     if (_formKey.currentState == null) return;
     if (_formKey.currentState!.validate()) {
       showAlertDialog(context, 'creating order..');
-      var res = await zcOrderCreate(
-          widget.market.symbol, ZcMarketSide.bid, _amount, _address);
+      var res = await beOrderCreate(
+          widget.market.symbol, BeMarketSide.bid, _amount, _address);
       Navigator.pop(context);
       if (res.error.type == ErrorType.None) {
         Navigator.push(
@@ -398,7 +398,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
 }
 
 class MarketScreen extends StatefulWidget {
-  final List<ZcMarket> markets;
+  final List<BeMarket> markets;
   final Websocket websocket;
 
   MarketScreen(this.markets, this.websocket);
@@ -408,9 +408,9 @@ class MarketScreen extends StatefulWidget {
 }
 
 class _MarketScreenState extends State<MarketScreen> {
-  Future<void> _marketTap(ZcMarket market) async {
+  Future<void> _marketTap(BeMarket market) async {
     showAlertDialog(context, 'querying..');
-    var res = await zcOrderbook(market.symbol);
+    var res = await beOrderbook(market.symbol);
     Navigator.pop(context);
     if (res.error.type == ErrorType.None) {
       Navigator.push(
