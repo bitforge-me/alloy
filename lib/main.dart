@@ -56,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   UserInfo? _userInfo;
   bool _invalidAuth = false;
   bool _retry = false;
+  List<String> _alerts = [];
 
   @override
   void initState() {
@@ -71,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   Future<void> _initApi() async {
+    var alerts = <String>[];
     if (await Prefs.hasZcApiKey()) {
       UserInfo? userInfo;
       showAlertDialog(context, 'getting account info...');
@@ -96,12 +98,16 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             _invalidAuth = false;
             _retry = false;
           });
-          userInfo = result.info;
+          userInfo = result.info!;
+          if (!userInfo.kycValidated) alerts.add('User not verified');
           _websocket.wsEvent.subscribe(_websocketEvent);
           _websocket.connect(); // connect websocket
           break;
       }
-      setState(() => _userInfo = userInfo);
+      setState(() {
+        _userInfo = userInfo;
+        _alerts = alerts;
+      });
     }
   }
 
@@ -313,92 +319,108 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Image.asset(AppLogo),
-          SizedBox(width: 10),
-          Text(widget.title)
-        ]),
-        actions: _userInfo != null
-            ? [
-                IconButton(
-                    icon: const Icon(Icons.logout),
-                    tooltip: 'Logout',
-                    onPressed: _logout)
-              ]
-            : [],
+          title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Image.asset(AppLogo),
+            SizedBox(width: 10),
+            Text(widget.title)
+          ]),
+          leading: Builder(builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.menu),
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+              onPressed: _userInfo != null
+                  ? () => Scaffold.of(context).openDrawer()
+                  : null,
+              color: _alerts.isNotEmpty ? ZapWarning : null,
+            );
+          })),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      accountImage(_userInfo?.photo, _userInfo?.photoType),
+                      SizedBox(height: 5),
+                      Text('${_userInfo?.email}'),
+                      //SizedBox(height: 5),
+                      //Text('Validated: ${_userInfo?.kycValidated}'),
+                    ])),
+            _alerts.isNotEmpty ? AlertDrawer(() {}, _alerts) : SizedBox(),
+            Visibility(
+                visible: _userInfo?.kycValidated != true,
+                child: ListTile(
+                  leading: Icon(Icons.verified_user),
+                  title: const Text('Verify User'),
+                  onTap: () async {
+                    if (_userInfo?.kycUrl != null)
+                      await _urlLaunch(_userInfo!.kycUrl!);
+                    else
+                      await _kycRequestCreate();
+                    Navigator.pop(context);
+                  },
+                )),
+            ListTile(
+                leading: Icon(Icons.view_list),
+                title: const Text('Orders'),
+                onTap: _orders),
+            ListTile(
+                leading: Icon(Icons.logout),
+                title: const Text('Logout'),
+                onTap: _logout),
+          ],
+        ),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            accountImage(_userInfo?.photo, _userInfo?.photoType),
-            Visibility(
-                visible: _userInfo != null,
-                child: Text('Email: ${_userInfo?.email}')),
-            Visibility(
-                visible: _userInfo != null,
-                child: Text('Validated: ${_userInfo?.kycValidated}')),
-            Visibility(
-              visible: _userInfo != null && _userInfo?.kycUrl == null,
-              child: RoundedButton(_kycRequestCreate, ZapWhite, ZapBlue,
-                  ZapBlueGradient, 'Validate KYC',
-                  holePunch: true, width: 300),
-            ),
-            Visibility(
-              visible: _userInfo != null &&
-                  _userInfo?.kycUrl != null &&
-                  !_userInfo!.kycValidated,
-              child: RoundedButton(() => _urlLaunch(_userInfo!.kycUrl!),
-                  ZapWhite, ZapBlue, ZapBlueGradient, 'Validate KYC',
-                  holePunch: true, width: 300),
-            ),
             Visibility(
               visible: _userInfo == null,
               child: RoundedButton(
                   _register, ZapWhite, ZapBlue, ZapBlueGradient, 'Register',
-                  holePunch: true, width: 300),
+                  holePunch: true, width: 200),
             ),
             Visibility(
               visible: _userInfo == null,
               child: RoundedButton(
                   _login, ZapWhite, ZapBlue, ZapBlueGradient, 'Login',
-                  holePunch: true, width: 300),
+                  holePunch: true, width: 200),
             ),
             Visibility(
               visible: _userInfo == null,
               child: RoundedButton(_loginWithEmail, ZapWhite, ZapBlue,
-                  ZapBlueGradient, 'Login with email link (lost password)',
-                  holePunch: true, width: 300),
+                  ZapBlueGradient, 'Lost Password',
+                  holePunch: true, width: 200),
             ),
             Visibility(
               visible: _userInfo != null,
               child: RoundedButton(
                   _assets, ZapWhite, ZapBlue, ZapBlueGradient, 'Assets',
-                  holePunch: true, width: 300),
+                  holePunch: true, width: 200),
             ),
             Visibility(
               visible: _userInfo != null,
               child: RoundedButton(
                   _markets, ZapWhite, ZapBlue, ZapBlueGradient, 'Markets',
-                  holePunch: true, width: 300),
-            ),
-            Visibility(
-              visible: _userInfo != null,
-              child: RoundedButton(
-                  _orders, ZapWhite, ZapBlue, ZapBlueGradient, 'Orders',
-                  holePunch: true, width: 300),
+                  holePunch: true, width: 200),
             ),
             Visibility(
               visible: _invalidAuth,
               child: RoundedButton(
                   _logout, ZapWhite, ZapBlue, ZapBlueGradient, 'Reset',
-                  holePunch: true, width: 300),
+                  holePunch: true, width: 200),
             ),
             Visibility(
               visible: _retry,
               child: RoundedButton(
                   _retryAuth, ZapWhite, ZapBlue, ZapBlueGradient, 'Retry',
-                  holePunch: true, width: 300),
+                  holePunch: true, width: 200),
             ),
           ],
         ),
