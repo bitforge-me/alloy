@@ -11,7 +11,21 @@ import 'package:zapdart/colors.dart';
 import 'beryllium.dart';
 import 'cryptocurrency.dart';
 import 'prefs.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'websocket.dart';
+
+String findSvg(assetSymbol) {
+  String svgRes = 'assets/crypto_icons/Default.svg';
+  switch (assetSymbol) {
+    case 'BTC':
+      svgRes = 'assets/crypto_icons/Bitcoin.svg';
+      break;
+    case 'ETH':
+      svgRes = 'assets/crypto_icons/Ethereum.svg';
+      break;
+  }
+  return svgRes;
+}
 
 class AssetScreen extends StatelessWidget {
   final List<BeAsset> assets;
@@ -21,9 +35,11 @@ class AssetScreen extends StatelessWidget {
   Widget _listItem(BuildContext context, int n) {
     var asset = assets[n];
     return ListTile(
-        title: Text('${asset.symbol}'),
-        subtitle: Text(
-            'name: ${asset.name}, status: ${asset.status}, minimum confirmations: ${asset.minConfs}'));
+      title: Text('${asset.symbol}'),
+      leading: SvgPicture.asset(findSvg(asset.symbol), width: 32, height: 32),
+      subtitle: Text(
+          'name: ${asset.name}, status: ${asset.status}, minimum confirmations: ${asset.minConfs}'),
+    );
   }
 
   @override
@@ -213,6 +229,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
     var order = _orders[n];
     return ListTile(
         title: Text('${order.token}'),
+        leading:
+            SvgPicture.asset(findSvg(order.baseAsset), width: 32, height: 32),
         subtitle: Text(
             'market: ${order.market}, amount: ${order.baseAmount} ${order.baseAsset}, status: ${describeEnum(order.status)}',
             style: order.status == BeOrderStatus.expired ||
@@ -425,6 +443,8 @@ class _MarketScreenState extends State<MarketScreen> {
     var market = widget.markets[n];
     return ListTile(
         title: Text('${market.symbol}'),
+        leading:
+            SvgPicture.asset(findSvg(market.baseSymbol), width: 32, height: 32),
         subtitle: Text('status: ${market.status}'),
         onTap: () => _marketTap(market));
   }
