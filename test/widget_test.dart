@@ -8,6 +8,6 @@
 //import 'package:flutter/material.dart';
 //import 'package:flutter_test/flutter_test.dart';
 
-//import 'package:zap_crypto_fe/main.dart';
+//import 'package:alloy/main.dart';
 
 void main() {}

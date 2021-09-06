@@ -1,11 +1,11 @@
 {
-    "name": "zap_crypto_fe",
-    "short_name": "zap_crypto_fe",
+    "name": "Alloy",
+    "short_name": "Alloy",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "A crypto retailer.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

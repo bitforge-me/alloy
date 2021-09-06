@@ -1,4 +1,4 @@
-# zap_crypto_fe
+# alloy
 
 A new Flutter project.
 

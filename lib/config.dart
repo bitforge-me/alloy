@@ -14,8 +14,8 @@ const SupportUrl = 'https://support.crypto.zap.me/';
 const TestnetDefault = false;
 
 // Zap Crypto settings
-const String? ZcServerMainnet = 'https://zap-crypto-be.caprover.acuerdo.dev/';
-const String? ZcServerTestnet = null;
+const String? BeServerMainnet = 'https://zap-crypto-be.caprover.acuerdo.dev/';
+const String? BeServerTestnet = null;
 // registration
 const bool RequireMobileNumber = true;
 const String? InitialMobileCountry = 'NZ';

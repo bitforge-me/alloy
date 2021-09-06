@@ -15,7 +15,7 @@ import 'utils.dart';
 
 Future<String?> _server() async {
   var testnet = await Prefs.testnetGet();
-  var baseUrl = testnet ? ZcServerTestnet : ZcServerMainnet;
+  var baseUrl = testnet ? BeServerTestnet : BeServerMainnet;
   if (baseUrl != null) baseUrl = baseUrl + 'apiv1/';
   return baseUrl;
 }
@@ -700,7 +700,7 @@ Future<BeMarketResult> beMarkets() async {
   return BeMarketResult(markets, BeError.network());
 }
 
-Future<BeOrderbookResult> beOrderbook(String symbol) async {
+Future<BeOrderbookResult> beOrderbook(String market) async {
   var baseUrl = await _server();
   if (baseUrl == null)
     return BeOrderbookResult(BeOrderbook.empty(), BeError.network());
@@ -709,7 +709,7 @@ Future<BeOrderbookResult> beOrderbook(String symbol) async {
   var apisecret = await Prefs.beApiSecretGet();
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
-  var body = jsonEncode({"api_key": apikey, "nonce": nonce, "symbol": symbol});
+  var body = jsonEncode({"api_key": apikey, "nonce": nonce, "market": market});
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});

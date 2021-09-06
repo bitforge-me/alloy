@@ -1,5 +1,5 @@
-name: zap_crypto_fe
-description: Zap crypto retail front end
+name: alloy
+description: A front end to Beryllium
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 

@@ -18,7 +18,7 @@ class WsEventArgs extends EventArgs {
 
 Future<String?> _server() async {
   var testnet = await Prefs.testnetGet();
-  var baseUrl = testnet ? ZcServerTestnet : ZcServerMainnet;
+  var baseUrl = testnet ? BeServerTestnet : BeServerMainnet;
   if (baseUrl != null) baseUrl = baseUrl + 'events';
   return baseUrl;
 }
