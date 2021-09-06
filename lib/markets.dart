@@ -111,8 +111,7 @@ class _OrderScreenState extends State<OrderScreen> {
     if (res.error.type == ErrorType.None) {
       setState(() => _order = res.order);
       urlLaunch(_order.paymentUrl);
-    }
-    else
+    } else
       alert(context, 'error', 'failed to accept order (${res.error.msg})');
   }
 
@@ -124,8 +123,7 @@ class _OrderScreenState extends State<OrderScreen> {
     processOrderUpdates = true;
     if (res.error.type == ErrorType.None) {
       setState(() => _order = res.order);
-    }
-    else
+    } else
       alert(
           context, 'error', 'failed to update order status (${res.error.msg})');
   }
@@ -177,10 +175,14 @@ class _OrderScreenState extends State<OrderScreen> {
                   title:
                       raisedButton(onPressed: _update, child: Text('Update')))
               : SizedBox(),
-              _order.status == BeOrderStatus.completed
+          _order.status == BeOrderStatus.completed
               ? ListTile(
-                  title:
-                      raisedButton(onPressed: () {Navigator.pop(context); Navigator.pop(context);}, child: Text('OK')))
+                  title: raisedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                      child: Text('OK')))
               : SizedBox(),
         ]));
   }
