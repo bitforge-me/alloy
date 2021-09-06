@@ -130,80 +130,83 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _order.status != BeOrderStatus.completed ? 
-    Scaffold(
-        appBar: AppBar(
-          title: Text('Order ${_order.token}'),
-          actions: [assetIcon(_order.baseAsset, margin: EdgeInsets.all(10))],
-        ),
-        body: ListView(children: [
-          ListTile(title: Text('Market'), subtitle: Text('${_order.market}')),
-          ListTile(
-              title: Text('Action'),
-              subtitle: Text('${marketSideNice(_order.side)}')),
-          ListTile(
-              title: Text('Amount'),
-              subtitle: Text('${_order.baseAmount} ${_order.baseAsset}')),
-          ListTile(
-              title: Text('Price'),
-              subtitle: Text('${_order.quoteAmount} ${_order.quoteAsset}')),
-          ListTile(title: Text('Date'), subtitle: Text('${_order.date}')),
-          _order.status == BeOrderStatus.created ||
-                  _order.status == BeOrderStatus.ready
-              ? ListTile(
-                  title: Text('Expiry'), subtitle: Text('${_order.expiry}'))
-              : SizedBox(),
-          ListTile(
-              title: Text('Recipient'), subtitle: Text('${_order.recipient}')),
-          ListTile(
-              title: Text('Status'),
-              subtitle: Text('${describeEnum(_order.status)}')),
-          _order.paymentUrl != null
-              ? ListTile(
-                  title: Text('Payment URL'),
-                  subtitle: Text('${_order.paymentUrl}'),
-                  onTap: () => urlLaunch(_order.paymentUrl))
-              : SizedBox(),
-          _order.status == BeOrderStatus.created
-              ? ListTile(
-                  title:
-                      raisedButton(onPressed: _accept, child: Text('Accept')))
-              : SizedBox(),
-          _order.status != BeOrderStatus.expired &&
-                  _order.status != BeOrderStatus.cancelled &&
-                  _order.status != BeOrderStatus.completed
-              ? ListTile(
-                  title:
-                      raisedButton(onPressed: _update, child: Text('Update')))
-              : SizedBox(),
-                      ])) : Scaffold(
-		appBar: AppBar(
-		  title: Text('Order ${_order.token}'),
-		  actions: [assetIcon(_order.baseAsset, margin: EdgeInsets.all(10))],
-                ),
-                body: Center(
-                        child: 
-			  Column(
-			    children: <Widget>[
-			      SizedBox(height: 80),
-			      assetIcon(_order.baseAsset, margin: EdgeInsets.all(10)),
-			      SizedBox(height: 80),
-			      Text('Purchased ${_order.baseAmount} ${_order.baseAsset}'),
-                              SizedBox(height: 80),
-			      ListTile(
-			        title: raisedButton(
-			        onPressed: () {
-			          Navigator.pop(context);
-			          Navigator.pop(context);
-			        },
-			        child: Text('OK')
-                                )
-                              ),
-			    ],
-			  ),
-                      ),
-
-            );
+    return _order.status != BeOrderStatus.completed
+        ? Scaffold(
+            appBar: AppBar(
+              title: Text('Order ${_order.token}'),
+              actions: [
+                assetIcon(_order.baseAsset, margin: EdgeInsets.all(10))
+              ],
+            ),
+            body: ListView(children: [
+              ListTile(
+                  title: Text('Market'), subtitle: Text('${_order.market}')),
+              ListTile(
+                  title: Text('Action'),
+                  subtitle: Text('${marketSideNice(_order.side)}')),
+              ListTile(
+                  title: Text('Amount'),
+                  subtitle: Text('${_order.baseAmount} ${_order.baseAsset}')),
+              ListTile(
+                  title: Text('Price'),
+                  subtitle: Text('${_order.quoteAmount} ${_order.quoteAsset}')),
+              ListTile(title: Text('Date'), subtitle: Text('${_order.date}')),
+              _order.status == BeOrderStatus.created ||
+                      _order.status == BeOrderStatus.ready
+                  ? ListTile(
+                      title: Text('Expiry'), subtitle: Text('${_order.expiry}'))
+                  : SizedBox(),
+              ListTile(
+                  title: Text('Recipient'),
+                  subtitle: Text('${_order.recipient}')),
+              ListTile(
+                  title: Text('Status'),
+                  subtitle: Text('${describeEnum(_order.status)}')),
+              _order.paymentUrl != null
+                  ? ListTile(
+                      title: Text('Payment URL'),
+                      subtitle: Text('${_order.paymentUrl}'),
+                      onTap: () => urlLaunch(_order.paymentUrl))
+                  : SizedBox(),
+              _order.status == BeOrderStatus.created
+                  ? ListTile(
+                      title: raisedButton(
+                          onPressed: _accept, child: Text('Accept')))
+                  : SizedBox(),
+              _order.status != BeOrderStatus.expired &&
+                      _order.status != BeOrderStatus.cancelled &&
+                      _order.status != BeOrderStatus.completed
+                  ? ListTile(
+                      title: raisedButton(
+                          onPressed: _update, child: Text('Update')))
+                  : SizedBox(),
+            ]))
+        : Scaffold(
+            appBar: AppBar(
+              title: Text('Order ${_order.token}'),
+              actions: [
+                assetIcon(_order.baseAsset, margin: EdgeInsets.all(10))
+              ],
+            ),
+            body: Center(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(height: 80),
+                  assetIcon(_order.baseAsset, margin: EdgeInsets.all(10)),
+                  SizedBox(height: 80),
+                  Text('Purchased ${_order.baseAmount} ${_order.baseAsset}'),
+                  SizedBox(height: 80),
+                  ListTile(
+                      title: raisedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                          child: Text('OK'))),
+                ],
+              ),
+            ),
+          );
   }
 }
 
