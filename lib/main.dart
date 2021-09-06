@@ -1,6 +1,6 @@
+import 'package:alloy/verify_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
@@ -13,6 +13,7 @@ import 'prefs.dart';
 import 'markets.dart';
 import 'websocket.dart';
 import 'profile.dart';
+import 'utils.dart';
 
 void main() {
   runApp(Phoenix(child: MyApp()));
@@ -119,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       if (info.email != _userInfo?.email)
         _websocket.connect(); // reconnect websocket
       setState(() => _userInfo = info);
-      flushbarMsg(context, 'user updated');
+      //flushbarMsg(context, 'user updated');
     }
   }
 
@@ -269,10 +270,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   Future<void> _support() async {
     if (_userInfo != null)
-      await _urlLaunch(
+      await urlLaunch(
           '$SupportUrl?email=${Uri.encodeQueryComponent(_userInfo!.email)}');
     else
-      await _urlLaunch(SupportUrl);
+      await urlLaunch(SupportUrl);
   }
 
   Future<void> _logout() async {
@@ -324,15 +325,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             builder: (context) => ProfileScreen(_websocket, _userInfo!)));
   }
 
-  Future<void> _kycRequestCreate() async {
-    showAlertDialog(context, 'creating kyc validation request..');
-    var res = await beKycRequestCreate();
-    Navigator.pop(context);
-    if (res.error.type == ErrorType.None) _urlLaunch(res.kycUrl!);
-  }
-
-  Future<void> _urlLaunch(String url) async {
-    await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+  Future<void> _verifyUser() async {
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => VerifyUserScreen(_userInfo!, _websocket)));
   }
 
   Drawer makeDrawer(BuildContext contex) {
@@ -369,13 +366,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               child: ListTile(
                 leading: Icon(Icons.verified_user),
                 title: const Text('Verify User'),
-                onTap: () async {
-                  if (_userInfo?.kycUrl != null)
-                    await _urlLaunch(_userInfo!.kycUrl!);
-                  else
-                    await _kycRequestCreate();
-                  Navigator.pop(context);
-                },
+                onTap: _verifyUser,
               )),
           ListTile(
               leading: Icon(Icons.account_circle),
