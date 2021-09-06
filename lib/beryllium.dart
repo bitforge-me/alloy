@@ -61,6 +61,7 @@ class UserInfo {
   final Iterable<BeRole> roles;
   final bool kycValidated;
   final String? kycUrl;
+  final bool aplyidReqExists;
 
   UserInfo(
       this.firstName,
@@ -73,7 +74,8 @@ class UserInfo {
       this.permissions,
       this.roles,
       this.kycValidated,
-      this.kycUrl);
+      this.kycUrl,
+      this.aplyidReqExists);
 
   UserInfo replace(UserInfo info) {
     // selectively replace permissions because websocket events do not include the permissions field
@@ -90,7 +92,8 @@ class UserInfo {
         permissions,
         info.roles,
         info.kycValidated,
-        info.kycUrl);
+        info.kycUrl,
+        info.aplyidReqExists);
   }
 
   static UserInfo parse(String data) {
@@ -118,7 +121,8 @@ class UserInfo {
         perms,
         roles,
         jsnObj['kyc_validated'],
-        jsnObj['kyc_url']);
+        jsnObj['kyc_url'],
+        jsnObj['aplyid_req_exists']);
   }
 }
 
@@ -636,6 +640,31 @@ Future<BeKycRequestCreateResult> beKycRequestCreate() async {
   checkApiKey(apikey, apisecret);
   var nonce = nextNonce();
   var body = jsonEncode({"api_key": apikey, "nonce": nonce});
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null)
+    return BeKycRequestCreateResult(null, BeError.network());
+  if (response.statusCode == 200) {
+    var jsnObj = json.decode(response.body);
+    return BeKycRequestCreateResult(jsnObj['kyc_url'], BeError.none());
+  } else if (response.statusCode == 400)
+    return BeKycRequestCreateResult(null, BeError.auth(response.body));
+  print(response.statusCode);
+  return BeKycRequestCreateResult(null, BeError.network());
+}
+
+Future<BeKycRequestCreateResult> beKycRequestSendMobileNumber(
+    String mobileNumber) async {
+  var baseUrl = await _server();
+  if (baseUrl == null) return BeKycRequestCreateResult(null, BeError.network());
+  var url = baseUrl + "user_kyc_request_send_mobile_number";
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = nextNonce();
+  var body = jsonEncode(
+      {"api_key": apikey, "nonce": nonce, "mobile_number": mobileNumber});
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
