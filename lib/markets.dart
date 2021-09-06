@@ -110,7 +110,7 @@ class _OrderScreenState extends State<OrderScreen> {
     processOrderUpdates = true;
     if (res.error.type == ErrorType.None) {
       setState(() => _order = res.order);
-      _launchURL(_order.paymentUrl);
+      urlLaunch(_order.paymentUrl);
     }
     else
       alert(context, 'error', 'failed to accept order (${res.error.msg})');
