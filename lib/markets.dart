@@ -130,7 +130,8 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return _order.status != BeOrderStatus.completed ? 
+    Scaffold(
         appBar: AppBar(
           title: Text('Order ${_order.token}'),
           actions: [assetIcon(_order.baseAsset, margin: EdgeInsets.all(10))],
@@ -175,16 +176,34 @@ class _OrderScreenState extends State<OrderScreen> {
                   title:
                       raisedButton(onPressed: _update, child: Text('Update')))
               : SizedBox(),
-          _order.status == BeOrderStatus.completed
-              ? ListTile(
-                  title: raisedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      },
-                      child: Text('OK')))
-              : SizedBox(),
-        ]));
+                      ])) : Scaffold(
+		appBar: AppBar(
+		  title: Text('Order ${_order.token}'),
+		  actions: [assetIcon(_order.baseAsset, margin: EdgeInsets.all(10))],
+                ),
+                body: Center(
+                        child: 
+			  Column(
+			    children: <Widget>[
+			      SizedBox(height: 80),
+			      assetIcon(_order.baseAsset, margin: EdgeInsets.all(10)),
+			      SizedBox(height: 80),
+			      Text('Purchased ${_order.baseAmount} ${_order.baseAsset}'),
+                              SizedBox(height: 80),
+			      ListTile(
+			        title: raisedButton(
+			        onPressed: () {
+			          Navigator.pop(context);
+			          Navigator.pop(context);
+			        },
+			        child: Text('OK')
+                                )
+                              ),
+			    ],
+			  ),
+                      ),
+
+            );
   }
 }
 
