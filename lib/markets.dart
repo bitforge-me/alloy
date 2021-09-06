@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
 
@@ -13,6 +12,7 @@ import 'cryptocurrency.dart';
 import 'prefs.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'websocket.dart';
+import 'utils.dart';
 
 String findSvg(String asset) {
   String svgRes = 'assets/crypto_icons/Default.svg';
@@ -127,11 +127,6 @@ class _OrderScreenState extends State<OrderScreen> {
           context, 'error', 'failed to update order status (${res.error.msg})');
   }
 
-  void _launchURL(String? url) async {
-    if (url != null)
-      await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -165,7 +160,7 @@ class _OrderScreenState extends State<OrderScreen> {
               ? ListTile(
                   title: Text('Payment URL'),
                   subtitle: Text('${_order.paymentUrl}'),
-                  onTap: () => _launchURL(_order.paymentUrl))
+                  onTap: () => urlLaunch(_order.paymentUrl))
               : SizedBox(),
           _order.status == BeOrderStatus.created
               ? ListTile(
