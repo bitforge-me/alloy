@@ -108,8 +108,10 @@ class _OrderScreenState extends State<OrderScreen> {
     var res = await beOrderAccept(_order.token);
     Navigator.pop(context);
     processOrderUpdates = true;
-    if (res.error.type == ErrorType.None)
+    if (res.error.type == ErrorType.None) {
       setState(() => _order = res.order);
+      _launchURL(_order.paymentUrl);
+    }
     else
       alert(context, 'error', 'failed to accept order (${res.error.msg})');
   }
@@ -120,8 +122,9 @@ class _OrderScreenState extends State<OrderScreen> {
     var res = await beOrderStatus(_order.token);
     Navigator.pop(context);
     processOrderUpdates = true;
-    if (res.error.type == ErrorType.None)
+    if (res.error.type == ErrorType.None) {
       setState(() => _order = res.order);
+    }
     else
       alert(
           context, 'error', 'failed to update order status (${res.error.msg})');
