@@ -23,7 +23,6 @@ dependencies:
   url_launcher: ^6.0.9
   socket_io_client: ^2.0.0-beta.4-nullsafety.0
   event: ^2.0.5
-  pagination_view: ^2.0.0-nullsafety.0
   flutter_icons:
     git:
       url: https://github.com/adarsh-technocrat/flutter-icons

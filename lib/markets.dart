@@ -182,6 +182,11 @@ class _OrderScreenState extends State<OrderScreen> {
                   title:
                       raisedButton(onPressed: _update, child: Text('Update')))
               : SizedBox(),
+              _order.status == BeOrderStatus.completed
+              ? ListTile(
+                  title:
+                      raisedButton(onPressed: () {Navigator.pop(context); Navigator.pop(context);}, child: Text('OK')))
+              : SizedBox(),
         ]));
   }
 }
