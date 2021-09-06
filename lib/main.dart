@@ -335,6 +335,69 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
   }
 
+  Drawer makeDrawer(BuildContext contex) {
+    var header = DrawerHeader(
+        decoration: BoxDecoration(
+          color: ZapBlue,
+        ),
+        child: _userInfo != null
+            ? Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                accountImage(_userInfo?.photo, _userInfo?.photoType),
+                SizedBox(height: 5),
+                Text('${_userInfo?.email}', style: TextStyle(color: ZapWhite)),
+                //SizedBox(height: 5),
+                //Text('Validated: ${_userInfo?.kycValidated}'),
+              ])
+            : SizedBox());
+    if (_userInfo == null)
+      return Drawer(
+          child: ListView(padding: EdgeInsets.zero, children: [
+        header,
+        ListTile(
+            leading: Icon(Icons.contact_support),
+            title: const Text('Support'),
+            onTap: _support)
+      ]));
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          header,
+          _alerts.isNotEmpty ? AlertDrawer(() {}, _alerts) : SizedBox(),
+          Visibility(
+              visible: _userInfo?.kycValidated != true,
+              child: ListTile(
+                leading: Icon(Icons.verified_user),
+                title: const Text('Verify User'),
+                onTap: () async {
+                  if (_userInfo?.kycUrl != null)
+                    await _urlLaunch(_userInfo!.kycUrl!);
+                  else
+                    await _kycRequestCreate();
+                  Navigator.pop(context);
+                },
+              )),
+          ListTile(
+              leading: Icon(Icons.account_circle),
+              title: const Text('Profile'),
+              onTap: _profile),
+          ListTile(
+              leading: Icon(Icons.view_list),
+              title: const Text('Orders'),
+              onTap: _orders),
+          ListTile(
+              leading: Icon(Icons.contact_support),
+              title: const Text('Support'),
+              onTap: _support),
+          ListTile(
+              leading: Icon(Icons.logout),
+              title: const Text('Logout'),
+              onTap: _logout),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -348,62 +411,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             return IconButton(
               icon: const Icon(Icons.menu),
               tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-              onPressed: _userInfo != null
-                  ? () => Scaffold.of(context).openDrawer()
-                  : null,
+              onPressed: () => Scaffold.of(context).openDrawer(),
               color: _alerts.isNotEmpty ? ZapWarning : null,
             );
           })),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                ),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      accountImage(_userInfo?.photo, _userInfo?.photoType),
-                      SizedBox(height: 5),
-                      Text('${_userInfo?.email}'),
-                      //SizedBox(height: 5),
-                      //Text('Validated: ${_userInfo?.kycValidated}'),
-                    ])),
-            _alerts.isNotEmpty ? AlertDrawer(() {}, _alerts) : SizedBox(),
-            Visibility(
-                visible: _userInfo?.kycValidated != true,
-                child: ListTile(
-                  leading: Icon(Icons.verified_user),
-                  title: const Text('Verify User'),
-                  onTap: () async {
-                    if (_userInfo?.kycUrl != null)
-                      await _urlLaunch(_userInfo!.kycUrl!);
-                    else
-                      await _kycRequestCreate();
-                    Navigator.pop(context);
-                  },
-                )),
-            ListTile(
-                leading: Icon(Icons.account_circle),
-                title: const Text('Profile'),
-                onTap: _profile),
-            ListTile(
-                leading: Icon(Icons.view_list),
-                title: const Text('Orders'),
-                onTap: _orders),
-            ListTile(
-                leading: Icon(Icons.contact_support),
-                title: const Text('Support'),
-                onTap: _support),
-            ListTile(
-                leading: Icon(Icons.logout),
-                title: const Text('Logout'),
-                onTap: _logout),
-          ],
-        ),
-      ),
+      drawer: makeDrawer(context),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -424,12 +436,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               visible: _userInfo == null,
               child: RoundedButton(_loginWithEmail, ZapWhite, ZapBlue,
                   ZapBlueGradient, 'Lost Password',
-                  holePunch: true, width: 200),
-            ),
-            Visibility(
-              visible: _userInfo == null,
-              child: RoundedButton(
-                  _support, ZapWhite, ZapBlue, ZapBlueGradient, 'Support',
                   holePunch: true, width: 200),
             ),
             Visibility(
