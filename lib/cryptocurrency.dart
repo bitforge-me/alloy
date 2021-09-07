@@ -9,24 +9,27 @@ class ValidateResult {
   ValidateResult(this.result, this.reason);
 }
 
+ValidateResult base58Validate(String address, bool testnet,
+    List<int> mainnetPrefixes, List<int> testnetPrefixes) {
+  var data = decode(address);
+  if (data.length <= 0)
+    return ValidateResult(false, 'failed to decode version');
+  var version = data[0];
+  if (testnet && testnetPrefixes.contains(version) ||
+      !testnet && mainnetPrefixes.contains(version))
+    return ValidateResult(true, null);
+  else
+    return ValidateResult(false, 'invalid address version');
+}
+
 ValidateResult addressValidate(String symbol, bool testnet, String address) {
   symbol = symbol.toUpperCase();
   switch (symbol) {
     case 'BTC':
       try {
         // first try base58
-        var data = decode(address);
-        if (data.length <= 0)
-          return ValidateResult(false, 'failed to decode version');
-        var version = data[0];
-        if (testnet && (version == 111 || version == 196) ||
-            !testnet && (version == 0 || version == 5))
-          return ValidateResult(true, null);
-        else
-          return ValidateResult(false, 'invalid address version');
-      } on ArgumentError {
-        print('invalid address');
-      }
+        return base58Validate(address, testnet, [0, 5], [111, 196]);
+      } on ArgumentError {}
       // try bech32
       try {
         var addr = segwit.decode(address);
@@ -34,21 +37,28 @@ ValidateResult addressValidate(String symbol, bool testnet, String address) {
           return ValidateResult(true, null);
         else
           return ValidateResult(false, 'invalid address version');
-      } on Exception {
-        print('invalid address');
-      }
-      return ValidateResult(false, 'invalid address');
+      } on Exception {}
+      break;
     case 'ETH':
       try {
         EthereumAddress.fromHex(address, enforceEip55: true);
         return ValidateResult(true, null);
-      } on ArgumentError {
-        print('invalid address');
-      }
-      return ValidateResult(false, 'invalid address');
+      } on ArgumentError {}
+      break;
+    case 'DOGE':
+      try {
+        return base58Validate(address, testnet, [0x1E], [0x71]);
+      } on ArgumentError {}
+      break;
+    case 'LTC':
+      try {
+        return base58Validate(address, testnet, [0x30], [0x6F]);
+      } on ArgumentError {}
+      break;
     default:
       return ValidateResult(false, '$symbol not known');
   }
+  return ValidateResult(false, 'invalid address');
 }
 
 ValidateResult bankValidate(String address) {

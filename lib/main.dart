@@ -393,11 +393,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Image.asset(AppLogo),
-            SizedBox(width: 10),
-            Text(widget.title)
-          ]),
+          title: Image.asset(AppLogo),
           leading: Builder(builder: (BuildContext context) {
             return IconButton(
               icon: const Icon(Icons.menu),

@@ -15,16 +15,17 @@ import 'websocket.dart';
 import 'utils.dart';
 
 String findSvg(String asset) {
-  String svgRes = 'assets/crypto_icons/Default.svg';
   switch (asset) {
     case 'BTC':
-      svgRes = 'assets/crypto_icons/Bitcoin.svg';
-      break;
+      return 'assets/crypto_logos/bitcoin.svg';
     case 'ETH':
-      svgRes = 'assets/crypto_icons/Ethereum.svg';
-      break;
+      return 'assets/crypto_logos/ethereum.svg';
+    case 'DOGE':
+      return 'assets/crypto_logos/dogecoin.svg';
+    case 'LTC':
+      return 'assets/crypto_logos/litecoin.svg';
   }
-  return svgRes;
+  return 'assets/crypto_logos/default.svg';
 }
 
 Widget assetIcon(String asset, {EdgeInsetsGeometry? margin}) {
@@ -97,7 +98,7 @@ class _OrderScreenState extends State<OrderScreen> {
       if (_order.token == newOrder.token) {
         setState(() => _order = newOrder);
         flushbarMsg(context,
-            'broker order updated ${newOrder.token} - ${describeEnum(newOrder.status)}');
+            'broker order updated ${newOrder.token} - ${describeEnum(newOrder.status).toUpperCase()}');
       }
     }
   }
@@ -155,7 +156,7 @@ class _OrderScreenState extends State<OrderScreen> {
               title: Text('Recipient'), subtitle: Text('${_order.recipient}')),
           ListTile(
               title: Text('Status'),
-              subtitle: Text('${describeEnum(_order.status)}')),
+              subtitle: Text('${describeEnum(_order.status).toUpperCase()}')),
           _order.paymentUrl != null
               ? ListTile(
                   title: Text('Payment URL'),
@@ -212,7 +213,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
       _orders.insert(0, newOrder);
       setState(() => _orders = _orders);
       flushbarMsg(context,
-          'broker order created ${newOrder.token} - ${describeEnum(newOrder.status)}');
+          'broker order created ${newOrder.token} - ${describeEnum(newOrder.status).toUpperCase()}');
     }
     if (args.event == WebsocketEvent.brokerOrderUpdate) {
       var newOrders = <BeBrokerOrder>[];
@@ -224,7 +225,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           newOrders.add(order);
       setState(() => _orders = newOrders);
       flushbarMsg(context,
-          'broker order updated ${newOrder.token} - ${describeEnum(newOrder.status)}');
+          'broker order updated ${newOrder.token} - ${describeEnum(newOrder.status).toUpperCase()}');
     }
   }
 
@@ -241,7 +242,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         title: Text('${order.token}'),
         leading: assetIcon(order.baseAsset),
         subtitle: Text(
-            '${order.market}, ${marketSideNice(order.side)}, ${order.baseAmount} ${order.baseAsset}, ${describeEnum(order.status)}',
+            '${order.market} - ${marketSideNice(order.side)} ${order.baseAmount} ${order.baseAsset} - ${describeEnum(order.status).toUpperCase()}',
             style: order.status == BeOrderStatus.expired ||
                     order.status == BeOrderStatus.cancelled
                 ? TextStyle(color: ZapBlackLight)
@@ -356,7 +357,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
   void _updateQuote() {
     var quote = '-';
     var amount = Decimal.zero;
-    var value = Decimal.tryParse(_amountController.text);
+    var value = Decimal.tryParse(_amountController.text.trim());
     if (value != null && value > Decimal.zero) {
       amount = value;
       QuoteTotalPrice totalPrice;
@@ -382,16 +383,16 @@ class _QuoteScreenState extends State<QuoteScreen> {
 
   void _updateAddress() {
     var addr = '-';
-    var res = addressValidate(
-        widget.market.baseAsset, _testnet, _withdrawalAddressController.text);
-    if (res.result) addr = _withdrawalAddressController.text;
+    var res = addressValidate(widget.market.baseAsset, _testnet,
+        _withdrawalAddressController.text.trim());
+    if (res.result) addr = _withdrawalAddressController.text.trim();
     setState(() => _address = addr);
   }
 
   void _updateBank() {
     var bank = '-';
-    var res = bankValidate(_withdrawalBankController.text);
-    if (res.result) bank = _withdrawalBankController.text;
+    var res = bankValidate(_withdrawalBankController.text.trim());
+    if (res.result) bank = _withdrawalBankController.text.trim();
     setState(() => _bank = bank);
   }
 
@@ -445,7 +446,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                       validator: (value) {
                         if (value == null || value.isEmpty)
                           return 'Please enter a value';
-                        var d = Decimal.tryParse(value);
+                        var d = Decimal.tryParse(value.trim());
                         if (d == null) return 'Invalid value';
                         if (d <= Decimal.fromInt(0))
                           return 'Please enter a value greater then 0';
@@ -471,8 +472,8 @@ class _QuoteScreenState extends State<QuoteScreen> {
                           validator: (value) {
                             if (value == null || value.isEmpty)
                               return 'Please enter a value';
-                            var res = addressValidate(
-                                widget.market.baseAsset, _testnet, value);
+                            var res = addressValidate(widget.market.baseAsset,
+                                _testnet, value.trim());
                             if (!res.result) return res.reason;
                             return null;
                           })),
@@ -486,7 +487,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                           validator: (value) {
                             if (value == null || value.isEmpty)
                               return 'Please enter a value';
-                            var res = bankValidate(value);
+                            var res = bankValidate(value.trim());
                             if (!res.result) return res.reason;
                             return null;
                           })),
