@@ -289,6 +289,42 @@ class BeOrderbookResult {
   BeOrderbookResult(this.orderbook, this.error);
 }
 
+class BeAddressBookEntry {
+  final DateTime date;
+  final String recipient;
+  final String? description;
+
+  BeAddressBookEntry(this.date, this.recipient, this.description);
+
+  static BeAddressBookEntry parse(dynamic item) {
+    return BeAddressBookEntry(
+        DateTime.parse(item['date']), item['recipient'], item['description']);
+  }
+}
+
+class BeAddressBookResult {
+  final List<BeAddressBookEntry> entries;
+  final BeError error;
+
+  BeAddressBookResult(this.entries, this.error);
+
+  static BeAddressBookResult parse(String data) {
+    var json = jsonDecode(data);
+    List<BeAddressBookEntry> entries = [];
+    for (var item in json['entries'])
+      entries.add(BeAddressBookEntry.parse(item));
+    return BeAddressBookResult(entries, BeError.none());
+  }
+
+  static BeAddressBookResult network() {
+    return BeAddressBookResult([], BeError.network());
+  }
+
+  static BeAddressBookResult auth(String msg) {
+    return BeAddressBookResult([], BeError.auth(msg));
+  }
+}
+
 enum BeMarketSide { bid, ask }
 
 String marketSideNice(BeMarketSide side) {
@@ -769,8 +805,34 @@ Future<BeOrderbookResult> beOrderbook(String market) async {
   return BeOrderbookResult(BeOrderbook.empty(), BeError.network());
 }
 
+Future<BeAddressBookResult> beAddressBook(String asset) async {
+  var baseUrl = await _server();
+  if (baseUrl == null) return BeAddressBookResult.network();
+  var url = baseUrl + "address_book";
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = nextNonce();
+  var body = jsonEncode({"api_key": apikey, "nonce": nonce, "asset": asset});
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null) return BeAddressBookResult.network();
+  if (response.statusCode == 200) {
+    return BeAddressBookResult.parse(response.body);
+  } else if (response.statusCode == 400)
+    return BeAddressBookResult.auth(response.body);
+  print(response.statusCode);
+  return BeAddressBookResult.network();
+}
+
 Future<BeBrokerOrderResult> beOrderCreate(
-    String market, BeMarketSide side, Decimal amount, String recipient) async {
+    String market,
+    BeMarketSide side,
+    Decimal amount,
+    String recipient,
+    bool saveRecipient,
+    String? recipientDescription) async {
   var baseUrl = await _server();
   if (baseUrl == null)
     return BeBrokerOrderResult(BeBrokerOrder.empty(), BeError.network());
@@ -785,7 +847,9 @@ Future<BeBrokerOrderResult> beOrderCreate(
     "market": market,
     "side": describeEnum(side),
     "amount_dec": amount.toString(),
-    "recipient": recipient
+    "recipient": recipient,
+    "save_recipient": saveRecipient,
+    "recipient_description": recipientDescription
   });
   var sig = createHmacSig(apisecret!, body);
   var response =

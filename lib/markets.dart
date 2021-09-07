@@ -13,6 +13,7 @@ import 'prefs.dart';
 import 'websocket.dart';
 import 'utils.dart';
 import 'assets.dart';
+import 'form_ui.dart';
 
 class OrderScreen extends StatefulWidget {
   final BeBrokerOrder order;
@@ -226,6 +227,46 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 }
 
+class AddressBookScreen extends StatefulWidget {
+  final String asset;
+  final List<BeAddressBookEntry> entries;
+
+  AddressBookScreen(this.asset, this.entries);
+
+  @override
+  State<AddressBookScreen> createState() => _AddressBookScreenState();
+}
+
+class _AddressBookScreenState extends State<AddressBookScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<void> _entryTap(BeAddressBookEntry entry) async {
+    Navigator.pop<String>(context, entry.recipient);
+  }
+
+  Widget _listItem(BuildContext context, int n) {
+    var entry = widget.entries[n];
+    return ListTile(
+        title: Text('${entry.recipient}'),
+        subtitle: Text('${entry.date} - ${entry.description}'),
+        onTap: () => _entryTap(entry));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+          title: Text('Address Book - ${widget.asset}'),
+          actions: [assetLogo(widget.asset, margin: EdgeInsets.all(10))]),
+      body: ListView.builder(
+          itemBuilder: _listItem, itemCount: widget.entries.length),
+    );
+  }
+}
+
 class QuoteTotalPrice {
   final Decimal amount;
   final String? errMsg;
@@ -249,12 +290,14 @@ class _QuoteScreenState extends State<QuoteScreen> {
   final _amountController = TextEditingController();
   final _withdrawalAddressController = TextEditingController();
   final _withdrawalBankController = TextEditingController();
+  final _recipientDescriptionController = TextEditingController();
 
   var _quote = '-';
   var _amount = Decimal.zero;
   var _side = BeMarketSide.bid;
   var _address = '-';
   var _bank = '-';
+  var _saveRecipient = true;
   var _testnet = false;
 
   @override
@@ -358,12 +401,34 @@ class _QuoteScreenState extends State<QuoteScreen> {
     setState(() => _bank = bank);
   }
 
+  Future<void> _addressBook() async {
+    showAlertDialog(context, 'querying address book..');
+    var res = await beAddressBook(widget.market.baseAsset);
+    Navigator.pop(context);
+    if (res.error.type != ErrorType.None) return;
+    var recipient = await Navigator.push<String?>(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                AddressBookScreen(widget.market.baseAsset, res.entries)));
+    if (recipient == null) return;
+    if (_side == BeMarketSide.bid)
+      _withdrawalAddressController.text = recipient;
+    else
+      _withdrawalBankController.text = recipient;
+  }
+
+  void _updateSaveRecipient(bool? value) {
+    if (value == null) return;
+    setState(() => _saveRecipient = value);
+  }
+
   void _orderCreate() async {
     if (_formKey.currentState == null) return;
     if (_formKey.currentState!.validate()) {
       showAlertDialog(context, 'creating order..');
-      var res =
-          await beOrderCreate(widget.market.symbol, _side, _amount, _address);
+      var res = await beOrderCreate(widget.market.symbol, _side, _amount,
+          _address, _saveRecipient, _recipientDescriptionController.text);
       Navigator.pop(context);
       if (res.error.type == ErrorType.None) {
         Navigator.push(
@@ -428,8 +493,12 @@ class _QuoteScreenState extends State<QuoteScreen> {
                       visible: _side == BeMarketSide.bid,
                       child: TextFormField(
                           controller: _withdrawalAddressController,
-                          decoration:
-                              InputDecoration(labelText: 'Wallet Address'),
+                          decoration: InputDecoration(
+                              labelText: 'Wallet Address',
+                              suffix: IconButton(
+                                  icon: Icon(Icons.alternate_email),
+                                  tooltip: 'Address Book',
+                                  onPressed: _addressBook)),
                           keyboardType: TextInputType.text,
                           validator: (value) {
                             if (value == null || value.isEmpty)
@@ -443,14 +512,38 @@ class _QuoteScreenState extends State<QuoteScreen> {
                       visible: _side == BeMarketSide.ask,
                       child: TextFormField(
                           controller: _withdrawalBankController,
-                          decoration:
-                              InputDecoration(labelText: 'Bank Account'),
+                          decoration: InputDecoration(
+                              labelText: 'Bank Account',
+                              suffix: IconButton(
+                                  icon: Icon(Icons.alternate_email),
+                                  tooltip: 'Address Book',
+                                  onPressed: _addressBook)),
                           keyboardType: TextInputType.number,
                           validator: (value) {
                             if (value == null || value.isEmpty)
                               return 'Please enter a value';
                             var res = bankValidate(value.trim());
                             if (!res.result) return res.reason;
+                            return null;
+                          })),
+                  CheckboxFormField(
+                      Text(_side == BeMarketSide.bid
+                          ? 'Save Wallet Address'
+                          : 'Save Bank Account'),
+                      _saveRecipient,
+                      onChanged: _updateSaveRecipient),
+                  Visibility(
+                      visible: _saveRecipient,
+                      child: TextFormField(
+                          controller: _recipientDescriptionController,
+                          decoration: InputDecoration(
+                              labelText: _side == BeMarketSide.bid
+                                  ? 'Wallet Address Description'
+                                  : 'Bank Account Description'),
+                          keyboardType: TextInputType.text,
+                          validator: (value) {
+                            if (value == null || value.isEmpty)
+                              return 'Please enter a value';
                             return null;
                           })),
                   raisedButton(
