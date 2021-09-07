@@ -7,14 +7,15 @@ import 'package:zapdart/widgets.dart';
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/account_forms.dart';
 
-import 'beryllium.dart';
 import 'config.dart';
 import 'prefs.dart';
+import 'beryllium.dart';
+import 'assets.dart';
 import 'markets.dart';
+import 'orders.dart';
 import 'websocket.dart';
 import 'profile.dart';
 import 'utils.dart';
-import 'assets.dart';
 
 void main() {
   runApp(Phoenix(child: MyApp()));
