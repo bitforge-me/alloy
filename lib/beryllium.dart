@@ -403,15 +403,32 @@ class BeBrokerOrderResult {
 
 class BeBrokerOrdersResult {
   final List<BeBrokerOrder> orders;
+  final int offset;
+  final int limit;
+  final int total;
   final BeError error;
 
-  BeBrokerOrdersResult(this.orders, this.error);
+  BeBrokerOrdersResult(
+      this.orders, this.offset, this.limit, this.total, this.error);
 
   static BeBrokerOrdersResult parse(String data) {
+    var json = jsonDecode(data);
     List<BeBrokerOrder> orderList = [];
-    var orders = jsonDecode(data)['broker_orders'];
+    var orders = json['broker_orders'];
     for (var item in orders) orderList.add(BeBrokerOrder.parse(item));
-    return BeBrokerOrdersResult(orderList, BeError.none());
+    var offset = json['offset'];
+    var limit = json['limit'];
+    var total = json['total'];
+    return BeBrokerOrdersResult(
+        orderList, offset, limit, total, BeError.none());
+  }
+
+  static BeBrokerOrdersResult network() {
+    return BeBrokerOrdersResult([], 0, 0, 0, BeError.network());
+  }
+
+  static BeBrokerOrdersResult auth(String msg) {
+    return BeBrokerOrdersResult([], 0, 0, 0, BeError.auth(msg));
   }
 }
 
@@ -834,7 +851,7 @@ Future<BeBrokerOrderResult> beOrderStatus(String token) async {
 
 Future<BeBrokerOrdersResult> beOrderList(int offset, int limit) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeBrokerOrdersResult([], BeError.network());
+  if (baseUrl == null) return BeBrokerOrdersResult.network();
   var url = baseUrl + "broker_orders";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -845,11 +862,11 @@ Future<BeBrokerOrdersResult> beOrderList(int offset, int limit) async {
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeBrokerOrdersResult([], BeError.network());
+  if (response == null) return BeBrokerOrdersResult.network();
   if (response.statusCode == 200) {
     return BeBrokerOrdersResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return BeBrokerOrdersResult([], BeError.auth(response.body));
+    return BeBrokerOrdersResult.auth(response.body);
   print(response.statusCode);
-  return BeBrokerOrdersResult([], BeError.network());
+  return BeBrokerOrdersResult.network();
 }
