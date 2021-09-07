@@ -10,57 +10,9 @@ import 'package:zapdart/colors.dart';
 import 'beryllium.dart';
 import 'cryptocurrency.dart';
 import 'prefs.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'websocket.dart';
 import 'utils.dart';
-
-String findSvg(String asset) {
-  switch (asset) {
-    case 'BTC':
-      return 'assets/crypto_logos/bitcoin.svg';
-    case 'ETH':
-      return 'assets/crypto_logos/ethereum.svg';
-    case 'DOGE':
-      return 'assets/crypto_logos/dogecoin.svg';
-    case 'LTC':
-      return 'assets/crypto_logos/litecoin.svg';
-  }
-  return 'assets/crypto_logos/default.svg';
-}
-
-Widget assetIcon(String asset, {EdgeInsetsGeometry? margin}) {
-  return Container(
-      margin: margin,
-      width: 32,
-      height: 32,
-      child: Center(child: SvgPicture.asset(findSvg(asset))));
-}
-
-class AssetScreen extends StatelessWidget {
-  final List<BeAsset> assets;
-
-  AssetScreen(this.assets);
-
-  Widget _listItem(BuildContext context, int n) {
-    var asset = assets[n];
-    return ListTile(
-      title: Text('${asset.symbol}'),
-      leading: assetIcon(asset.symbol),
-      subtitle: Text(
-          'name: ${asset.name}, status: ${asset.status}, minimum confirmations: ${asset.minConfs}'),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Assets'),
-      ),
-      body: ListView.builder(itemBuilder: _listItem, itemCount: assets.length),
-    );
-  }
-}
+import 'assets.dart';
 
 class OrderScreen extends StatefulWidget {
   final BeBrokerOrder order;
@@ -75,6 +27,7 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   BeBrokerOrder _order;
   var processOrderUpdates = true;
+  var _testnet = false;
 
   _OrderScreenState(this._order);
 
@@ -101,6 +54,13 @@ class _OrderScreenState extends State<OrderScreen> {
             'broker order updated ${newOrder.token} - ${describeEnum(newOrder.status).toUpperCase()}');
       }
     }
+  }
+
+  void _addrLaunch() {
+    var url =
+        addressBlockExplorer(_order.baseAsset, _testnet, _order.recipient);
+    if (url == null) return;
+    urlLaunch(url);
   }
 
   Future<void> _accept() async {
@@ -133,7 +93,7 @@ class _OrderScreenState extends State<OrderScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Order ${_order.token}'),
-          actions: [assetIcon(_order.baseAsset, margin: EdgeInsets.all(10))],
+          actions: [assetLogo(_order.baseAsset, margin: EdgeInsets.all(10))],
         ),
         body: ListView(children: [
           ListTile(title: Text('Market'), subtitle: Text('${_order.market}')),
@@ -153,7 +113,9 @@ class _OrderScreenState extends State<OrderScreen> {
                   title: Text('Expiry'), subtitle: Text('${_order.expiry}'))
               : SizedBox(),
           ListTile(
-              title: Text('Recipient'), subtitle: Text('${_order.recipient}')),
+              title: Text('Recipient'),
+              subtitle: Text('${_order.recipient}'),
+              onTap: _addrLaunch),
           ListTile(
               title: Text('Status'),
               subtitle: Text('${describeEnum(_order.status).toUpperCase()}')),
@@ -240,7 +202,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     var order = _orders[n];
     return ListTile(
         title: Text('${order.token}'),
-        leading: assetIcon(order.baseAsset),
+        leading: assetLogo(order.baseAsset),
         subtitle: Text(
             '${order.market} - ${marketSideNice(order.side)} ${order.baseAmount} ${order.baseAsset} - ${describeEnum(order.status).toUpperCase()}',
             style: order.status == BeOrderStatus.expired ||
@@ -420,7 +382,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
         appBar: AppBar(
           title: Text('Create Order'),
           actions: [
-            assetIcon(widget.market.baseAsset, margin: EdgeInsets.all(10))
+            assetLogo(widget.market.baseAsset, margin: EdgeInsets.all(10))
           ],
         ),
         body: Form(
@@ -525,7 +487,7 @@ class _MarketScreenState extends State<MarketScreen> {
     var market = widget.markets[n];
     return ListTile(
         title: Text('${market.symbol}'),
-        leading: assetIcon(market.baseAsset),
+        leading: assetLogo(market.baseAsset),
         subtitle: Text('status: ${market.status}'),
         onTap: () => _marketTap(market));
   }

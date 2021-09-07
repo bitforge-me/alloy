@@ -14,6 +14,7 @@ import 'markets.dart';
 import 'websocket.dart';
 import 'profile.dart';
 import 'utils.dart';
+import 'assets.dart';
 
 void main() {
   runApp(Phoenix(child: MyApp()));
