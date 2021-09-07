@@ -46,7 +46,6 @@ class Websocket {
     var baseUrl = await _server();
     var apikey = await Prefs.beApiKeyGet();
     var apisecret = await Prefs.beApiSecretGet();
-    var nonce = nextNonce();
 
     var socket = IO.io(baseUrl, <String, dynamic>{
       'secure': true,
@@ -55,6 +54,7 @@ class Websocket {
     print('socket namespace: ${socket.nsp}');
     socket.on('connect', (_) {
       print('ws connect');
+      var nonce = nextNonce();
       var sig = createHmacSig(apisecret!, nonce.toString());
       var auth = {"signature": sig, "api_key": apikey, "nonce": nonce};
       socket.emit('auth', auth);
