@@ -231,6 +231,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
             ]))
           : Center(
               child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 ListView.builder(
                     itemBuilder: _listItem,
