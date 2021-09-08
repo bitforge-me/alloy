@@ -215,11 +215,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('orders length is ${_orders.length}');
     return Scaffold(
       appBar: AppBar(
         title: Text('Orders'),
       ),
-      body: ListView.builder(itemBuilder: _listItem, itemCount: _orders.length),
+      body: _orders.length == 0 ? Center(child: Column(children: <Widget>[SizedBox(height: 90), Text("No orders yet")])) : ListView.builder(itemBuilder: _listItem, itemCount: _orders.length),
     );
   }
 }
