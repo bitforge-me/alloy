@@ -220,7 +220,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
       appBar: AppBar(
         title: Text('Orders'),
       ),
-      body: _orders.length == 0 ? Center(child: Column(children: <Widget>[SizedBox(height: 90), Text("No orders yet")])) : ListView.builder(itemBuilder: _listItem, itemCount: _orders.length),
+      body: _orders.length == 0
+          ? Center(
+              child: Column(children: <Widget>[
+              SizedBox(height: 90),
+              Text("No orders yet")
+            ]))
+          : ListView.builder(itemBuilder: _listItem, itemCount: _orders.length),
     );
   }
 }
