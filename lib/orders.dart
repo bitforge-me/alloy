@@ -197,7 +197,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   Widget _listItem(BuildContext context, int n) {
-    int actualizedNumber = _currentPage == 0 ? 0 : (_currentPage * _ordersPerPage);
+    int actualizedNumber =
+        _currentPage == 0 ? 0 : (_currentPage * _ordersPerPage);
     var order = _orders[n + actualizedNumber];
     var baseAmount = assetFormat(order.baseAsset, order.baseAmount);
     return ListTile(
@@ -233,9 +234,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
               children: <Widget>[
                 ListView.builder(
                     itemBuilder: _listItem,
-                    itemCount: (_orders.length - ((_currentPage + 1) * _ordersPerPage)) >= 0
+                    itemCount: (_orders.length -
+                                ((_currentPage + 1) * _ordersPerPage)) >=
+                            0
                         ? _ordersPerPage
-                        : (((_currentPage + 1) * _ordersPerPage) - _orders.length),
+                        : (((_currentPage + 1) * _ordersPerPage) -
+                            _orders.length),
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true),
                 Row(
