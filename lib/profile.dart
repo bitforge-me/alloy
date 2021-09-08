@@ -7,7 +7,6 @@ import 'package:zapdart/account_forms.dart';
 import 'beryllium.dart';
 import 'utils.dart';
 import 'websocket.dart';
-import 'form_ui.dart';
 
 class ProfileScreen extends StatefulWidget {
   final Websocket websocket;

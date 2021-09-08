@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
+import 'package:zapdart/form_ui.dart';
 
 import 'beryllium.dart';
 import 'websocket.dart';
+import 'config.dart';
 
 class VerifyUserScreen extends StatefulWidget {
   final UserInfo userInfo;
@@ -20,7 +23,9 @@ class _VerifyUserScreenState extends State<VerifyUserScreen> {
   UserInfo _userInfo;
   final _formKey = GlobalKey<FormState>();
   final _mobileNumberController = TextEditingController();
-  var processWebsocketUpdates = true;
+  var _processWebsocketUpdates = true;
+  PhoneNumber? _initialNumber;
+  PhoneNumber? _phoneNumber;
 
   _VerifyUserScreenState(this._userInfo);
 
@@ -28,8 +33,12 @@ class _VerifyUserScreenState extends State<VerifyUserScreen> {
   void initState() {
     super.initState();
     widget.websocket.wsEvent.subscribe(_websocketEvent);
+
     if (_userInfo.mobileNumber != null)
-      _mobileNumberController.text = _userInfo.mobileNumber!;
+      PhoneNumber.getRegionInfoFromPhoneNumber(_userInfo.mobileNumber!)
+          .then((value) {
+        setState(() => _initialNumber = value);
+      });
   }
 
   @override
@@ -39,7 +48,7 @@ class _VerifyUserScreenState extends State<VerifyUserScreen> {
   }
 
   void _websocketEvent(WsEventArgs? args) {
-    if (!processWebsocketUpdates) return;
+    if (!_processWebsocketUpdates) return;
     if (args == null) return;
     if (args.event == WebsocketEvent.userInfoUpdate) {
       var newUserInfo = UserInfo.parse(args.msg);
@@ -58,7 +67,8 @@ class _VerifyUserScreenState extends State<VerifyUserScreen> {
   Future<BeKycRequestCreateResult> _kycSendMobileNumber(
       String mobileNumber) async {
     showAlertDialog(context, 'sending SMS..');
-    var res = await beKycRequestSendMobileNumber(mobileNumber);
+    var res =
+        await beKycRequestSendMobileNumber(mobileNumber.replaceFirst('+', ''));
     Navigator.pop(context);
     return res;
   }
@@ -73,7 +83,8 @@ class _VerifyUserScreenState extends State<VerifyUserScreen> {
           return;
         }
       }
-      var res = await _kycSendMobileNumber(_mobileNumberController.text);
+      if (_phoneNumber == null || _phoneNumber!.phoneNumber == null) return;
+      var res = await _kycSendMobileNumber(_phoneNumber!.phoneNumber!);
       if (res.error.type != ErrorType.None) {
         await alert(context, 'Error', res.error.msg);
         return;
@@ -103,16 +114,16 @@ class _VerifyUserScreenState extends State<VerifyUserScreen> {
                   Container(
                       padding: EdgeInsets.all(10),
                       child: Image.asset('assets/aplyid-logo.webp')),
-                  TextFormField(
-                      controller: _mobileNumberController,
-                      decoration: InputDecoration(labelText: 'Mobile Number'),
-                      keyboardType: TextInputType.numberWithOptions(
-                          signed: false, decimal: false),
+                  phoneNumberInput(
+                      _mobileNumberController, (pn) => _phoneNumber = pn,
                       validator: (value) {
-                        if (value == null || value.isEmpty)
-                          return 'Please enter a value';
-                        return null;
-                      }),
+                    if (value == null || value.isEmpty)
+                      return 'Please enter a value';
+                    return null;
+                  },
+                      initialNumber: _initialNumber,
+                      countryCode: InitialMobileCountry,
+                      preferredCountries: PreferredMobileCountries),
                   raisedButton(onPressed: _submit, child: Text('Submit')),
                 ]))));
   }
