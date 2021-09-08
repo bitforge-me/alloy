@@ -235,6 +235,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children:
 			    _currentPage > 0 ?
+                            ((_currentPage + 1) * 7 < _orders.length ?
 			    <Widget>[
 			      FloatingActionButton(
 				//below function will update state so _orders is spliced to only relevant items
@@ -259,8 +260,21 @@ class _OrdersScreenState extends State<OrdersScreen> {
 				},
 				child: const Icon(Icons.arrow_forward),
 				backgroundColor: Colors.blue,
+			      )]
+			    : <Widget>[
+			      FloatingActionButton(
+				//below function will update state so _orders is spliced to only relevant items
+				onPressed: () {
+				  setState(
+				    (){
+				      _currentPage--;
+				    }
+				  );
+				},
+				child: const Icon(Icons.arrow_back),
+				backgroundColor: Colors.blue,
 			      ),
-			    ]
+			    ])
 			    : <Widget>[
 			      FloatingActionButton(
 				//below function will update state so _orders is spliced to only relevant items
