@@ -152,6 +152,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   List<BeBrokerOrder> _orders;
   _OrdersScreenState(this._orders);
   int _currentPage = 0;
+  int _ordersPerPage = 7;
 
   @override
   void initState() {
@@ -196,7 +197,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   Widget _listItem(BuildContext context, int n) {
-    int actualizedNumber = _currentPage == 0 ? 0 : (_currentPage * 7);
+    int actualizedNumber = _currentPage == 0 ? 0 : (_currentPage * _ordersPerPage);
     var order = _orders[n + actualizedNumber];
     var baseAmount = assetFormat(order.baseAsset, order.baseAmount);
     return ListTile(
@@ -232,15 +233,15 @@ class _OrdersScreenState extends State<OrdersScreen> {
               children: <Widget>[
                 ListView.builder(
                     itemBuilder: _listItem,
-                    itemCount: (_orders.length - ((_currentPage + 1) * 7)) >= 0
-                        ? 7
-                        : (((_currentPage + 1) * 7) - _orders.length),
+                    itemCount: (_orders.length - ((_currentPage + 1) * _ordersPerPage)) >= 0
+                        ? _ordersPerPage
+                        : (((_currentPage + 1) * _ordersPerPage) - _orders.length),
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: _currentPage > 0
-                      ? ((_currentPage + 1) * 7 < _orders.length
+                      ? ((_currentPage + 1) * _ordersPerPage < _orders.length
                           ? <Widget>[
                               FloatingActionButton(
                                 //below function will update state so _orders is spliced to only relevant items
