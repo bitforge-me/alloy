@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:decimal/decimal.dart';
 
 import 'beryllium.dart';
 
@@ -23,6 +24,28 @@ Widget assetLogo(String symbol, {EdgeInsetsGeometry? margin}) {
       width: 32,
       height: 32,
       child: Center(child: SvgPicture.asset(_svgAsset(symbol))));
+}
+
+int assetDecimals(String symbol) {
+  switch (symbol) {
+    case 'NZD':
+      return 2;
+    case 'BTC':
+      return 8;
+    case 'ETH':
+      return 18;
+    case 'DOGE':
+      return 8;
+    case 'LTC':
+      return 8;
+  }
+  return -1;
+}
+
+String assetFormat(String symbol, Decimal amount) {
+  var decimals = assetDecimals(symbol);
+  if (decimals <= 0) return amount.toString();
+  return amount.toStringAsFixed(decimals);
 }
 
 String? addressBlockExplorer(String symbol, bool testnet, String address) {

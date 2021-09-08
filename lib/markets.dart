@@ -82,7 +82,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
   var _side = BeMarketSide.bid;
   var _address = '-';
   var _bank = '-';
-  var _saveRecipient = true;
+  var _saveRecipient = false;
   var _testnet = false;
 
   @override
@@ -161,9 +161,13 @@ class _QuoteScreenState extends State<QuoteScreen> {
       }
       if (totalPrice.errMsg != null)
         quote = totalPrice.errMsg!;
-      else
+      else {
+        var baseAmount = assetFormat(widget.market.baseAsset, value);
+        var quoteAmount =
+            assetFormat(widget.market.quoteAsset, totalPrice.amount);
         quote =
-            '$value ${widget.market.baseAsset} = ${totalPrice.amount} ${widget.market.quoteAsset}';
+            '$baseAmount ${widget.market.baseAsset} = $quoteAmount ${widget.market.quoteAsset}';
+      }
     }
     setState(() {
       _quote = quote;
@@ -242,7 +246,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                 child: Column(children: [
                   Text(_quote),
                   Text(
-                      'Send $_amount to ${_side == BeMarketSide.bid ? _address : _bank}'),
+                      'Send ${assetFormat(widget.market.baseAsset, _amount)} to ${_side == BeMarketSide.bid ? _address : _bank}'),
                   DropdownButtonFormField<BeMarketSide>(
                       value: _side,
                       items: BeMarketSide.values
