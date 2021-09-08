@@ -7,6 +7,7 @@ import 'package:zapdart/account_forms.dart';
 import 'beryllium.dart';
 import 'utils.dart';
 import 'websocket.dart';
+import 'form_ui.dart';
 
 class ProfileScreen extends StatefulWidget {
   final Websocket websocket;
@@ -92,21 +93,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _updateEmail() async {
     var reg = accountRegistration();
-    var newReg = await Navigator.push<AccountRegistration>(
-        context,
-        MaterialPageRoute(
-            builder: (context) => AccountRegisterForm(reg,
-                instructions: 'Update Email',
-                showName: false,
-                showImage: false,
-                showMobileNumber: false,
-                showAddress: false,
-                showCurrentPassword: false,
-                showNewPassword: false)));
-    if (newReg != null) {
-      if (newReg.email != reg.email) {
+    var newEmail = await Navigator.push<String?>(context,
+        MaterialPageRoute(builder: (context) => AccountUpdateEmailForm()));
+    if (newEmail != null) {
+      if (newEmail != reg.email) {
         showAlertDialog(context, 'sending update email request..');
-        var result = await beUserUpdateEmail(newReg.email);
+        var result = await beUserUpdateEmail(newEmail);
         Navigator.of(context).pop();
         if (result.type == ErrorType.None)
           flushbarMsg(context, 'update email request created');
