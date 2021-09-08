@@ -150,8 +150,8 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   List<BeBrokerOrder> _orders;
-
   _OrdersScreenState(this._orders);
+  int _currentPage = 0;
 
   @override
   void initState() {
@@ -196,7 +196,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   Widget _listItem(BuildContext context, int n) {
-    var order = _orders[n];
+    int actualizedNumber = _currentPage == 0 ? (_currentPage * 8) : (_currentPage * 8) - 1;
+    var order = _orders[n + actualizedNumber];
     var baseAmount = assetFormat(order.baseAsset, order.baseAmount);
     return ListTile(
         title: Text('${order.token}'),
@@ -226,7 +227,59 @@ class _OrdersScreenState extends State<OrdersScreen> {
               SizedBox(height: 90),
               Text("No orders yet")
             ]))
-          : ListView.builder(itemBuilder: _listItem, itemCount: _orders.length),
+          : Center(child: 
+                    Column(
+                      children: <Widget>[
+                        ListView.builder(itemBuilder: _listItem, itemCount: 7, scrollDirection: Axis.vertical, shrinkWrap: true),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children:
+			    _currentPage > 0 ?
+			    <Widget>[
+			      FloatingActionButton(
+				//below function will update state so _orders is spliced to only relevant items
+				onPressed: () {
+				  setState(
+				    (){
+				      _currentPage--;
+				    }
+				  );
+				},
+				child: const Icon(Icons.arrow_back),
+				backgroundColor: Colors.blue,
+			      ),
+			      FloatingActionButton(
+				//below function will update state so _orders is spliced to only relevant items
+				onPressed: () {
+				  setState(
+				    (){
+				      _currentPage++;
+				    }
+				  );
+				},
+				child: const Icon(Icons.arrow_forward),
+				backgroundColor: Colors.blue,
+			      ),
+			    ]
+			    : <Widget>[
+			      FloatingActionButton(
+				//below function will update state so _orders is spliced to only relevant items
+				onPressed: () {
+				  setState(
+				    (){
+				      _currentPage++;
+				    }
+				  );
+				},
+				child: const Icon(Icons.arrow_forward),
+				backgroundColor: Colors.blue,
+			      ),
+			    ],
+                        ),
+                      ],
+
+                    )
+            ),
     );
   }
 }
