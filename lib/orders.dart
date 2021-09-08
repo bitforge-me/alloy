@@ -282,6 +282,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                               ),
                             ])
                       : <Widget>[
+                          SizedBox(height: 20),
                           FloatingActionButton(
                             //below function will update state so _orders is spliced to only relevant items
                             onPressed: () {
