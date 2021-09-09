@@ -249,7 +249,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       ? ((_currentPage + 1) * _ordersPerPage < _orders.length
                           ? <Widget>[
                               FloatingActionButton(
-                                //below function will update state so _orders is spliced to only relevant items
                                 onPressed: () {
                                   setState(() {
                                     _currentPage--;
@@ -271,7 +270,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                 ),
                               ),
                               FloatingActionButton(
-                                //below function will update state so _orders is spliced to only relevant items
                                 onPressed: () {
                                   setState(() {
                                     _currentPage++;
@@ -283,7 +281,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             ]
                           : <Widget>[
                               FloatingActionButton(
-                                //below function will update state so _orders is spliced to only relevant items
                                 onPressed: () {
                                   setState(() {
                                     _currentPage--;
@@ -307,7 +304,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                               Opacity(
                                 opacity: 0,
                                 child: FloatingActionButton(
-                                  //below function will update state so _orders is spliced to only relevant items
+                                  mouseCursor: SystemMouseCursors.basic,
                                   onPressed: () {
                                     setState(() {});
                                   },
@@ -320,7 +317,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           Opacity(
                             opacity: 0,
                             child: FloatingActionButton(
-                              //below function will update state so _orders is spliced to only relevant items
+                              mouseCursor: SystemMouseCursors.basic,
                               onPressed: () {
                                 setState(() {});
                               },
@@ -341,7 +338,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             ),
                           ),
                           FloatingActionButton(
-                            //below function will update state so _orders is spliced to only relevant items
                             onPressed: () {
                               setState(() {
                                 _currentPage++;
