@@ -304,30 +304,32 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   color: Colors.blue.shade400,
                                 ),
                               ),
-                              Visibility(
-                                visible: false,
-                                child: FloatingActionButton(
-                                  //below function will update state so _orders is spliced to only relevant items
-                                  onPressed: () {
-                                    setState(() {});
-                                  },
-                                  child: const Icon(Icons.arrow_back),
-                                  backgroundColor: Colors.blue,
-                                ),
+                              Opacity(
+                                opacity: 0,
+                                child:
+				FloatingActionButton(
+				    //below function will update state so _orders is spliced to only relevant items
+				    onPressed: () {
+				      setState(() {});
+				    },
+				    child: const Icon(Icons.arrow_back),
+				    backgroundColor: Colors.white,
+				  ),
                               ),
                             ])
                       : <Widget>[
-                          Visibility(
-                            visible: false,
-                            child: FloatingActionButton(
-                              //below function will update state so _orders is spliced to only relevant items
-                              onPressed: () {
-                                setState(() {});
-                              },
-                              child: const Icon(Icons.arrow_back),
-                              backgroundColor: Colors.blue,
-                            ),
-                          ),
+			  Opacity(
+			    opacity: 0,
+			    child:
+			    FloatingActionButton(
+				//below function will update state so _orders is spliced to only relevant items
+				onPressed: () {
+				  setState(() {});
+				},
+				child: const Icon(Icons.arrow_back),
+				backgroundColor: Colors.white,
+			      ),
+			  ),
                           Container(
                             width: 40,
                             height: 40,
