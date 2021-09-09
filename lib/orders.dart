@@ -237,10 +237,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     itemBuilder: _listItem,
                     itemCount: (_orders.length -
                                 ((_currentPage + 1) * _ordersPerPage)) >=
-                            0
+                            _ordersPerPage
                         ? _ordersPerPage
-                        : (((_currentPage + 1) * _ordersPerPage) -
-                            _orders.length),
+                        : (_orders.length - ((_currentPage) * _ordersPerPage)),
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true),
                 Row(
