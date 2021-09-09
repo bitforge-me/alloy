@@ -306,30 +306,28 @@ class _OrdersScreenState extends State<OrdersScreen> {
                               ),
                               Opacity(
                                 opacity: 0,
-                                child:
-				FloatingActionButton(
-				    //below function will update state so _orders is spliced to only relevant items
-				    onPressed: () {
-				      setState(() {});
-				    },
-				    child: const Icon(Icons.arrow_back),
-				    backgroundColor: Colors.white,
-				  ),
+                                child: FloatingActionButton(
+                                  //below function will update state so _orders is spliced to only relevant items
+                                  onPressed: () {
+                                    setState(() {});
+                                  },
+                                  child: const Icon(Icons.arrow_back),
+                                  backgroundColor: Colors.white,
+                                ),
                               ),
                             ])
                       : <Widget>[
-			  Opacity(
-			    opacity: 0,
-			    child:
-			    FloatingActionButton(
-				//below function will update state so _orders is spliced to only relevant items
-				onPressed: () {
-				  setState(() {});
-				},
-				child: const Icon(Icons.arrow_back),
-				backgroundColor: Colors.white,
-			      ),
-			  ),
+                          Opacity(
+                            opacity: 0,
+                            child: FloatingActionButton(
+                              //below function will update state so _orders is spliced to only relevant items
+                              onPressed: () {
+                                setState(() {});
+                              },
+                              child: const Icon(Icons.arrow_back),
+                              backgroundColor: Colors.white,
+                            ),
+                          ),
                           Container(
                             width: 40,
                             height: 40,
