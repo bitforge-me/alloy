@@ -244,6 +244,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     shrinkWrap: true),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: _currentPage > 0
                       ? ((_currentPage + 1) * _ordersPerPage < _orders.length
                           ? <Widget>[
@@ -257,6 +258,17 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                 child: const Icon(Icons.arrow_back),
                                 backgroundColor: Colors.blue,
                               ),
+                              Container(
+                                width: 40,
+                                height: 40,
+                                child: Center(child:
+                                         Text('${_currentPage + 1}', textAlign: TextAlign.center, style: TextStyle(color: Colors.white))
+                                ),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.blue.shade400,
+                                ),
+                              ),
                               FloatingActionButton(
                                 //below function will update state so _orders is spliced to only relevant items
                                 onPressed: () {
@@ -269,6 +281,29 @@ class _OrdersScreenState extends State<OrdersScreen> {
                               )
                             ]
                           : <Widget>[
+                              Visibility(
+                                visible: false,
+				child: FloatingActionButton(
+				  //below function will update state so _orders is spliced to only relevant items
+				  onPressed: () {
+				    setState(() {
+				    });
+				  },
+				  child: const Icon(Icons.arrow_back),
+				  backgroundColor: Colors.blue,
+				),
+                              ),
+                              Container(
+                                width: 40,
+                                height: 40,
+                                child: Center(child:
+                                         Text('${_currentPage + 1}', textAlign: TextAlign.center, style: TextStyle(color: Colors.white))
+                                ),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.blue.shade400,
+                                ),
+                              ),
                               FloatingActionButton(
                                 //below function will update state so _orders is spliced to only relevant items
                                 onPressed: () {
@@ -281,7 +316,29 @@ class _OrdersScreenState extends State<OrdersScreen> {
                               ),
                             ])
                       : <Widget>[
-                          SizedBox(height: 20),
+			  Visibility(
+			    visible: false,
+			    child: FloatingActionButton(
+			      //below function will update state so _orders is spliced to only relevant items
+			      onPressed: () {
+				setState(() {
+				});
+			      },
+			      child: const Icon(Icons.arrow_back),
+			      backgroundColor: Colors.blue,
+			    ),
+			  ),
+			  Container(
+			    width: 40,
+			    height: 40,
+			    child: Center(child:
+				     Text('${_currentPage + 1}', textAlign: TextAlign.center, style: TextStyle(color: Colors.white))
+			    ),
+			    decoration: BoxDecoration(
+			      shape: BoxShape.circle,
+			      color: Colors.blue.shade400,
+			    ),
+			  ),
                           FloatingActionButton(
                             //below function will update state so _orders is spliced to only relevant items
                             onPressed: () {
