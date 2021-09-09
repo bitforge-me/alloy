@@ -282,16 +282,15 @@ class _OrdersScreenState extends State<OrdersScreen> {
                               )
                             ]
                           : <Widget>[
-                              Visibility(
-                                visible: false,
-                                child: FloatingActionButton(
-                                  //below function will update state so _orders is spliced to only relevant items
-                                  onPressed: () {
-                                    setState(() {});
-                                  },
-                                  child: const Icon(Icons.arrow_back),
-                                  backgroundColor: Colors.blue,
-                                ),
+                              FloatingActionButton(
+                                //below function will update state so _orders is spliced to only relevant items
+                                onPressed: () {
+                                  setState(() {
+                                    _currentPage--;
+                                  });
+                                },
+                                child: const Icon(Icons.arrow_back),
+                                backgroundColor: Colors.blue,
                               ),
                               Container(
                                 width: 40,
@@ -305,15 +304,16 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   color: Colors.blue.shade400,
                                 ),
                               ),
-                              FloatingActionButton(
-                                //below function will update state so _orders is spliced to only relevant items
-                                onPressed: () {
-                                  setState(() {
-                                    _currentPage--;
-                                  });
-                                },
-                                child: const Icon(Icons.arrow_back),
-                                backgroundColor: Colors.blue,
+                              Visibility(
+                                visible: false,
+                                child: FloatingActionButton(
+                                  //below function will update state so _orders is spliced to only relevant items
+                                  onPressed: () {
+                                    setState(() {});
+                                  },
+                                  child: const Icon(Icons.arrow_back),
+                                  backgroundColor: Colors.blue,
+                                ),
                               ),
                             ])
                       : <Widget>[
