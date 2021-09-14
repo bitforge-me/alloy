@@ -235,9 +235,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
               children: <Widget>[
                 ListView.builder(
                     itemBuilder: _listItem,
-                    itemCount: (_orders.length -
-                                ((_currentPage + 1) * _ordersPerPage)) >=
-                            _ordersPerPage
+                    itemCount: ((_orders.length -
+                                ((_currentPage + 1) * _ordersPerPage)) > -1)
                         ? _ordersPerPage
                         : (_orders.length - ((_currentPage) * _ordersPerPage)),
                     scrollDirection: Axis.vertical,
