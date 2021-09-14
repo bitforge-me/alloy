@@ -6,6 +6,8 @@ import 'beryllium.dart';
 
 String _svgAsset(String symbol) {
   switch (symbol) {
+    case 'NZD':
+      return 'assets/crypto_logos/nzd.svg';
     case 'BTC':
       return 'assets/crypto_logos/bitcoin.svg';
     case 'ETH':

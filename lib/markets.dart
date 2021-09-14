@@ -133,8 +133,32 @@ class _QuoteScreenState extends State<QuoteScreen> {
     if (amount < widget.orderbook.minOrder)
       return QuoteTotalPrice(Decimal.zero, 'amount too low');
 
-    // TODO - implement me
-    return QuoteTotalPrice(Decimal.one, null);
+    var amountTotal = amount;
+    var filled = Decimal.zero;
+    var totalPrice = Decimal.zero;
+    var n = 0;
+    while (amountTotal > filled) {
+      if (n >= widget.orderbook.bids.length) {
+        break;
+      }
+      var rate = widget.orderbook.bids[n].rate;
+      var quantity = widget.orderbook.bids[n].quantity;
+      var quantityToUse = quantity;
+      if (quantityToUse > amountTotal - filled)
+        quantityToUse = amountTotal - filled;
+      filled += quantityToUse;
+      totalPrice += quantityToUse * rate;
+      if (filled == amountTotal) {
+        return QuoteTotalPrice(
+            totalPrice *
+                    (Decimal.one -
+                        widget.orderbook.brokerFee / Decimal.fromInt(100)) -
+                widget.orderbook.quoteAssetWithdrawFee,
+            null);
+      }
+      n++;
+    }
+    return QuoteTotalPrice(Decimal.zero, 'not enough liquidity');
   }
 
   void _updateSide(BeMarketSide side) {
@@ -191,15 +215,17 @@ class _QuoteScreenState extends State<QuoteScreen> {
   }
 
   Future<void> _addressBook() async {
+    var asset = _side == BeMarketSide.bid
+        ? widget.market.baseAsset
+        : widget.market.quoteAsset;
     showAlertDialog(context, 'querying address book..');
-    var res = await beAddressBook(widget.market.baseAsset);
+    var res = await beAddressBook(asset);
     Navigator.pop(context);
     if (res.error.type != ErrorType.None) return;
     var recipient = await Navigator.push<String?>(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                AddressBookScreen(widget.market.baseAsset, res.entries)));
+            builder: (context) => AddressBookScreen(asset, res.entries)));
     if (recipient == null) return;
     if (_side == BeMarketSide.bid)
       _withdrawalAddressController.text = recipient;
