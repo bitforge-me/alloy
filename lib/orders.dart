@@ -223,6 +223,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   Widget build(BuildContext context) {
     print('orders length is ${_orders.length}');
     List<Widget> pageButtons = <Widget>[];
+    SizedBox fillerWidth = SizedBox(width: 100);
     if (_currentPage > 0 && (_currentPage + 1) < _totalPages) {
       pageButtons = 
       <Widget>[
@@ -248,6 +249,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
             );
           },
         ),
+        fillerWidth,
 	Container(
 	  width: 40,
 	  height: 40,
@@ -260,6 +262,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
 	    color: Colors.blue.shade400,
 	  ),
 	),
+        fillerWidth,
         GestureDetector(
           child: 
 	    Container(
@@ -309,6 +312,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
 	      );
 	    },
 	  ),
+          fillerWidth,
 	  Container(
 	    width: 40,
 	    height: 40,
@@ -337,6 +341,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
 	      color: Colors.blue.shade400,
 	    ),
 	  ),
+          fillerWidth,
 	  GestureDetector(
 	    child: 
 	      Container(
@@ -377,6 +382,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
 	  ),
 	];
     }
+
+    Row buttonsRow = Row(
+      children: pageButtons,
+    );
     
     return Scaffold(
       appBar: AppBar(
@@ -415,9 +424,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                 child: const Icon(Icons.arrow_back),
                                 backgroundColor: Colors.blue,
                               ),
-                              Row(
-                                children: pageButtons,
-                              ),
+                              buttonsRow,
                               FloatingActionButton(
                                 onPressed: () {
                                   setState(() {
@@ -438,18 +445,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                 child: const Icon(Icons.arrow_back),
                                 backgroundColor: Colors.blue,
                               ),
-                              Container(
-                                width: 40,
-                                height: 40,
-                                child: Center(
-                                    child: Text('${_currentPage + 1}',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(color: Colors.white))),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.blue.shade400,
-                                ),
-                              ),
+                              buttonsRow,
                               Opacity(
                                 opacity: 0,
                                 child: FloatingActionButton(
@@ -474,18 +470,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                               backgroundColor: Colors.white,
                             ),
                           ),
-                          Container(
-                            width: 40,
-                            height: 40,
-                            child: Center(
-                                child: Text('${_currentPage + 1}',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(color: Colors.white))),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.blue.shade400,
-                            ),
-                          ),
+                          buttonsRow,
                           FloatingActionButton(
                             onPressed: () {
                               setState(() {
