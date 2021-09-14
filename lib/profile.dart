@@ -59,7 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   UserInfo userInfo(AccountRegistration reg) {
     return UserInfo(reg.firstName, reg.lastName, reg.mobileNumber, reg.address,
-        reg.email, reg.photo, reg.photoType, [], [], false, null, false);
+        reg.email, reg.photo, reg.photoType, [], [], false, null, false, false);
   }
 
   void _updateProfileImage() async {

@@ -15,6 +15,7 @@ import 'markets.dart';
 import 'orders.dart';
 import 'websocket.dart';
 import 'profile.dart';
+import 'security.dart';
 import 'utils.dart';
 
 void main() {
@@ -75,8 +76,15 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       _websocket.connect(); // reconnect websocket
   }
 
-  Future<void> _initApi() async {
+  List<String> _generateAlerts(UserInfo? info) {
     var alerts = <String>[];
+    if (info == null) return alerts;
+    if (!info.kycValidated) alerts.add('User not verified');
+    if (!info.tfEnabled) alerts.add('Two Factor Authentication not enabled');
+    return alerts;
+  }
+
+  Future<void> _initApi() async {
     if (await Prefs.hasZcApiKey()) {
       UserInfo? userInfo;
       showAlertDialog(context, 'getting account info...');
@@ -103,14 +111,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             _retry = false;
           });
           userInfo = result.info!;
-          if (!userInfo.kycValidated) alerts.add('User not verified');
           _websocket.wsEvent.subscribe(_websocketEvent);
           _websocket.connect(); // connect websocket
           break;
       }
       setState(() {
         _userInfo = userInfo;
-        _alerts = alerts;
+        _alerts = _generateAlerts(userInfo);
       });
     }
   }
@@ -121,26 +128,35 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       var info = UserInfo.parse(args.msg);
       if (info.email != _userInfo?.email)
         _websocket.connect(); // reconnect websocket
-      setState(() => _userInfo = info);
+      setState(() {
+        _userInfo = info;
+        _alerts = _generateAlerts(info);
+      });
       //flushbarMsg(context, 'user updated');
+    }
+  }
+
+  Future<void> _loginErrorAlert(BuildContext context, BeError error) async {
+    switch (error.type) {
+      case ErrorType.None:
+        break;
+      case ErrorType.Auth:
+        await alert(context, 'Authentication failed',
+            'The login details you entered are not valid (${error.msg})');
+        break;
+      case ErrorType.Network:
+        await alert(context, 'Network error',
+            'A network error occured when trying to login');
+        break;
     }
   }
 
   Future<Acct?> _beLogin(BuildContext context, AccountLogin login,
       {bool silent: false}) async {
     var devName = await deviceName();
-    var result = await beApiKeyCreate(login.email, login.password, devName);
+    var result = await beApiKeyCreate(
+        login.email, login.password, devName, login.tfCode);
     switch (result.error.type) {
-      case ErrorType.Auth:
-        if (!silent)
-          await alert(context, 'Authentication failed',
-              'The login details you entered are not valid (${result.error.msg})');
-        break;
-      case ErrorType.Network:
-        if (!silent)
-          await alert(context, 'Network error',
-              'A network error occured when trying to login');
-        break;
       case ErrorType.None:
         // write api key
         if (result.apikey != null) {
@@ -148,6 +164,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           await Prefs.beApiSecretSet(result.apikey!.secret);
         }
         return Acct(login.email, result.apikey?.token);
+      default:
+        if (!silent) await _loginErrorAlert(context, result.error);
+        break;
     }
     return null;
   }
@@ -213,7 +232,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             await Future.delayed(Duration(seconds: 5));
             // save account if login successful
             acct = await _beLogin(
-                context, AccountLogin(reg.email, reg.newPassword),
+                context, AccountLogin(reg.email, reg.newPassword, ''),
                 silent: true);
           }
           Navigator.pop(context);
@@ -225,16 +244,45 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   Future<void> _login() async {
     AccountLogin? login;
-    login = await Navigator.push<AccountLogin>(
-      context,
-      MaterialPageRoute(builder: (context) => AccountLoginForm(login)),
-    );
-    if (login == null) return;
-    // save account if login successful
-    showAlertDialog(context, 'logging in..');
-    var acct = await _beLogin(context, login);
-    Navigator.pop(context);
-    if (acct != null) _initApi();
+    // first check if we need a two factor code
+    bool tfEnabled = false;
+    while (true) {
+      login = await Navigator.push<AccountLogin>(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                AccountLoginForm(login, showTwoFactorCode: false)),
+      );
+      if (login == null) return;
+      showAlertDialog(context, 'logging in..');
+      var result =
+          await beUserTwoFactorEnabledCheck(login.email, login.password);
+      Navigator.pop(context);
+      if (result.error.type == ErrorType.None && result.tfEnabled != null) {
+        tfEnabled = result.tfEnabled!;
+        break;
+      } else
+        await _loginErrorAlert(context, result.error);
+    }
+    while (true) {
+      // get the two factor code if required
+      if (tfEnabled)
+        login = await Navigator.push<AccountLogin>(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  AccountLoginForm(login, showTwoFactorCode: tfEnabled)),
+        );
+      if (login == null) return;
+      // login and save account if login successful
+      showAlertDialog(context, 'logging in..');
+      var acct = await _beLogin(context, login);
+      Navigator.pop(context);
+      if (acct != null) {
+        _initApi();
+        break;
+      }
+    }
   }
 
   Future<void> _loginWithEmail() async {
@@ -327,6 +375,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             builder: (context) => ProfileScreen(_websocket, _userInfo!)));
   }
 
+  Future<void> _security() async {
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => SecurityScreen(_websocket, _userInfo!)));
+  }
+
   Future<void> _verifyUser() async {
     await Navigator.push(
         context,
@@ -366,7 +421,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           Visibility(
               visible: _userInfo?.kycValidated != true,
               child: ListTile(
-                leading: Icon(Icons.verified_user),
+                leading: Icon(Icons.verified_user, color: ZapWarning),
                 title: const Text('Verify User'),
                 onTap: _verifyUser,
               )),
@@ -374,6 +429,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               leading: Icon(Icons.account_circle),
               title: const Text('Profile'),
               onTap: _profile),
+          ListTile(
+              leading: Icon(Icons.shield,
+                  color: _userInfo?.tfEnabled == true ? null : ZapWarning),
+              title: const Text('Security'),
+              onTap: _security),
           ListTile(
               leading: Icon(Icons.view_list),
               title: const Text('Orders'),

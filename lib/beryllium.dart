@@ -62,6 +62,7 @@ class UserInfo {
   final bool kycValidated;
   final String? kycUrl;
   final bool aplyidReqExists;
+  final bool tfEnabled;
 
   UserInfo(
       this.firstName,
@@ -75,7 +76,8 @@ class UserInfo {
       this.roles,
       this.kycValidated,
       this.kycUrl,
-      this.aplyidReqExists);
+      this.aplyidReqExists,
+      this.tfEnabled);
 
   UserInfo replace(UserInfo info) {
     // selectively replace permissions because websocket events do not include the permissions field
@@ -93,7 +95,8 @@ class UserInfo {
         info.roles,
         info.kycValidated,
         info.kycUrl,
-        info.aplyidReqExists);
+        info.aplyidReqExists,
+        info.tfEnabled);
   }
 
   static UserInfo parse(String data) {
@@ -122,7 +125,8 @@ class UserInfo {
         roles,
         jsnObj['kyc_validated'],
         jsnObj['kyc_url'],
-        jsnObj['aplyid_req_exists']);
+        jsnObj['aplyid_req_exists'],
+        jsnObj['tf_enabled']);
   }
 }
 
@@ -131,6 +135,27 @@ class UserInfoResult {
   final BeError error;
 
   UserInfoResult(this.info, this.error);
+}
+
+class BeTwoFactorEnabledResult {
+  final bool? tfEnabled;
+  final BeError error;
+
+  BeTwoFactorEnabledResult(this.tfEnabled, this.error);
+
+  static BeTwoFactorEnabledResult parse(String data) {
+    var json = jsonDecode(data);
+    var tfEnabled = json['tf_enabled'];
+    return BeTwoFactorEnabledResult(tfEnabled, BeError.none());
+  }
+
+  static BeTwoFactorEnabledResult network() {
+    return BeTwoFactorEnabledResult(null, BeError.network());
+  }
+
+  static BeTwoFactorEnabledResult auth(String msg) {
+    return BeTwoFactorEnabledResult(null, BeError.auth(msg));
+  }
 }
 
 class BeApiKey {
@@ -159,6 +184,48 @@ class BeKycRequestCreateResult {
   final BeError error;
 
   BeKycRequestCreateResult(this.kycUrl, this.error);
+}
+
+class BeTwoFactorSetup {
+  final String image;
+  final String key;
+  final String issuer;
+  final String username;
+
+  BeTwoFactorSetup(this.image, this.key, this.issuer, this.username);
+}
+
+class BeTwoFactor {
+  final String method;
+  final BeTwoFactorSetup? setup;
+
+  BeTwoFactor(this.method, this.setup);
+}
+
+class BeTwoFactorResult {
+  final BeTwoFactor? twoFactor;
+  final BeError error;
+
+  BeTwoFactorResult(this.twoFactor, this.error);
+
+  static BeTwoFactorResult parse(String data) {
+    var json = jsonDecode(data);
+    var method = json['method'];
+    BeTwoFactorSetup? setup;
+    if (json['setup'] != null) {
+      setup = BeTwoFactorSetup(json['setup']['image'], json['setup']['key'],
+          json['setup']['issuer'], json['setup']['username']);
+    }
+    return BeTwoFactorResult(BeTwoFactor(method, setup), BeError.none());
+  }
+
+  static BeTwoFactorResult network() {
+    return BeTwoFactorResult(null, BeError.network());
+  }
+
+  static BeTwoFactorResult auth(String msg) {
+    return BeTwoFactorResult(null, BeError.auth(msg));
+  }
 }
 
 class BeAsset {
@@ -517,13 +584,33 @@ Future<BeError> beUserRegister(AccountRegistration reg) async {
   return BeError.network();
 }
 
+Future<BeTwoFactorEnabledResult> beUserTwoFactorEnabledCheck(
+    String email, String password) async {
+  var baseUrl = await _server();
+  if (baseUrl == null) return BeTwoFactorEnabledResult(null, BeError.network());
+  var url = baseUrl + "user_two_factor_enabled_check";
+  var body = jsonEncode({"email": email, "password": password});
+  var response = await postAndCatch(url, body);
+  if (response == null) return BeTwoFactorEnabledResult.network();
+  if (response.statusCode == 200) {
+    return BeTwoFactorEnabledResult.parse(response.body);
+  } else if (response.statusCode == 400)
+    return BeTwoFactorEnabledResult.auth(response.body);
+  print(response.statusCode);
+  return BeTwoFactorEnabledResult.network();
+}
+
 Future<BeApiKeyResult> beApiKeyCreate(
-    String email, String password, String deviceName) async {
+    String email, String password, String deviceName, String tfCode) async {
   var baseUrl = await _server();
   if (baseUrl == null) return BeApiKeyResult(null, BeError.network());
   var url = baseUrl + "api_key_create";
-  var body = jsonEncode(
-      {"email": email, "password": password, "device_name": deviceName});
+  var body = jsonEncode({
+    "email": email,
+    "password": password,
+    "device_name": deviceName,
+    "tf_code": tfCode
+  });
   var response = await postAndCatch(url, body);
   if (response == null) return BeApiKeyResult(null, BeError.network());
   if (response.statusCode == 200) {
@@ -730,6 +817,48 @@ Future<BeKycRequestCreateResult> beKycRequestSendMobileNumber(
     return BeKycRequestCreateResult(null, BeError.auth(response.body));
   print(response.statusCode);
   return BeKycRequestCreateResult(null, BeError.network());
+}
+
+Future<BeTwoFactorResult> beUserTwoFactorEnable(String? code) async {
+  var baseUrl = await _server();
+  if (baseUrl == null) return BeTwoFactorResult(null, BeError.network());
+  var url = baseUrl + "user_two_factor_enable";
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = nextNonce();
+  var body = jsonEncode({"api_key": apikey, "nonce": nonce, "code": code});
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null) return BeTwoFactorResult(null, BeError.network());
+  if (response.statusCode == 200) {
+    return BeTwoFactorResult.parse(response.body);
+  } else if (response.statusCode == 400)
+    return BeTwoFactorResult.auth(response.body);
+  print(response.statusCode);
+  return BeTwoFactorResult.network();
+}
+
+Future<BeTwoFactorResult> beUserTwoFactorDisable(String? code) async {
+  var baseUrl = await _server();
+  if (baseUrl == null) return BeTwoFactorResult(null, BeError.network());
+  var url = baseUrl + "user_two_factor_disable";
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = nextNonce();
+  var body = jsonEncode({"api_key": apikey, "nonce": nonce, "code": code});
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null) return BeTwoFactorResult(null, BeError.network());
+  if (response.statusCode == 200) {
+    return BeTwoFactorResult.parse(response.body);
+  } else if (response.statusCode == 400)
+    return BeTwoFactorResult.auth(response.body);
+  print(response.statusCode);
+  return BeTwoFactorResult.network();
 }
 
 Future<BeAssetResult> beAssets() async {

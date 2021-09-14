@@ -902,8 +902,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: cb83421a9cea5590a1742a367a208872a89f02b2
-      resolved-ref: cb83421a9cea5590a1742a367a208872a89f02b2
+      ref: d3ca499217f15eed4aa031511dd7a68829b890f2
+      resolved-ref: d3ca499217f15eed4aa031511dd7a68829b890f2
       url: "https://github.com/zap-me/zapdart.git"
     source: git
     version: "0.0.1"
