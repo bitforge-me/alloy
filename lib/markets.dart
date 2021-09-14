@@ -3,6 +3,7 @@ import 'package:decimal/decimal.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
+import 'package:zapdart/form_ui.dart';
 
 import 'beryllium.dart';
 import 'cryptocurrency.dart';
@@ -10,7 +11,6 @@ import 'prefs.dart';
 import 'websocket.dart';
 import 'assets.dart';
 import 'orders.dart';
-import 'form_ui.dart';
 
 class AddressBookScreen extends StatefulWidget {
   final String asset;

@@ -287,7 +287,7 @@ packages:
       name: extended_image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.0"
+    version: "4.2.1"
   extended_image_library:
     dependency: transitive
     description:
@@ -423,7 +423,7 @@ packages:
       name: image_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.3+2"
+    version: "0.8.4"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -437,7 +437,7 @@ packages:
       name: image_picker_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0"
+    version: "2.4.1"
   intl_phone_number_input:
     dependency: transitive
     description:
@@ -675,7 +675,7 @@ packages:
       name: shared_preferences
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.6"
+    version: "2.0.7"
   shared_preferences_linux:
     dependency: transitive
     description:
@@ -902,8 +902,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: b7c3a24e4e060b296f5f0d32c5f69760f4343854
-      resolved-ref: b7c3a24e4e060b296f5f0d32c5f69760f4343854
+      ref: d3ca499217f15eed4aa031511dd7a68829b890f2
+      resolved-ref: d3ca499217f15eed4aa031511dd7a68829b890f2
       url: "https://github.com/zap-me/zapdart.git"
     source: git
     version: "0.0.1"
