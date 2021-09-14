@@ -160,7 +160,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
     super.initState();
     widget.websocket.wsEvent.subscribe(_websocketEvent);
     _totalPages = (_orders.length / _ordersPerPage).ceil();
-    print('_totalPages is ${_totalPages}');
   }
 
   @override
@@ -221,172 +220,154 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('orders length is ${_orders.length}');
     List<Widget> pageButtons = <Widget>[];
     SizedBox fillerWidth = SizedBox(width: 100);
     if (_currentPage > 0 && (_currentPage + 1) < _totalPages) {
-      pageButtons = 
-      <Widget>[
+      pageButtons = <Widget>[
         GestureDetector(
-          child: 
-	    Container(
-	      width: 40,
-	      height: 40,
-	      child: Center(
-		  child: Text('${_currentPage}',
-		      textAlign: TextAlign.center,
-		      style: TextStyle(color: Colors.white))),
-	      decoration: BoxDecoration(
-		shape: BoxShape.circle,
-		color: Colors.grey,
-	      ),
-	    ),
-          onTap: (){
-            setState(
-              () {
-                _currentPage--;
-              }
-            );
+          child: Container(
+            width: 40,
+            height: 40,
+            child: Center(
+                child: Text(_currentPage.toString(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white))),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.grey,
+            ),
+          ),
+          onTap: () {
+            setState(() {
+              _currentPage--;
+            });
           },
         ),
         fillerWidth,
-	Container(
-	  width: 40,
-	  height: 40,
-	  child: Center(
-	      child: Text('${_currentPage + 1}',
-		  textAlign: TextAlign.center,
-		  style: TextStyle(color: Colors.white))),
-	  decoration: BoxDecoration(
-	    shape: BoxShape.circle,
-	    color: Colors.blue.shade400,
-	  ),
-	),
+        Container(
+          width: 40,
+          height: 40,
+          child: Center(
+              child: Text('${_currentPage + 1}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white))),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.blue.shade400,
+          ),
+        ),
         fillerWidth,
         GestureDetector(
-          child: 
-	    Container(
-	      width: 40,
-	      height: 40,
-	      child: Center(
-		  child: Text('${_currentPage + 2}',
-		      textAlign: TextAlign.center,
-		      style: TextStyle(color: Colors.white))),
-	      decoration: BoxDecoration(
-		shape: BoxShape.circle,
-		color: Colors.grey,
-	      ),
-	    ),
-          onTap: (){
-            setState(
-              () {
-                _currentPage++;
-              }
-            );
+          child: Container(
+            width: 40,
+            height: 40,
+            child: Center(
+                child: Text('${_currentPage + 2}',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white))),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.grey,
+            ),
+          ),
+          onTap: () {
+            setState(() {
+              _currentPage++;
+            });
           },
         ),
-
       ];
     } else if (_currentPage > 0) {
-      pageButtons =
-	<Widget>[
-	  GestureDetector(
-	    child: 
-	      Container(
-		width: 40,
-		height: 40,
-		child: Center(
-		    child: Text('${_currentPage}',
-			textAlign: TextAlign.center,
-			style: TextStyle(color: Colors.white))),
-		decoration: BoxDecoration(
-		  shape: BoxShape.circle,
-		  color: Colors.grey,
-		),
-	      ),
-	    onTap: (){
-	      setState(
-		() {
-		  _currentPage--;
-		}
-	      );
-	    },
-	  ),
-          fillerWidth,
-	  Container(
-	    width: 40,
-	    height: 40,
-	    child: Center(
-		child: Text('${_currentPage + 1}',
-		    textAlign: TextAlign.center,
-		    style: TextStyle(color: Colors.white))),
-	    decoration: BoxDecoration(
-	      shape: BoxShape.circle,
-	      color: Colors.blue.shade400,
-	    ),
-	  ),
-	];
+      pageButtons = <Widget>[
+        GestureDetector(
+          child: Container(
+            width: 40,
+            height: 40,
+            child: Center(
+                child: Text(_currentPage.toString(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white))),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.grey,
+            ),
+          ),
+          onTap: () {
+            setState(() {
+              _currentPage--;
+            });
+          },
+        ),
+        fillerWidth,
+        Container(
+          width: 40,
+          height: 40,
+          child: Center(
+              child: Text('${_currentPage + 1}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white))),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.blue.shade400,
+          ),
+        ),
+      ];
     } else if ((_currentPage + 1) < _totalPages) {
-      pageButtons =
-	<Widget>[
-	  Container(
-	    width: 40,
-	    height: 40,
-	    child: Center(
-		child: Text('${_currentPage + 1}',
-		    textAlign: TextAlign.center,
-		    style: TextStyle(color: Colors.white))),
-	    decoration: BoxDecoration(
-	      shape: BoxShape.circle,
-	      color: Colors.blue.shade400,
-	    ),
-	  ),
-          fillerWidth,
-	  GestureDetector(
-	    child: 
-	      Container(
-		width: 40,
-		height: 40,
-		child: Center(
-		    child: Text('${_currentPage + 2}',
-			textAlign: TextAlign.center,
-			style: TextStyle(color: Colors.white))),
-		decoration: BoxDecoration(
-		  shape: BoxShape.circle,
-		  color: Colors.grey,
-		),
-	      ),
-	    onTap: (){
-	      setState(
-		() {
-		  _currentPage++;
-		}
-	      );
-	    },
-	  ),
-	];
+      pageButtons = <Widget>[
+        Container(
+          width: 40,
+          height: 40,
+          child: Center(
+              child: Text('${_currentPage + 1}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white))),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.blue.shade400,
+          ),
+        ),
+        fillerWidth,
+        GestureDetector(
+          child: Container(
+            width: 40,
+            height: 40,
+            child: Center(
+                child: Text('${_currentPage + 2}',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white))),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.grey,
+            ),
+          ),
+          onTap: () {
+            setState(() {
+              _currentPage++;
+            });
+          },
+        ),
+      ];
     } else {
-      pageButtons =
-	<Widget>[
-	  Container(
-	    width: 40,
-	    height: 40,
-	    child: Center(
-		child: Text('${_currentPage + 1}',
-		    textAlign: TextAlign.center,
-		    style: TextStyle(color: Colors.white))),
-	    decoration: BoxDecoration(
-	      shape: BoxShape.circle,
-	      color: Colors.blue.shade400,
-	    ),
-	  ),
-	];
+      pageButtons = <Widget>[
+        Container(
+          width: 40,
+          height: 40,
+          child: Center(
+              child: Text('${_currentPage + 1}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white))),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.blue.shade400,
+          ),
+        ),
+      ];
     }
 
     Row buttonsRow = Row(
       children: pageButtons,
     );
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Orders'),
@@ -404,7 +385,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 ListView.builder(
                     itemBuilder: _listItem,
                     itemCount: ((_orders.length -
-                                ((_currentPage + 1) * _ordersPerPage)) > -1)
+                                ((_currentPage + 1) * _ordersPerPage)) >
+                            -1)
                         ? _ordersPerPage
                         : (_orders.length - ((_currentPage) * _ordersPerPage)),
                     scrollDirection: Axis.vertical,
