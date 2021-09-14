@@ -153,11 +153,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
   _OrdersScreenState(this._orders);
   int _currentPage = 0;
   int _ordersPerPage = 7;
+  int _totalPages = 0;
 
   @override
   void initState() {
     super.initState();
     widget.websocket.wsEvent.subscribe(_websocketEvent);
+    _totalPages = (_orders.length / _ordersPerPage).ceil();
+    print('_totalPages is ${_totalPages}');
   }
 
   @override
@@ -219,6 +222,162 @@ class _OrdersScreenState extends State<OrdersScreen> {
   @override
   Widget build(BuildContext context) {
     print('orders length is ${_orders.length}');
+    List<Widget> pageButtons = <Widget>[];
+    if (_currentPage > 0 && (_currentPage + 1) < _totalPages) {
+      pageButtons = 
+      <Widget>[
+        GestureDetector(
+          child: 
+	    Container(
+	      width: 40,
+	      height: 40,
+	      child: Center(
+		  child: Text('${_currentPage}',
+		      textAlign: TextAlign.center,
+		      style: TextStyle(color: Colors.white))),
+	      decoration: BoxDecoration(
+		shape: BoxShape.circle,
+		color: Colors.grey,
+	      ),
+	    ),
+          onTap: (){
+            setState(
+              () {
+                _currentPage--;
+              }
+            );
+          },
+        ),
+	Container(
+	  width: 40,
+	  height: 40,
+	  child: Center(
+	      child: Text('${_currentPage + 1}',
+		  textAlign: TextAlign.center,
+		  style: TextStyle(color: Colors.white))),
+	  decoration: BoxDecoration(
+	    shape: BoxShape.circle,
+	    color: Colors.blue.shade400,
+	  ),
+	),
+        GestureDetector(
+          child: 
+	    Container(
+	      width: 40,
+	      height: 40,
+	      child: Center(
+		  child: Text('${_currentPage + 2}',
+		      textAlign: TextAlign.center,
+		      style: TextStyle(color: Colors.white))),
+	      decoration: BoxDecoration(
+		shape: BoxShape.circle,
+		color: Colors.grey,
+	      ),
+	    ),
+          onTap: (){
+            setState(
+              () {
+                _currentPage++;
+              }
+            );
+          },
+        ),
+
+      ];
+    } else if (_currentPage > 0) {
+      pageButtons =
+	<Widget>[
+	  GestureDetector(
+	    child: 
+	      Container(
+		width: 40,
+		height: 40,
+		child: Center(
+		    child: Text('${_currentPage}',
+			textAlign: TextAlign.center,
+			style: TextStyle(color: Colors.white))),
+		decoration: BoxDecoration(
+		  shape: BoxShape.circle,
+		  color: Colors.grey,
+		),
+	      ),
+	    onTap: (){
+	      setState(
+		() {
+		  _currentPage--;
+		}
+	      );
+	    },
+	  ),
+	  Container(
+	    width: 40,
+	    height: 40,
+	    child: Center(
+		child: Text('${_currentPage + 1}',
+		    textAlign: TextAlign.center,
+		    style: TextStyle(color: Colors.white))),
+	    decoration: BoxDecoration(
+	      shape: BoxShape.circle,
+	      color: Colors.blue.shade400,
+	    ),
+	  ),
+	];
+    } else if ((_currentPage + 1) < _totalPages) {
+      pageButtons =
+	<Widget>[
+	  Container(
+	    width: 40,
+	    height: 40,
+	    child: Center(
+		child: Text('${_currentPage + 1}',
+		    textAlign: TextAlign.center,
+		    style: TextStyle(color: Colors.white))),
+	    decoration: BoxDecoration(
+	      shape: BoxShape.circle,
+	      color: Colors.blue.shade400,
+	    ),
+	  ),
+	  GestureDetector(
+	    child: 
+	      Container(
+		width: 40,
+		height: 40,
+		child: Center(
+		    child: Text('${_currentPage + 2}',
+			textAlign: TextAlign.center,
+			style: TextStyle(color: Colors.white))),
+		decoration: BoxDecoration(
+		  shape: BoxShape.circle,
+		  color: Colors.grey,
+		),
+	      ),
+	    onTap: (){
+	      setState(
+		() {
+		  _currentPage++;
+		}
+	      );
+	    },
+	  ),
+	];
+    } else {
+      pageButtons =
+	<Widget>[
+	  Container(
+	    width: 40,
+	    height: 40,
+	    child: Center(
+		child: Text('${_currentPage + 1}',
+		    textAlign: TextAlign.center,
+		    style: TextStyle(color: Colors.white))),
+	    decoration: BoxDecoration(
+	      shape: BoxShape.circle,
+	      color: Colors.blue.shade400,
+	    ),
+	  ),
+	];
+    }
+    
     return Scaffold(
       appBar: AppBar(
         title: Text('Orders'),
@@ -256,17 +415,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                 child: const Icon(Icons.arrow_back),
                                 backgroundColor: Colors.blue,
                               ),
-                              Container(
-                                width: 40,
-                                height: 40,
-                                child: Center(
-                                    child: Text('${_currentPage + 1}',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(color: Colors.white))),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.blue.shade400,
-                                ),
+                              Row(
+                                children: pageButtons,
                               ),
                               FloatingActionButton(
                                 onPressed: () {
