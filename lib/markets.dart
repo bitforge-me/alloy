@@ -79,9 +79,9 @@ class _QuoteScreenState extends State<QuoteScreen> {
 
   var _quote = '-';
   var _amount = Decimal.zero;
+  var _price = Decimal.zero;
   var _side = BeMarketSide.bid;
-  var _address = '-';
-  var _bank = '-';
+  var _recipient = '-';
   var _saveRecipient = false;
   var _testnet = false;
 
@@ -165,12 +165,17 @@ class _QuoteScreenState extends State<QuoteScreen> {
     setState(() {
       _side = side;
       _updateQuote();
+      if (side == BeMarketSide.bid)
+        _updateAddress();
+      else
+        _updateBank();
     });
   }
 
   void _updateQuote() {
     var quote = '-';
     var amount = Decimal.zero;
+    var price = Decimal.zero;
     var value = Decimal.tryParse(_amountController.text.trim());
     if (value != null && value > Decimal.zero) {
       amount = value;
@@ -191,27 +196,29 @@ class _QuoteScreenState extends State<QuoteScreen> {
             assetFormat(widget.market.quoteAsset, totalPrice.amount);
         quote =
             '$baseAmount ${widget.market.baseAsset} = $quoteAmount ${widget.market.quoteAsset}';
+        price = totalPrice.amount;
       }
     }
     setState(() {
       _quote = quote;
       _amount = amount;
+      _price = price;
     });
   }
 
   void _updateAddress() {
     var addr = '-';
-    var res = addressValidate(widget.market.baseAsset, _testnet,
-        _withdrawalAddressController.text.trim());
+    var res = addressValidate(
+        widget.market.baseAsset, _testnet, _withdrawalAddressController.text);
     if (res.result) addr = _withdrawalAddressController.text.trim();
-    setState(() => _address = addr);
+    setState(() => _recipient = addr);
   }
 
   void _updateBank() {
     var bank = '-';
-    var res = bankValidate(_withdrawalBankController.text.trim());
-    if (res.result) bank = _withdrawalBankController.text.trim();
-    setState(() => _bank = bank);
+    var res = bankValidate(_withdrawalBankController.text);
+    if (res.result) bank = bankFormat(_withdrawalBankController.text);
+    setState(() => _recipient = bank);
   }
 
   Future<void> _addressBook() async {
@@ -243,7 +250,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
     if (_formKey.currentState!.validate()) {
       showAlertDialog(context, 'creating order..');
       var res = await beOrderCreate(widget.market.symbol, _side, _amount,
-          _address, _saveRecipient, _recipientDescriptionController.text);
+          _recipient, _saveRecipient, _recipientDescriptionController.text);
       Navigator.pop(context);
       if (res.error.type == ErrorType.None) {
         Navigator.push(
@@ -270,16 +277,32 @@ class _QuoteScreenState extends State<QuoteScreen> {
             child: Container(
                 padding: EdgeInsets.all(10),
                 child: Column(children: [
-                  Text(_quote),
-                  Text(
-                      'Send ${assetFormat(widget.market.baseAsset, _amount)} to ${_side == BeMarketSide.bid ? _address : _bank}'),
-                  DropdownButtonFormField<BeMarketSide>(
-                      value: _side,
-                      items: BeMarketSide.values
-                          .map((e) => DropdownMenuItem<BeMarketSide>(
-                              value: e, child: Text(marketSideNice(e))))
-                          .toList(),
-                      onChanged: (value) => _updateSide(value!)),
+                  Container(
+                      margin: EdgeInsets.all(20),
+                      child: Column(children: [
+                        Text(_quote),
+                        SizedBox(height: 10),
+                        _side == BeMarketSide.bid
+                            ? Text(
+                                'Send ${assetFormat(widget.market.baseAsset, _amount)} ${widget.market.baseAsset} to $_recipient')
+                            : Text(
+                                'Send ${assetFormat(widget.market.quoteAsset, _price)} ${widget.market.quoteAsset} to $_recipient')
+                      ])),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Radio<BeMarketSide>(
+                      value: BeMarketSide.bid,
+                      groupValue: _side,
+                      onChanged: (value) => _updateSide(value!),
+                    ),
+                    Text('Buy'),
+                    SizedBox(width: 20),
+                    Radio<BeMarketSide>(
+                      value: BeMarketSide.ask,
+                      groupValue: _side,
+                      onChanged: (value) => _updateSide(value!),
+                    ),
+                    Text('Sell')
+                  ]),
                   TextFormField(
                       controller: _amountController,
                       decoration: InputDecoration(labelText: 'Amount'),
@@ -318,8 +341,8 @@ class _QuoteScreenState extends State<QuoteScreen> {
                           validator: (value) {
                             if (value == null || value.isEmpty)
                               return 'Please enter a value';
-                            var res = addressValidate(widget.market.baseAsset,
-                                _testnet, value.trim());
+                            var res = addressValidate(
+                                widget.market.baseAsset, _testnet, value);
                             if (!res.result) return res.reason;
                             return null;
                           })),
@@ -337,7 +360,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                           validator: (value) {
                             if (value == null || value.isEmpty)
                               return 'Please enter a value';
-                            var res = bankValidate(value.trim());
+                            var res = bankValidate(value);
                             if (!res.result) return res.reason;
                             return null;
                           })),
