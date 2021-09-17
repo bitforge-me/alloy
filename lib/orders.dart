@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
 import 'package:zapdart/colors.dart';
+import 'package:zapdart/qrwidget.dart';
 
 import 'beryllium.dart';
 import 'websocket.dart';
@@ -53,9 +54,15 @@ class _OrderScreenState extends State<OrderScreen> {
     }
   }
 
+  String _recipientAsset() {
+    return _order.side == BeMarketSide.bid
+        ? _order.baseAsset
+        : _order.quoteAsset;
+  }
+
   void _addrLaunch() {
     var url =
-        addressBlockExplorer(_order.baseAsset, _testnet, _order.recipient);
+        addressBlockExplorer(_recipientAsset(), _testnet, _order.recipient);
     if (url == null) return;
     urlLaunch(url);
   }
@@ -112,14 +119,17 @@ class _OrderScreenState extends State<OrderScreen> {
           ListTile(
               title: Text('Recipient'),
               subtitle: Text('${_order.recipient}'),
-              onTap: _addrLaunch),
+              onTap: assetIsCrypto(_recipientAsset()) ? _addrLaunch : null),
           ListTile(
               title: Text('Status'),
               subtitle: Text('${describeEnum(_order.status).toUpperCase()}')),
           _order.paymentUrl != null && _order.status == BeOrderStatus.ready
               ? ListTile(
                   title: Text('Payment URL'),
-                  subtitle: Text('${_order.paymentUrl}'),
+                  subtitle: Column(children: [
+                    QrWidget(_order.paymentUrl!, size: 100),
+                    Text('${_order.paymentUrl}')
+                  ]),
                   onTap: () => urlLaunch(_order.paymentUrl))
               : SizedBox(),
           _order.status == BeOrderStatus.created

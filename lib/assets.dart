@@ -44,6 +44,17 @@ int assetDecimals(String symbol) {
   return -1;
 }
 
+bool assetIsCrypto(String asset) {
+  switch (asset) {
+    case 'BTC':
+    case 'ETH':
+    case 'DOGE':
+    case 'LTC':
+      return true;
+  }
+  return false;
+}
+
 String assetFormat(String symbol, Decimal amount) {
   var decimals = assetDecimals(symbol);
   if (decimals <= 0) return amount.toString();
