@@ -235,7 +235,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   @override
   Widget build(BuildContext context) {
     //if already at final page, then will be non viewable
-    Widget finalPage = (_currentPage + 1) < _totalPages ? 
+    Widget finalPage = (_currentPage + 2) < _totalPages ? 
         GestureDetector(
           child: Container(
             width: 40,
@@ -257,7 +257,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         )
 
       : SizedBox.shrink();
-    Widget firstPage = (_currentPage > 1) ? 
+    Widget firstPage = (_currentPage > 2) ? 
         GestureDetector(
           child: Container(
             width: 40,
@@ -277,159 +277,77 @@ class _OrdersScreenState extends State<OrdersScreen> {
             });
           },
         )
-
       : SizedBox.shrink();
-    List<Widget> pageButtons = <Widget>[];
+    
+    Widget mostLeft = _currentPage > 0 ? 
+      GestureDetector(
+	child: Container(
+	  width: 40,
+	  height: 40,
+	  child: Center(
+	      child: Text(_currentPage.toString(),
+		  textAlign: TextAlign.center,
+		  style: TextStyle(color: Colors.white))),
+	  decoration: BoxDecoration(
+	    shape: BoxShape.circle,
+	    color: Colors.grey,
+	  ),
+	),
+	onTap: () {
+	  setState(() {
+	    _currentPage--;
+	  });
+	},
+      )
+      : SizedBox.shrink();
+    
+    Widget mostRight = _currentPage + 1 < _totalPages ? 
+      GestureDetector(
+	child: Container(
+	  width: 40,
+	  height: 40,
+	  child: Center(
+	      child: Text("${_currentPage + 2}",
+		  textAlign: TextAlign.center,
+		  style: TextStyle(color: Colors.white))),
+	  decoration: BoxDecoration(
+	    shape: BoxShape.circle,
+	    color: Colors.grey,
+	  ),
+	),
+	onTap: () {
+	  setState(() {
+	    _currentPage++;
+	  });
+	},
+      )
+      : SizedBox.shrink();
+
+  Widget centerPage = 
+    Container(
+      width: 40,
+      height: 40,
+      child: Center(
+	  child: Text('${_currentPage + 1}',
+	      textAlign: TextAlign.center,
+	      style: TextStyle(color: Colors.white))),
+      decoration: BoxDecoration(
+	shape: BoxShape.circle,
+	color: Colors.blue.shade400,
+      ),
+    );
+
     SizedBox fillerWidth = SizedBox(width: 100);
-    if (_currentPage > 0 && (_currentPage + 1) < _totalPages) {
-      pageButtons = <Widget>[
-        firstPage,
-        fillerWidth,
-        GestureDetector(
-          child: Container(
-            width: 40,
-            height: 40,
-            child: Center(
-                child: Text(_currentPage.toString(),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white))),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.grey,
-            ),
-          ),
-          onTap: () {
-            setState(() {
-              _currentPage--;
-            });
-          },
-        ),
-        fillerWidth,
-        Container(
-          width: 40,
-          height: 40,
-          child: Center(
-              child: Text('${_currentPage + 1}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white))),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.blue.shade400,
-          ),
-        ),
-        fillerWidth,
-        GestureDetector(
-          child: Container(
-            width: 40,
-            height: 40,
-            child: Center(
-                child: Text('${_currentPage + 2}',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white))),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.grey,
-            ),
-          ),
-          onTap: () {
-            setState(() {
-              _currentPage++;
-            });
-          },
-        ),
-        fillerWidth,
-        finalPage
-      ];
-    } else if (_currentPage > 0) {
-      pageButtons = <Widget>[
-        firstPage,
-        fillerWidth,
-        GestureDetector(
-          child: Container(
-            width: 40,
-            height: 40,
-            child: Center(
-                child: Text(_currentPage.toString(),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white))),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.grey,
-            ),
-          ),
-          onTap: () {
-            setState(() {
-              _currentPage--;
-            });
-          },
-        ),
-        fillerWidth,
-        Container(
-          width: 40,
-          height: 40,
-          child: Center(
-              child: Text('${_currentPage + 1}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white))),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.blue.shade400,
-          ),
-        ),
-      ];
-    } else if ((_currentPage + 1) < _totalPages) {
-      pageButtons = <Widget>[
-        Container(
-          width: 40,
-          height: 40,
-          child: Center(
-              child: Text('${_currentPage + 1}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white))),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.blue.shade400,
-          ),
-        ),
-        fillerWidth,
-        GestureDetector(
-          child: Container(
-            width: 40,
-            height: 40,
-            child: Center(
-                child: Text('${_currentPage + 2}',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white))),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.grey,
-            ),
-          ),
-          onTap: () {
-            setState(() {
-              _currentPage++;
-            });
-          },
-        ),
-        fillerWidth,
-        finalPage,
-      ];
-    } else {
-      pageButtons = <Widget>[
-        Container(
-          width: 40,
-          height: 40,
-          child: Center(
-              child: Text('${_currentPage + 1}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white))),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.blue.shade400,
-          ),
-        ),
-      ];
-    }
+
+    List<Widget> pageButtons = <Widget>[
+      firstPage,
+      fillerWidth,
+      mostLeft,
+      centerPage,
+      mostRight,
+      finalPage 
+    ];
+
 
     Row buttonsRow = Row(
       children: pageButtons,
