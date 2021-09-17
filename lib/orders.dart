@@ -164,16 +164,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
   int _currentPage = 0;
   int _ordersPerPage = 1;
   int _totalPages = 0;
-  List<int?> _pagesList = [];
 
   @override
   void initState() {
     super.initState();
-    int incrementer = 0;
+    //int incrementer = 0;
     widget.websocket.wsEvent.subscribe(_websocketEvent);
     _totalPages = (_orders.length / _ordersPerPage).ceil();
-    _pagesList = List.generate(_totalPages, (index) => ++incrementer);
-    print("array is ${_pagesList}");
+    //List<int?> _pagesList = List.generate(_totalPages, (index) => ++incrementer);
   }
 
   @override
@@ -234,128 +232,125 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SizedBox fillerWidth = SizedBox(width: 100);
+    //SizedBox fillerWidth = SizedBox(width: 100);
     //if already at final page, then will be non viewable
-    Widget finalPage = (_currentPage + 2) < _totalPages ? 
-        Row(
-          children: <Widget>[
-            Text("..."),
-	    GestureDetector(
-	      child: Container(
-		width: 40,
-		height: 40,
-		child: Center(
-		    child: Text(_totalPages.toString(),
-			textAlign: TextAlign.center,
-			style: TextStyle(color: Colors.white))),
-		decoration: BoxDecoration(
-		  shape: BoxShape.circle,
-		  color: Colors.grey,
-		),
-	      ),
-	      onTap: () {
-		setState(() {
-		  _currentPage = _totalPages - 1;
-		});
-	      },
-	    )
-          ],
-        )
-      : SizedBox.shrink();
-    Widget firstPage = (_currentPage > 1) ? 
-        Row(
-          children: <Widget>[
-	    GestureDetector(
-	      child: Container(
-		width: 40,
-		height: 40,
-		child: Center(
-		    child: Text('1',
-			textAlign: TextAlign.center,
-			style: TextStyle(color: Colors.white))),
-		decoration: BoxDecoration(
-		  shape: BoxShape.circle,
-		  color: Colors.grey,
-		),
-	      ),
-	      onTap: () {
-		setState(() {
-		  _currentPage = 0;
-		});
-	      },
-	    ),
-            Text("..."),
-          ],
-        )
-      : SizedBox.shrink();
-    
-    Widget mostLeft = _currentPage > 0 ? 
-      GestureDetector(
-	child: Container(
-	  width: 40,
-	  height: 40,
-	  child: Center(
-	      child: Text(_currentPage.toString(),
-		  textAlign: TextAlign.center,
-		  style: TextStyle(color: Colors.white))),
-	  decoration: BoxDecoration(
-	    shape: BoxShape.circle,
-	    color: Colors.grey,
-	  ),
-	),
-	onTap: () {
-	  setState(() {
-	    _currentPage--;
-	  });
-	},
-      )
-      : SizedBox.shrink();
-    
-    Widget mostRight = _currentPage + 1 < _totalPages ? 
-      GestureDetector(
-	child: Container(
-	  width: 40,
-	  height: 40,
-	  child: Center(
-	      child: Text("${_currentPage + 2}",
-		  textAlign: TextAlign.center,
-		  style: TextStyle(color: Colors.white))),
-	  decoration: BoxDecoration(
-	    shape: BoxShape.circle,
-	    color: Colors.grey,
-	  ),
-	),
-	onTap: () {
-	  setState(() {
-	    _currentPage++;
-	  });
-	},
-      )
-      : SizedBox.shrink();
+    Widget finalPage = (_currentPage + 2) < _totalPages
+        ? Row(
+            children: <Widget>[
+              Text("..."),
+              GestureDetector(
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  child: Center(
+                      child: Text(_totalPages.toString(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white))),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.grey,
+                  ),
+                ),
+                onTap: () {
+                  setState(() {
+                    _currentPage = _totalPages - 1;
+                  });
+                },
+              )
+            ],
+          )
+        : SizedBox.shrink();
+    Widget firstPage = (_currentPage > 1)
+        ? Row(
+            children: <Widget>[
+              GestureDetector(
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  child: Center(
+                      child: Text('1',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white))),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.grey,
+                  ),
+                ),
+                onTap: () {
+                  setState(() {
+                    _currentPage = 0;
+                  });
+                },
+              ),
+              Text("..."),
+            ],
+          )
+        : SizedBox.shrink();
 
-  Widget centerPage = 
-    Container(
+    Widget mostLeft = _currentPage > 0
+        ? GestureDetector(
+            child: Container(
+              width: 40,
+              height: 40,
+              child: Center(
+                  child: Text(_currentPage.toString(),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white))),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.grey,
+              ),
+            ),
+            onTap: () {
+              setState(() {
+                _currentPage--;
+              });
+            },
+          )
+        : SizedBox.shrink();
+
+    Widget mostRight = _currentPage + 1 < _totalPages
+        ? GestureDetector(
+            child: Container(
+              width: 40,
+              height: 40,
+              child: Center(
+                  child: Text("${_currentPage + 2}",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white))),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.grey,
+              ),
+            ),
+            onTap: () {
+              setState(() {
+                _currentPage++;
+              });
+            },
+          )
+        : SizedBox.shrink();
+
+    Widget centerPage = Container(
       width: 40,
       height: 40,
       child: Center(
-	  child: Text('${_currentPage + 1}',
-	      textAlign: TextAlign.center,
-	      style: TextStyle(color: Colors.white))),
+          child: Text('${_currentPage + 1}',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white))),
       decoration: BoxDecoration(
-	shape: BoxShape.circle,
-	color: Colors.blue.shade400,
+        shape: BoxShape.circle,
+        color: Colors.blue.shade400,
       ),
     );
-
 
     List<Widget> pageButtons = <Widget>[
       firstPage,
       mostLeft,
       centerPage,
       mostRight,
-      finalPage 
+      finalPage
     ];
-
 
     Row buttonsRow = Row(
       children: pageButtons,
