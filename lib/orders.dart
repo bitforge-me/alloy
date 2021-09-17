@@ -342,6 +342,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
       ];
     } else if (_currentPage > 0) {
       pageButtons = <Widget>[
+        firstPage,
+        fillerWidth,
         GestureDetector(
           child: Container(
             width: 40,
@@ -409,6 +411,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
             });
           },
         ),
+        fillerWidth,
+        finalPage,
       ];
     } else {
       pageButtons = <Widget>[
