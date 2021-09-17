@@ -259,32 +259,28 @@ class _OrdersScreenState extends State<OrdersScreen> {
               )
             ],
           )
-          :
-          Opacity(
+        : Opacity(
             opacity: 0,
-            child:
-	    Row(
-	      children: <Widget>[
-		Text("..."),
-		GestureDetector(
-		  child: Container(
-		    width: 40,
-		    height: 40,
-		    child: Center(
-			child: Text(_totalPages.toString(),
-			    textAlign: TextAlign.center,
-			    style: TextStyle(color: Colors.white))),
-		    decoration: BoxDecoration(
-		      shape: BoxShape.circle,
-		      color: Colors.grey,
-		    ),
-		  ),
-		  onTap: () {
-		  },
-		)
-	      ],
-	    )
-          );
+            child: Row(
+              children: <Widget>[
+                Text("..."),
+                GestureDetector(
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    child: Center(
+                        child: Text(_totalPages.toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white))),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  onTap: () {},
+                )
+              ],
+            ));
 
     Widget firstPage = (_currentPage > 1)
         ? Row(
@@ -310,32 +306,29 @@ class _OrdersScreenState extends State<OrdersScreen> {
               ),
               Text("..."),
             ],
-          ) :
-          Opacity(
+          )
+        : Opacity(
             opacity: 0,
-            child:
-	    Row(
-	      children: <Widget>[
-		Text("..."),
-		GestureDetector(
-		  child: Container(
-		    width: 40,
-		    height: 40,
-		    child: Center(
-			child: Text(_totalPages.toString(),
-			    textAlign: TextAlign.center,
-			    style: TextStyle(color: Colors.white))),
-		    decoration: BoxDecoration(
-		      shape: BoxShape.circle,
-		      color: Colors.grey,
-		    ),
-		  ),
-		  onTap: () {
-		  },
-		)
-	      ],
-	    )
-          );
+            child: Row(
+              children: <Widget>[
+                Text("..."),
+                GestureDetector(
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    child: Center(
+                        child: Text(_totalPages.toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white))),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  onTap: () {},
+                )
+              ],
+            ));
 
     Widget mostLeft = _currentPage > 0
         ? GestureDetector(
@@ -356,31 +349,28 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 _currentPage--;
               });
             },
-          ) :
-          Opacity(
+          )
+        : Opacity(
             opacity: 0,
-            child:
-	    Row(
-	      children: <Widget>[
-		GestureDetector(
-		  child: Container(
-		    width: 40,
-		    height: 40,
-		    child: Center(
-			child: Text(_totalPages.toString(),
-			    textAlign: TextAlign.center,
-			    style: TextStyle(color: Colors.white))),
-		    decoration: BoxDecoration(
-		      shape: BoxShape.circle,
-		      color: Colors.grey,
-		    ),
-		  ),
-		  onTap: () {
-		  },
-		)
-	      ],
-	    )
-          );
+            child: Row(
+              children: <Widget>[
+                GestureDetector(
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    child: Center(
+                        child: Text(_totalPages.toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white))),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  onTap: () {},
+                )
+              ],
+            ));
 
     Widget mostRight = _currentPage + 1 < _totalPages
         ? GestureDetector(
@@ -401,31 +391,28 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 _currentPage++;
               });
             },
-          ) :
-          Opacity(
+          )
+        : Opacity(
             opacity: 0,
-            child:
-	    Row(
-	      children: <Widget>[
-		GestureDetector(
-		  child: Container(
-		    width: 40,
-		    height: 40,
-		    child: Center(
-			child: Text(_totalPages.toString(),
-			    textAlign: TextAlign.center,
-			    style: TextStyle(color: Colors.white))),
-		    decoration: BoxDecoration(
-		      shape: BoxShape.circle,
-		      color: Colors.grey,
-		    ),
-		  ),
-		  onTap: () {
-		  },
-		)
-	      ],
-	    )
-          );
+            child: Row(
+              children: <Widget>[
+                GestureDetector(
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    child: Center(
+                        child: Text(_totalPages.toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white))),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  onTap: () {},
+                )
+              ],
+            ));
 
     Widget centerPage = Container(
       width: 40,
