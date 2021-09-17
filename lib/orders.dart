@@ -234,48 +234,58 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizedBox fillerWidth = SizedBox(width: 100);
     //if already at final page, then will be non viewable
     Widget finalPage = (_currentPage + 2) < _totalPages ? 
-        GestureDetector(
-          child: Container(
-            width: 40,
-            height: 40,
-            child: Center(
-                child: Text(_totalPages.toString(),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white))),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.grey,
-            ),
-          ),
-          onTap: () {
-            setState(() {
-              _currentPage = _totalPages - 1;
-            });
-          },
+        Row(
+          children: <Widget>[
+            Text("..."),
+	    GestureDetector(
+	      child: Container(
+		width: 40,
+		height: 40,
+		child: Center(
+		    child: Text(_totalPages.toString(),
+			textAlign: TextAlign.center,
+			style: TextStyle(color: Colors.white))),
+		decoration: BoxDecoration(
+		  shape: BoxShape.circle,
+		  color: Colors.grey,
+		),
+	      ),
+	      onTap: () {
+		setState(() {
+		  _currentPage = _totalPages - 1;
+		});
+	      },
+	    )
+          ],
         )
-
       : SizedBox.shrink();
-    Widget firstPage = (_currentPage > 2) ? 
-        GestureDetector(
-          child: Container(
-            width: 40,
-            height: 40,
-            child: Center(
-                child: Text('1',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white))),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.grey,
-            ),
-          ),
-          onTap: () {
-            setState(() {
-              _currentPage = 0;
-            });
-          },
+    Widget firstPage = (_currentPage > 1) ? 
+        Row(
+          children: <Widget>[
+	    GestureDetector(
+	      child: Container(
+		width: 40,
+		height: 40,
+		child: Center(
+		    child: Text('1',
+			textAlign: TextAlign.center,
+			style: TextStyle(color: Colors.white))),
+		decoration: BoxDecoration(
+		  shape: BoxShape.circle,
+		  color: Colors.grey,
+		),
+	      ),
+	      onTap: () {
+		setState(() {
+		  _currentPage = 0;
+		});
+	      },
+	    ),
+            Text("..."),
+          ],
         )
       : SizedBox.shrink();
     
@@ -337,11 +347,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
       ),
     );
 
-    SizedBox fillerWidth = SizedBox(width: 100);
 
     List<Widget> pageButtons = <Widget>[
       firstPage,
-      fillerWidth,
       mostLeft,
       centerPage,
       mostRight,
