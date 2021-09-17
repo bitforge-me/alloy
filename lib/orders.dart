@@ -162,14 +162,18 @@ class _OrdersScreenState extends State<OrdersScreen> {
   List<BeBrokerOrder> _orders;
   _OrdersScreenState(this._orders);
   int _currentPage = 0;
-  int _ordersPerPage = 7;
+  int _ordersPerPage = 1;
   int _totalPages = 0;
+  List<int?> _pagesList = [];
 
   @override
   void initState() {
     super.initState();
+    int incrementer = 0;
     widget.websocket.wsEvent.subscribe(_websocketEvent);
     _totalPages = (_orders.length / _ordersPerPage).ceil();
+    _pagesList = List.generate(_totalPages, (index) => ++incrementer);
+    print("array is ${_pagesList}");
   }
 
   @override
@@ -230,10 +234,57 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //if already at final page, then will be non viewable
+    Widget finalPage = (_currentPage + 1) < _totalPages ? 
+        GestureDetector(
+          child: Container(
+            width: 40,
+            height: 40,
+            child: Center(
+                child: Text(_totalPages.toString(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white))),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.grey,
+            ),
+          ),
+          onTap: () {
+            setState(() {
+              _currentPage = _totalPages - 1;
+            });
+          },
+        )
+
+      : SizedBox.shrink();
+    Widget firstPage = (_currentPage > 1) ? 
+        GestureDetector(
+          child: Container(
+            width: 40,
+            height: 40,
+            child: Center(
+                child: Text('1',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white))),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.grey,
+            ),
+          ),
+          onTap: () {
+            setState(() {
+              _currentPage = 0;
+            });
+          },
+        )
+
+      : SizedBox.shrink();
     List<Widget> pageButtons = <Widget>[];
     SizedBox fillerWidth = SizedBox(width: 100);
     if (_currentPage > 0 && (_currentPage + 1) < _totalPages) {
       pageButtons = <Widget>[
+        firstPage,
+        fillerWidth,
         GestureDetector(
           child: Container(
             width: 40,
@@ -286,6 +337,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
             });
           },
         ),
+        fillerWidth,
+        finalPage
       ];
     } else if (_currentPage > 0) {
       pageButtons = <Widget>[
