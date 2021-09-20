@@ -162,11 +162,17 @@ class _OrdersScreenState extends State<OrdersScreen> {
   List<BeBrokerOrder> _orders;
 
   _OrdersScreenState(this._orders);
+  final _ordersPerPage = 5;
+  int _currentPage = 0;
+  int _totalOrders = 0;
+  int _totalPages = 0;
 
   @override
   void initState() {
     super.initState();
-    widget.websocket.wsEvent.subscribe(_websocketEvent);
+    _currentPage = 0;
+    _initOrders();
+    //widget.websocket.wsEvent.subscribe(_websocketEvent);
   }
 
   @override
@@ -203,6 +209,17 @@ class _OrdersScreenState extends State<OrdersScreen> {
         context,
         MaterialPageRoute(
             builder: (context) => OrderScreen(order, widget.websocket)));
+  }
+
+  Future<void> _initOrders() async {
+    setState(
+      () async {
+        BeBrokerOrdersResult beBrokerOrdersResult = await beOrderList(_currentPage * _ordersPerPage, _ordersPerPage);
+        _orders = beBrokerOrdersResult.orders;
+        _totalOrders = beBrokerOrdersResult.total;
+        _totalPages = (_totalOrders  / _ordersPerPage).ceil();
+      }
+    );
   }
 
   Widget _listItem(BuildContext context, int n) {
