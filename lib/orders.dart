@@ -476,7 +476,83 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   ListView.builder(itemBuilder: _listItem, itemCount: _orders.length, scrollDirection: Axis.vertical, shrinkWrap: true),
-                  buttonsRow,
+		  Row(
+		    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+		    crossAxisAlignment: CrossAxisAlignment.end,
+		    children: _currentPage > 0
+			? ((_currentPage + 1) * _ordersPerPage < _totalOrders
+			    ? <Widget>[
+				FloatingActionButton(
+				  onPressed: () {
+				    setState(() {
+				      _currentPage--;
+                                      _initOrders();
+				    });
+				  },
+				  child: const Icon(Icons.arrow_back),
+				  backgroundColor: Colors.blue,
+				),
+				buttonsRow,
+				FloatingActionButton(
+				  onPressed: () {
+				    setState(() {
+				      _currentPage++;
+                                      _initOrders();
+				    });
+				  },
+				  child: const Icon(Icons.arrow_forward),
+				  backgroundColor: Colors.blue,
+				)
+			      ]
+			    : <Widget>[
+				FloatingActionButton(
+				  onPressed: () {
+				    setState(() {
+				      _currentPage--;
+                                      _initOrders();
+				    });
+				  },
+				  child: const Icon(Icons.arrow_back),
+				  backgroundColor: Colors.blue,
+				),
+				buttonsRow,
+				Opacity(
+				  opacity: 0,
+				  child: FloatingActionButton(
+				    mouseCursor: SystemMouseCursors.basic,
+				    onPressed: () {
+				      setState(() {});
+				    },
+				    child: const Icon(Icons.arrow_back),
+				    backgroundColor: Colors.white,
+				  ),
+				),
+			      ])
+			: <Widget>[
+			    Opacity(
+			      opacity: 0,
+			      child: FloatingActionButton(
+				mouseCursor: SystemMouseCursors.basic,
+				onPressed: () {
+				  setState(() {});
+				},
+				child: const Icon(Icons.arrow_back),
+				backgroundColor: Colors.white,
+			      ),
+			    ),
+			    buttonsRow,
+			    FloatingActionButton(
+			      onPressed: () {
+				setState(() {
+				  _currentPage++;
+                                  _initOrders();
+				});
+			      },
+			      child: const Icon(Icons.arrow_forward),
+			      backgroundColor: Colors.blue,
+			    ),
+			  ],
+		  ),
                 ],
               ), 
           )
@@ -484,3 +560,4 @@ class _OrdersScreenState extends State<OrdersScreen> {
     );
   }
 }
+
