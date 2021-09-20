@@ -162,7 +162,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   List<BeBrokerOrder> _orders;
 
   _OrdersScreenState(this._orders);
-  final _ordersPerPage = 5;
+  final _ordersPerPage = 2;
   int _currentPage = 0;
   int _totalOrders = 0;
   int _totalPages = 0;
@@ -212,14 +212,15 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   Future<void> _initOrders() async {
-    setState(
-      () async {
         BeBrokerOrdersResult beBrokerOrdersResult = await beOrderList(_currentPage * _ordersPerPage, _ordersPerPage);
-        _orders = beBrokerOrdersResult.orders;
-        _totalOrders = beBrokerOrdersResult.total;
-        _totalPages = (_totalOrders  / _ordersPerPage).ceil();
-      }
-    );
+        setState(
+          (){
+	    _orders = beBrokerOrdersResult.orders;
+	    _totalOrders = beBrokerOrdersResult.total;
+	    _totalPages = (_totalOrders  / _ordersPerPage).ceil();
+          }
+
+        );
   }
 
   Widget _listItem(BuildContext context, int n) {
@@ -242,11 +243,244 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    Widget finalPage = (_currentPage + 2) < _totalPages
+        ? Row(
+            children: <Widget>[
+              Text("..."),
+              GestureDetector(
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  child: Center(
+                      child: Text(_totalPages.toString(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white))),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.grey,
+                  ),
+                ),
+                onTap: () {
+                  setState(() {
+                    _currentPage = _totalPages - 1;
+                    _initOrders();
+                  });
+                },
+              )
+            ],
+          )
+        : Opacity(
+            opacity: 0,
+            child: Row(
+              children: <Widget>[
+                Text("..."),
+                GestureDetector(
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    child: Center(
+                        child: Text(_totalPages.toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white))),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  onTap: () {},
+                )
+              ],
+            ));
+
+    Widget firstPage = (_currentPage > 1)
+        ? Row(
+            children: <Widget>[
+              GestureDetector(
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  child: Center(
+                      child: Text('1',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white))),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.grey,
+                  ),
+                ),
+                onTap: () {
+                  setState(() {
+                    _currentPage = 0;
+                    _initOrders();
+                  });
+                },
+              ),
+              Text("..."),
+            ],
+          )
+        : Opacity(
+            opacity: 0,
+            child: Row(
+              children: <Widget>[
+                Text("..."),
+                GestureDetector(
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    child: Center(
+                        child: Text(_totalPages.toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white))),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  onTap: () {},
+                )
+              ],
+            ));
+
+    Widget mostLeft = _currentPage > 0
+        ? GestureDetector(
+            child: Container(
+              width: 40,
+              height: 40,
+              child: Center(
+                  child: Text(_currentPage.toString(),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white))),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.grey,
+              ),
+            ),
+            onTap: () {
+              setState(() {
+                _currentPage--;
+                _initOrders();
+              });
+            },
+          )
+        : Opacity(
+            opacity: 0,
+            child: Row(
+              children: <Widget>[
+                GestureDetector(
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    child: Center(
+                        child: Text(_totalPages.toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white))),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  onTap: () {},
+                )
+              ],
+            ));
+
+    Widget mostRight = _currentPage + 1 < _totalPages
+        ? GestureDetector(
+            child: Container(
+              width: 40,
+              height: 40,
+              child: Center(
+                  child: Text("${_currentPage + 2}",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white))),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.grey,
+              ),
+            ),
+            onTap: () {
+              setState(() {
+                _currentPage++;
+                    _initOrders();
+              });
+            },
+          )
+        : Opacity(
+            opacity: 0,
+            child: Row(
+              children: <Widget>[
+                GestureDetector(
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    child: Center(
+                        child: Text(_totalPages.toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white))),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  onTap: () {},
+                )
+              ],
+            ));
+
+    Widget centerPage = Container(
+      width: 40,
+      height: 40,
+      child: Center(
+          child: Text('${_currentPage + 1}',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white))),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.blue.shade400,
+      ),
+    );
+
+    List<Widget> pageButtons = <Widget>[
+      firstPage,
+      mostLeft,
+      centerPage,
+      mostRight,
+      finalPage
+    ];
+
+    Row buttonsRow = Row(
+      children: pageButtons,
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Orders'),
       ),
-      body: ListView.builder(itemBuilder: _listItem, itemCount: _orders.length),
+      body: _orders.length == 0
+        ? 
+          Center(
+            child: 
+              Column(
+                children:
+                  <Widget>[
+                    SizedBox(height: 90),
+                    Text('No orders yet.')
+                  ],
+              )
+          )
+        :
+          Center(
+            child:
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  ListView.builder(itemBuilder: _listItem, itemCount: _orders.length, scrollDirection: Axis.vertical, shrinkWrap: true),
+                  buttonsRow,
+                ],
+              ), 
+          )
+
     );
   }
 }
