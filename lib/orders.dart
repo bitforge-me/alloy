@@ -212,16 +212,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   Future<void> _initOrders(int newPage) async {
-        BeBrokerOrdersResult beBrokerOrdersResult = await beOrderList(_currentPage * _ordersPerPage, _ordersPerPage);
-        setState(
-          (){
-            _currentPage = newPage;
-	    _orders = beBrokerOrdersResult.orders;
-	    _totalOrders = beBrokerOrdersResult.total;
-	    _totalPages = (_totalOrders  / _ordersPerPage).ceil();
-          }
-
-        );
+    BeBrokerOrdersResult beBrokerOrdersResult =
+        await beOrderList(_currentPage * _ordersPerPage, _ordersPerPage);
+    setState(() {
+      _currentPage = newPage;
+      _orders = beBrokerOrdersResult.orders;
+      _totalOrders = beBrokerOrdersResult.total;
+      _totalPages = (_totalOrders / _ordersPerPage).ceil();
+    });
   }
 
   Widget _listItem(BuildContext context, int n) {
@@ -244,7 +242,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     Widget finalPage = (_currentPage + 2) < _totalPages
         ? Row(
             children: <Widget>[
@@ -443,98 +440,93 @@ class _OrdersScreenState extends State<OrdersScreen> {
     );
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Orders'),
-      ),
-      body: _orders.length == 0
-        ? 
-          Center(
-            child: 
-              Column(
-                children:
-                  <Widget>[
-                    SizedBox(height: 90),
-                    Text('No orders yet.')
-                  ],
-              )
-          )
-        :
-          Center(
-            child:
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        appBar: AppBar(
+          title: Text('Orders'),
+        ),
+        body: _orders.length == 0
+            ? Center(
+                child: Column(
                 children: <Widget>[
-                  ListView.builder(itemBuilder: _listItem, itemCount: _orders.length, scrollDirection: Axis.vertical, shrinkWrap: true),
-		  Row(
-		    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-		    crossAxisAlignment: CrossAxisAlignment.end,
-		    children: _currentPage > 0
-			? ((_currentPage + 1) * _ordersPerPage < _totalOrders
-			    ? <Widget>[
-				FloatingActionButton(
-				  onPressed: () {
-                                    _initOrders(_currentPage - 1);
-				  },
-				  child: const Icon(Icons.arrow_back),
-				  backgroundColor: Colors.blue,
-				),
-				buttonsRow,
-				FloatingActionButton(
-				  onPressed: () {
-                                    _initOrders(_currentPage + 1);
-				  },
-				  child: const Icon(Icons.arrow_forward),
-				  backgroundColor: Colors.blue,
-				)
-			      ]
-			    : <Widget>[
-				FloatingActionButton(
-				  onPressed: () {
-                                    _initOrders(_currentPage - 1);
-				  },
-				  child: const Icon(Icons.arrow_back),
-				  backgroundColor: Colors.blue,
-				),
-				buttonsRow,
-				Opacity(
-				  opacity: 0,
-				  child: FloatingActionButton(
-				    mouseCursor: SystemMouseCursors.basic,
-				    onPressed: () {
-				      setState(() {});
-				    },
-				    child: const Icon(Icons.arrow_back),
-				    backgroundColor: Colors.white,
-				  ),
-				),
-			      ])
-			: <Widget>[
-			    Opacity(
-			      opacity: 0,
-			      child: FloatingActionButton(
-				mouseCursor: SystemMouseCursors.basic,
-				onPressed: () {
-				  setState(() {});
-				},
-				child: const Icon(Icons.arrow_back),
-				backgroundColor: Colors.white,
-			      ),
-			    ),
-			    buttonsRow,
-			    FloatingActionButton(
-			      onPressed: () {
-                                _initOrders(_currentPage + 1);
-			      },
-			      child: const Icon(Icons.arrow_forward),
-			      backgroundColor: Colors.blue,
-			    ),
-			  ],
-		  ),
+                  SizedBox(height: 90),
+                  Text('No orders yet.')
                 ],
-              ), 
-          )
-
-    );
+              ))
+            : Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    ListView.builder(
+                        itemBuilder: _listItem,
+                        itemCount: _orders.length,
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: _currentPage > 0
+                          ? ((_currentPage + 1) * _ordersPerPage < _totalOrders
+                              ? <Widget>[
+                                  FloatingActionButton(
+                                    onPressed: () {
+                                      _initOrders(_currentPage - 1);
+                                    },
+                                    child: const Icon(Icons.arrow_back),
+                                    backgroundColor: Colors.blue,
+                                  ),
+                                  buttonsRow,
+                                  FloatingActionButton(
+                                    onPressed: () {
+                                      _initOrders(_currentPage + 1);
+                                    },
+                                    child: const Icon(Icons.arrow_forward),
+                                    backgroundColor: Colors.blue,
+                                  )
+                                ]
+                              : <Widget>[
+                                  FloatingActionButton(
+                                    onPressed: () {
+                                      _initOrders(_currentPage - 1);
+                                    },
+                                    child: const Icon(Icons.arrow_back),
+                                    backgroundColor: Colors.blue,
+                                  ),
+                                  buttonsRow,
+                                  Opacity(
+                                    opacity: 0,
+                                    child: FloatingActionButton(
+                                      mouseCursor: SystemMouseCursors.basic,
+                                      onPressed: () {
+                                        setState(() {});
+                                      },
+                                      child: const Icon(Icons.arrow_back),
+                                      backgroundColor: Colors.white,
+                                    ),
+                                  ),
+                                ])
+                          : <Widget>[
+                              Opacity(
+                                opacity: 0,
+                                child: FloatingActionButton(
+                                  mouseCursor: SystemMouseCursors.basic,
+                                  onPressed: () {
+                                    setState(() {});
+                                  },
+                                  child: const Icon(Icons.arrow_back),
+                                  backgroundColor: Colors.white,
+                                ),
+                              ),
+                              buttonsRow,
+                              FloatingActionButton(
+                                onPressed: () {
+                                  _initOrders(_currentPage + 1);
+                                },
+                                child: const Icon(Icons.arrow_forward),
+                                backgroundColor: Colors.blue,
+                              ),
+                            ],
+                    ),
+                  ],
+                ),
+              ));
   }
 }
-
