@@ -160,7 +160,7 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   List<BeBrokerOrder> _orders = <BeBrokerOrder>[];
-  final _ordersPerPage = 1;
+  final _ordersPerPage = 3;
   int _currentPage = 0;
   int _totalOrders = 0;
   int _totalPages = 0;
@@ -211,7 +211,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   Future<void> _initOrders(int newPage) async {
     BeBrokerOrdersResult beBrokerOrdersResult =
-        await beOrderList(_currentPage * _ordersPerPage, _ordersPerPage);
+        await beOrderList(newPage * _ordersPerPage, _ordersPerPage);
     setState(() {
       _currentPage = newPage;
       _orders = beBrokerOrdersResult.orders;
