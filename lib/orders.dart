@@ -171,7 +171,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   void initState() {
     super.initState();
     _currentPage = 0;
-    _initOrders();
+    _initOrders(0);
     //widget.websocket.wsEvent.subscribe(_websocketEvent);
   }
 
@@ -211,10 +211,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
             builder: (context) => OrderScreen(order, widget.websocket)));
   }
 
-  Future<void> _initOrders() async {
+  Future<void> _initOrders(int newPage) async {
         BeBrokerOrdersResult beBrokerOrdersResult = await beOrderList(_currentPage * _ordersPerPage, _ordersPerPage);
         setState(
           (){
+            _currentPage = newPage;
 	    _orders = beBrokerOrdersResult.orders;
 	    _totalOrders = beBrokerOrdersResult.total;
 	    _totalPages = (_totalOrders  / _ordersPerPage).ceil();
@@ -262,10 +263,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   ),
                 ),
                 onTap: () {
-                  setState(() {
-                    _currentPage = _totalPages - 1;
-                    _initOrders();
-                  });
+                  _initOrders(_totalPages - 1);
                 },
               )
             ],
@@ -310,10 +308,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   ),
                 ),
                 onTap: () {
-                  setState(() {
-                    _currentPage = 0;
-                    _initOrders();
-                  });
+                  _initOrders(0);
                 },
               ),
               Text("..."),
@@ -357,10 +352,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               ),
             ),
             onTap: () {
-              setState(() {
-                _currentPage--;
-                _initOrders();
-              });
+              _initOrders(_currentPage - 1);
             },
           )
         : Opacity(
@@ -400,10 +392,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               ),
             ),
             onTap: () {
-              setState(() {
-                _currentPage++;
-                    _initOrders();
-              });
+              _initOrders(_currentPage + 1);
             },
           )
         : Opacity(
@@ -484,10 +473,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
 			    ? <Widget>[
 				FloatingActionButton(
 				  onPressed: () {
-				    setState(() {
-				      _currentPage--;
-                                      _initOrders();
-				    });
+                                    _initOrders(_currentPage - 1);
 				  },
 				  child: const Icon(Icons.arrow_back),
 				  backgroundColor: Colors.blue,
@@ -495,10 +481,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
 				buttonsRow,
 				FloatingActionButton(
 				  onPressed: () {
-				    setState(() {
-				      _currentPage++;
-                                      _initOrders();
-				    });
+                                    _initOrders(_currentPage + 1);
 				  },
 				  child: const Icon(Icons.arrow_forward),
 				  backgroundColor: Colors.blue,
@@ -507,10 +490,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
 			    : <Widget>[
 				FloatingActionButton(
 				  onPressed: () {
-				    setState(() {
-				      _currentPage--;
-                                      _initOrders();
-				    });
+                                    _initOrders(_currentPage - 1);
 				  },
 				  child: const Icon(Icons.arrow_back),
 				  backgroundColor: Colors.blue,
@@ -543,10 +523,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
 			    buttonsRow,
 			    FloatingActionButton(
 			      onPressed: () {
-				setState(() {
-				  _currentPage++;
-                                  _initOrders();
-				});
+                                _initOrders(_currentPage + 1);
 			      },
 			      child: const Icon(Icons.arrow_forward),
 			      backgroundColor: Colors.blue,
