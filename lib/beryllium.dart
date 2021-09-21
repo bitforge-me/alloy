@@ -410,7 +410,7 @@ enum BeOrderStatus {
   incoming,
   confirmed,
   exchange,
-  withdraw,
+  withdrawing,
   completed,
   expired,
   cancelled
@@ -452,7 +452,7 @@ class BeBrokerOrder {
       this.status,
       this.paymentUrl);
 
-  static BeBrokerOrder parse(dynamic data) {
+  static BeBrokerOrder parse(Map data) {
     var date = DateTime.parse(data['date']);
     var expiry = DateTime.parse(data['expiry']);
     var side = (data['side'] as String).toEnumSide();
