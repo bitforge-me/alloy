@@ -160,7 +160,7 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   List<BeBrokerOrder> _orders = <BeBrokerOrder>[];
-  final _ordersPerPage = 3;
+  final _ordersPerPage = 8;
   int _currentPage = 0;
   int _totalOrders = 0;
   int _totalPages = 0;
