@@ -163,6 +163,54 @@ class _OrdersScreenState extends State<OrdersScreen> {
   int _currentPage = 0;
   int _totalOrders = 0;
   int _totalPages = 0;
+  
+  Widget createArrow(String direction) {
+    return 
+    Padding(
+      padding: direction == "FORWARD" ?
+	  EdgeInsets.only(right: _arrowPadding)
+          : 
+	  EdgeInsets.only(left: _arrowPadding),
+      child: FloatingActionButton(
+	onPressed: 
+           direction == "FORWARD" ?
+           () {
+	     _initOrders(_currentPage + 1);
+	   }
+          :
+           () {
+	     _initOrders(_currentPage - 1);
+	   },
+	child: direction == "FORWARD" ?
+          const Icon(Icons.arrow_forward)
+          :
+          const Icon(Icons.arrow_back),
+	backgroundColor: Colors.blue,
+      ),
+    );
+
+  }
+
+  Widget createInvisibleArrow(String direction) {
+    return
+    Padding(
+      padding: direction == "FORWARD" ?
+	  EdgeInsets.only(right: _arrowPadding)
+          : 
+	  EdgeInsets.only(left: _arrowPadding),
+      child: Opacity(
+	opacity: 0,
+	child: FloatingActionButton(
+	  mouseCursor: SystemMouseCursors.basic,
+	  onPressed: () {
+	    setState(() {});
+	  },
+	  child: const Icon(Icons.arrow_back),
+	  backgroundColor: Colors.white,
+	),
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -464,122 +512,27 @@ class _OrdersScreenState extends State<OrdersScreen> {
                               ((_orders.length < _ordersPerPage) ||
                                   (_orders.length == _totalOrders)))
                           ? <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(right: _arrowPadding),
-                                child: Opacity(
-                                  opacity: 0,
-                                  child: FloatingActionButton(
-                                    mouseCursor: SystemMouseCursors.basic,
-                                    onPressed: () {
-                                      setState(() {});
-                                    },
-                                    child: const Icon(Icons.arrow_back),
-                                    backgroundColor: Colors.white,
-                                  ),
-                                ),
-                              ),
+                              createInvisibleArrow("BACK"),
                               buttonsRow,
-                              Padding(
-                                padding: EdgeInsets.only(right: _arrowPadding),
-                                child: Opacity(
-                                  opacity: 0,
-                                  child: FloatingActionButton(
-                                    mouseCursor: SystemMouseCursors.basic,
-                                    onPressed: () {
-                                      setState(() {});
-                                    },
-                                    child: const Icon(Icons.arrow_back),
-                                    backgroundColor: Colors.white,
-                                  ),
-                                ),
-                              ),
+                              createInvisibleArrow("FORWARD"),
                             ]
                           : _currentPage > 0
                               ? ((_currentPage + 1) * _ordersPerPage <
                                       _totalOrders
                                   ? <Widget>[
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: _arrowPadding),
-                                        child: FloatingActionButton(
-                                          onPressed: () {
-                                            _initOrders(_currentPage - 1);
-                                          },
-                                          child: const Icon(Icons.arrow_back),
-                                          backgroundColor: Colors.blue,
-                                        ),
-                                      ),
+                                      createArrow("BACK"),
                                       buttonsRow,
-                                      Padding(
-                                          padding: EdgeInsets.only(
-                                              right: _arrowPadding),
-                                          child: FloatingActionButton(
-                                            onPressed: () {
-                                              _initOrders(_currentPage + 1);
-                                            },
-                                            child:
-                                                const Icon(Icons.arrow_forward),
-                                            backgroundColor: Colors.blue,
-                                          )),
+                                      createArrow("FORWARD"),
                                     ]
                                   : <Widget>[
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: _arrowPadding),
-                                        child: FloatingActionButton(
-                                          onPressed: () {
-                                            _initOrders(_currentPage - 1);
-                                          },
-                                          child: const Icon(Icons.arrow_back),
-                                          backgroundColor: Colors.blue,
-                                        ),
-                                      ),
+                                      createArrow("BACK"),
                                       buttonsRow,
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            right: _arrowPadding),
-                                        child: Opacity(
-                                          opacity: 0,
-                                          child: FloatingActionButton(
-                                            mouseCursor:
-                                                SystemMouseCursors.basic,
-                                            onPressed: () {
-                                              setState(() {});
-                                            },
-                                            child: const Icon(Icons.arrow_back),
-                                            backgroundColor: Colors.white,
-                                          ),
-                                        ),
-                                      ),
+                                      createInvisibleArrow("FORWARD"),
                                     ])
                               : <Widget>[
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.only(left: _arrowPadding),
-                                    child: Opacity(
-                                      opacity: 0,
-                                      child: FloatingActionButton(
-                                        mouseCursor: SystemMouseCursors.basic,
-                                        onPressed: () {
-                                          setState(() {});
-                                        },
-                                        child: const Icon(Icons.arrow_back),
-                                        backgroundColor: Colors.white,
-                                      ),
-                                    ),
-                                  ),
+                                  createInvisibleArrow("BACK"),
                                   buttonsRow,
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.only(right: _arrowPadding),
-                                    child: FloatingActionButton(
-                                      onPressed: () {
-                                        _initOrders(_currentPage + 1);
-                                      },
-                                      child: const Icon(Icons.arrow_forward),
-                                      backgroundColor: Colors.blue,
-                                    ),
-                                  ),
+                                  createArrow("FORWARD"),
                                 ],
                     ),
                   ],
