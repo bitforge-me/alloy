@@ -358,10 +358,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   Future<void> _orders() async {
-    Navigator.push(
-	context,
-	MaterialPageRoute(
-	    builder: (context) => OrdersScreen(_websocket)));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => OrdersScreen(_websocket)));
   }
 
   Future<void> _profile() async {
