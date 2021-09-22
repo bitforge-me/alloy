@@ -356,6 +356,43 @@ class BeOrderbookResult {
   BeOrderbookResult(this.orderbook, this.error);
 }
 
+class BeBalance {
+  final String asset;
+  final String name;
+  final Decimal total;
+  final Decimal available;
+
+  BeBalance(this.asset, this.name, this.total, this.available);
+
+  static BeBalance parse(Map item) {
+    var total = Decimal.parse(item['total']);
+    var available = Decimal.parse(item['available']);
+    return BeBalance(item['symbol'], item['name'], total, available);
+  }
+}
+
+class BeBalancesResult {
+  final List<BeBalance> balances;
+  final BeError error;
+
+  BeBalancesResult(this.balances, this.error);
+
+  static BeBalancesResult network() {
+    return BeBalancesResult([], BeError.network());
+  }
+
+  static BeBalancesResult auth(String msg) {
+    return BeBalancesResult([], BeError.auth(msg));
+  }
+
+  static BeBalancesResult parse(String data) {
+    List<BeBalance> balances = [];
+    for (var item in jsonDecode(data)['balances'])
+      balances.add(BeBalance.parse(item));
+    return BeBalancesResult(balances, BeError.none());
+  }
+}
+
 class BeAddressBookEntry {
   final DateTime date;
   final String recipient;
@@ -410,7 +447,7 @@ enum BeOrderStatus {
   incoming,
   confirmed,
   exchange,
-  withdraw,
+  withdrawing,
   completed,
   expired,
   cancelled
@@ -452,7 +489,7 @@ class BeBrokerOrder {
       this.status,
       this.paymentUrl);
 
-  static BeBrokerOrder parse(dynamic data) {
+  static BeBrokerOrder parse(Map data) {
     var date = DateTime.parse(data['date']);
     var expiry = DateTime.parse(data['expiry']);
     var side = (data['side'] as String).toEnumSide();
@@ -932,6 +969,27 @@ Future<BeOrderbookResult> beOrderbook(String market) async {
     return BeOrderbookResult(BeOrderbook.empty(), BeError.auth(response.body));
   print(response.statusCode);
   return BeOrderbookResult(BeOrderbook.empty(), BeError.network());
+}
+
+Future<BeBalancesResult> beBalances() async {
+  var baseUrl = await _server();
+  if (baseUrl == null) return BeBalancesResult.network();
+  var url = baseUrl + "balances";
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = nextNonce();
+  var body = jsonEncode({"api_key": apikey, "nonce": nonce});
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null) return BeBalancesResult.network();
+  if (response.statusCode == 200) {
+    return BeBalancesResult.parse(response.body);
+  } else if (response.statusCode == 400)
+    return BeBalancesResult.auth(response.body);
+  print(response.statusCode);
+  return BeBalancesResult.network();
 }
 
 Future<BeAddressBookResult> beAddressBook(String asset) async {

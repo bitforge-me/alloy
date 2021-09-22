@@ -17,6 +17,7 @@ import 'websocket.dart';
 import 'profile.dart';
 import 'security.dart';
 import 'utils.dart';
+import 'balances.dart';
 
 void main() {
   runApp(Phoenix(child: MyApp()));
@@ -357,6 +358,17 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               builder: (context) => MarketScreen(res.markets, _websocket)));
   }
 
+  Future<void> _balances() async {
+    showAlertDialog(context, 'querying..');
+    var res = await beBalances();
+    Navigator.pop(context);
+    if (res.error.type == ErrorType.None)
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BalanceScreen(res.balances, _websocket)));
+  }
+
   Future<void> _orders() async {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => OrdersScreen(_websocket)));
@@ -491,6 +503,12 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               visible: _userInfo != null,
               child: RoundedButton(
                   _markets, ZapWhite, ZapBlue, ZapBlueGradient, 'Markets',
+                  holePunch: true, width: 200),
+            ),
+            Visibility(
+              visible: _userInfo != null,
+              child: RoundedButton(
+                  _balances, ZapWhite, ZapBlue, ZapBlueGradient, 'Balances',
                   holePunch: true, width: 200),
             ),
             Visibility(
