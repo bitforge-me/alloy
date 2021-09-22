@@ -1,3 +1,4 @@
+import 'package:alloy/paginator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
@@ -149,30 +150,48 @@ class _OrderScreenState extends State<OrderScreen> {
 }
 
 class OrdersScreen extends StatefulWidget {
-  final List<BeBrokerOrder> orders;
   final Websocket websocket;
 
-  OrdersScreen(this.orders, this.websocket);
+  OrdersScreen(this.websocket);
 
   @override
-  State<OrdersScreen> createState() => _OrdersScreenState(orders);
+  State<OrdersScreen> createState() => _OrdersScreenState();
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
-  List<BeBrokerOrder> _orders;
+  List<BeBrokerOrder> _orders = [];
+  int _pageNumber = 0;
+  int _pageCount = 0;
 
-  _OrdersScreenState(this._orders);
+  _OrdersScreenState();
 
   @override
   void initState() {
     super.initState();
     widget.websocket.wsEvent.subscribe(_websocketEvent);
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      _initOrders(0);
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
     widget.websocket.wsEvent.unsubscribe(_websocketEvent);
+  }
+
+  Future<void> _initOrders(int pageNumber) async {
+    const itemsPerPage = 10;
+    showAlertDialog(context, 'querying..');
+    var res = await beOrderList(pageNumber * itemsPerPage, itemsPerPage);
+    Navigator.pop(context);
+    if (res.error.type == ErrorType.None) {
+      setState(() {
+        _orders = res.orders;
+        _pageNumber = pageNumber;
+        _pageCount = (res.total / itemsPerPage).ceil();
+      });
+    }
   }
 
   void _websocketEvent(WsEventArgs? args) {
@@ -226,10 +245,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Orders'),
-      ),
-      body: ListView.builder(itemBuilder: _listItem, itemCount: _orders.length),
-    );
+        appBar: AppBar(
+          title: Text('Orders'),
+        ),
+        body:
+            ListView.builder(itemBuilder: _listItem, itemCount: _orders.length),
+        bottomNavigationBar: _pageCount > 0
+            ? Paginator(_pageCount, _pageNumber, (n) => _initOrders(n))
+            : null);
   }
 }

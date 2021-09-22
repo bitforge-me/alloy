@@ -370,14 +370,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   Future<void> _orders() async {
-    showAlertDialog(context, 'querying..');
-    var res = await beOrderList(0, 1000);
-    Navigator.pop(context);
-    if (res.error.type == ErrorType.None)
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => OrdersScreen(res.orders, _websocket)));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => OrdersScreen(_websocket)));
   }
 
   Future<void> _profile() async {
