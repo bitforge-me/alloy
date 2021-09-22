@@ -465,35 +465,33 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   (_orders.length == _totalOrders)))
                           ? <Widget>[
                               Padding(
-				padding: EdgeInsets.only(right: _arrowPadding),
-				child:
-				Opacity(
-				  opacity: 0,
-				  child: FloatingActionButton(
-				    mouseCursor: SystemMouseCursors.basic,
-				    onPressed: () {
-				      setState(() {});
-				    },
-				    child: const Icon(Icons.arrow_back),
-				    backgroundColor: Colors.white,
-				  ),
-				),
+                                padding: EdgeInsets.only(right: _arrowPadding),
+                                child: Opacity(
+                                  opacity: 0,
+                                  child: FloatingActionButton(
+                                    mouseCursor: SystemMouseCursors.basic,
+                                    onPressed: () {
+                                      setState(() {});
+                                    },
+                                    child: const Icon(Icons.arrow_back),
+                                    backgroundColor: Colors.white,
+                                  ),
+                                ),
                               ),
                               buttonsRow,
                               Padding(
-				padding: EdgeInsets.only(right: _arrowPadding),
-				child:
-				Opacity(
-				  opacity: 0,
-				  child: FloatingActionButton(
-				    mouseCursor: SystemMouseCursors.basic,
-				    onPressed: () {
-				      setState(() {});
-				    },
-				    child: const Icon(Icons.arrow_back),
-				    backgroundColor: Colors.white,
-				  ),
-				),
+                                padding: EdgeInsets.only(right: _arrowPadding),
+                                child: Opacity(
+                                  opacity: 0,
+                                  child: FloatingActionButton(
+                                    mouseCursor: SystemMouseCursors.basic,
+                                    onPressed: () {
+                                      setState(() {});
+                                    },
+                                    child: const Icon(Icons.arrow_back),
+                                    backgroundColor: Colors.white,
+                                  ),
+                                ),
                               ),
                             ]
                           : _currentPage > 0
@@ -501,85 +499,86 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                       _totalOrders
                                   ? <Widget>[
                                       Padding(
-					padding: EdgeInsets.only(left: _arrowPadding),
-					child:
-					FloatingActionButton(
-					  onPressed: () {
-					    _initOrders(_currentPage - 1);
-					  },
-					  child: const Icon(Icons.arrow_back),
-					  backgroundColor: Colors.blue,
-					),
+                                        padding: EdgeInsets.only(
+                                            left: _arrowPadding),
+                                        child: FloatingActionButton(
+                                          onPressed: () {
+                                            _initOrders(_currentPage - 1);
+                                          },
+                                          child: const Icon(Icons.arrow_back),
+                                          backgroundColor: Colors.blue,
+                                        ),
                                       ),
                                       buttonsRow,
                                       Padding(
-                                        padding: EdgeInsets.only(right: _arrowPadding),
-                                        child:
-					FloatingActionButton(
-					  onPressed: () {
-					    _initOrders(_currentPage + 1);
-					  },
-					  child: const Icon(Icons.arrow_forward),
-					  backgroundColor: Colors.blue,
-					)
-                                      ),
+                                          padding: EdgeInsets.only(
+                                              right: _arrowPadding),
+                                          child: FloatingActionButton(
+                                            onPressed: () {
+                                              _initOrders(_currentPage + 1);
+                                            },
+                                            child:
+                                                const Icon(Icons.arrow_forward),
+                                            backgroundColor: Colors.blue,
+                                          )),
                                     ]
                                   : <Widget>[
                                       Padding(
-                                        padding: EdgeInsets.only(left: _arrowPadding),
-                                        child:
-					FloatingActionButton(
-					  onPressed: () {
-					    _initOrders(_currentPage - 1);
-					  },
-					  child: const Icon(Icons.arrow_back),
-					  backgroundColor: Colors.blue,
-					),
+                                        padding: EdgeInsets.only(
+                                            left: _arrowPadding),
+                                        child: FloatingActionButton(
+                                          onPressed: () {
+                                            _initOrders(_currentPage - 1);
+                                          },
+                                          child: const Icon(Icons.arrow_back),
+                                          backgroundColor: Colors.blue,
+                                        ),
                                       ),
                                       buttonsRow,
                                       Padding(
-                                        padding: EdgeInsets.only(right: _arrowPadding),
-                                        child:
-					Opacity(
-					  opacity: 0,
-					  child: FloatingActionButton(
-					    mouseCursor: SystemMouseCursors.basic,
-					    onPressed: () {
-					      setState(() {});
-					    },
-					    child: const Icon(Icons.arrow_back),
-					    backgroundColor: Colors.white,
-					  ),
-					),
+                                        padding: EdgeInsets.only(
+                                            right: _arrowPadding),
+                                        child: Opacity(
+                                          opacity: 0,
+                                          child: FloatingActionButton(
+                                            mouseCursor:
+                                                SystemMouseCursors.basic,
+                                            onPressed: () {
+                                              setState(() {});
+                                            },
+                                            child: const Icon(Icons.arrow_back),
+                                            backgroundColor: Colors.white,
+                                          ),
+                                        ),
                                       ),
                                     ])
                               : <Widget>[
                                   Padding(
-                                    padding: EdgeInsets.only(left: _arrowPadding),
-                                    child:
-				    Opacity(
-				      opacity: 0,
-				      child: FloatingActionButton(
-					mouseCursor: SystemMouseCursors.basic,
-					onPressed: () {
-					  setState(() {});
-					},
-					child: const Icon(Icons.arrow_back),
-					backgroundColor: Colors.white,
-				      ),
-				    ),
+                                    padding:
+                                        EdgeInsets.only(left: _arrowPadding),
+                                    child: Opacity(
+                                      opacity: 0,
+                                      child: FloatingActionButton(
+                                        mouseCursor: SystemMouseCursors.basic,
+                                        onPressed: () {
+                                          setState(() {});
+                                        },
+                                        child: const Icon(Icons.arrow_back),
+                                        backgroundColor: Colors.white,
+                                      ),
+                                    ),
                                   ),
                                   buttonsRow,
                                   Padding(
-                                    padding: EdgeInsets.only(right: _arrowPadding),
-                                    child: 
-				    FloatingActionButton(
-				      onPressed: () {
-					_initOrders(_currentPage + 1);
-				      },
-				      child: const Icon(Icons.arrow_forward),
-				      backgroundColor: Colors.blue,
-				    ),
+                                    padding:
+                                        EdgeInsets.only(right: _arrowPadding),
+                                    child: FloatingActionButton(
+                                      onPressed: () {
+                                        _initOrders(_currentPage + 1);
+                                      },
+                                      child: const Icon(Icons.arrow_forward),
+                                      backgroundColor: Colors.blue,
+                                    ),
                                   ),
                                 ],
                     ),
