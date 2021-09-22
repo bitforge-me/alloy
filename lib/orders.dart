@@ -163,51 +163,43 @@ class _OrdersScreenState extends State<OrdersScreen> {
   int _currentPage = 0;
   int _totalOrders = 0;
   int _totalPages = 0;
-  
+
   Widget createArrow(String direction) {
-    return 
-    Padding(
-      padding: direction == "FORWARD" ?
-	  EdgeInsets.only(right: _arrowPadding)
-          : 
-	  EdgeInsets.only(left: _arrowPadding),
+    return Padding(
+      padding: direction == "FORWARD"
+          ? EdgeInsets.only(right: _arrowPadding)
+          : EdgeInsets.only(left: _arrowPadding),
       child: FloatingActionButton(
-	onPressed: 
-           direction == "FORWARD" ?
-           () {
-	     _initOrders(_currentPage + 1);
-	   }
-          :
-           () {
-	     _initOrders(_currentPage - 1);
-	   },
-	child: direction == "FORWARD" ?
-          const Icon(Icons.arrow_forward)
-          :
-          const Icon(Icons.arrow_back),
-	backgroundColor: Colors.blue,
+        onPressed: direction == "FORWARD"
+            ? () {
+                _initOrders(_currentPage + 1);
+              }
+            : () {
+                _initOrders(_currentPage - 1);
+              },
+        child: direction == "FORWARD"
+            ? const Icon(Icons.arrow_forward)
+            : const Icon(Icons.arrow_back),
+        backgroundColor: Colors.blue,
       ),
     );
-
   }
 
   Widget createInvisibleArrow(String direction) {
-    return
-    Padding(
-      padding: direction == "FORWARD" ?
-	  EdgeInsets.only(right: _arrowPadding)
-          : 
-	  EdgeInsets.only(left: _arrowPadding),
+    return Padding(
+      padding: direction == "FORWARD"
+          ? EdgeInsets.only(right: _arrowPadding)
+          : EdgeInsets.only(left: _arrowPadding),
       child: Opacity(
-	opacity: 0,
-	child: FloatingActionButton(
-	  mouseCursor: SystemMouseCursors.basic,
-	  onPressed: () {
-	    setState(() {});
-	  },
-	  child: const Icon(Icons.arrow_back),
-	  backgroundColor: Colors.white,
-	),
+        opacity: 0,
+        child: FloatingActionButton(
+          mouseCursor: SystemMouseCursors.basic,
+          onPressed: () {
+            setState(() {});
+          },
+          child: const Icon(Icons.arrow_back),
+          backgroundColor: Colors.white,
+        ),
       ),
     );
   }
