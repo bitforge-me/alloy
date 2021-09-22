@@ -160,7 +160,7 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   List<BeBrokerOrder> _orders = <BeBrokerOrder>[];
-  final _ordersPerPage = 8;
+  final _ordersPerPage = 9;
   int _currentPage = 0;
   int _totalOrders = 0;
   int _totalPages = 0;
@@ -240,6 +240,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("total orders length is ${_totalOrders}");
     Widget finalPage = (_currentPage + 2) < _totalPages
         ? Row(
             children: <Widget>[
@@ -461,7 +462,36 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,
-                      children: _currentPage > 0
+                      children: 
+                          (_currentPage == 0 && ((_orders.length < _ordersPerPage) || (_orders.length == _totalOrders)))
+                         ?
+			<Widget>[
+			    Opacity(
+			      opacity: 0,
+			      child: FloatingActionButton(
+				mouseCursor: SystemMouseCursors.basic,
+				onPressed: () {
+				  setState(() {});
+				},
+				child: const Icon(Icons.arrow_back),
+				backgroundColor: Colors.white,
+			      ),
+			    ),
+			    buttonsRow,
+			    Opacity(
+			      opacity: 0,
+			      child: FloatingActionButton(
+				mouseCursor: SystemMouseCursors.basic,
+				onPressed: () {
+				  setState(() {});
+				},
+				child: const Icon(Icons.arrow_back),
+				backgroundColor: Colors.white,
+			      ),
+			    ),
+			  ]
+                         :
+                          _currentPage > 0
                           ? ((_currentPage + 1) * _ordersPerPage < _totalOrders
                               ? <Widget>[
                                   FloatingActionButton(
