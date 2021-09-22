@@ -149,10 +149,8 @@ class _OrderScreenState extends State<OrderScreen> {
 }
 
 class OrdersScreen extends StatefulWidget {
-  final List<BeBrokerOrder> orders;
   final Websocket websocket;
-
-  OrdersScreen(this.orders, this.websocket);
+  OrdersScreen(this.websocket);
 
   @override
   State<OrdersScreen> createState() => _OrdersScreenState();
