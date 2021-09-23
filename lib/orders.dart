@@ -249,8 +249,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   Future<void> _initOrders(int newPage) async {
+    Future(() {
+      showAlertDialog(context, 'querying..');
+    });
     BeBrokerOrdersResult beBrokerOrdersResult =
         await beOrderList(newPage * _ordersPerPage, _ordersPerPage);
+    Navigator.pop(context);
     setState(() {
       _currentPage = newPage;
       _orders = beBrokerOrdersResult.orders;
