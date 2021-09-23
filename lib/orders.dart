@@ -159,10 +159,12 @@ class OrdersScreen extends StatefulWidget {
 class _OrdersScreenState extends State<OrdersScreen> {
   List<BeBrokerOrder> _orders = <BeBrokerOrder>[];
   final _arrowPadding = 50.0;
-  final _ordersPerPage = 9;
+  final _ordersPerPage = 2;
   int _currentPage = 0;
   int _totalOrders = 0;
   int _totalPages = 0;
+
+  SizedBox gap = SizedBox(width: 15.0);
 
   Widget createArrow(String direction) {
     return Padding(
@@ -286,7 +288,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
     Widget finalPage = (_currentPage + 2) < _totalPages
         ? Row(
             children: <Widget>[
+              gap,
               Text("..."),
+              gap,
               GestureDetector(
                 child: Container(
                   width: 40,
@@ -310,7 +314,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
             opacity: 0,
             child: Row(
               children: <Widget>[
+                gap,
                 Text("..."),
+                gap,
                 GestureDetector(
                   child: Container(
                     width: 40,
@@ -349,14 +355,18 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   _initOrders(0);
                 },
               ),
+              gap,
               Text("..."),
+              gap,
             ],
           )
         : Opacity(
             opacity: 0,
             child: Row(
               children: <Widget>[
+                gap,
                 Text("..."),
+                gap,
                 GestureDetector(
                   child: Container(
                     width: 40,
