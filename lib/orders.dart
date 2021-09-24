@@ -160,6 +160,7 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   List<BeBrokerOrder> _orders = [];
+  final int _itemsPerPage = 10;
   int _pageNumber = 0;
   int _pageCount = 0;
 
@@ -181,15 +182,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   Future<void> _initOrders(int pageNumber) async {
-    const itemsPerPage = 10;
     showAlertDialog(context, 'querying..');
-    var res = await beOrderList(pageNumber * itemsPerPage, itemsPerPage);
+    var res = await beOrderList(pageNumber * _itemsPerPage, _itemsPerPage);
     Navigator.pop(context);
     if (res.error.type == ErrorType.None) {
       setState(() {
         _orders = res.orders;
         _pageNumber = pageNumber;
-        _pageCount = (res.total / itemsPerPage).ceil();
+        _pageCount = (res.total / _itemsPerPage).ceil();
       });
     }
   }
@@ -198,8 +198,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
     if (args == null) return;
     if (args.event == WebsocketEvent.brokerOrderNew) {
       var newOrder = BeBrokerOrder.parse(jsonDecode(args.msg));
-      _orders.insert(0, newOrder);
-      setState(() => _orders = _orders);
+      if (_pageCount == 0) {
+        _orders.insert(0, newOrder);
+        if (_orders.length > _itemsPerPage) _orders.removeLast();
+        setState(() => _orders = _orders);
+      }
       flushbarMsg(context,
           'broker order created ${newOrder.token} - ${describeEnum(newOrder.status).toUpperCase()}');
     }

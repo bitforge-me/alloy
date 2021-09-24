@@ -18,6 +18,7 @@ import 'profile.dart';
 import 'security.dart';
 import 'utils.dart';
 import 'balances.dart';
+import 'deposit.dart';
 
 void main() {
   runApp(Phoenix(child: MyApp()));
@@ -369,6 +370,18 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               builder: (context) => BalanceScreen(res.balances, _websocket)));
   }
 
+  Future<void> _deposit() async {
+    showAlertDialog(context, 'querying..');
+    var res = await beAssets();
+    Navigator.pop(context);
+    if (res.error.type == ErrorType.None)
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  DepositSelectScreen(res.assets, _websocket)));
+  }
+
   Future<void> _orders() async {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => OrdersScreen(_websocket)));
@@ -509,6 +522,12 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               visible: _userInfo != null,
               child: RoundedButton(
                   _balances, ZapWhite, ZapBlue, ZapBlueGradient, 'Balances',
+                  holePunch: true, width: 200),
+            ),
+            Visibility(
+              visible: _userInfo != null,
+              child: RoundedButton(
+                  _deposit, ZapWhite, ZapBlue, ZapBlueGradient, 'Deposit',
                   holePunch: true, width: 200),
             ),
             Visibility(

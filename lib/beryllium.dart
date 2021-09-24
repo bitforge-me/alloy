@@ -231,26 +231,18 @@ class BeTwoFactorResult {
 class BeAsset {
   final String symbol;
   final String name;
-  final String coinType;
-  final String status;
-  final int minConfs;
-  final String message;
   final int decimals;
+  final Decimal withdrawFee;
+  final bool isCrypto;
 
-  BeAsset(this.symbol, this.name, this.coinType, this.status, this.minConfs,
-      this.message, this.decimals);
+  BeAsset(
+      this.symbol, this.name, this.decimals, this.withdrawFee, this.isCrypto);
 
-  static List<BeAsset> parseAssets(dynamic assets) {
+  static List<BeAsset> parseAssets(List<dynamic> assets) {
     List<BeAsset> assetList = [];
     for (var item in assets)
-      assetList.add(BeAsset(
-          item['symbol'],
-          item['name'],
-          item['coin_type'],
-          item['status'],
-          item['min_confs'],
-          item['message'],
-          item['decimals']));
+      assetList.add(BeAsset(item['symbol'], item['name'], item['decimals'],
+          Decimal.parse(item['withdraw_fee']), item['is_crypto']));
     return assetList;
   }
 }
@@ -390,6 +382,148 @@ class BeBalancesResult {
     for (var item in jsonDecode(data)['balances'])
       balances.add(BeBalance.parse(item));
     return BeBalancesResult(balances, BeError.none());
+  }
+}
+
+class BeCryptoDepositAddressResult {
+  final String? address;
+  final BeError error;
+
+  BeCryptoDepositAddressResult(this.address, this.error);
+
+  static BeCryptoDepositAddressResult network() {
+    return BeCryptoDepositAddressResult(null, BeError.network());
+  }
+
+  static BeCryptoDepositAddressResult auth(String msg) {
+    return BeCryptoDepositAddressResult(null, BeError.auth(msg));
+  }
+
+  static BeCryptoDepositAddressResult parse(String data) {
+    return BeCryptoDepositAddressResult(
+        jsonDecode(data)['address'], BeError.none());
+  }
+}
+
+class BeCryptoDeposit {
+  final String token;
+  final String asset;
+  final String address;
+  final Decimal amount;
+  final DateTime date;
+  final String status;
+  final String txid;
+
+  BeCryptoDeposit(this.token, this.asset, this.address, this.amount, this.date,
+      this.status, this.txid);
+
+  static BeCryptoDeposit parse(Map item) {
+    var amount = Decimal.parse(item['amount']);
+    var date = DateTime.parse(item['date']);
+    return BeCryptoDeposit(item['id'], item['symbol'], item['address'], amount,
+        date, item['status'], item['txid']);
+  }
+}
+
+class BeCryptoDepositsResult {
+  final List<BeCryptoDeposit> deposits;
+  final int offset;
+  final int limit;
+  final int total;
+  final BeError error;
+
+  BeCryptoDepositsResult(
+      this.deposits, this.offset, this.limit, this.total, this.error);
+
+  static BeCryptoDepositsResult network() {
+    return BeCryptoDepositsResult([], 0, 0, 0, BeError.network());
+  }
+
+  static BeCryptoDepositsResult auth(String msg) {
+    return BeCryptoDepositsResult([], 0, 0, 0, BeError.auth(msg));
+  }
+
+  static BeCryptoDepositsResult parse(String data) {
+    var json = jsonDecode(data);
+    List<BeCryptoDeposit> deposits = [];
+    for (var item in json['deposits'])
+      deposits.add(BeCryptoDeposit.parse(item));
+    var offset = json['offset'];
+    var limit = json['limit'];
+    var total = json['total'];
+    return BeCryptoDepositsResult(
+        deposits, offset, limit, total, BeError.none());
+  }
+}
+
+class BeFiatDeposit {
+  final String token;
+  final String asset;
+  final DateTime date;
+  final DateTime expiry;
+  final Decimal amount;
+  final String status;
+  final String? paymentUrl;
+
+  BeFiatDeposit(this.token, this.asset, this.date, this.expiry, this.amount,
+      this.status, this.paymentUrl);
+
+  static BeFiatDeposit parse(Map item) {
+    var amount = Decimal.parse(item['amount_dec']);
+    var date = DateTime.parse(item['date']);
+    var expiry = DateTime.parse(item['expiry']);
+    return BeFiatDeposit(item['token'], item['asset'], date, expiry, amount,
+        item['status'], item['payment_url']);
+  }
+}
+
+class BeFiatDepositResult {
+  final BeFiatDeposit? deposit;
+  final BeError error;
+
+  BeFiatDepositResult(this.deposit, this.error);
+
+  static BeFiatDepositResult network() {
+    return BeFiatDepositResult(null, BeError.network());
+  }
+
+  static BeFiatDepositResult auth(String msg) {
+    return BeFiatDepositResult(null, BeError.auth(msg));
+  }
+
+  static BeFiatDepositResult parse(String data) {
+    var json = jsonDecode(data);
+    return BeFiatDepositResult(
+        BeFiatDeposit.parse(json['deposit']), BeError.none());
+  }
+}
+
+class BeFiatDepositsResult {
+  final List<BeFiatDeposit> deposits;
+  final int offset;
+  final int limit;
+  final int total;
+  final BeError error;
+
+  BeFiatDepositsResult(
+      this.deposits, this.offset, this.limit, this.total, this.error);
+
+  static BeFiatDepositsResult network() {
+    return BeFiatDepositsResult([], 0, 0, 0, BeError.network());
+  }
+
+  static BeFiatDepositsResult auth(String msg) {
+    return BeFiatDepositsResult([], 0, 0, 0, BeError.auth(msg));
+  }
+
+  static BeFiatDepositsResult parse(String data) {
+    var json = jsonDecode(data);
+    List<BeFiatDeposit> deposits = [];
+    for (var item in json['deposits']) deposits.add(BeFiatDeposit.parse(item));
+    var offset = json['offset'];
+    var limit = json['limit'];
+    var total = json['total'];
+    return BeFiatDepositsResult(deposits, offset, limit, total, BeError.none());
   }
 }
 
@@ -990,6 +1124,111 @@ Future<BeBalancesResult> beBalances() async {
     return BeBalancesResult.auth(response.body);
   print(response.statusCode);
   return BeBalancesResult.network();
+}
+
+Future<BeCryptoDepositAddressResult> beCryptoDepositAddress(
+    String asset) async {
+  var baseUrl = await _server();
+  if (baseUrl == null) return BeCryptoDepositAddressResult.network();
+  var url = baseUrl + "crypto_deposit_address";
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = nextNonce();
+  var body = jsonEncode({"api_key": apikey, "nonce": nonce, "asset": asset});
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null) return BeCryptoDepositAddressResult.network();
+  if (response.statusCode == 200) {
+    return BeCryptoDepositAddressResult.parse(response.body);
+  } else if (response.statusCode == 400)
+    return BeCryptoDepositAddressResult.auth(response.body);
+  print(response.statusCode);
+  return BeCryptoDepositAddressResult.network();
+}
+
+Future<BeCryptoDepositsResult> beCryptoDeposits(
+    String asset, int offset, int limit) async {
+  var baseUrl = await _server();
+  if (baseUrl == null) return BeCryptoDepositsResult.network();
+  var url = baseUrl + "crypto_deposits";
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = nextNonce();
+  var body = jsonEncode({
+    "api_key": apikey,
+    "nonce": nonce,
+    "asset": asset,
+    "offset": offset,
+    "limit": limit
+  });
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null) return BeCryptoDepositsResult.network();
+  if (response.statusCode == 200) {
+    return BeCryptoDepositsResult.parse(response.body);
+  } else if (response.statusCode == 400)
+    return BeCryptoDepositsResult.auth(response.body);
+  print(response.statusCode);
+  return BeCryptoDepositsResult.network();
+}
+
+Future<BeFiatDepositResult> beFiatDepositCreate(
+    String asset, Decimal amount) async {
+  var baseUrl = await _server();
+  if (baseUrl == null) return BeFiatDepositResult.network();
+  var url = baseUrl + "fiat_deposit_create";
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = nextNonce();
+  var body = jsonEncode({
+    "api_key": apikey,
+    "nonce": nonce,
+    "asset": asset,
+    "amount_dec": amount.toString()
+  });
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null) return BeFiatDepositResult.network();
+  if (response.statusCode == 200) {
+    return BeFiatDepositResult.parse(response.body);
+  } else if (response.statusCode == 400)
+    return BeFiatDepositResult.auth(response.body);
+  print(response.statusCode);
+  return BeFiatDepositResult.network();
+}
+
+Future<BeFiatDepositsResult> beFiatDeposits(
+    String asset, int offset, int limit) async {
+  var baseUrl = await _server();
+  if (baseUrl == null) return BeFiatDepositsResult.network();
+  var url = baseUrl + "fiat_deposits";
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = nextNonce();
+  var body = jsonEncode({
+    "api_key": apikey,
+    "nonce": nonce,
+    "asset": asset,
+    "offset": offset,
+    "limit": limit
+  });
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null) return BeFiatDepositsResult.network();
+  if (response.statusCode == 200) {
+    return BeFiatDepositsResult.parse(response.body);
+  } else if (response.statusCode == 400)
+    return BeFiatDepositsResult.auth(response.body);
+  print(response.statusCode);
+  return BeFiatDepositsResult.network();
 }
 
 Future<BeAddressBookResult> beAddressBook(String asset) async {

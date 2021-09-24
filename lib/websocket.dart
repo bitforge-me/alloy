@@ -7,7 +7,16 @@ import 'prefs.dart';
 import 'config.dart';
 import 'utils.dart';
 
-enum WebsocketEvent { none, userInfoUpdate, brokerOrderNew, brokerOrderUpdate }
+enum WebsocketEvent {
+  none,
+  userInfoUpdate,
+  brokerOrderNew,
+  brokerOrderUpdate,
+  cryptoDepositNew,
+  cryptoDepositUpdate,
+  fiatDepositNew,
+  fiatDepositUpdate
+}
 
 class WsEventArgs extends EventArgs {
   WebsocketEvent event;
@@ -39,6 +48,12 @@ class Websocket {
     if (event == 'broker_order_new') wevent = WebsocketEvent.brokerOrderNew;
     if (event == 'broker_order_update')
       wevent = WebsocketEvent.brokerOrderUpdate;
+    if (event == 'crypto_deposit_new') wevent = WebsocketEvent.cryptoDepositNew;
+    if (event == 'crypto_deposit_update')
+      wevent = WebsocketEvent.cryptoDepositUpdate;
+    if (event == 'fiat_deposit_new') wevent = WebsocketEvent.fiatDepositNew;
+    if (event == 'fiat_deposit_update')
+      wevent = WebsocketEvent.fiatDepositUpdate;
     wsEvent.broadcast(WsEventArgs(wevent, msg));
   }
 

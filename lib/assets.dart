@@ -90,8 +90,7 @@ class AssetScreen extends StatelessWidget {
     return ListTile(
       title: Text('${asset.symbol}'),
       leading: assetLogo(asset.symbol),
-      subtitle: Text(
-          'name: ${asset.name}, status: ${asset.status}, minimum confirmations: ${asset.minConfs}'),
+      subtitle: Text('name: ${asset.name}'),
     );
   }
 
