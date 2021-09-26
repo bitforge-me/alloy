@@ -284,24 +284,23 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   MouseRegion _pageButton(String pageNumber, void Function() onTapped) {
-    return 
-    MouseRegion(
-	cursor: SystemMouseCursors.click,
-	child: GestureDetector(
-	  child: Container(
-	    width: 40,
-	    height: 40,
-	    child: Center(
-		child: Text(pageNumber,
-		    textAlign: TextAlign.center,
-		    style: TextStyle(color: Colors.grey))),
-	    decoration: BoxDecoration(
-	      shape: BoxShape.circle,
-	      color: Colors.white,
-	    ),
-	  ),
-	  onTap: onTapped,
-	));
+    return MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          child: Container(
+            width: 40,
+            height: 40,
+            child: Center(
+                child: Text(pageNumber,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.grey))),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+            ),
+          ),
+          onTap: onTapped,
+        ));
   }
 
   @override
@@ -312,11 +311,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
               gap,
               Text("..."),
               gap,
-	      _pageButton(_totalPages.toString(), 
-		(){
-		  _initOrders(_totalPages - 1);
-		}
-	      ),
+              _pageButton(_totalPages.toString(), () {
+                _initOrders(_totalPages - 1);
+              }),
             ],
           )
         : Opacity(
@@ -347,12 +344,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
     Widget firstPage = (_currentPage > 1)
         ? Row(
             children: <Widget>[
-              _pageButton(
-		'1',
-		 (){
-		   _initOrders(0);
-		 }
-              ),
+              _pageButton('1', () {
+                _initOrders(0);
+              }),
               gap,
               Text("..."),
               gap,
@@ -384,13 +378,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
             ));
 
     Widget mostLeft = _currentPage > 0
-        ?
-	_pageButton(
-	  _currentPage.toString(),
-	  (){
-	    _initOrders(_currentPage - 1);
-	  }
-	)
+        ? _pageButton(_currentPage.toString(), () {
+            _initOrders(_currentPage - 1);
+          })
         : Opacity(
             opacity: 0,
             child: Row(
@@ -414,13 +404,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
             ));
 
     Widget mostRight = _currentPage + 1 < _totalPages
-        ?
-	_pageButton(
-	  "${_currentPage + 2}",
-	  (){
-	    _initOrders(_currentPage + 1);
-	  }
-	)
+        ? _pageButton("${_currentPage + 2}", () {
+            _initOrders(_currentPage + 1);
+          })
         : Opacity(
             opacity: 0,
             child: Row(
