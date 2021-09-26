@@ -302,7 +302,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.white, 
-                    border: Border.all(color: Colors.blueAccent),
+                    
                   ),
                 ),
                 onTap: () {
@@ -329,7 +329,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white, 
-                      border: Border.all(color: Colors.blueAccent),
+                      
                     ),
                   ),
                   onTap: () {},
@@ -351,7 +351,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.white, 
-                    border: Border.all(color: Colors.blueAccent),
+                    
                   ),
                 ),
                 onTap: () {
@@ -381,7 +381,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white, 
-                      border: Border.all(color: Colors.blueAccent),
+                      
                     ),
                   ),
                   onTap: () {},
@@ -401,7 +401,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.white, 
-                border: Border.all(color: Colors.blueAccent),
+                
               ),
             ),
             onTap: () {
@@ -423,7 +423,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white, 
-                      border: Border.all(color: Colors.blueAccent),
+                      
                     ),
                   ),
                   onTap: () {},
@@ -443,7 +443,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.white, 
-                border: Border.all(color: Colors.blueAccent),
+                
               ),
             ),
             onTap: () {
@@ -465,7 +465,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white, 
-                      border: Border.all(color: Colors.blueAccent),
+                      
                     ),
                   ),
                   onTap: () {},
