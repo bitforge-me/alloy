@@ -292,27 +292,24 @@ class _OrdersScreenState extends State<OrdersScreen> {
               Text("..."),
               gap,
               MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child:
-		GestureDetector(
-		  child: Container(
-		    width: 40,
-		    height: 40,
-		    child: Center(
-			child: Text(_totalPages.toString(),
-			    textAlign: TextAlign.center,
-			    style: TextStyle(color: Colors.grey))),
-		    decoration: BoxDecoration(
-		      shape: BoxShape.circle,
-		      color: Colors.white, 
-		      
-		    ),
-		  ),
-		  onTap: () {
-		    _initOrders(_totalPages - 1);
-		  },
-		)
-              ),
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      child: Center(
+                          child: Text(_totalPages.toString(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.grey))),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                      ),
+                    ),
+                    onTap: () {
+                      _initOrders(_totalPages - 1);
+                    },
+                  )),
             ],
           )
         : Opacity(
@@ -332,8 +329,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             style: TextStyle(color: Colors.grey))),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white, 
-                      
+                      color: Colors.white,
                     ),
                   ),
                   onTap: () {},
@@ -346,25 +342,23 @@ class _OrdersScreenState extends State<OrdersScreen> {
             children: <Widget>[
               MouseRegion(
                 cursor: SystemMouseCursors.click,
-                child:
-		GestureDetector(
-		  child: Container(
-		    width: 40,
-		    height: 40,
-		    child: Center(
-			child: Text('1',
-			    textAlign: TextAlign.center,
-			    style: TextStyle(color: Colors.grey))),
-		    decoration: BoxDecoration(
-		      shape: BoxShape.circle,
-		      color: Colors.white, 
-		      
-		    ),
-		  ),
-		  onTap: () {
-		    _initOrders(0);
-		  },
-		),
+                child: GestureDetector(
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    child: Center(
+                        child: Text('1',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.grey))),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
+                  ),
+                  onTap: () {
+                    _initOrders(0);
+                  },
+                ),
               ),
               gap,
               Text("..."),
@@ -388,8 +382,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             style: TextStyle(color: Colors.grey))),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white, 
-                      
+                      color: Colors.white,
                     ),
                   ),
                   onTap: () {},
@@ -398,30 +391,25 @@ class _OrdersScreenState extends State<OrdersScreen> {
             ));
 
     Widget mostLeft = _currentPage > 0
-        ? 
-
-	  MouseRegion(
-	    cursor: SystemMouseCursors.click,
-	    child:
-	    GestureDetector(
-	      child: Container(
-		width: 40,
-		height: 40,
-		child: Center(
-		    child: Text(_currentPage.toString(),
-			textAlign: TextAlign.center,
-			style: TextStyle(color: Colors.grey))),
-		decoration: BoxDecoration(
-		  shape: BoxShape.circle,
-		  color: Colors.white, 
-		  
-		),
-	      ),
-	      onTap: () {
-		_initOrders(_currentPage - 1);
-	      },
-	    )
-	  )
+        ? MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              child: Container(
+                width: 40,
+                height: 40,
+                child: Center(
+                    child: Text(_currentPage.toString(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey))),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                ),
+              ),
+              onTap: () {
+                _initOrders(_currentPage - 1);
+              },
+            ))
         : Opacity(
             opacity: 0,
             child: Row(
@@ -436,8 +424,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             style: TextStyle(color: Colors.grey))),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white, 
-                      
+                      color: Colors.white,
                     ),
                   ),
                   onTap: () {},
@@ -446,30 +433,25 @@ class _OrdersScreenState extends State<OrdersScreen> {
             ));
 
     Widget mostRight = _currentPage + 1 < _totalPages
-        ? 
-
-	  MouseRegion(
-	    cursor: SystemMouseCursors.click,
-	    child:
-	    GestureDetector(
-	      child: Container(
-		width: 40,
-		height: 40,
-		child: Center(
-		    child: Text("${_currentPage + 2}",
-			textAlign: TextAlign.center,
-			style: TextStyle(color: Colors.grey))),
-		decoration: BoxDecoration(
-		  shape: BoxShape.circle,
-		  color: Colors.white, 
-		  
-		),
-	      ),
-	      onTap: () {
-		_initOrders(_currentPage + 1);
-	      },
-	    )
-	  )
+        ? MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              child: Container(
+                width: 40,
+                height: 40,
+                child: Center(
+                    child: Text("${_currentPage + 2}",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey))),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                ),
+              ),
+              onTap: () {
+                _initOrders(_currentPage + 1);
+              },
+            ))
         : Opacity(
             opacity: 0,
             child: Row(
@@ -484,8 +466,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             style: TextStyle(color: Colors.grey))),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white, 
-                      
+                      color: Colors.white,
                     ),
                   ),
                   onTap: () {},
@@ -493,24 +474,20 @@ class _OrdersScreenState extends State<OrdersScreen> {
               ],
             ));
 
-    Widget centerPage = 
-
-    MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child:
-      Container(
-	width: 40,
-	height: 40,
-	child: Center(
-	    child: Text('${_currentPage + 1}',
-		textAlign: TextAlign.center,
-		style: TextStyle(color: Colors.white))),
-	decoration: BoxDecoration(
-	  shape: BoxShape.circle,
-	  color: Colors.blue.shade400,
-	),
-      )
-    );
+    Widget centerPage = MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: Container(
+          width: 40,
+          height: 40,
+          child: Center(
+              child: Text('${_currentPage + 1}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white))),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.blue.shade400,
+          ),
+        ));
 
     List<Widget> pageButtons = <Widget>[
       firstPage,
