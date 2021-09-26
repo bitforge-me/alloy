@@ -211,36 +211,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
     super.initState();
     _currentPage = 0;
     _initOrders(0);
-    //widget.websocket.wsEvent.subscribe(_websocketEvent);
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget.websocket.wsEvent.unsubscribe(_websocketEvent);
-  }
-
-  void _websocketEvent(WsEventArgs? args) {
-    if (args == null) return;
-    if (args.event == WebsocketEvent.brokerOrderNew) {
-      var newOrder = BeBrokerOrder.parse(jsonDecode(args.msg));
-      _orders.insert(0, newOrder);
-      setState(() => _orders = _orders);
-      flushbarMsg(context,
-          'broker order created ${newOrder.token} - ${describeEnum(newOrder.status).toUpperCase()}');
-    }
-    if (args.event == WebsocketEvent.brokerOrderUpdate) {
-      var newOrders = <BeBrokerOrder>[];
-      var newOrder = BeBrokerOrder.parse(jsonDecode(args.msg));
-      for (var order in _orders)
-        if (order.token == newOrder.token)
-          newOrders.add(newOrder);
-        else
-          newOrders.add(order);
-      setState(() => _orders = newOrders);
-      flushbarMsg(context,
-          'broker order updated ${newOrder.token} - ${describeEnum(newOrder.status).toUpperCase()}');
-    }
   }
 
   Future<void> _orderTap(BeBrokerOrder order) async {
