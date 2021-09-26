@@ -159,7 +159,7 @@ class OrdersScreen extends StatefulWidget {
 class _OrdersScreenState extends State<OrdersScreen> {
   List<BeBrokerOrder> _orders = <BeBrokerOrder>[];
   final _arrowPadding = 50.0;
-  final _ordersPerPage = 9;
+  final _ordersPerPage = 2;
   int _currentPage = 0;
   int _totalOrders = 0;
   int _totalPages = 0;
@@ -298,10 +298,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   child: Center(
                       child: Text(_totalPages.toString(),
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white))),
+                          style: TextStyle(color: Colors.grey))),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.grey,
+                    color: Colors.white, 
+                    border: Border.all(color: Colors.blueAccent),
                   ),
                 ),
                 onTap: () {
@@ -324,10 +325,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     child: Center(
                         child: Text(_totalPages.toString(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white))),
+                            style: TextStyle(color: Colors.grey))),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.grey,
+                      color: Colors.white, 
+                      border: Border.all(color: Colors.blueAccent),
                     ),
                   ),
                   onTap: () {},
@@ -345,10 +347,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   child: Center(
                       child: Text('1',
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white))),
+                          style: TextStyle(color: Colors.grey))),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.grey,
+                    color: Colors.white, 
+                    border: Border.all(color: Colors.blueAccent),
                   ),
                 ),
                 onTap: () {
@@ -374,10 +377,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     child: Center(
                         child: Text(_totalPages.toString(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white))),
+                            style: TextStyle(color: Colors.grey))),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.grey,
+                      color: Colors.white, 
+                      border: Border.all(color: Colors.blueAccent),
                     ),
                   ),
                   onTap: () {},
@@ -393,10 +397,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
               child: Center(
                   child: Text(_currentPage.toString(),
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white))),
+                      style: TextStyle(color: Colors.grey))),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.grey,
+                color: Colors.white, 
+                border: Border.all(color: Colors.blueAccent),
               ),
             ),
             onTap: () {
@@ -414,10 +419,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     child: Center(
                         child: Text(_totalPages.toString(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white))),
+                            style: TextStyle(color: Colors.grey))),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.grey,
+                      color: Colors.white, 
+                      border: Border.all(color: Colors.blueAccent),
                     ),
                   ),
                   onTap: () {},
@@ -433,10 +439,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
               child: Center(
                   child: Text("${_currentPage + 2}",
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white))),
+                      style: TextStyle(color: Colors.grey))),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.grey,
+                color: Colors.white, 
+                border: Border.all(color: Colors.blueAccent),
               ),
             ),
             onTap: () {
@@ -454,10 +461,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     child: Center(
                         child: Text(_totalPages.toString(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white))),
+                            style: TextStyle(color: Colors.grey))),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.grey,
+                      color: Colors.white, 
+                      border: Border.all(color: Colors.blueAccent),
                     ),
                   ),
                   onTap: () {},
