@@ -291,24 +291,28 @@ class _OrdersScreenState extends State<OrdersScreen> {
               gap,
               Text("..."),
               gap,
-              GestureDetector(
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  child: Center(
-                      child: Text(_totalPages.toString(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.grey))),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white, 
-                    
-                  ),
-                ),
-                onTap: () {
-                  _initOrders(_totalPages - 1);
-                },
-              )
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child:
+		GestureDetector(
+		  child: Container(
+		    width: 40,
+		    height: 40,
+		    child: Center(
+			child: Text(_totalPages.toString(),
+			    textAlign: TextAlign.center,
+			    style: TextStyle(color: Colors.grey))),
+		    decoration: BoxDecoration(
+		      shape: BoxShape.circle,
+		      color: Colors.white, 
+		      
+		    ),
+		  ),
+		  onTap: () {
+		    _initOrders(_totalPages - 1);
+		  },
+		)
+              ),
             ],
           )
         : Opacity(
@@ -340,23 +344,27 @@ class _OrdersScreenState extends State<OrdersScreen> {
     Widget firstPage = (_currentPage > 1)
         ? Row(
             children: <Widget>[
-              GestureDetector(
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  child: Center(
-                      child: Text('1',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.grey))),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white, 
-                    
-                  ),
-                ),
-                onTap: () {
-                  _initOrders(0);
-                },
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child:
+		GestureDetector(
+		  child: Container(
+		    width: 40,
+		    height: 40,
+		    child: Center(
+			child: Text('1',
+			    textAlign: TextAlign.center,
+			    style: TextStyle(color: Colors.grey))),
+		    decoration: BoxDecoration(
+		      shape: BoxShape.circle,
+		      color: Colors.white, 
+		      
+		    ),
+		  ),
+		  onTap: () {
+		    _initOrders(0);
+		  },
+		),
               ),
               gap,
               Text("..."),
@@ -390,24 +398,30 @@ class _OrdersScreenState extends State<OrdersScreen> {
             ));
 
     Widget mostLeft = _currentPage > 0
-        ? GestureDetector(
-            child: Container(
-              width: 40,
-              height: 40,
-              child: Center(
-                  child: Text(_currentPage.toString(),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.grey))),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white, 
-                
-              ),
-            ),
-            onTap: () {
-              _initOrders(_currentPage - 1);
-            },
-          )
+        ? 
+
+	  MouseRegion(
+	    cursor: SystemMouseCursors.click,
+	    child:
+	    GestureDetector(
+	      child: Container(
+		width: 40,
+		height: 40,
+		child: Center(
+		    child: Text(_currentPage.toString(),
+			textAlign: TextAlign.center,
+			style: TextStyle(color: Colors.grey))),
+		decoration: BoxDecoration(
+		  shape: BoxShape.circle,
+		  color: Colors.white, 
+		  
+		),
+	      ),
+	      onTap: () {
+		_initOrders(_currentPage - 1);
+	      },
+	    )
+	  )
         : Opacity(
             opacity: 0,
             child: Row(
@@ -432,24 +446,30 @@ class _OrdersScreenState extends State<OrdersScreen> {
             ));
 
     Widget mostRight = _currentPage + 1 < _totalPages
-        ? GestureDetector(
-            child: Container(
-              width: 40,
-              height: 40,
-              child: Center(
-                  child: Text("${_currentPage + 2}",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.grey))),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white, 
-                
-              ),
-            ),
-            onTap: () {
-              _initOrders(_currentPage + 1);
-            },
-          )
+        ? 
+
+	  MouseRegion(
+	    cursor: SystemMouseCursors.click,
+	    child:
+	    GestureDetector(
+	      child: Container(
+		width: 40,
+		height: 40,
+		child: Center(
+		    child: Text("${_currentPage + 2}",
+			textAlign: TextAlign.center,
+			style: TextStyle(color: Colors.grey))),
+		decoration: BoxDecoration(
+		  shape: BoxShape.circle,
+		  color: Colors.white, 
+		  
+		),
+	      ),
+	      onTap: () {
+		_initOrders(_currentPage + 1);
+	      },
+	    )
+	  )
         : Opacity(
             opacity: 0,
             child: Row(
@@ -473,17 +493,23 @@ class _OrdersScreenState extends State<OrdersScreen> {
               ],
             ));
 
-    Widget centerPage = Container(
-      width: 40,
-      height: 40,
-      child: Center(
-          child: Text('${_currentPage + 1}',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white))),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.blue.shade400,
-      ),
+    Widget centerPage = 
+
+    MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child:
+      Container(
+	width: 40,
+	height: 40,
+	child: Center(
+	    child: Text('${_currentPage + 1}',
+		textAlign: TextAlign.center,
+		style: TextStyle(color: Colors.white))),
+	decoration: BoxDecoration(
+	  shape: BoxShape.circle,
+	  color: Colors.blue.shade400,
+	),
+      )
     );
 
     List<Widget> pageButtons = <Widget>[
