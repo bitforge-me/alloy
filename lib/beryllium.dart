@@ -411,11 +411,11 @@ class BeCryptoDeposit {
   final String address;
   final Decimal amount;
   final DateTime date;
-  final String status;
+  final bool confirmed;
   final String txid;
 
   BeCryptoDeposit(this.token, this.asset, this.address, this.amount, this.date,
-      this.status, this.txid);
+      this.confirmed, this.txid);
 
   static BeCryptoDeposit parse(Map item) {
     var amount = Decimal.parse(item['amount']);
@@ -453,6 +453,78 @@ class BeCryptoDepositsResult {
     var total = json['total'];
     return BeCryptoDepositsResult(
         deposits, offset, limit, total, BeError.none());
+  }
+}
+
+class BeCryptoWithdrawal {
+  final String token;
+  final String asset;
+  final DateTime date;
+  final Decimal amount;
+  final String recipient;
+  final String? txid;
+  final String status;
+
+  BeCryptoWithdrawal(this.token, this.asset, this.date, this.amount,
+      this.recipient, this.txid, this.status);
+
+  static BeCryptoWithdrawal parse(Map item) {
+    var amount = Decimal.parse(item['amount_dec']);
+    var date = DateTime.parse(item['date']);
+    return BeCryptoWithdrawal(item['token'], item['asset'], date, amount,
+        item['recipient'], item['txid'], item['status']);
+  }
+}
+
+class BeCryptoWithdrawalResult {
+  final BeCryptoWithdrawal? withdrawal;
+  final BeError error;
+
+  BeCryptoWithdrawalResult(this.withdrawal, this.error);
+
+  static BeCryptoWithdrawalResult network() {
+    return BeCryptoWithdrawalResult(null, BeError.network());
+  }
+
+  static BeCryptoWithdrawalResult auth(String msg) {
+    return BeCryptoWithdrawalResult(null, BeError.auth(msg));
+  }
+
+  static BeCryptoWithdrawalResult parse(String data) {
+    var json = jsonDecode(data);
+    return BeCryptoWithdrawalResult(
+        BeCryptoWithdrawal.parse(json['withdrawal']), BeError.none());
+  }
+}
+
+class BeCryptoWithdrawalsResult {
+  final List<BeCryptoWithdrawal> withdrawals;
+  final int offset;
+  final int limit;
+  final int total;
+  final BeError error;
+
+  BeCryptoWithdrawalsResult(
+      this.withdrawals, this.offset, this.limit, this.total, this.error);
+
+  static BeCryptoWithdrawalsResult network() {
+    return BeCryptoWithdrawalsResult([], 0, 0, 0, BeError.network());
+  }
+
+  static BeCryptoWithdrawalsResult auth(String msg) {
+    return BeCryptoWithdrawalsResult([], 0, 0, 0, BeError.auth(msg));
+  }
+
+  static BeCryptoWithdrawalsResult parse(String data) {
+    var json = jsonDecode(data);
+    List<BeCryptoWithdrawal> withdrawals = [];
+    for (var item in json['withdrawals'])
+      withdrawals.add(BeCryptoWithdrawal.parse(item));
+    var offset = json['offset'];
+    var limit = json['limit'];
+    var total = json['total'];
+    return BeCryptoWithdrawalsResult(
+        withdrawals, offset, limit, total, BeError.none());
   }
 }
 
@@ -524,6 +596,77 @@ class BeFiatDepositsResult {
     var limit = json['limit'];
     var total = json['total'];
     return BeFiatDepositsResult(deposits, offset, limit, total, BeError.none());
+  }
+}
+
+class BeFiatWithdrawal {
+  final String token;
+  final String asset;
+  final DateTime date;
+  final Decimal amount;
+  final String recipient;
+  final String status;
+
+  BeFiatWithdrawal(this.token, this.asset, this.date, this.amount,
+      this.recipient, this.status);
+
+  static BeFiatWithdrawal parse(Map item) {
+    var amount = Decimal.parse(item['amount_dec']);
+    var date = DateTime.parse(item['date']);
+    return BeFiatWithdrawal(item['token'], item['asset'], date, amount,
+        item['recipient'], item['status']);
+  }
+}
+
+class BeFiatWithdrawalResult {
+  final BeFiatWithdrawal? withdrawal;
+  final BeError error;
+
+  BeFiatWithdrawalResult(this.withdrawal, this.error);
+
+  static BeFiatWithdrawalResult network() {
+    return BeFiatWithdrawalResult(null, BeError.network());
+  }
+
+  static BeFiatWithdrawalResult auth(String msg) {
+    return BeFiatWithdrawalResult(null, BeError.auth(msg));
+  }
+
+  static BeFiatWithdrawalResult parse(String data) {
+    var json = jsonDecode(data);
+    return BeFiatWithdrawalResult(
+        BeFiatWithdrawal.parse(json['withdrawal']), BeError.none());
+  }
+}
+
+class BeFiatWithdrawalsResult {
+  final List<BeFiatWithdrawal> withdrawals;
+  final int offset;
+  final int limit;
+  final int total;
+  final BeError error;
+
+  BeFiatWithdrawalsResult(
+      this.withdrawals, this.offset, this.limit, this.total, this.error);
+
+  static BeFiatWithdrawalsResult network() {
+    return BeFiatWithdrawalsResult([], 0, 0, 0, BeError.network());
+  }
+
+  static BeFiatWithdrawalsResult auth(String msg) {
+    return BeFiatWithdrawalsResult([], 0, 0, 0, BeError.auth(msg));
+  }
+
+  static BeFiatWithdrawalsResult parse(String data) {
+    var json = jsonDecode(data);
+    List<BeFiatWithdrawal> withdrawals = [];
+    for (var item in json['withdrawals'])
+      withdrawals.add(BeFiatWithdrawal.parse(item));
+    var offset = json['offset'];
+    var limit = json['limit'];
+    var total = json['total'];
+    return BeFiatWithdrawalsResult(
+        withdrawals, offset, limit, total, BeError.none());
   }
 }
 
@@ -1176,6 +1319,62 @@ Future<BeCryptoDepositsResult> beCryptoDeposits(
   return BeCryptoDepositsResult.network();
 }
 
+Future<BeCryptoWithdrawalResult> beCryptoWithdrawalCreate(
+    String asset, Decimal amount, String recipient) async {
+  var baseUrl = await _server();
+  if (baseUrl == null) return BeCryptoWithdrawalResult.network();
+  var url = baseUrl + "crypto_withdrawal_create";
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = nextNonce();
+  var body = jsonEncode({
+    "api_key": apikey,
+    "nonce": nonce,
+    "asset": asset,
+    "amount_dec": amount.toString(),
+    "recipient": recipient
+  });
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null) return BeCryptoWithdrawalResult.network();
+  if (response.statusCode == 200) {
+    return BeCryptoWithdrawalResult.parse(response.body);
+  } else if (response.statusCode == 400)
+    return BeCryptoWithdrawalResult.auth(response.body);
+  print(response.statusCode);
+  return BeCryptoWithdrawalResult.network();
+}
+
+Future<BeCryptoWithdrawalsResult> beCryptoWithdrawals(
+    String asset, int offset, int limit) async {
+  var baseUrl = await _server();
+  if (baseUrl == null) return BeCryptoWithdrawalsResult.network();
+  var url = baseUrl + "crypto_withdrawals";
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = nextNonce();
+  var body = jsonEncode({
+    "api_key": apikey,
+    "nonce": nonce,
+    "asset": asset,
+    "offset": offset,
+    "limit": limit
+  });
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null) return BeCryptoWithdrawalsResult.network();
+  if (response.statusCode == 200) {
+    return BeCryptoWithdrawalsResult.parse(response.body);
+  } else if (response.statusCode == 400)
+    return BeCryptoWithdrawalsResult.auth(response.body);
+  print(response.statusCode);
+  return BeCryptoWithdrawalsResult.network();
+}
+
 Future<BeFiatDepositResult> beFiatDepositCreate(
     String asset, Decimal amount) async {
   var baseUrl = await _server();
@@ -1229,6 +1428,62 @@ Future<BeFiatDepositsResult> beFiatDeposits(
     return BeFiatDepositsResult.auth(response.body);
   print(response.statusCode);
   return BeFiatDepositsResult.network();
+}
+
+Future<BeFiatWithdrawalResult> beFiatWithdrawalCreate(
+    String asset, Decimal amount, String recipient) async {
+  var baseUrl = await _server();
+  if (baseUrl == null) return BeFiatWithdrawalResult.network();
+  var url = baseUrl + "fiat_withdrawal_create";
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = nextNonce();
+  var body = jsonEncode({
+    "api_key": apikey,
+    "nonce": nonce,
+    "asset": asset,
+    "amount_dec": amount.toString(),
+    "recipient": recipient
+  });
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null) return BeFiatWithdrawalResult.network();
+  if (response.statusCode == 200) {
+    return BeFiatWithdrawalResult.parse(response.body);
+  } else if (response.statusCode == 400)
+    return BeFiatWithdrawalResult.auth(response.body);
+  print(response.statusCode);
+  return BeFiatWithdrawalResult.network();
+}
+
+Future<BeFiatWithdrawalsResult> beFiatWithdrawals(
+    String asset, int offset, int limit) async {
+  var baseUrl = await _server();
+  if (baseUrl == null) return BeFiatWithdrawalsResult.network();
+  var url = baseUrl + "fiat_withdrawals";
+  var apikey = await Prefs.beApiKeyGet();
+  var apisecret = await Prefs.beApiSecretGet();
+  checkApiKey(apikey, apisecret);
+  var nonce = nextNonce();
+  var body = jsonEncode({
+    "api_key": apikey,
+    "nonce": nonce,
+    "asset": asset,
+    "offset": offset,
+    "limit": limit
+  });
+  var sig = createHmacSig(apisecret!, body);
+  var response =
+      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
+  if (response == null) return BeFiatWithdrawalsResult.network();
+  if (response.statusCode == 200) {
+    return BeFiatWithdrawalsResult.parse(response.body);
+  } else if (response.statusCode == 400)
+    return BeFiatWithdrawalsResult.auth(response.body);
+  print(response.statusCode);
+  return BeFiatWithdrawalsResult.network();
 }
 
 Future<BeAddressBookResult> beAddressBook(String asset) async {

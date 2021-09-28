@@ -1,0 +1,432 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:decimal/decimal.dart';
+
+import 'package:zapdart/utils.dart';
+import 'package:zapdart/widgets.dart';
+
+import 'beryllium.dart';
+import 'websocket.dart';
+import 'utils.dart';
+import 'assets.dart';
+import 'paginator.dart';
+
+class WithdrawalSelectScreen extends StatefulWidget {
+  final List<BeAsset> assets;
+  final Websocket websocket;
+
+  WithdrawalSelectScreen(this.assets, this.websocket);
+
+  @override
+  State<WithdrawalSelectScreen> createState() => _WithdrawalSelectScreenState();
+}
+
+class _WithdrawalSelectScreenState extends State<WithdrawalSelectScreen> {
+  Future<void> _assetTap(BeAsset asset) async {
+    if (assetIsCrypto(asset.symbol))
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  CryptoWithdrawalsScreen(asset, widget.websocket)));
+    else
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  FiatWithdrawalsScreen(asset, widget.websocket)));
+  }
+
+  Widget _listItem(BuildContext context, int n) {
+    var asset = widget.assets[n];
+    return ListTile(
+      title: Text('${asset.symbol}'),
+      leading: assetLogo(asset.symbol),
+      onTap: () => _assetTap(asset),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Withdrawals'),
+      ),
+      body: ListView.builder(
+          itemBuilder: _listItem, itemCount: widget.assets.length),
+    );
+  }
+}
+
+class CryptoWithdrawalsScreen extends StatefulWidget {
+  final BeAsset asset;
+  final Websocket websocket;
+
+  CryptoWithdrawalsScreen(this.asset, this.websocket);
+
+  @override
+  State<CryptoWithdrawalsScreen> createState() =>
+      _CryptoWithdrawalsScreenState();
+}
+
+class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
+  List<BeCryptoWithdrawal> _withdrawals = [];
+  final int _itemsPerPage = 10;
+  int _pageNumber = 0;
+  int _pageCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.websocket.wsEvent.subscribe(_websocketEvent);
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      _initWithdrawals(0);
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.websocket.wsEvent.unsubscribe(_websocketEvent);
+  }
+
+  void _websocketEvent(WsEventArgs? args) {
+    if (args == null) return;
+    if (args.event == WebsocketEvent.cryptoWithdrawalNew) {
+      if (_pageCount == 0) {
+        _withdrawals.insert(0, BeCryptoWithdrawal.parse(jsonDecode(args.msg)));
+        if (_withdrawals.length > _itemsPerPage) _withdrawals.removeLast();
+        setState(() => _withdrawals = _withdrawals);
+      }
+    }
+  }
+
+  Future<void> _initWithdrawals(int pageNumber) async {
+    showAlertDialog(context, 'querying..');
+    var res = await beCryptoWithdrawals(
+        widget.asset.symbol, pageNumber * _itemsPerPage, _itemsPerPage);
+    Navigator.pop(context);
+    if (res.error.type == ErrorType.None) {
+      setState(() {
+        _withdrawals = res.withdrawals;
+        _pageNumber = pageNumber;
+        _pageCount = (res.total / _itemsPerPage).ceil();
+      });
+    }
+  }
+
+  Future<void> _withdrawalTap(BeCryptoWithdrawal withdrawal) async {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                CryptoWithdrawalDetailScreen(withdrawal, widget.websocket)));
+  }
+
+  Widget _listItem(BuildContext context, int n) {
+    var withdrawal = _withdrawals[n];
+    return ListTile(
+      title: Text(
+          '${assetFormat(withdrawal.asset, withdrawal.amount)} ${withdrawal.asset} - ${withdrawal.status.toUpperCase()}'),
+      onTap: () => _withdrawalTap(withdrawal),
+    );
+  }
+
+  Future<void> _actionButtonTap() async {
+    // TODO - use proper form
+    var amountStr = await askString(context,
+        'How much ${widget.asset.symbol} do you want to withdrawal?', '');
+    if (amountStr == null) return;
+    var amount = Decimal.tryParse(amountStr);
+    if (amount == null) {
+      flushbarMsg(context, 'invalid amount', category: MessageCategory.Warning);
+      return;
+    }
+    // TODO - use address book
+    var recipient = await askString(context, 'What address?', '');
+    if (recipient == null) return;
+    showAlertDialog(context, 'querying..');
+    var res =
+        await beCryptoWithdrawalCreate(widget.asset.symbol, amount, recipient);
+    Navigator.pop(context);
+    // TODO - show error
+    if (res.error.type == ErrorType.None && res.withdrawal != null)
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CryptoWithdrawalDetailScreen(
+                  res.withdrawal!, widget.websocket)));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('${widget.asset.symbol} Withdrawals'),
+          actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
+        ),
+        body: ListView.builder(
+            itemBuilder: _listItem, itemCount: _withdrawals.length),
+        bottomNavigationBar: _pageCount > 0
+            ? Paginator(_pageCount, _pageNumber, (n) => _initWithdrawals(n))
+            : null,
+        floatingActionButton: FloatingActionButton(
+            child: const Icon(Icons.add), onPressed: _actionButtonTap));
+  }
+}
+
+class CryptoWithdrawalDetailScreen extends StatefulWidget {
+  final BeCryptoWithdrawal withdrawal;
+  final Websocket websocket;
+
+  CryptoWithdrawalDetailScreen(this.withdrawal, this.websocket);
+
+  @override
+  State<CryptoWithdrawalDetailScreen> createState() =>
+      _CryptoWithdrawalDetailScreenState(withdrawal);
+}
+
+class _CryptoWithdrawalDetailScreenState
+    extends State<CryptoWithdrawalDetailScreen> {
+  BeCryptoWithdrawal _withdrawal;
+  var _testnet = false;
+
+  _CryptoWithdrawalDetailScreenState(this._withdrawal);
+
+  @override
+  void initState() {
+    super.initState();
+    widget.websocket.wsEvent.subscribe(_websocketEvent);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.websocket.wsEvent.unsubscribe(_websocketEvent);
+  }
+
+  void _websocketEvent(WsEventArgs? args) {
+    if (args == null) return;
+    if (args.event == WebsocketEvent.cryptoWithdrawalUpdate) {
+      var newWithdrawal = BeCryptoWithdrawal.parse(jsonDecode(args.msg));
+      if (_withdrawal.token == newWithdrawal.token) {
+        setState(() => _withdrawal = newWithdrawal);
+        flushbarMsg(context, 'withdrawal updated ${newWithdrawal.token}');
+      }
+    }
+  }
+
+  void _addrLaunch() {
+    var url = addressBlockExplorer(
+        _withdrawal.asset, _testnet, _withdrawal.recipient);
+    if (url == null) return;
+    urlLaunch(url);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Withdrawal ${_withdrawal.asset}'),
+          actions: [assetLogo(_withdrawal.asset, margin: EdgeInsets.all(10))],
+        ),
+        body: ListView(children: [
+          ListTile(
+              title: Text('Amount'),
+              subtitle: Text(
+                  '${assetFormat(_withdrawal.asset, _withdrawal.amount)} ${_withdrawal.asset} - ${_withdrawal.status}')),
+          ListTile(title: Text('Date'), subtitle: Text('${_withdrawal.date}')),
+          ListTile(
+              title: Text('Address'),
+              subtitle: Text('${_withdrawal.recipient}'),
+              onTap: _addrLaunch),
+          ListTile(
+              title: Text('Transaction Id'),
+              subtitle: Text('${_withdrawal.txid}')),
+          ListTile(
+              title: Text('Status'),
+              subtitle: Text('${_withdrawal.status.toUpperCase()}')),
+        ]));
+  }
+}
+
+class FiatWithdrawalsScreen extends StatefulWidget {
+  final BeAsset asset;
+  final Websocket websocket;
+
+  FiatWithdrawalsScreen(this.asset, this.websocket);
+
+  @override
+  State<FiatWithdrawalsScreen> createState() => _FiatWithdrawalsScreenState();
+}
+
+class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
+  List<BeFiatWithdrawal> _withdrawals = [];
+  final int _itemsPerPage = 10;
+  int _pageNumber = 0;
+  int _pageCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.websocket.wsEvent.subscribe(_websocketEvent);
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      _initWithdrawals(0);
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.websocket.wsEvent.unsubscribe(_websocketEvent);
+  }
+
+  void _websocketEvent(WsEventArgs? args) {
+    if (args == null) return;
+    if (args.event == WebsocketEvent.fiatWithdrawalNew) {
+      if (_pageCount == 0) {
+        _withdrawals.insert(0, BeFiatWithdrawal.parse(jsonDecode(args.msg)));
+        if (_withdrawals.length > _itemsPerPage) _withdrawals.removeLast();
+        setState(() => _withdrawals = _withdrawals);
+      }
+    }
+  }
+
+  Future<void> _initWithdrawals(int pageNumber) async {
+    showAlertDialog(context, 'querying..');
+    var res = await beFiatWithdrawals(
+        widget.asset.symbol, pageNumber * _itemsPerPage, _itemsPerPage);
+    Navigator.pop(context);
+    if (res.error.type == ErrorType.None) {
+      setState(() {
+        _withdrawals = res.withdrawals;
+        _pageNumber = pageNumber;
+        _pageCount = (res.total / _itemsPerPage).ceil();
+      });
+    }
+  }
+
+  Future<void> _withdrawalTap(BeFiatWithdrawal withdrawal) async {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                FiatWithdrawalDetailScreen(withdrawal, widget.websocket)));
+  }
+
+  Widget _listItem(BuildContext context, int n) {
+    var withdrawal = _withdrawals[n];
+    return ListTile(
+      title: Text(
+          '${assetFormat(withdrawal.asset, withdrawal.amount)} ${withdrawal.asset} - ${withdrawal.status.toUpperCase()}'),
+      onTap: () => _withdrawalTap(withdrawal),
+    );
+  }
+
+  Future<void> _actionButtonTap() async {
+    // TODO - use proper form
+    var amountStr = await askString(context,
+        'How much ${widget.asset.symbol} do you want to withdrawal?', '');
+    if (amountStr == null) return;
+    var amount = Decimal.tryParse(amountStr);
+    if (amount == null) {
+      flushbarMsg(context, 'invalid amount', category: MessageCategory.Warning);
+      return;
+    }
+    // TODO - use address book
+    var recipient = await askString(context, 'What bank account?', '');
+    if (recipient == null) return;
+    showAlertDialog(context, 'querying..');
+    var res =
+        await beFiatWithdrawalCreate(widget.asset.symbol, amount, recipient);
+    Navigator.pop(context);
+    // TODO - show error
+    if (res.error.type == ErrorType.None && res.withdrawal != null)
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => FiatWithdrawalDetailScreen(
+                  res.withdrawal!, widget.websocket)));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('${widget.asset.symbol} Withdrawals'),
+          actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
+        ),
+        body: ListView.builder(
+            itemBuilder: _listItem, itemCount: _withdrawals.length),
+        bottomNavigationBar: _pageCount > 0
+            ? Paginator(_pageCount, _pageNumber, (n) => _initWithdrawals(n))
+            : null,
+        floatingActionButton: FloatingActionButton(
+            child: const Icon(Icons.add), onPressed: _actionButtonTap));
+  }
+}
+
+class FiatWithdrawalDetailScreen extends StatefulWidget {
+  final BeFiatWithdrawal withdrawal;
+  final Websocket websocket;
+
+  FiatWithdrawalDetailScreen(this.withdrawal, this.websocket);
+
+  @override
+  State<FiatWithdrawalDetailScreen> createState() =>
+      _FiatWithdrawalDetailScreenState(withdrawal);
+}
+
+class _FiatWithdrawalDetailScreenState
+    extends State<FiatWithdrawalDetailScreen> {
+  BeFiatWithdrawal _withdrawal;
+
+  _FiatWithdrawalDetailScreenState(this._withdrawal);
+
+  @override
+  void initState() {
+    super.initState();
+    widget.websocket.wsEvent.subscribe(_websocketEvent);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.websocket.wsEvent.unsubscribe(_websocketEvent);
+  }
+
+  void _websocketEvent(WsEventArgs? args) {
+    if (args == null) return;
+    if (args.event == WebsocketEvent.fiatWithdrawalUpdate) {
+      var newWithdrawal = BeFiatWithdrawal.parse(jsonDecode(args.msg));
+      if (_withdrawal.token == newWithdrawal.token) {
+        setState(() => _withdrawal = newWithdrawal);
+        flushbarMsg(context,
+            'withdrawal updated ${newWithdrawal.token} - ${newWithdrawal.status.toUpperCase()}');
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Withdrawal ${_withdrawal.asset}'),
+          actions: [assetLogo(_withdrawal.asset, margin: EdgeInsets.all(10))],
+        ),
+        body: ListView(children: [
+          ListTile(
+              title: Text('Amount'),
+              subtitle: Text(
+                  '${assetFormat(_withdrawal.asset, _withdrawal.amount)} ${_withdrawal.asset}')),
+          ListTile(title: Text('Date'), subtitle: Text('${_withdrawal.date}')),
+          ListTile(
+              title: Text('Bank Account'),
+              subtitle: Text(_withdrawal.recipient)),
+          ListTile(
+              title: Text('Status'),
+              subtitle: Text('${_withdrawal.status.toUpperCase()}')),
+        ]));
+  }
+}

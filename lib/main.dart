@@ -19,6 +19,7 @@ import 'security.dart';
 import 'utils.dart';
 import 'balances.dart';
 import 'deposit.dart';
+import 'withdrawal.dart';
 
 void main() {
   runApp(Phoenix(child: MyApp()));
@@ -382,6 +383,18 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   DepositSelectScreen(res.assets, _websocket)));
   }
 
+  Future<void> _withdrawal() async {
+    showAlertDialog(context, 'querying..');
+    var res = await beAssets();
+    Navigator.pop(context);
+    if (res.error.type == ErrorType.None)
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  WithdrawalSelectScreen(res.assets, _websocket)));
+  }
+
   Future<void> _orders() async {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => OrdersScreen(_websocket)));
@@ -527,7 +540,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             Visibility(
               visible: _userInfo != null,
               child: RoundedButton(
-                  _deposit, ZapWhite, ZapBlue, ZapBlueGradient, 'Deposit',
+                  _deposit, ZapWhite, ZapBlue, ZapBlueGradient, 'Deposits',
+                  holePunch: true, width: 200),
+            ),
+            Visibility(
+              visible: _userInfo != null,
+              child: RoundedButton(_withdrawal, ZapWhite, ZapBlue,
+                  ZapBlueGradient, 'Withdrawals',
                   holePunch: true, width: 200),
             ),
             Visibility(

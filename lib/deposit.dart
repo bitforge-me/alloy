@@ -53,7 +53,7 @@ class _DepositSelectScreenState extends State<DepositSelectScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Deposit'),
+        title: Text('Deposits'),
       ),
       body: ListView.builder(
           itemBuilder: _listItem, itemCount: widget.assets.length),
@@ -129,7 +129,7 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
     var deposit = _deposits[n];
     return ListTile(
       title: Text(
-          '${assetFormat(deposit.asset, deposit.amount)} ${deposit.asset} - ${deposit.status.toUpperCase()}'),
+          '${assetFormat(deposit.asset, deposit.amount)} ${deposit.asset} - ${deposit.confirmed ? 'CONFIRMED' : 'PENDING'}'),
       onTap: () => _depositTap(deposit),
     );
   }
@@ -150,7 +150,7 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Deposits'),
+          title: Text('${widget.asset.symbol} Deposits'),
           actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
         ),
         body: ListView.builder(
@@ -199,7 +199,7 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
       if (_deposit.token == newDeposit.token) {
         setState(() => _deposit = newDeposit);
         flushbarMsg(context,
-            'deposit updated ${newDeposit.token} - ${newDeposit.status.toUpperCase()}');
+            'deposit updated ${newDeposit.token} - ${newDeposit.confirmed ? 'CONFIRMED' : 'PENDING'}');
       }
     }
   }
@@ -229,7 +229,8 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
               onTap: _addrLaunch),
           ListTile(
               title: Text('Status'),
-              subtitle: Text('${_deposit.status.toUpperCase()}')),
+              subtitle:
+                  Text('${_deposit.confirmed ? 'CONFIRMED' : 'PENDING'}')),
         ]));
   }
 }
@@ -374,7 +375,7 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Deposits'),
+          title: Text('${widget.asset.symbol} Deposits'),
           actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
         ),
         body: ListView.builder(

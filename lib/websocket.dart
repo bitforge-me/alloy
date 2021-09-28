@@ -15,7 +15,11 @@ enum WebsocketEvent {
   cryptoDepositNew,
   cryptoDepositUpdate,
   fiatDepositNew,
-  fiatDepositUpdate
+  fiatDepositUpdate,
+  cryptoWithdrawalNew,
+  cryptoWithdrawalUpdate,
+  fiatWithdrawalNew,
+  fiatWithdrawalUpdate
 }
 
 class WsEventArgs extends EventArgs {
@@ -54,6 +58,14 @@ class Websocket {
     if (event == 'fiat_deposit_new') wevent = WebsocketEvent.fiatDepositNew;
     if (event == 'fiat_deposit_update')
       wevent = WebsocketEvent.fiatDepositUpdate;
+    if (event == 'crypto_withdrawal_new')
+      wevent = WebsocketEvent.cryptoWithdrawalNew;
+    if (event == 'crypto_withdrawal_update')
+      wevent = WebsocketEvent.cryptoWithdrawalUpdate;
+    if (event == 'fiat_withdrawal_new')
+      wevent = WebsocketEvent.fiatWithdrawalNew;
+    if (event == 'fiat_withdrawal_update')
+      wevent = WebsocketEvent.fiatWithdrawalUpdate;
     wsEvent.broadcast(WsEventArgs(wevent, msg));
   }
 
