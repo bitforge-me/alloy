@@ -10,8 +10,6 @@ import 'package:zapdart/account_forms.dart';
 import 'config.dart';
 import 'prefs.dart';
 import 'beryllium.dart';
-import 'assets.dart';
-import 'markets.dart';
 import 'orders.dart';
 import 'websocket.dart';
 import 'profile.dart';
@@ -340,26 +338,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     _initApi();
   }
 
-  Future<void> _assets() async {
-    showAlertDialog(context, 'querying..');
-    var res = await beAssets();
-    Navigator.pop(context);
-    if (res.error.type == ErrorType.None)
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => AssetScreen(res.assets)));
-  }
-
-  Future<void> _markets() async {
-    showAlertDialog(context, 'querying..');
-    var res = await beMarkets();
-    Navigator.pop(context);
-    if (res.error.type == ErrorType.None)
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MarketScreen(res.markets, _websocket)));
-  }
-
   Future<void> _balances() async {
     showAlertDialog(context, 'querying..');
     var res = await beBalances();
@@ -467,10 +445,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               title: const Text('Security'),
               onTap: _security),
           ListTile(
-              leading: Icon(Icons.view_list),
-              title: const Text('Orders'),
-              onTap: _orders),
-          ListTile(
               leading: Icon(Icons.contact_support),
               title: const Text('Support'),
               onTap: _support),
@@ -522,13 +496,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             Visibility(
               visible: _userInfo != null,
               child: RoundedButton(
-                  _assets, ZapWhite, ZapBlue, ZapBlueGradient, 'Assets',
-                  holePunch: true, width: 200),
-            ),
-            Visibility(
-              visible: _userInfo != null,
-              child: RoundedButton(
-                  _markets, ZapWhite, ZapBlue, ZapBlueGradient, 'Markets',
+                  _orders, ZapWhite, ZapBlue, ZapBlueGradient, 'Orders',
                   holePunch: true, width: 200),
             ),
             Visibility(
