@@ -8,7 +8,7 @@ import 'package:zapdart/colors.dart';
 
 const AppTitle = 'Alloy';
 const AppLogo = 'assets/logo.png';
-const SupportUrl = 'https://support.crypto.zap.me/';
+const SupportUrl = 'https://alloy-support.zap.me/';
 
 // the default testnet value
 const TestnetDefault = false;
