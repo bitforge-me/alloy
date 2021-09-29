@@ -1320,7 +1320,11 @@ Future<BeCryptoDepositsResult> beCryptoDeposits(
 }
 
 Future<BeCryptoWithdrawalResult> beCryptoWithdrawalCreate(
-    String asset, Decimal amount, String recipient) async {
+    String asset,
+    Decimal amount,
+    String recipient,
+    bool saveRecipient,
+    String recipientDescription) async {
   var baseUrl = await _server();
   if (baseUrl == null) return BeCryptoWithdrawalResult.network();
   var url = baseUrl + "crypto_withdrawal_create";
@@ -1333,7 +1337,9 @@ Future<BeCryptoWithdrawalResult> beCryptoWithdrawalCreate(
     "nonce": nonce,
     "asset": asset,
     "amount_dec": amount.toString(),
-    "recipient": recipient
+    "recipient": recipient,
+    "save_recipient": saveRecipient,
+    "recipient_description": recipientDescription,
   });
   var sig = createHmacSig(apisecret!, body);
   var response =
@@ -1431,7 +1437,11 @@ Future<BeFiatDepositsResult> beFiatDeposits(
 }
 
 Future<BeFiatWithdrawalResult> beFiatWithdrawalCreate(
-    String asset, Decimal amount, String recipient) async {
+    String asset,
+    Decimal amount,
+    String recipient,
+    bool saveRecipient,
+    String recipientDescription) async {
   var baseUrl = await _server();
   if (baseUrl == null) return BeFiatWithdrawalResult.network();
   var url = baseUrl + "fiat_withdrawal_create";
@@ -1444,7 +1454,9 @@ Future<BeFiatWithdrawalResult> beFiatWithdrawalCreate(
     "nonce": nonce,
     "asset": asset,
     "amount_dec": amount.toString(),
-    "recipient": recipient
+    "recipient": recipient,
+    "save_recipient": saveRecipient,
+    "recipient_description": recipientDescription,
   });
   var sig = createHmacSig(apisecret!, body);
   var response =

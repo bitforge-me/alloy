@@ -5,12 +5,195 @@ import 'package:decimal/decimal.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
+import 'package:zapdart/form_ui.dart';
 
 import 'beryllium.dart';
 import 'websocket.dart';
 import 'utils.dart';
 import 'assets.dart';
 import 'paginator.dart';
+import 'markets.dart';
+import 'cryptocurrency.dart';
+
+class WithdrawalFormScreen extends StatefulWidget {
+  final BeAsset asset;
+  final Websocket websocket;
+
+  WithdrawalFormScreen(this.asset, this.websocket);
+
+  @override
+  State<WithdrawalFormScreen> createState() => _WithdrawalFormScreenState();
+}
+
+class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _amountController = TextEditingController();
+  final _withdrawalAddressController = TextEditingController();
+  final _withdrawalBankController = TextEditingController();
+  final _recipientDescriptionController = TextEditingController();
+
+  var _saveRecipient = false;
+  var _testnet = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<void> _addressBook() async {
+    var asset = widget.asset.symbol;
+    showAlertDialog(context, 'querying address book..');
+    var res = await beAddressBook(asset);
+    Navigator.pop(context);
+    if (res.error.type != ErrorType.None) return;
+    var recipient = await Navigator.push<String?>(
+        context,
+        MaterialPageRoute(
+            builder: (context) => AddressBookScreen(asset, res.entries)));
+    if (recipient == null) return;
+    if (widget.asset.isCrypto)
+      _withdrawalAddressController.text = recipient;
+    else
+      _withdrawalBankController.text = recipient;
+  }
+
+  void _updateSaveRecipient(bool? value) {
+    if (value == null) return;
+    setState(() => _saveRecipient = value);
+  }
+
+  void _withdrawalCreate() async {
+    if (_formKey.currentState == null) return;
+    if (_formKey.currentState!.validate()) {
+      if (widget.asset.isCrypto) {
+        showAlertDialog(context, 'creating withdrawal..');
+        var res = await beCryptoWithdrawalCreate(
+            widget.asset.symbol,
+            Decimal.parse(_amountController.text),
+            _withdrawalAddressController.text,
+            _saveRecipient,
+            _recipientDescriptionController.text);
+        Navigator.pop(context);
+        if (res.error.type == ErrorType.None) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CryptoWithdrawalDetailScreen(
+                      res.withdrawal!, widget.websocket)));
+        } else
+          alert(context, 'error',
+              'failed to create withdrawal (${res.error.msg})');
+      } else {
+        showAlertDialog(context, 'creating withdrawal..');
+        var res = await beFiatWithdrawalCreate(
+            widget.asset.symbol,
+            Decimal.parse(_amountController.text),
+            _withdrawalBankController.text,
+            _saveRecipient,
+            _recipientDescriptionController.text);
+        Navigator.pop(context);
+        if (res.error.type == ErrorType.None) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => FiatWithdrawalDetailScreen(
+                      res.withdrawal!, widget.websocket)));
+        } else
+          alert(context, 'error',
+              'failed to create withdrawal (${res.error.msg})');
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Create Withdrawal'),
+          actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
+        ),
+        body: Form(
+            key: _formKey,
+            child: Container(
+                padding: EdgeInsets.all(10),
+                child: Column(children: [
+                  TextFormField(
+                      controller: _amountController,
+                      decoration: InputDecoration(labelText: 'Amount'),
+                      keyboardType: TextInputType.numberWithOptions(
+                          signed: false, decimal: true),
+                      validator: (value) {
+                        if (value == null || value.isEmpty)
+                          return 'Please enter a value';
+                        var d = Decimal.tryParse(value.trim());
+                        if (d == null) return 'Invalid value';
+                        if (d <= Decimal.fromInt(0))
+                          return 'Please enter a value greater then 0';
+                        return null;
+                      }),
+                  Visibility(
+                      visible: widget.asset.isCrypto,
+                      child: TextFormField(
+                          controller: _withdrawalAddressController,
+                          decoration: InputDecoration(
+                              labelText: 'Wallet Address',
+                              suffix: IconButton(
+                                  icon: Icon(Icons.alternate_email),
+                                  tooltip: 'Address Book',
+                                  onPressed: _addressBook)),
+                          keyboardType: TextInputType.text,
+                          validator: (value) {
+                            if (value == null || value.isEmpty)
+                              return 'Please enter a value';
+                            var res = addressValidate(
+                                widget.asset.symbol, _testnet, value);
+                            if (!res.result) return res.reason;
+                            return null;
+                          })),
+                  Visibility(
+                      visible: !widget.asset.isCrypto,
+                      child: TextFormField(
+                          controller: _withdrawalBankController,
+                          decoration: InputDecoration(
+                              labelText: 'Bank Account',
+                              suffix: IconButton(
+                                  icon: Icon(Icons.alternate_email),
+                                  tooltip: 'Address Book',
+                                  onPressed: _addressBook)),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value == null || value.isEmpty)
+                              return 'Please enter a value';
+                            var res = bankValidate(value);
+                            if (!res.result) return res.reason;
+                            return null;
+                          })),
+                  CheckboxFormField(
+                      Text(widget.asset.isCrypto
+                          ? 'Save Wallet Address'
+                          : 'Save Bank Account'),
+                      _saveRecipient,
+                      onChanged: _updateSaveRecipient),
+                  Visibility(
+                      visible: _saveRecipient,
+                      child: TextFormField(
+                          controller: _recipientDescriptionController,
+                          decoration: InputDecoration(
+                              labelText: widget.asset.isCrypto
+                                  ? 'Wallet Address Description'
+                                  : 'Bank Account Description'),
+                          keyboardType: TextInputType.text,
+                          validator: (value) {
+                            if (value == null || value.isEmpty)
+                              return 'Please enter a value';
+                            return null;
+                          })),
+                  raisedButton(
+                      onPressed: _withdrawalCreate,
+                      child: Text('Create Withdrawal'))
+                ]))));
+  }
+}
 
 class WithdrawalSelectScreen extends StatefulWidget {
   final List<BeAsset> assets;
@@ -134,29 +317,11 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
   }
 
   Future<void> _actionButtonTap() async {
-    // TODO - use proper form
-    var amountStr = await askString(context,
-        'How much ${widget.asset.symbol} do you want to withdrawal?', '');
-    if (amountStr == null) return;
-    var amount = Decimal.tryParse(amountStr);
-    if (amount == null) {
-      flushbarMsg(context, 'invalid amount', category: MessageCategory.Warning);
-      return;
-    }
-    // TODO - use address book
-    var recipient = await askString(context, 'What address?', '');
-    if (recipient == null) return;
-    showAlertDialog(context, 'querying..');
-    var res =
-        await beCryptoWithdrawalCreate(widget.asset.symbol, amount, recipient);
-    Navigator.pop(context);
-    // TODO - show error
-    if (res.error.type == ErrorType.None && res.withdrawal != null)
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CryptoWithdrawalDetailScreen(
-                  res.withdrawal!, widget.websocket)));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                WithdrawalFormScreen(widget.asset, widget.websocket)));
   }
 
   @override
@@ -235,7 +400,7 @@ class _CryptoWithdrawalDetailScreenState
           ListTile(
               title: Text('Amount'),
               subtitle: Text(
-                  '${assetFormat(_withdrawal.asset, _withdrawal.amount)} ${_withdrawal.asset} - ${_withdrawal.status}')),
+                  '${assetFormat(_withdrawal.asset, _withdrawal.amount)} ${_withdrawal.asset}')),
           ListTile(title: Text('Date'), subtitle: Text('${_withdrawal.date}')),
           ListTile(
               title: Text('Address'),
@@ -325,29 +490,11 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
   }
 
   Future<void> _actionButtonTap() async {
-    // TODO - use proper form
-    var amountStr = await askString(context,
-        'How much ${widget.asset.symbol} do you want to withdrawal?', '');
-    if (amountStr == null) return;
-    var amount = Decimal.tryParse(amountStr);
-    if (amount == null) {
-      flushbarMsg(context, 'invalid amount', category: MessageCategory.Warning);
-      return;
-    }
-    // TODO - use address book
-    var recipient = await askString(context, 'What bank account?', '');
-    if (recipient == null) return;
-    showAlertDialog(context, 'querying..');
-    var res =
-        await beFiatWithdrawalCreate(widget.asset.symbol, amount, recipient);
-    Navigator.pop(context);
-    // TODO - show error
-    if (res.error.type == ErrorType.None && res.withdrawal != null)
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => FiatWithdrawalDetailScreen(
-                  res.withdrawal!, widget.websocket)));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                WithdrawalFormScreen(widget.asset, widget.websocket)));
   }
 
   @override
