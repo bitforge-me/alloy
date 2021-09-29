@@ -26,14 +26,20 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final theme = ThemeData();
     return MaterialApp(
       title: AppTitle,
-      theme: ThemeData(
-        brightness: ZapBrightness,
-        primaryColor: ZapWhite,
-        accentColor: ZapBlue,
+      theme: theme.copyWith(
+        // TODO - flutter 2.5.1 has some theme bugs which make it difficult to use
+        // a theme with a primary color of white at the moment
+        primaryColor: ZapBlue, //ZapWhite,
         textTheme: ZapTextThemer(Theme.of(context).textTheme),
         primaryTextTheme: ZapTextThemer(Theme.of(context).textTheme),
+        colorScheme: theme.colorScheme.copyWith(
+          //brightness: ZapBrightness,
+          primary: ZapBlue, //ZapWhite,
+          //secondary: ZapBlue
+        ),
       ),
       debugShowCheckedModeBanner: false,
       home: MyHomePage(title: AppTitle),
