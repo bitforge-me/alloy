@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
@@ -92,7 +93,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.userInfoUpdate) {
-      var info = UserInfo.parse(args.msg);
+      var info = UserInfo.fromJson(jsonDecode(args.msg));
       setState(() => _userInfo = info);
       flushbarMsg(context, 'user updated');
     }

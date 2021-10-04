@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:decimal/decimal.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/hmac.dart';
@@ -12,6 +13,11 @@ import 'package:zapdart/account_forms.dart';
 import 'config.dart';
 import 'prefs.dart';
 import 'utils.dart';
+
+part 'beryllium.g.dart';
+
+Decimal _decimalFromJson(input) => Decimal.parse(input);
+String _decimalToJson(input) => input.toString();
 
 Future<String?> _server() async {
   var testnet = await Prefs.testnetGet();
@@ -49,19 +55,28 @@ class BeError {
   }
 }
 
+@JsonSerializable()
 class UserInfo {
+  @JsonKey(name: 'first_name')
   final String? firstName;
+  @JsonKey(name: 'last_name')
   final String? lastName;
+  @JsonKey(name: 'mobile_number')
   final String? mobileNumber;
   final String? address;
   final String email;
   final String? photo;
+  @JsonKey(name: 'photo_type')
   final String? photoType;
   final Iterable<BePermission>? permissions;
   final Iterable<BeRole> roles;
+  @JsonKey(name: 'kyc_validated')
   final bool kycValidated;
+  @JsonKey(name: 'kyc_url')
   final String? kycUrl;
+  @JsonKey(name: 'aplyid_req_exists')
   final bool aplyidReqExists;
+  @JsonKey(name: 'tf_enabled')
   final bool tfEnabled;
 
   UserInfo(
@@ -99,35 +114,9 @@ class UserInfo {
         info.tfEnabled);
   }
 
-  static UserInfo parse(String data) {
-    var jsnObj = json.decode(data);
-    // check for permissions field because websocket events do not include this field
-    List<BePermission>? perms;
-    if (jsnObj.containsKey('permissions')) {
-      perms = [];
-      for (var permName in jsnObj['permissions'])
-        for (var perm in BePermission.values)
-          if (describeEnum(perm) == permName) perms.add(perm);
-    }
-    var roles = <BeRole>[];
-    for (var roleName in jsnObj['roles'])
-      for (var role in BeRole.values)
-        if (describeEnum(role) == roleName) roles.add(role);
-    return UserInfo(
-        jsnObj['first_name'],
-        jsnObj['last_name'],
-        jsnObj['mobile_number'],
-        jsnObj['address'],
-        jsnObj['email'],
-        jsnObj['photo'],
-        jsnObj['photo_type'],
-        perms,
-        roles,
-        jsnObj['kyc_validated'],
-        jsnObj['kyc_url'],
-        jsnObj['aplyid_req_exists'],
-        jsnObj['tf_enabled']);
-  }
+  factory UserInfo.fromJson(Map<String, dynamic> json) =>
+      _$UserInfoFromJson(json);
+  Map<String, dynamic> toJson() => _$UserInfoToJson(this);
 }
 
 class UserInfoResult {
@@ -186,6 +175,7 @@ class BeKycRequestCreateResult {
   BeKycRequestCreateResult(this.kycUrl, this.error);
 }
 
+@JsonSerializable()
 class BeTwoFactorSetup {
   final String image;
   final String key;
@@ -193,6 +183,10 @@ class BeTwoFactorSetup {
   final String username;
 
   BeTwoFactorSetup(this.image, this.key, this.issuer, this.username);
+
+  factory BeTwoFactorSetup.fromJson(Map<String, dynamic> json) =>
+      _$BeTwoFactorSetupFromJson(json);
+  Map<String, dynamic> toJson() => _$BeTwoFactorSetupToJson(this);
 }
 
 class BeTwoFactor {
@@ -212,10 +206,7 @@ class BeTwoFactorResult {
     var json = jsonDecode(data);
     var method = json['method'];
     BeTwoFactorSetup? setup;
-    if (json['setup'] != null) {
-      setup = BeTwoFactorSetup(json['setup']['image'], json['setup']['key'],
-          json['setup']['issuer'], json['setup']['username']);
-    }
+    if (json['setup'] != null) setup = BeTwoFactorSetup.fromJson(json['setup']);
     return BeTwoFactorResult(BeTwoFactor(method, setup), BeError.none());
   }
 
@@ -228,21 +219,26 @@ class BeTwoFactorResult {
   }
 }
 
+@JsonSerializable()
 class BeAsset {
   final String symbol;
   final String name;
   final int decimals;
+  @JsonKey(
+      name: 'withdraw_fee', fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal withdrawFee;
+  @JsonKey(name: 'is_crypto')
   final bool isCrypto;
 
   BeAsset(
       this.symbol, this.name, this.decimals, this.withdrawFee, this.isCrypto);
+  factory BeAsset.fromJson(Map<String, dynamic> json) =>
+      _$BeAssetFromJson(json);
+  Map<String, dynamic> toJson() => _$BeAssetToJson(this);
 
   static List<BeAsset> parseAssets(List<dynamic> assets) {
     List<BeAsset> assetList = [];
-    for (var item in assets)
-      assetList.add(BeAsset(item['symbol'], item['name'], item['decimals'],
-          Decimal.parse(item['withdraw_fee']), item['is_crypto']));
+    for (var item in assets) assetList.add(BeAsset.fromJson(item));
     return assetList;
   }
 }
@@ -259,29 +255,28 @@ class BeAssetResult {
   }
 }
 
+@JsonSerializable()
 class BeMarket {
   final String symbol;
+  @JsonKey(name: 'base_asset')
   final String baseAsset;
+  @JsonKey(name: 'quote_asset')
   final String quoteAsset;
   final int precision;
   final String status;
+  @JsonKey(name: 'min_trade')
   final String minTrade;
   final String message;
 
   BeMarket(this.symbol, this.baseAsset, this.quoteAsset, this.precision,
       this.status, this.minTrade, this.message);
+  factory BeMarket.fromJson(Map<String, dynamic> json) =>
+      _$BeMarketFromJson(json);
+  Map<String, dynamic> toJson() => _$BeMarketToJson(this);
 
   static List<BeMarket> parseMarkets(dynamic markets) {
     List<BeMarket> marketList = [];
-    for (var item in markets)
-      marketList.add(BeMarket(
-          item['symbol'],
-          item['base_asset'],
-          item['quote_asset'],
-          item['precision'],
-          item['status'],
-          item['min_trade'],
-          item['message']));
+    for (var item in markets) marketList.add(BeMarket.fromJson(item));
     return marketList;
   }
 }
@@ -298,42 +293,44 @@ class BeMarketResult {
   }
 }
 
+@JsonSerializable()
 class BeRate {
+  @JsonKey(fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal quantity;
+  @JsonKey(fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal rate;
 
   BeRate(this.quantity, this.rate);
+  factory BeRate.fromJson(Map<String, dynamic> json) => _$BeRateFromJson(json);
+  Map<String, dynamic> toJson() => _$BeRateToJson(this);
 }
 
+@JsonSerializable()
 class BeOrderbook {
   final List<BeRate> bids;
   final List<BeRate> asks;
+  @JsonKey(
+      name: 'min_order', fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal minOrder;
+  @JsonKey(
+      name: 'base_asset_withdraw_fee',
+      fromJson: _decimalFromJson,
+      toJson: _decimalToJson)
   final Decimal baseAssetWithdrawFee;
+  @JsonKey(
+      name: 'quote_asset_withdraw_fee',
+      fromJson: _decimalFromJson,
+      toJson: _decimalToJson)
   final Decimal quoteAssetWithdrawFee;
+  @JsonKey(
+      name: 'broker_fee', fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal brokerFee;
 
   BeOrderbook(this.bids, this.asks, this.minOrder, this.baseAssetWithdrawFee,
       this.quoteAssetWithdrawFee, this.brokerFee);
-
-  static BeOrderbook parse(String data) {
-    List<BeRate> bids = [];
-    List<BeRate> asks = [];
-    var json = jsonDecode(data);
-    var orderbook = json['order_book'];
-    var minOrder = Decimal.parse(json['min_order']);
-    var baseAssetWithdrawFee = Decimal.parse(json['base_asset_withdraw_fee']);
-    var quoteAssetWithdrawFee = Decimal.parse(json['quote_asset_withdraw_fee']);
-    var brokerFee = Decimal.parse(json['broker_fee']);
-    for (var item in orderbook['bids'])
-      bids.add(
-          BeRate(Decimal.parse(item['quantity']), Decimal.parse(item['rate'])));
-    for (var item in orderbook['asks'])
-      asks.add(
-          BeRate(Decimal.parse(item['quantity']), Decimal.parse(item['rate'])));
-    return BeOrderbook(bids, asks, minOrder, baseAssetWithdrawFee,
-        quoteAssetWithdrawFee, brokerFee);
-  }
+  factory BeOrderbook.fromJson(Map<String, dynamic> json) =>
+      _$BeOrderbookFromJson(json);
+  Map<String, dynamic> toJson() => _$BeOrderbookToJson(this);
 
   static BeOrderbook empty() {
     return BeOrderbook(
@@ -348,19 +345,20 @@ class BeOrderbookResult {
   BeOrderbookResult(this.orderbook, this.error);
 }
 
+@JsonSerializable()
 class BeBalance {
+  @JsonKey(name: 'symbol')
   final String asset;
   final String name;
+  @JsonKey(fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal total;
+  @JsonKey(fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal available;
 
   BeBalance(this.asset, this.name, this.total, this.available);
-
-  static BeBalance parse(Map item) {
-    var total = Decimal.parse(item['total']);
-    var available = Decimal.parse(item['available']);
-    return BeBalance(item['symbol'], item['name'], total, available);
-  }
+  factory BeBalance.fromJson(Map<String, dynamic> json) =>
+      _$BeBalanceFromJson(json);
+  Map<String, dynamic> toJson() => _$BeBalanceToJson(this);
 }
 
 class BeBalancesResult {
@@ -380,7 +378,7 @@ class BeBalancesResult {
   static BeBalancesResult parse(String data) {
     List<BeBalance> balances = [];
     for (var item in jsonDecode(data)['balances'])
-      balances.add(BeBalance.parse(item));
+      balances.add(BeBalance.fromJson(item));
     return BeBalancesResult(balances, BeError.none());
   }
 }
@@ -405,10 +403,12 @@ class BeCryptoDepositAddressResult {
   }
 }
 
+@JsonSerializable()
 class BeCryptoDeposit {
   final String token;
   final String asset;
   final String address;
+  @JsonKey(fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal amount;
   final DateTime date;
   final bool confirmed;
@@ -416,13 +416,9 @@ class BeCryptoDeposit {
 
   BeCryptoDeposit(this.token, this.asset, this.address, this.amount, this.date,
       this.confirmed, this.txid);
-
-  static BeCryptoDeposit parse(Map item) {
-    var amount = Decimal.parse(item['amount']);
-    var date = DateTime.parse(item['date']);
-    return BeCryptoDeposit(item['id'], item['symbol'], item['address'], amount,
-        date, item['status'], item['txid']);
-  }
+  factory BeCryptoDeposit.fromJson(Map<String, dynamic> json) =>
+      _$BeCryptoDepositFromJson(json);
+  Map<String, dynamic> toJson() => _$BeCryptoDepositToJson(this);
 }
 
 class BeCryptoDepositsResult {
@@ -447,7 +443,7 @@ class BeCryptoDepositsResult {
     var json = jsonDecode(data);
     List<BeCryptoDeposit> deposits = [];
     for (var item in json['deposits'])
-      deposits.add(BeCryptoDeposit.parse(item));
+      deposits.add(BeCryptoDeposit.fromJson(item));
     var offset = json['offset'];
     var limit = json['limit'];
     var total = json['total'];
@@ -456,10 +452,13 @@ class BeCryptoDepositsResult {
   }
 }
 
+@JsonSerializable()
 class BeCryptoWithdrawal {
   final String token;
   final String asset;
   final DateTime date;
+  @JsonKey(
+      name: 'amount_dec', fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal amount;
   final String recipient;
   final String? txid;
@@ -467,13 +466,9 @@ class BeCryptoWithdrawal {
 
   BeCryptoWithdrawal(this.token, this.asset, this.date, this.amount,
       this.recipient, this.txid, this.status);
-
-  static BeCryptoWithdrawal parse(Map item) {
-    var amount = Decimal.parse(item['amount_dec']);
-    var date = DateTime.parse(item['date']);
-    return BeCryptoWithdrawal(item['token'], item['asset'], date, amount,
-        item['recipient'], item['txid'], item['status']);
-  }
+  factory BeCryptoWithdrawal.fromJson(Map<String, dynamic> json) =>
+      _$BeCryptoWithdrawalFromJson(json);
+  Map<String, dynamic> toJson() => _$BeCryptoWithdrawalToJson(this);
 }
 
 class BeCryptoWithdrawalResult {
@@ -493,7 +488,7 @@ class BeCryptoWithdrawalResult {
   static BeCryptoWithdrawalResult parse(String data) {
     var json = jsonDecode(data);
     return BeCryptoWithdrawalResult(
-        BeCryptoWithdrawal.parse(json['withdrawal']), BeError.none());
+        BeCryptoWithdrawal.fromJson(json['withdrawal']), BeError.none());
   }
 }
 
@@ -519,7 +514,7 @@ class BeCryptoWithdrawalsResult {
     var json = jsonDecode(data);
     List<BeCryptoWithdrawal> withdrawals = [];
     for (var item in json['withdrawals'])
-      withdrawals.add(BeCryptoWithdrawal.parse(item));
+      withdrawals.add(BeCryptoWithdrawal.fromJson(item));
     var offset = json['offset'];
     var limit = json['limit'];
     var total = json['total'];
@@ -528,25 +523,24 @@ class BeCryptoWithdrawalsResult {
   }
 }
 
+@JsonSerializable()
 class BeFiatDeposit {
   final String token;
   final String asset;
   final DateTime date;
   final DateTime expiry;
+  @JsonKey(
+      name: 'amount_dec', fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal amount;
   final String status;
+  @JsonKey(name: 'payment_url')
   final String? paymentUrl;
 
   BeFiatDeposit(this.token, this.asset, this.date, this.expiry, this.amount,
       this.status, this.paymentUrl);
-
-  static BeFiatDeposit parse(Map item) {
-    var amount = Decimal.parse(item['amount_dec']);
-    var date = DateTime.parse(item['date']);
-    var expiry = DateTime.parse(item['expiry']);
-    return BeFiatDeposit(item['token'], item['asset'], date, expiry, amount,
-        item['status'], item['payment_url']);
-  }
+  factory BeFiatDeposit.fromJson(Map<String, dynamic> json) =>
+      _$BeFiatDepositFromJson(json);
+  Map<String, dynamic> toJson() => _$BeFiatDepositToJson(this);
 }
 
 class BeFiatDepositResult {
@@ -566,7 +560,7 @@ class BeFiatDepositResult {
   static BeFiatDepositResult parse(String data) {
     var json = jsonDecode(data);
     return BeFiatDepositResult(
-        BeFiatDeposit.parse(json['deposit']), BeError.none());
+        BeFiatDeposit.fromJson(json['deposit']), BeError.none());
   }
 }
 
@@ -591,7 +585,8 @@ class BeFiatDepositsResult {
   static BeFiatDepositsResult parse(String data) {
     var json = jsonDecode(data);
     List<BeFiatDeposit> deposits = [];
-    for (var item in json['deposits']) deposits.add(BeFiatDeposit.parse(item));
+    for (var item in json['deposits'])
+      deposits.add(BeFiatDeposit.fromJson(item));
     var offset = json['offset'];
     var limit = json['limit'];
     var total = json['total'];
@@ -599,23 +594,22 @@ class BeFiatDepositsResult {
   }
 }
 
+@JsonSerializable()
 class BeFiatWithdrawal {
   final String token;
   final String asset;
   final DateTime date;
+  @JsonKey(
+      name: 'amount_dec', fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal amount;
   final String recipient;
   final String status;
 
   BeFiatWithdrawal(this.token, this.asset, this.date, this.amount,
       this.recipient, this.status);
-
-  static BeFiatWithdrawal parse(Map item) {
-    var amount = Decimal.parse(item['amount_dec']);
-    var date = DateTime.parse(item['date']);
-    return BeFiatWithdrawal(item['token'], item['asset'], date, amount,
-        item['recipient'], item['status']);
-  }
+  factory BeFiatWithdrawal.fromJson(Map<String, dynamic> json) =>
+      _$BeFiatWithdrawalFromJson(json);
+  Map<String, dynamic> toJson() => _$BeFiatWithdrawalToJson(this);
 }
 
 class BeFiatWithdrawalResult {
@@ -635,7 +629,7 @@ class BeFiatWithdrawalResult {
   static BeFiatWithdrawalResult parse(String data) {
     var json = jsonDecode(data);
     return BeFiatWithdrawalResult(
-        BeFiatWithdrawal.parse(json['withdrawal']), BeError.none());
+        BeFiatWithdrawal.fromJson(json['withdrawal']), BeError.none());
   }
 }
 
@@ -661,7 +655,7 @@ class BeFiatWithdrawalsResult {
     var json = jsonDecode(data);
     List<BeFiatWithdrawal> withdrawals = [];
     for (var item in json['withdrawals'])
-      withdrawals.add(BeFiatWithdrawal.parse(item));
+      withdrawals.add(BeFiatWithdrawal.fromJson(item));
     var offset = json['offset'];
     var limit = json['limit'];
     var total = json['total'];
@@ -670,17 +664,16 @@ class BeFiatWithdrawalsResult {
   }
 }
 
+@JsonSerializable()
 class BeAddressBookEntry {
   final DateTime date;
   final String recipient;
   final String? description;
 
   BeAddressBookEntry(this.date, this.recipient, this.description);
-
-  static BeAddressBookEntry parse(dynamic item) {
-    return BeAddressBookEntry(
-        DateTime.parse(item['date']), item['recipient'], item['description']);
-  }
+  factory BeAddressBookEntry.fromJson(Map<String, dynamic> json) =>
+      _$BeAddressBookEntryFromJson(json);
+  Map<String, dynamic> toJson() => _$BeAddressBookEntryToJson(this);
 }
 
 class BeAddressBookResult {
@@ -693,7 +686,7 @@ class BeAddressBookResult {
     var json = jsonDecode(data);
     List<BeAddressBookEntry> entries = [];
     for (var item in json['entries'])
-      entries.add(BeAddressBookEntry.parse(item));
+      entries.add(BeAddressBookEntry.fromJson(item));
     return BeAddressBookResult(entries, BeError.none());
   }
 
@@ -746,7 +739,11 @@ class BeBrokerOrder {
   final BeMarketSide side;
   final String baseAsset;
   final String quoteAsset;
+  @JsonKey(
+      name: 'base_amount', fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal baseAmount;
+  @JsonKey(
+      name: 'quote_amount', fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal quoteAmount;
   final String recipient;
   final BeOrderStatus status;
@@ -986,7 +983,7 @@ Future<UserInfoResult> beUserInfo({String? email}) async {
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
   if (response == null) return UserInfoResult(null, BeError.network());
   if (response.statusCode == 200) {
-    var info = UserInfo.parse(response.body);
+    var info = UserInfo.fromJson(jsonDecode(response.body));
     return UserInfoResult(info, BeError.none());
   } else if (response.statusCode == 400)
     return UserInfoResult(null, BeError.auth(response.body));
@@ -1241,7 +1238,8 @@ Future<BeOrderbookResult> beOrderbook(String market) async {
   if (response == null)
     return BeOrderbookResult(BeOrderbook.empty(), BeError.network());
   if (response.statusCode == 200) {
-    return BeOrderbookResult(BeOrderbook.parse(response.body), BeError.none());
+    return BeOrderbookResult(
+        BeOrderbook.fromJson(jsonDecode(response.body)), BeError.none());
   } else if (response.statusCode == 400)
     return BeOrderbookResult(BeOrderbook.empty(), BeError.auth(response.body));
   print(response.statusCode);

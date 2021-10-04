@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'dart:convert';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
@@ -51,7 +52,7 @@ class _VerifyUserScreenState extends State<VerifyUserScreen> {
     if (!_processWebsocketUpdates) return;
     if (args == null) return;
     if (args.event == WebsocketEvent.userInfoUpdate) {
-      var newUserInfo = UserInfo.parse(args.msg);
+      var newUserInfo = UserInfo.fromJson(jsonDecode(args.msg));
       setState(() => _userInfo = newUserInfo);
       if (newUserInfo.kycValidated) Navigator.pop(context);
     }

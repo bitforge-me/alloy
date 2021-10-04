@@ -96,7 +96,7 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
     if (args == null) return;
     if (args.event == WebsocketEvent.cryptoDepositNew) {
       if (_pageCount == 0) {
-        _deposits.insert(0, BeCryptoDeposit.parse(jsonDecode(args.msg)));
+        _deposits.insert(0, BeCryptoDeposit.fromJson(jsonDecode(args.msg)));
         if (_deposits.length > _itemsPerPage) _deposits.removeLast();
         setState(() => _deposits = _deposits);
       }
@@ -195,7 +195,7 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.cryptoDepositUpdate) {
-      var newDeposit = BeCryptoDeposit.parse(jsonDecode(args.msg));
+      var newDeposit = BeCryptoDeposit.fromJson(jsonDecode(args.msg));
       if (_deposit.token == newDeposit.token) {
         setState(() => _deposit = newDeposit);
         flushbarMsg(context,
@@ -313,7 +313,7 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
     if (args == null) return;
     if (args.event == WebsocketEvent.fiatDepositNew) {
       if (_pageCount == 0) {
-        _deposits.insert(0, BeFiatDeposit.parse(jsonDecode(args.msg)));
+        _deposits.insert(0, BeFiatDeposit.fromJson(jsonDecode(args.msg)));
         if (_deposits.length > _itemsPerPage) _deposits.removeLast();
         setState(() => _deposits = _deposits);
       }
@@ -419,7 +419,7 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.fiatDepositUpdate) {
-      var newDeposit = BeFiatDeposit.parse(jsonDecode(args.msg));
+      var newDeposit = BeFiatDeposit.fromJson(jsonDecode(args.msg));
       if (_deposit.token == newDeposit.token) {
         setState(() => _deposit = newDeposit);
         flushbarMsg(context,

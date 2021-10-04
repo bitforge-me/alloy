@@ -278,7 +278,8 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
     if (args == null) return;
     if (args.event == WebsocketEvent.cryptoWithdrawalNew) {
       if (_pageCount == 0) {
-        _withdrawals.insert(0, BeCryptoWithdrawal.parse(jsonDecode(args.msg)));
+        _withdrawals.insert(
+            0, BeCryptoWithdrawal.fromJson(jsonDecode(args.msg)));
         if (_withdrawals.length > _itemsPerPage) _withdrawals.removeLast();
         setState(() => _withdrawals = _withdrawals);
       }
@@ -374,7 +375,7 @@ class _CryptoWithdrawalDetailScreenState
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.cryptoWithdrawalUpdate) {
-      var newWithdrawal = BeCryptoWithdrawal.parse(jsonDecode(args.msg));
+      var newWithdrawal = BeCryptoWithdrawal.fromJson(jsonDecode(args.msg));
       if (_withdrawal.token == newWithdrawal.token) {
         setState(() => _withdrawal = newWithdrawal);
         flushbarMsg(context, 'withdrawal updated ${newWithdrawal.token}');
@@ -451,7 +452,7 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
     if (args == null) return;
     if (args.event == WebsocketEvent.fiatWithdrawalNew) {
       if (_pageCount == 0) {
-        _withdrawals.insert(0, BeFiatWithdrawal.parse(jsonDecode(args.msg)));
+        _withdrawals.insert(0, BeFiatWithdrawal.fromJson(jsonDecode(args.msg)));
         if (_withdrawals.length > _itemsPerPage) _withdrawals.removeLast();
         setState(() => _withdrawals = _withdrawals);
       }
@@ -546,7 +547,7 @@ class _FiatWithdrawalDetailScreenState
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.fiatWithdrawalUpdate) {
-      var newWithdrawal = BeFiatWithdrawal.parse(jsonDecode(args.msg));
+      var newWithdrawal = BeFiatWithdrawal.fromJson(jsonDecode(args.msg));
       if (_withdrawal.token == newWithdrawal.token) {
         setState(() => _withdrawal = newWithdrawal);
         flushbarMsg(context,

@@ -1,6 +1,6 @@
-import 'package:alloy/verify_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'dart:convert';
 
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
@@ -18,6 +18,7 @@ import 'utils.dart';
 import 'balances.dart';
 import 'deposit.dart';
 import 'withdrawal.dart';
+import 'verify_user.dart';
 
 void main() {
   runApp(Phoenix(child: MyApp()));
@@ -132,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.userInfoUpdate) {
-      var info = UserInfo.parse(args.msg);
+      var info = UserInfo.fromJson(jsonDecode(args.msg));
       if (info.email != _userInfo?.email)
         _websocket.connect(); // reconnect websocket
       setState(() {
