@@ -47,7 +47,7 @@ class _OrderScreenState extends State<OrderScreen> {
     if (!processOrderUpdates) return;
     if (args == null) return;
     if (args.event == WebsocketEvent.brokerOrderUpdate) {
-      var newOrder = BeBrokerOrder.parse(jsonDecode(args.msg));
+      var newOrder = BeBrokerOrder.fromJson(jsonDecode(args.msg));
       if (_order.token == newOrder.token) {
         setState(() => _order = newOrder);
         flushbarMsg(context,
@@ -75,10 +75,9 @@ class _OrderScreenState extends State<OrderScreen> {
     var res = await beOrderAccept(_order.token);
     Navigator.pop(context);
     processOrderUpdates = true;
-    if (res.error.type == ErrorType.None)
-      setState(() => _order = res.order);
-    else
-      alert(context, 'error', 'failed to accept order (${res.error.msg})');
+    res.when((order) => setState(() => _order = order),
+        error: (err) => alert(
+            context, 'error', 'failed to accept order (${BeError2.msg(err)})'));
   }
 
   Future<void> _update() async {
@@ -87,11 +86,9 @@ class _OrderScreenState extends State<OrderScreen> {
     var res = await beOrderStatus(_order.token);
     Navigator.pop(context);
     processOrderUpdates = true;
-    if (res.error.type == ErrorType.None)
-      setState(() => _order = res.order);
-    else
-      alert(
-          context, 'error', 'failed to update order status (${res.error.msg})');
+    res.when((order) => setState(() => _order = order),
+        error: (err) => alert(
+            context, 'error', 'failed to update order (${BeError2.msg(err)})'));
   }
 
   @override
@@ -186,19 +183,20 @@ class _OrdersScreenState extends State<OrdersScreen> {
     showAlertDialog(context, 'querying..');
     var res = await beOrderList(pageNumber * _itemsPerPage, _itemsPerPage);
     Navigator.pop(context);
-    if (res.error.type == ErrorType.None) {
-      setState(() {
-        _orders = res.orders;
-        _pageNumber = pageNumber;
-        _pageCount = (res.total / _itemsPerPage).ceil();
-      });
-    }
+    res.when(
+        (orders, offset, limit, total) => setState(() {
+              _orders = orders;
+              _pageNumber = pageNumber;
+              _pageCount = (total / _itemsPerPage).ceil();
+            }),
+        error: (err) => alert(
+            context, 'error', 'failed to query orders (${BeError2.msg(err)})'));
   }
 
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.brokerOrderNew) {
-      var newOrder = BeBrokerOrder.parse(jsonDecode(args.msg));
+      var newOrder = BeBrokerOrder.fromJson(jsonDecode(args.msg));
       if (_pageCount == 0) {
         _orders.insert(0, newOrder);
         if (_orders.length > _itemsPerPage) _orders.removeLast();
@@ -209,7 +207,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     }
     if (args.event == WebsocketEvent.brokerOrderUpdate) {
       var newOrders = <BeBrokerOrder>[];
-      var newOrder = BeBrokerOrder.parse(jsonDecode(args.msg));
+      var newOrder = BeBrokerOrder.fromJson(jsonDecode(args.msg));
       for (var order in _orders)
         if (order.token == newOrder.token)
           newOrders.add(newOrder);
@@ -250,12 +248,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
     showAlertDialog(context, 'querying..');
     var res = await beMarkets();
     Navigator.pop(context);
-    if (res.error.type == ErrorType.None)
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  MarketScreen(res.markets, widget.websocket)));
+    res.when(
+        (markets) => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MarketScreen(markets, widget.websocket))),
+        error: (err) => flushbarMsg(context, 'failed to query markets',
+            category: MessageCategory.Warning));
   }
 
   @override

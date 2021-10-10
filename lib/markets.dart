@@ -228,16 +228,19 @@ class _QuoteScreenState extends State<QuoteScreen> {
     showAlertDialog(context, 'querying address book..');
     var res = await beAddressBook(asset);
     Navigator.pop(context);
-    if (res.error.type != ErrorType.None) return;
-    var recipient = await Navigator.push<String?>(
-        context,
-        MaterialPageRoute(
-            builder: (context) => AddressBookScreen(asset, res.entries)));
-    if (recipient == null) return;
-    if (_side == BeMarketSide.bid)
-      _withdrawalAddressController.text = recipient;
-    else
-      _withdrawalBankController.text = recipient;
+    res.when((entries) async {
+      var recipient = await Navigator.push<String?>(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AddressBookScreen(asset, entries)));
+      if (recipient == null) return;
+      if (_side == BeMarketSide.bid)
+        _withdrawalAddressController.text = recipient;
+      else
+        _withdrawalBankController.text = recipient;
+    },
+        error: (err) => alert(context, 'error',
+            'failed to get address book (${BeError2.msg(err)})'));
   }
 
   void _updateSaveRecipient(bool? value) {
@@ -252,14 +255,13 @@ class _QuoteScreenState extends State<QuoteScreen> {
       var res = await beOrderCreate(widget.market.symbol, _side, _amount,
           _recipient, _saveRecipient, _recipientDescriptionController.text);
       Navigator.pop(context);
-      if (res.error.type == ErrorType.None) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    OrderScreen(res.order, widget.websocket)));
-      } else
-        alert(context, 'error', 'failed to create order (${res.error.msg})');
+      res.when(
+          (order) => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => OrderScreen(order, widget.websocket))),
+          error: (err) => alert(context, 'error',
+              'failed to create order (${BeError2.msg(err)})'));
     }
   }
 
@@ -405,13 +407,14 @@ class _MarketScreenState extends State<MarketScreen> {
     showAlertDialog(context, 'querying..');
     var res = await beOrderbook(market.symbol);
     Navigator.pop(context);
-    if (res.error.type == ErrorType.None) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  QuoteScreen(market, res.orderbook, widget.websocket)));
-    }
+    res.when(
+        (orderbook) => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    QuoteScreen(market, orderbook, widget.websocket))),
+        error: (err) => flushbarMsg(context, 'failed to get orderbook',
+            category: MessageCategory.Warning));
   }
 
   Widget _listItem(BuildContext context, int n) {

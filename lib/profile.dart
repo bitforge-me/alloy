@@ -81,12 +81,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         showAlertDialog(context, 'updating photo..');
         var result = await beUserUpdatePhoto(newReg.photo, newReg.photoType);
         Navigator.of(context).pop();
-        if (result.type == ErrorType.None) {
+        result.when(() {
           flushbarMsg(context, 'update photo completed');
           setState(() => _userInfo = userInfo(newReg));
-        } else
-          flushbarMsg(context, 'failed to update photo',
-              category: MessageCategory.Warning);
+        },
+            error: (err) => flushbarMsg(context, 'failed to update photo',
+                category: MessageCategory.Warning));
       }
     }
   }
@@ -100,13 +100,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         showAlertDialog(context, 'sending update email request..');
         var result = await beUserUpdateEmail(newEmail);
         Navigator.of(context).pop();
-        if (result.type == ErrorType.None)
-          flushbarMsg(context, 'update email request created');
-        else {
-          flushbarMsg(context, 'failed to create update email request',
-              category: MessageCategory.Warning);
-          return;
-        }
+        result.when(() => flushbarMsg(context, 'update email request created'),
+            error: (err) => flushbarMsg(
+                context, 'failed to create update email request',
+                category: MessageCategory.Warning));
       }
     }
   }
@@ -131,11 +128,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         var result = await beUserUpdatePassword(
             newReg.currentPassword, newReg.newPassword);
         Navigator.of(context).pop();
-        if (result.type == ErrorType.None) {
-          flushbarMsg(context, 'update password completed');
-        } else
-          flushbarMsg(context, 'failed to update password',
-              category: MessageCategory.Warning);
+        result.when(() => flushbarMsg(context, 'update password completed'),
+            error: (err) => flushbarMsg(context, 'failed to update password',
+                category: MessageCategory.Warning));
       }
     }
   }
@@ -146,11 +141,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     showAlertDialog(context, 'requesting password reset..');
     var result = await beUserResetPassword();
     Navigator.of(context).pop();
-    if (result.type == ErrorType.None) {
-      flushbarMsg(context, 'password reset request sent (check email)');
-    } else
-      flushbarMsg(context, 'failed to reset password',
-          category: MessageCategory.Warning);
+    result.when(
+        () => flushbarMsg(context, 'password reset request sent (check email)'),
+        error: (err) => flushbarMsg(context, 'failed to reset password',
+            category: MessageCategory.Warning));
   }
 
   @override

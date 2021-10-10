@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:decimal/decimal.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/hmac.dart';
@@ -15,6 +16,7 @@ import 'prefs.dart';
 import 'utils.dart';
 
 part 'beryllium.g.dart';
+part 'beryllium.freezed.dart';
 
 Decimal _decimalFromJson(input) => Decimal.parse(input);
 String _decimalToJson(input) => input.toString();
@@ -26,33 +28,35 @@ Future<String?> _server() async {
   return baseUrl;
 }
 
-enum ErrorType { None, Network, Auth }
-
 enum BePermission { receive, balance, history, transfer, issue }
 enum BeRole { admin, proposer, authorizer }
 
-class BeError {
-  final ErrorType type;
-  final String msg;
-
-  BeError(this.type, this.msg);
-
-  static BeError none() {
-    return BeError(ErrorType.None, 'no error');
-  }
-
-  static BeError network() {
-    return BeError(ErrorType.Network, 'network error');
-  }
-
-  static BeError auth(String msg) {
+@freezed
+class BeError2 with _$BeError2 {
+  const factory BeError2.network() = Network;
+  const factory BeError2.auth(String message) = Auth;
+  // helper to parse the '{"message": "<MSG>"}' json if exists
+  static authParseMsg(String message) {
     try {
-      var json = jsonDecode(msg);
-      return BeError(ErrorType.Auth, json['message']);
+      var json = jsonDecode(message);
+      return BeError2.auth(json['message']);
     } catch (_) {
-      return BeError(ErrorType.Auth, msg);
+      return BeError2.auth(message);
     }
   }
+
+  static String msg(BeError2 err) {
+    return err.when<String>(network: () => 'network error', auth: (msg) => msg);
+  }
+}
+
+@freezed
+class ErrorResult with _$ErrorResult {
+  const factory ErrorResult() = _ErrorResult;
+  const factory ErrorResult.error(BeError2 err) = _ErrorResultErr;
+  static network() => ErrorResult.error(BeError2.network());
+  static auth(String message) =>
+      ErrorResult.error(BeError2.authParseMsg(message));
 }
 
 @JsonSerializable()
@@ -119,31 +123,23 @@ class UserInfo {
   Map<String, dynamic> toJson() => _$UserInfoToJson(this);
 }
 
-class UserInfoResult {
-  final UserInfo? info;
-  final BeError error;
-
-  UserInfoResult(this.info, this.error);
+@freezed
+class UserInfoResult with _$UserInfoResult {
+  const factory UserInfoResult(UserInfo info) = _UserInfo;
+  const factory UserInfoResult.error(BeError2 err) = _UserInfoErr;
 }
 
-class BeTwoFactorEnabledResult {
-  final bool? tfEnabled;
-  final BeError error;
-
-  BeTwoFactorEnabledResult(this.tfEnabled, this.error);
+@freezed
+class BeTwoFactorEnabledResult with _$BeTwoFactorEnabledResult {
+  const factory BeTwoFactorEnabledResult(bool enabled) =
+      _BeTwoFactorEnabledResult;
+  const factory BeTwoFactorEnabledResult.error(BeError2 err) =
+      _BeTwoFactorEnabledResultErr;
 
   static BeTwoFactorEnabledResult parse(String data) {
     var json = jsonDecode(data);
     var tfEnabled = json['tf_enabled'];
-    return BeTwoFactorEnabledResult(tfEnabled, BeError.none());
-  }
-
-  static BeTwoFactorEnabledResult network() {
-    return BeTwoFactorEnabledResult(null, BeError.network());
-  }
-
-  static BeTwoFactorEnabledResult auth(String msg) {
-    return BeTwoFactorEnabledResult(null, BeError.auth(msg));
+    return BeTwoFactorEnabledResult(tfEnabled);
   }
 }
 
@@ -154,25 +150,25 @@ class BeApiKey {
   BeApiKey(this.token, this.secret);
 }
 
-class BeApiKeyResult {
-  final BeApiKey? apikey;
-  final BeError error;
-
-  BeApiKeyResult(this.apikey, this.error);
+@freezed
+class BeApiKeyResult with _$BeApiKeyResult {
+  const factory BeApiKeyResult(BeApiKey apikey) = _BeApiKeyResult;
+  const factory BeApiKeyResult.error(BeError2 err) = _BeApiKeyResultErr;
 }
 
-class BeApiKeyRequestResult {
-  final String? token;
-  final BeError error;
-
-  BeApiKeyRequestResult(this.token, this.error);
+@freezed
+class BeApiKeyRequestResult with _$BeApiKeyRequestResult {
+  const factory BeApiKeyRequestResult(String token) = _BeApiKeyRequestResult;
+  const factory BeApiKeyRequestResult.error(BeError2 err) =
+      _BeApiKeyRequestResulttErr;
 }
 
-class BeKycRequestCreateResult {
-  final String? kycUrl;
-  final BeError error;
-
-  BeKycRequestCreateResult(this.kycUrl, this.error);
+@freezed
+class BeKycRequestCreateResult with _$BeKycRequestCreateResult {
+  const factory BeKycRequestCreateResult(String kycUrl) =
+      _BeKycRequestCreateResult;
+  const factory BeKycRequestCreateResult.error(BeError2 err) =
+      _BeKycRequestCreateResultErr;
 }
 
 @JsonSerializable()
@@ -196,26 +192,17 @@ class BeTwoFactor {
   BeTwoFactor(this.method, this.setup);
 }
 
-class BeTwoFactorResult {
-  final BeTwoFactor? twoFactor;
-  final BeError error;
-
-  BeTwoFactorResult(this.twoFactor, this.error);
+@freezed
+class BeTwoFactorResult with _$BeTwoFactorResult {
+  const factory BeTwoFactorResult(BeTwoFactor twoFactor) = _BeTwoFactorResult;
+  const factory BeTwoFactorResult.error(BeError2 err) = _BeTwoFactorResultErr;
 
   static BeTwoFactorResult parse(String data) {
     var json = jsonDecode(data);
     var method = json['method'];
     BeTwoFactorSetup? setup;
     if (json['setup'] != null) setup = BeTwoFactorSetup.fromJson(json['setup']);
-    return BeTwoFactorResult(BeTwoFactor(method, setup), BeError.none());
-  }
-
-  static BeTwoFactorResult network() {
-    return BeTwoFactorResult(null, BeError.network());
-  }
-
-  static BeTwoFactorResult auth(String msg) {
-    return BeTwoFactorResult(null, BeError.auth(msg));
+    return BeTwoFactorResult(BeTwoFactor(method, setup));
   }
 }
 
@@ -243,15 +230,14 @@ class BeAsset {
   }
 }
 
-class BeAssetResult {
-  final List<BeAsset> assets;
-  final BeError error;
-
-  BeAssetResult(this.assets, this.error);
+@freezed
+class BeAssetResult with _$BeAssetResult {
+  const factory BeAssetResult(List<BeAsset> assets) = _BeAssetResult;
+  const factory BeAssetResult.error(BeError2 err) = _BeAssetResultErr;
 
   static BeAssetResult parse(String data) {
     var assets = BeAsset.parseAssets(jsonDecode(data)['assets']);
-    return BeAssetResult(assets, BeError.none());
+    return BeAssetResult(assets);
   }
 }
 
@@ -281,15 +267,14 @@ class BeMarket {
   }
 }
 
-class BeMarketResult {
-  final List<BeMarket> markets;
-  final BeError error;
-
-  BeMarketResult(this.markets, this.error);
+@freezed
+class BeMarketResult with _$BeMarketResult {
+  const factory BeMarketResult(List<BeMarket> markets) = _BeMarketResult;
+  const factory BeMarketResult.error(BeError2 err) = _BeMarketResultErr;
 
   static BeMarketResult parse(String data) {
     var markets = BeMarket.parseMarkets(jsonDecode(data)['markets']);
-    return BeMarketResult(markets, BeError.none());
+    return BeMarketResult(markets);
   }
 }
 
@@ -331,18 +316,12 @@ class BeOrderbook {
   factory BeOrderbook.fromJson(Map<String, dynamic> json) =>
       _$BeOrderbookFromJson(json);
   Map<String, dynamic> toJson() => _$BeOrderbookToJson(this);
-
-  static BeOrderbook empty() {
-    return BeOrderbook(
-        [], [], Decimal.zero, Decimal.zero, Decimal.zero, Decimal.zero);
-  }
 }
 
-class BeOrderbookResult {
-  final BeOrderbook orderbook;
-  final BeError error;
-
-  BeOrderbookResult(this.orderbook, this.error);
+@freezed
+class BeOrderbookResult with _$BeOrderbookResult {
+  const factory BeOrderbookResult(BeOrderbook orderbook) = _BeOrderbookResult;
+  const factory BeOrderbookResult.error(BeError2 err) = _BeOrderbookResultErr;
 }
 
 @JsonSerializable()
@@ -361,45 +340,28 @@ class BeBalance {
   Map<String, dynamic> toJson() => _$BeBalanceToJson(this);
 }
 
-class BeBalancesResult {
-  final List<BeBalance> balances;
-  final BeError error;
-
-  BeBalancesResult(this.balances, this.error);
-
-  static BeBalancesResult network() {
-    return BeBalancesResult([], BeError.network());
-  }
-
-  static BeBalancesResult auth(String msg) {
-    return BeBalancesResult([], BeError.auth(msg));
-  }
+@freezed
+class BeBalancesResult with _$BeBalancesResult {
+  const factory BeBalancesResult(List<BeBalance> balances) = _BeBalancesResult;
+  const factory BeBalancesResult.error(BeError2 err) = _BeBalancesResultErr;
 
   static BeBalancesResult parse(String data) {
     List<BeBalance> balances = [];
     for (var item in jsonDecode(data)['balances'])
       balances.add(BeBalance.fromJson(item));
-    return BeBalancesResult(balances, BeError.none());
+    return BeBalancesResult(balances);
   }
 }
 
-class BeCryptoDepositAddressResult {
-  final String? address;
-  final BeError error;
-
-  BeCryptoDepositAddressResult(this.address, this.error);
-
-  static BeCryptoDepositAddressResult network() {
-    return BeCryptoDepositAddressResult(null, BeError.network());
-  }
-
-  static BeCryptoDepositAddressResult auth(String msg) {
-    return BeCryptoDepositAddressResult(null, BeError.auth(msg));
-  }
+@freezed
+class BeCryptoDepositAddressResult with _$BeCryptoDepositAddressResult {
+  const factory BeCryptoDepositAddressResult(String address) =
+      _BeCryptoDepositAddressResult;
+  const factory BeCryptoDepositAddressResult.error(BeError2 err) =
+      _BeCryptoDepositAddressResultErr;
 
   static BeCryptoDepositAddressResult parse(String data) {
-    return BeCryptoDepositAddressResult(
-        jsonDecode(data)['address'], BeError.none());
+    return BeCryptoDepositAddressResult(jsonDecode(data)['address']);
   }
 }
 
@@ -421,23 +383,13 @@ class BeCryptoDeposit {
   Map<String, dynamic> toJson() => _$BeCryptoDepositToJson(this);
 }
 
-class BeCryptoDepositsResult {
-  final List<BeCryptoDeposit> deposits;
-  final int offset;
-  final int limit;
-  final int total;
-  final BeError error;
-
-  BeCryptoDepositsResult(
-      this.deposits, this.offset, this.limit, this.total, this.error);
-
-  static BeCryptoDepositsResult network() {
-    return BeCryptoDepositsResult([], 0, 0, 0, BeError.network());
-  }
-
-  static BeCryptoDepositsResult auth(String msg) {
-    return BeCryptoDepositsResult([], 0, 0, 0, BeError.auth(msg));
-  }
+@freezed
+class BeCryptoDepositsResult with _$BeCryptoDepositsResult {
+  const factory BeCryptoDepositsResult(
+          List<BeCryptoDeposit> deposits, int offset, int limit, int total) =
+      _BeCryptoDepositsResult;
+  const factory BeCryptoDepositsResult.error(BeError2 err) =
+      _BeCryptoDepositsResultErr;
 
   static BeCryptoDepositsResult parse(String data) {
     var json = jsonDecode(data);
@@ -447,8 +399,7 @@ class BeCryptoDepositsResult {
     var offset = json['offset'];
     var limit = json['limit'];
     var total = json['total'];
-    return BeCryptoDepositsResult(
-        deposits, offset, limit, total, BeError.none());
+    return BeCryptoDepositsResult(deposits, offset, limit, total);
   }
 }
 
@@ -471,44 +422,26 @@ class BeCryptoWithdrawal {
   Map<String, dynamic> toJson() => _$BeCryptoWithdrawalToJson(this);
 }
 
-class BeCryptoWithdrawalResult {
-  final BeCryptoWithdrawal? withdrawal;
-  final BeError error;
-
-  BeCryptoWithdrawalResult(this.withdrawal, this.error);
-
-  static BeCryptoWithdrawalResult network() {
-    return BeCryptoWithdrawalResult(null, BeError.network());
-  }
-
-  static BeCryptoWithdrawalResult auth(String msg) {
-    return BeCryptoWithdrawalResult(null, BeError.auth(msg));
-  }
+@freezed
+class BeCryptoWithdrawalResult with _$BeCryptoWithdrawalResult {
+  const factory BeCryptoWithdrawalResult(BeCryptoWithdrawal withdrawal) =
+      _BeCryptoWithdrawalResult;
+  const factory BeCryptoWithdrawalResult.error(BeError2 err) =
+      _BeCryptoWithdrawalResultErr;
 
   static BeCryptoWithdrawalResult parse(String data) {
     var json = jsonDecode(data);
     return BeCryptoWithdrawalResult(
-        BeCryptoWithdrawal.fromJson(json['withdrawal']), BeError.none());
+        BeCryptoWithdrawal.fromJson(json['withdrawal']));
   }
 }
 
-class BeCryptoWithdrawalsResult {
-  final List<BeCryptoWithdrawal> withdrawals;
-  final int offset;
-  final int limit;
-  final int total;
-  final BeError error;
-
-  BeCryptoWithdrawalsResult(
-      this.withdrawals, this.offset, this.limit, this.total, this.error);
-
-  static BeCryptoWithdrawalsResult network() {
-    return BeCryptoWithdrawalsResult([], 0, 0, 0, BeError.network());
-  }
-
-  static BeCryptoWithdrawalsResult auth(String msg) {
-    return BeCryptoWithdrawalsResult([], 0, 0, 0, BeError.auth(msg));
-  }
+@freezed
+class BeCryptoWithdrawalsResult with _$BeCryptoWithdrawalsResult {
+  const factory BeCryptoWithdrawalsResult(List<BeCryptoWithdrawal> withdrawals,
+      int offset, int limit, int total) = _BeCryptoWithdrawalsResult;
+  const factory BeCryptoWithdrawalsResult.error(BeError2 err) =
+      _BeCryptoWithdrawalsResultErr;
 
   static BeCryptoWithdrawalsResult parse(String data) {
     var json = jsonDecode(data);
@@ -518,8 +451,7 @@ class BeCryptoWithdrawalsResult {
     var offset = json['offset'];
     var limit = json['limit'];
     var total = json['total'];
-    return BeCryptoWithdrawalsResult(
-        withdrawals, offset, limit, total, BeError.none());
+    return BeCryptoWithdrawalsResult(withdrawals, offset, limit, total);
   }
 }
 
@@ -543,44 +475,26 @@ class BeFiatDeposit {
   Map<String, dynamic> toJson() => _$BeFiatDepositToJson(this);
 }
 
-class BeFiatDepositResult {
-  final BeFiatDeposit? deposit;
-  final BeError error;
-
-  BeFiatDepositResult(this.deposit, this.error);
-
-  static BeFiatDepositResult network() {
-    return BeFiatDepositResult(null, BeError.network());
-  }
-
-  static BeFiatDepositResult auth(String msg) {
-    return BeFiatDepositResult(null, BeError.auth(msg));
-  }
+@freezed
+class BeFiatDepositResult with _$BeFiatDepositResult {
+  const factory BeFiatDepositResult(BeFiatDeposit deposit) =
+      _BeFiatDepositResult;
+  const factory BeFiatDepositResult.error(BeError2 err) =
+      _BeFiatDepositResultErr;
 
   static BeFiatDepositResult parse(String data) {
     var json = jsonDecode(data);
-    return BeFiatDepositResult(
-        BeFiatDeposit.fromJson(json['deposit']), BeError.none());
+    return BeFiatDepositResult(BeFiatDeposit.fromJson(json['deposit']));
   }
 }
 
-class BeFiatDepositsResult {
-  final List<BeFiatDeposit> deposits;
-  final int offset;
-  final int limit;
-  final int total;
-  final BeError error;
-
-  BeFiatDepositsResult(
-      this.deposits, this.offset, this.limit, this.total, this.error);
-
-  static BeFiatDepositsResult network() {
-    return BeFiatDepositsResult([], 0, 0, 0, BeError.network());
-  }
-
-  static BeFiatDepositsResult auth(String msg) {
-    return BeFiatDepositsResult([], 0, 0, 0, BeError.auth(msg));
-  }
+@freezed
+class BeFiatDepositsResult with _$BeFiatDepositsResult {
+  const factory BeFiatDepositsResult(
+          List<BeFiatDeposit> deposits, int offset, int limit, int total) =
+      _BeFiatDepositsResult;
+  const factory BeFiatDepositsResult.error(BeError2 err) =
+      _BeFiatDepositsResultErr;
 
   static BeFiatDepositsResult parse(String data) {
     var json = jsonDecode(data);
@@ -590,7 +504,7 @@ class BeFiatDepositsResult {
     var offset = json['offset'];
     var limit = json['limit'];
     var total = json['total'];
-    return BeFiatDepositsResult(deposits, offset, limit, total, BeError.none());
+    return BeFiatDepositsResult(deposits, offset, limit, total);
   }
 }
 
@@ -612,44 +526,26 @@ class BeFiatWithdrawal {
   Map<String, dynamic> toJson() => _$BeFiatWithdrawalToJson(this);
 }
 
-class BeFiatWithdrawalResult {
-  final BeFiatWithdrawal? withdrawal;
-  final BeError error;
-
-  BeFiatWithdrawalResult(this.withdrawal, this.error);
-
-  static BeFiatWithdrawalResult network() {
-    return BeFiatWithdrawalResult(null, BeError.network());
-  }
-
-  static BeFiatWithdrawalResult auth(String msg) {
-    return BeFiatWithdrawalResult(null, BeError.auth(msg));
-  }
+@freezed
+class BeFiatWithdrawalResult with _$BeFiatWithdrawalResult {
+  const factory BeFiatWithdrawalResult(BeFiatWithdrawal withdrawal) =
+      _BeFiatWithdrawalResult;
+  const factory BeFiatWithdrawalResult.error(BeError2 err) =
+      _BeFiatWithdrawalResultErr;
 
   static BeFiatWithdrawalResult parse(String data) {
     var json = jsonDecode(data);
     return BeFiatWithdrawalResult(
-        BeFiatWithdrawal.fromJson(json['withdrawal']), BeError.none());
+        BeFiatWithdrawal.fromJson(json['withdrawal']));
   }
 }
 
-class BeFiatWithdrawalsResult {
-  final List<BeFiatWithdrawal> withdrawals;
-  final int offset;
-  final int limit;
-  final int total;
-  final BeError error;
-
-  BeFiatWithdrawalsResult(
-      this.withdrawals, this.offset, this.limit, this.total, this.error);
-
-  static BeFiatWithdrawalsResult network() {
-    return BeFiatWithdrawalsResult([], 0, 0, 0, BeError.network());
-  }
-
-  static BeFiatWithdrawalsResult auth(String msg) {
-    return BeFiatWithdrawalsResult([], 0, 0, 0, BeError.auth(msg));
-  }
+@freezed
+class BeFiatWithdrawalsResult with _$BeFiatWithdrawalsResult {
+  const factory BeFiatWithdrawalsResult(List<BeFiatWithdrawal> withdrawals,
+      int offset, int limit, int total) = _BeFiatWithdrawalsResult;
+  const factory BeFiatWithdrawalsResult.error(BeError2 err) =
+      _BeFiatWithdrawalsResultErr;
 
   static BeFiatWithdrawalsResult parse(String data) {
     var json = jsonDecode(data);
@@ -659,8 +555,7 @@ class BeFiatWithdrawalsResult {
     var offset = json['offset'];
     var limit = json['limit'];
     var total = json['total'];
-    return BeFiatWithdrawalsResult(
-        withdrawals, offset, limit, total, BeError.none());
+    return BeFiatWithdrawalsResult(withdrawals, offset, limit, total);
   }
 }
 
@@ -676,26 +571,19 @@ class BeAddressBookEntry {
   Map<String, dynamic> toJson() => _$BeAddressBookEntryToJson(this);
 }
 
-class BeAddressBookResult {
-  final List<BeAddressBookEntry> entries;
-  final BeError error;
-
-  BeAddressBookResult(this.entries, this.error);
+@freezed
+class BeAddressBookResult with _$BeAddressBookResult {
+  const factory BeAddressBookResult(List<BeAddressBookEntry> entries) =
+      _BeAddressBookResult;
+  const factory BeAddressBookResult.error(BeError2 err) =
+      _BeAddressBookResultErr;
 
   static BeAddressBookResult parse(String data) {
     var json = jsonDecode(data);
     List<BeAddressBookEntry> entries = [];
     for (var item in json['entries'])
       entries.add(BeAddressBookEntry.fromJson(item));
-    return BeAddressBookResult(entries, BeError.none());
-  }
-
-  static BeAddressBookResult network() {
-    return BeAddressBookResult([], BeError.network());
-  }
-
-  static BeAddressBookResult auth(String msg) {
-    return BeAddressBookResult([], BeError.auth(msg));
+    return BeAddressBookResult(entries);
   }
 }
 
@@ -731,22 +619,30 @@ extension EnumEx on String {
       BeOrderStatus.values.firstWhere((d) => describeEnum(d) == toLowerCase());
 }
 
+@JsonSerializable()
 class BeBrokerOrder {
   final String token;
   final DateTime date;
   final DateTime expiry;
   final String market;
   final BeMarketSide side;
+  @JsonKey(name: 'base_asset')
   final String baseAsset;
+  @JsonKey(name: 'quote_asset')
   final String quoteAsset;
   @JsonKey(
-      name: 'base_amount', fromJson: _decimalFromJson, toJson: _decimalToJson)
+      name: 'base_amount_dec',
+      fromJson: _decimalFromJson,
+      toJson: _decimalToJson)
   final Decimal baseAmount;
   @JsonKey(
-      name: 'quote_amount', fromJson: _decimalFromJson, toJson: _decimalToJson)
+      name: 'quote_amount_dec',
+      fromJson: _decimalFromJson,
+      toJson: _decimalToJson)
   final Decimal quoteAmount;
   final String recipient;
   final BeOrderStatus status;
+  @JsonKey(name: 'payment_url')
   final String? paymentUrl;
 
   BeBrokerOrder(
@@ -763,86 +659,41 @@ class BeBrokerOrder {
       this.status,
       this.paymentUrl);
 
-  static BeBrokerOrder parse(Map data) {
-    var date = DateTime.parse(data['date']);
-    var expiry = DateTime.parse(data['expiry']);
-    var side = (data['side'] as String).toEnumSide();
-    var baseAmount = Decimal.parse(data['base_amount_dec']);
-    var quoteAmount = Decimal.parse(data['quote_amount_dec']);
-    var status = (data['status'] as String).toEnumStatus();
-    return BeBrokerOrder(
-        data['token'],
-        date,
-        expiry,
-        data['market'],
-        side,
-        data['base_asset'],
-        data['quote_asset'],
-        baseAmount,
-        quoteAmount,
-        data['recipient'],
-        status,
-        data['payment_url']);
-  }
-
-  static BeBrokerOrder empty() {
-    return BeBrokerOrder(
-        '',
-        DateTime.now(),
-        DateTime.now(),
-        '',
-        BeMarketSide.bid,
-        '',
-        '',
-        Decimal.zero,
-        Decimal.zero,
-        '',
-        BeOrderStatus.none,
-        null);
-  }
+  factory BeBrokerOrder.fromJson(Map<String, dynamic> json) =>
+      _$BeBrokerOrderFromJson(json);
+  Map<String, dynamic> toJson() => _$BeBrokerOrderToJson(this);
 }
 
-class BeBrokerOrderResult {
-  final BeBrokerOrder order;
-  final BeError error;
-
-  BeBrokerOrderResult(this.order, this.error);
+@freezed
+class BeBrokerOrderResult with _$BeBrokerOrderResult {
+  const factory BeBrokerOrderResult(BeBrokerOrder order) = _BeBrokerOrderResult;
+  const factory BeBrokerOrderResult.error(BeError2 err) =
+      _BeBrokerOrderResultErr;
 
   static BeBrokerOrderResult parse(String data) {
     var json = jsonDecode(data);
-    BeBrokerOrder order = BeBrokerOrder.parse(json['broker_order']);
-    return BeBrokerOrderResult(order, BeError.none());
+    BeBrokerOrder order = BeBrokerOrder.fromJson(json['broker_order']);
+    return BeBrokerOrderResult(order);
   }
 }
 
-class BeBrokerOrdersResult {
-  final List<BeBrokerOrder> orders;
-  final int offset;
-  final int limit;
-  final int total;
-  final BeError error;
-
-  BeBrokerOrdersResult(
-      this.orders, this.offset, this.limit, this.total, this.error);
+@freezed
+class BeBrokerOrdersResult with _$BeBrokerOrdersResult {
+  const factory BeBrokerOrdersResult(
+          List<BeBrokerOrder> orders, int offset, int limit, int total) =
+      _BeBrokerOrdersResult;
+  const factory BeBrokerOrdersResult.error(BeError2 err) =
+      _BeBrokerOrdersResultErr;
 
   static BeBrokerOrdersResult parse(String data) {
     var json = jsonDecode(data);
     List<BeBrokerOrder> orderList = [];
     var orders = json['broker_orders'];
-    for (var item in orders) orderList.add(BeBrokerOrder.parse(item));
+    for (var item in orders) orderList.add(BeBrokerOrder.fromJson(item));
     var offset = json['offset'];
     var limit = json['limit'];
     var total = json['total'];
-    return BeBrokerOrdersResult(
-        orderList, offset, limit, total, BeError.none());
-  }
-
-  static BeBrokerOrdersResult network() {
-    return BeBrokerOrdersResult([], 0, 0, 0, BeError.network());
-  }
-
-  static BeBrokerOrdersResult auth(String msg) {
-    return BeBrokerOrdersResult([], 0, 0, 0, BeError.auth(msg));
+    return BeBrokerOrdersResult(orderList, offset, limit, total);
   }
 }
 
@@ -872,9 +723,9 @@ Future<String?> beServer() async {
   return await _server();
 }
 
-Future<BeError> beUserRegister(AccountRegistration reg) async {
+Future<ErrorResult> beUserRegister(AccountRegistration reg) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeError.network();
+  if (baseUrl == null) return ErrorResult.network();
   var url = baseUrl + "user_register";
   var body = jsonEncode({
     "first_name": reg.firstName,
@@ -887,34 +738,37 @@ Future<BeError> beUserRegister(AccountRegistration reg) async {
     "photo_type": reg.photoType
   });
   var response = await postAndCatch(url, body);
-  if (response == null) return BeError.network();
+  if (response == null) return ErrorResult.network();
   if (response.statusCode == 200) {
-    return BeError.none();
-  } else if (response.statusCode == 400) return BeError.auth(response.body);
+    return ErrorResult();
+  } else if (response.statusCode == 400)
+    return BeError2.authParseMsg(response.body);
   print(response.statusCode);
-  return BeError.network();
+  return ErrorResult.network();
 }
 
 Future<BeTwoFactorEnabledResult> beUserTwoFactorEnabledCheck(
     String email, String password) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeTwoFactorEnabledResult(null, BeError.network());
+  if (baseUrl == null)
+    return BeTwoFactorEnabledResult.error(BeError2.network());
   var url = baseUrl + "user_two_factor_enabled_check";
   var body = jsonEncode({"email": email, "password": password});
   var response = await postAndCatch(url, body);
-  if (response == null) return BeTwoFactorEnabledResult.network();
+  if (response == null)
+    return BeTwoFactorEnabledResult.error(BeError2.network());
   if (response.statusCode == 200) {
     return BeTwoFactorEnabledResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return BeTwoFactorEnabledResult.auth(response.body);
+    return BeTwoFactorEnabledResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeTwoFactorEnabledResult.network();
+  return BeTwoFactorEnabledResult.error(BeError2.network());
 }
 
 Future<BeApiKeyResult> beApiKeyCreate(
     String email, String password, String deviceName, String tfCode) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeApiKeyResult(null, BeError.network());
+  if (baseUrl == null) return BeApiKeyResult.error(BeError2.network());
   var url = baseUrl + "api_key_create";
   var body = jsonEncode({
     "email": email,
@@ -923,55 +777,55 @@ Future<BeApiKeyResult> beApiKeyCreate(
     "tf_code": tfCode
   });
   var response = await postAndCatch(url, body);
-  if (response == null) return BeApiKeyResult(null, BeError.network());
+  if (response == null) return BeApiKeyResult.error(BeError2.network());
   if (response.statusCode == 200) {
     var jsnObj = json.decode(response.body);
     var info = BeApiKey(jsnObj["token"], jsnObj["secret"]);
-    return BeApiKeyResult(info, BeError.none());
+    return BeApiKeyResult(info);
   } else if (response.statusCode == 400)
-    return BeApiKeyResult(null, BeError.auth(response.body));
+    return BeApiKeyResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeApiKeyResult(null, BeError.network());
+  return BeApiKeyResult.error(BeError2.network());
 }
 
 Future<BeApiKeyRequestResult> beApiKeyRequest(
     String email, String deviceName) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeApiKeyRequestResult(null, BeError.network());
+  if (baseUrl == null) return BeApiKeyRequestResult.error(BeError2.network());
   var url = baseUrl + "api_key_request";
   var body = jsonEncode({"email": email, "device_name": deviceName});
   var response = await postAndCatch(url, body);
-  if (response == null) return BeApiKeyRequestResult(null, BeError.network());
+  if (response == null) return BeApiKeyRequestResult.error(BeError2.network());
   if (response.statusCode == 200) {
     var jsnObj = json.decode(response.body);
     var token = jsnObj["token"];
-    return BeApiKeyRequestResult(token, BeError.none());
+    return BeApiKeyRequestResult(token);
   } else if (response.statusCode == 400)
-    return BeApiKeyRequestResult(null, BeError.auth(response.body));
+    return BeApiKeyRequestResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeApiKeyRequestResult(null, BeError.network());
+  return BeApiKeyRequestResult.error(BeError2.network());
 }
 
 Future<BeApiKeyResult> beApiKeyClaim(String token) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeApiKeyResult(null, BeError.network());
+  if (baseUrl == null) return BeApiKeyResult.error(BeError2.network());
   var url = baseUrl + "api_key_claim";
   var body = jsonEncode({"token": token});
   var response = await postAndCatch(url, body);
-  if (response == null) return BeApiKeyResult(null, BeError.network());
+  if (response == null) return BeApiKeyResult.error(BeError2.network());
   if (response.statusCode == 200) {
     var jsnObj = json.decode(response.body);
     var info = BeApiKey(jsnObj["token"], jsnObj["secret"]);
-    return BeApiKeyResult(info, BeError.none());
+    return BeApiKeyResult(info);
   } else if (response.statusCode == 400)
-    return BeApiKeyResult(null, BeError.auth(response.body));
+    return BeApiKeyResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeApiKeyResult(null, BeError.network());
+  return BeApiKeyResult.error(BeError2.network());
 }
 
 Future<UserInfoResult> beUserInfo({String? email}) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return UserInfoResult(null, BeError.network());
+  if (baseUrl == null) return UserInfoResult.error(BeError2.network());
   var url = baseUrl + "user_info";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -981,19 +835,19 @@ Future<UserInfoResult> beUserInfo({String? email}) async {
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return UserInfoResult(null, BeError.network());
+  if (response == null) return UserInfoResult.error(BeError2.network());
   if (response.statusCode == 200) {
     var info = UserInfo.fromJson(jsonDecode(response.body));
-    return UserInfoResult(info, BeError.none());
+    return UserInfoResult(info);
   } else if (response.statusCode == 400)
-    return UserInfoResult(null, BeError.auth(response.body));
+    return UserInfoResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return UserInfoResult(null, BeError.network());
+  return UserInfoResult.error(BeError2.network());
 }
 
-Future<BeError> beUserResetPassword() async {
+Future<ErrorResult> beUserResetPassword() async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeError.network();
+  if (baseUrl == null) return ErrorResult.network();
   var url = baseUrl + "user_reset_password";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1003,17 +857,17 @@ Future<BeError> beUserResetPassword() async {
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeError.network();
+  if (response == null) return ErrorResult.network();
   if (response.statusCode == 200) {
-    return BeError.none();
-  } else if (response.statusCode == 400) return BeError.auth(response.body);
+    return ErrorResult();
+  } else if (response.statusCode == 400) return ErrorResult.auth(response.body);
   print(response.statusCode);
-  return BeError.network();
+  return ErrorResult.network();
 }
 
-Future<BeError> beUserUpdateEmail(String email) async {
+Future<ErrorResult> beUserUpdateEmail(String email) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeError.network();
+  if (baseUrl == null) return ErrorResult.network();
   var url = baseUrl + "user_update_email";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1023,18 +877,18 @@ Future<BeError> beUserUpdateEmail(String email) async {
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeError.network();
+  if (response == null) return ErrorResult.network();
   if (response.statusCode == 200) {
-    return BeError.none();
-  } else if (response.statusCode == 400) return BeError.auth(response.body);
+    return ErrorResult();
+  } else if (response.statusCode == 400) return ErrorResult.auth(response.body);
   print(response.statusCode);
-  return BeError.network();
+  return ErrorResult.network();
 }
 
-Future<BeError> beUserUpdatePassword(
+Future<ErrorResult> beUserUpdatePassword(
     String currentPassword, String newPassword) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeError.network();
+  if (baseUrl == null) return ErrorResult.network();
   var url = baseUrl + "user_update_password";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1049,17 +903,17 @@ Future<BeError> beUserUpdatePassword(
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeError.network();
+  if (response == null) return ErrorResult.network();
   if (response.statusCode == 200) {
-    return BeError.none();
-  } else if (response.statusCode == 400) return BeError.auth(response.body);
+    return ErrorResult();
+  } else if (response.statusCode == 400) return ErrorResult.auth(response.body);
   print(response.statusCode);
-  return BeError.network();
+  return ErrorResult.network();
 }
 
-Future<BeError> beUserUpdatePhoto(String? photo, String? photoType) async {
+Future<ErrorResult> beUserUpdatePhoto(String? photo, String? photoType) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeError.network();
+  if (baseUrl == null) return ErrorResult.network();
   var url = baseUrl + "user_update_photo";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1074,17 +928,18 @@ Future<BeError> beUserUpdatePhoto(String? photo, String? photoType) async {
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeError.network();
+  if (response == null) return ErrorResult.network();
   if (response.statusCode == 200) {
-    return BeError.none();
-  } else if (response.statusCode == 400) return BeError.auth(response.body);
+    return ErrorResult();
+  } else if (response.statusCode == 400) return ErrorResult.auth(response.body);
   print(response.statusCode);
-  return BeError.network();
+  return ErrorResult.network();
 }
 
 Future<BeKycRequestCreateResult> beKycRequestCreate() async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeKycRequestCreateResult(null, BeError.network());
+  if (baseUrl == null)
+    return BeKycRequestCreateResult.error(BeError2.network());
   var url = baseUrl + "user_kyc_request_create";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1095,20 +950,21 @@ Future<BeKycRequestCreateResult> beKycRequestCreate() async {
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
   if (response == null)
-    return BeKycRequestCreateResult(null, BeError.network());
+    return BeKycRequestCreateResult.error(BeError2.network());
   if (response.statusCode == 200) {
     var jsnObj = json.decode(response.body);
-    return BeKycRequestCreateResult(jsnObj['kyc_url'], BeError.none());
+    return BeKycRequestCreateResult(jsnObj['kyc_url']);
   } else if (response.statusCode == 400)
-    return BeKycRequestCreateResult(null, BeError.auth(response.body));
+    return BeKycRequestCreateResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeKycRequestCreateResult(null, BeError.network());
+  return BeKycRequestCreateResult.error(BeError2.network());
 }
 
 Future<BeKycRequestCreateResult> beKycRequestSendMobileNumber(
     String mobileNumber) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeKycRequestCreateResult(null, BeError.network());
+  if (baseUrl == null)
+    return BeKycRequestCreateResult.error(BeError2.network());
   var url = baseUrl + "user_kyc_request_send_mobile_number";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1120,19 +976,19 @@ Future<BeKycRequestCreateResult> beKycRequestSendMobileNumber(
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
   if (response == null)
-    return BeKycRequestCreateResult(null, BeError.network());
+    return BeKycRequestCreateResult.error(BeError2.network());
   if (response.statusCode == 200) {
     var jsnObj = json.decode(response.body);
-    return BeKycRequestCreateResult(jsnObj['kyc_url'], BeError.none());
+    return BeKycRequestCreateResult(jsnObj['kyc_url']);
   } else if (response.statusCode == 400)
-    return BeKycRequestCreateResult(null, BeError.auth(response.body));
+    return BeKycRequestCreateResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeKycRequestCreateResult(null, BeError.network());
+  return BeKycRequestCreateResult.error(BeError2.network());
 }
 
 Future<BeTwoFactorResult> beUserTwoFactorEnable(String? code) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeTwoFactorResult(null, BeError.network());
+  if (baseUrl == null) return BeTwoFactorResult.error(BeError2.network());
   var url = baseUrl + "user_two_factor_enable";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1142,18 +998,18 @@ Future<BeTwoFactorResult> beUserTwoFactorEnable(String? code) async {
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeTwoFactorResult(null, BeError.network());
+  if (response == null) return BeTwoFactorResult.error(BeError2.network());
   if (response.statusCode == 200) {
     return BeTwoFactorResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return BeTwoFactorResult.auth(response.body);
+    return BeTwoFactorResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeTwoFactorResult.network();
+  return BeTwoFactorResult.error(BeError2.network());
 }
 
 Future<BeTwoFactorResult> beUserTwoFactorDisable(String? code) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeTwoFactorResult(null, BeError.network());
+  if (baseUrl == null) return BeTwoFactorResult.error(BeError2.network());
   var url = baseUrl + "user_two_factor_disable";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1163,19 +1019,18 @@ Future<BeTwoFactorResult> beUserTwoFactorDisable(String? code) async {
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeTwoFactorResult(null, BeError.network());
+  if (response == null) return BeTwoFactorResult.error(BeError2.network());
   if (response.statusCode == 200) {
     return BeTwoFactorResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return BeTwoFactorResult.auth(response.body);
+    return BeTwoFactorResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeTwoFactorResult.network();
+  return BeTwoFactorResult.error(BeError2.network());
 }
 
 Future<BeAssetResult> beAssets() async {
-  List<BeAsset> assets = [];
   var baseUrl = await _server();
-  if (baseUrl == null) return BeAssetResult(assets, BeError.network());
+  if (baseUrl == null) return BeAssetResult.error(BeError2.network());
   var url = baseUrl + "assets";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1188,19 +1043,18 @@ Future<BeAssetResult> beAssets() async {
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeAssetResult(assets, BeError.network());
+  if (response == null) return BeAssetResult.error(BeError2.network());
   if (response.statusCode == 200) {
     return BeAssetResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return BeAssetResult(assets, BeError.auth(response.body));
+    return BeAssetResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeAssetResult(assets, BeError.network());
+  return BeAssetResult.error(BeError2.network());
 }
 
 Future<BeMarketResult> beMarkets() async {
-  List<BeMarket> markets = [];
   var baseUrl = await _server();
-  if (baseUrl == null) return BeMarketResult(markets, BeError.network());
+  if (baseUrl == null) return BeMarketResult.error(BeError2.network());
   var url = baseUrl + "markets";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1213,19 +1067,18 @@ Future<BeMarketResult> beMarkets() async {
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeMarketResult(markets, BeError.network());
+  if (response == null) return BeMarketResult.error(BeError2.network());
   if (response.statusCode == 200) {
     return BeMarketResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return BeMarketResult(markets, BeError.auth(response.body));
+    return BeMarketResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeMarketResult(markets, BeError.network());
+  return BeMarketResult.error(BeError2.network());
 }
 
 Future<BeOrderbookResult> beOrderbook(String market) async {
   var baseUrl = await _server();
-  if (baseUrl == null)
-    return BeOrderbookResult(BeOrderbook.empty(), BeError.network());
+  if (baseUrl == null) return BeOrderbookResult.error(BeError2.network());
   var url = baseUrl + "order_book";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1235,20 +1088,18 @@ Future<BeOrderbookResult> beOrderbook(String market) async {
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null)
-    return BeOrderbookResult(BeOrderbook.empty(), BeError.network());
+  if (response == null) return BeOrderbookResult.error(BeError2.network());
   if (response.statusCode == 200) {
-    return BeOrderbookResult(
-        BeOrderbook.fromJson(jsonDecode(response.body)), BeError.none());
+    return BeOrderbookResult(BeOrderbook.fromJson(jsonDecode(response.body)));
   } else if (response.statusCode == 400)
-    return BeOrderbookResult(BeOrderbook.empty(), BeError.auth(response.body));
+    return BeOrderbookResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeOrderbookResult(BeOrderbook.empty(), BeError.network());
+  return BeOrderbookResult.error(BeError2.network());
 }
 
 Future<BeBalancesResult> beBalances() async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeBalancesResult.network();
+  if (baseUrl == null) return BeBalancesResult.error(BeError2.network());
   var url = baseUrl + "balances";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1258,19 +1109,20 @@ Future<BeBalancesResult> beBalances() async {
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeBalancesResult.network();
+  if (response == null) return BeBalancesResult.error(BeError2.network());
   if (response.statusCode == 200) {
     return BeBalancesResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return BeBalancesResult.auth(response.body);
+    return BeBalancesResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeBalancesResult.network();
+  return BeBalancesResult.error(BeError2.network());
 }
 
 Future<BeCryptoDepositAddressResult> beCryptoDepositAddress(
     String asset) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeCryptoDepositAddressResult.network();
+  if (baseUrl == null)
+    return BeCryptoDepositAddressResult.error(BeError2.network());
   var url = baseUrl + "crypto_deposit_address";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1280,19 +1132,21 @@ Future<BeCryptoDepositAddressResult> beCryptoDepositAddress(
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeCryptoDepositAddressResult.network();
+  if (response == null)
+    return BeCryptoDepositAddressResult.error(BeError2.network());
   if (response.statusCode == 200) {
     return BeCryptoDepositAddressResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return BeCryptoDepositAddressResult.auth(response.body);
+    return BeCryptoDepositAddressResult.error(
+        BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeCryptoDepositAddressResult.network();
+  return BeCryptoDepositAddressResult.error(BeError2.network());
 }
 
 Future<BeCryptoDepositsResult> beCryptoDeposits(
     String asset, int offset, int limit) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeCryptoDepositsResult.network();
+  if (baseUrl == null) return BeCryptoDepositsResult.error(BeError2.network());
   var url = baseUrl + "crypto_deposits";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1308,13 +1162,13 @@ Future<BeCryptoDepositsResult> beCryptoDeposits(
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeCryptoDepositsResult.network();
+  if (response == null) return BeCryptoDepositsResult.error(BeError2.network());
   if (response.statusCode == 200) {
     return BeCryptoDepositsResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return BeCryptoDepositsResult.auth(response.body);
+    return BeCryptoDepositsResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeCryptoDepositsResult.network();
+  return BeCryptoDepositsResult.error(BeError2.network());
 }
 
 Future<BeCryptoWithdrawalResult> beCryptoWithdrawalCreate(
@@ -1324,7 +1178,8 @@ Future<BeCryptoWithdrawalResult> beCryptoWithdrawalCreate(
     bool saveRecipient,
     String recipientDescription) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeCryptoWithdrawalResult.network();
+  if (baseUrl == null)
+    return BeCryptoWithdrawalResult.error(BeError2.network());
   var url = baseUrl + "crypto_withdrawal_create";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1342,19 +1197,21 @@ Future<BeCryptoWithdrawalResult> beCryptoWithdrawalCreate(
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeCryptoWithdrawalResult.network();
+  if (response == null)
+    return BeCryptoWithdrawalResult.error(BeError2.network());
   if (response.statusCode == 200) {
     return BeCryptoWithdrawalResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return BeCryptoWithdrawalResult.auth(response.body);
+    return BeCryptoWithdrawalResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeCryptoWithdrawalResult.network();
+  return BeCryptoWithdrawalResult.error(BeError2.network());
 }
 
 Future<BeCryptoWithdrawalsResult> beCryptoWithdrawals(
     String asset, int offset, int limit) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeCryptoWithdrawalsResult.network();
+  if (baseUrl == null)
+    return BeCryptoWithdrawalsResult.error(BeError2.network());
   var url = baseUrl + "crypto_withdrawals";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1370,19 +1227,21 @@ Future<BeCryptoWithdrawalsResult> beCryptoWithdrawals(
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeCryptoWithdrawalsResult.network();
+  if (response == null)
+    return BeCryptoWithdrawalsResult.error(BeError2.network());
   if (response.statusCode == 200) {
     return BeCryptoWithdrawalsResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return BeCryptoWithdrawalsResult.auth(response.body);
+    return BeCryptoWithdrawalsResult.error(
+        BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeCryptoWithdrawalsResult.network();
+  return BeCryptoWithdrawalsResult.error(BeError2.network());
 }
 
 Future<BeFiatDepositResult> beFiatDepositCreate(
     String asset, Decimal amount) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeFiatDepositResult.network();
+  if (baseUrl == null) return BeFiatDepositResult.error(BeError2.network());
   var url = baseUrl + "fiat_deposit_create";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1397,19 +1256,19 @@ Future<BeFiatDepositResult> beFiatDepositCreate(
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeFiatDepositResult.network();
+  if (response == null) return BeFiatDepositResult.error(BeError2.network());
   if (response.statusCode == 200) {
     return BeFiatDepositResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return BeFiatDepositResult.auth(response.body);
+    return BeFiatDepositResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeFiatDepositResult.network();
+  return BeFiatDepositResult.error(BeError2.network());
 }
 
 Future<BeFiatDepositsResult> beFiatDeposits(
     String asset, int offset, int limit) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeFiatDepositsResult.network();
+  if (baseUrl == null) return BeFiatDepositsResult.error(BeError2.network());
   var url = baseUrl + "fiat_deposits";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1425,13 +1284,13 @@ Future<BeFiatDepositsResult> beFiatDeposits(
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeFiatDepositsResult.network();
+  if (response == null) return BeFiatDepositsResult.error(BeError2.network());
   if (response.statusCode == 200) {
     return BeFiatDepositsResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return BeFiatDepositsResult.auth(response.body);
+    return BeFiatDepositsResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeFiatDepositsResult.network();
+  return BeFiatDepositsResult.error(BeError2.network());
 }
 
 Future<BeFiatWithdrawalResult> beFiatWithdrawalCreate(
@@ -1441,7 +1300,7 @@ Future<BeFiatWithdrawalResult> beFiatWithdrawalCreate(
     bool saveRecipient,
     String recipientDescription) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeFiatWithdrawalResult.network();
+  if (baseUrl == null) return BeFiatWithdrawalResult.error(BeError2.network());
   var url = baseUrl + "fiat_withdrawal_create";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1459,19 +1318,19 @@ Future<BeFiatWithdrawalResult> beFiatWithdrawalCreate(
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeFiatWithdrawalResult.network();
+  if (response == null) return BeFiatWithdrawalResult.error(BeError2.network());
   if (response.statusCode == 200) {
     return BeFiatWithdrawalResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return BeFiatWithdrawalResult.auth(response.body);
+    return BeFiatWithdrawalResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeFiatWithdrawalResult.network();
+  return BeFiatWithdrawalResult.error(BeError2.network());
 }
 
 Future<BeFiatWithdrawalsResult> beFiatWithdrawals(
     String asset, int offset, int limit) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeFiatWithdrawalsResult.network();
+  if (baseUrl == null) return BeFiatWithdrawalsResult.error(BeError2.network());
   var url = baseUrl + "fiat_withdrawals";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1487,18 +1346,19 @@ Future<BeFiatWithdrawalsResult> beFiatWithdrawals(
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeFiatWithdrawalsResult.network();
+  if (response == null)
+    return BeFiatWithdrawalsResult.error(BeError2.network());
   if (response.statusCode == 200) {
     return BeFiatWithdrawalsResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return BeFiatWithdrawalsResult.auth(response.body);
+    return BeFiatWithdrawalsResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeFiatWithdrawalsResult.network();
+  return BeFiatWithdrawalsResult.error(BeError2.network());
 }
 
 Future<BeAddressBookResult> beAddressBook(String asset) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeAddressBookResult.network();
+  if (baseUrl == null) return BeAddressBookResult.error(BeError2.network());
   var url = baseUrl + "address_book";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1508,13 +1368,13 @@ Future<BeAddressBookResult> beAddressBook(String asset) async {
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeAddressBookResult.network();
+  if (response == null) return BeAddressBookResult.error(BeError2.network());
   if (response.statusCode == 200) {
     return BeAddressBookResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return BeAddressBookResult.auth(response.body);
+    return BeAddressBookResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeAddressBookResult.network();
+  return BeAddressBookResult.error(BeError2.network());
 }
 
 Future<BeBrokerOrderResult> beOrderCreate(
@@ -1525,8 +1385,7 @@ Future<BeBrokerOrderResult> beOrderCreate(
     bool saveRecipient,
     String? recipientDescription) async {
   var baseUrl = await _server();
-  if (baseUrl == null)
-    return BeBrokerOrderResult(BeBrokerOrder.empty(), BeError.network());
+  if (baseUrl == null) return BeBrokerOrderResult.error(BeError2.network());
   var url = baseUrl + "broker_order_create";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1545,21 +1404,18 @@ Future<BeBrokerOrderResult> beOrderCreate(
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null)
-    return BeBrokerOrderResult(BeBrokerOrder.empty(), BeError.network());
+  if (response == null) return BeBrokerOrderResult.error(BeError2.network());
   if (response.statusCode == 200) {
     return BeBrokerOrderResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return BeBrokerOrderResult(
-        BeBrokerOrder.empty(), BeError.auth(response.body));
+    return BeBrokerOrderResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeBrokerOrderResult(BeBrokerOrder.empty(), BeError.network());
+  return BeBrokerOrderResult.error(BeError2.network());
 }
 
 Future<BeBrokerOrderResult> beOrderAccept(String token) async {
   var baseUrl = await _server();
-  if (baseUrl == null)
-    return BeBrokerOrderResult(BeBrokerOrder.empty(), BeError.network());
+  if (baseUrl == null) return BeBrokerOrderResult.error(BeError2.network());
   var url = baseUrl + "broker_order_accept";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1569,21 +1425,18 @@ Future<BeBrokerOrderResult> beOrderAccept(String token) async {
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null)
-    return BeBrokerOrderResult(BeBrokerOrder.empty(), BeError.network());
+  if (response == null) return BeBrokerOrderResult.error(BeError2.network());
   if (response.statusCode == 200) {
     return BeBrokerOrderResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return BeBrokerOrderResult(
-        BeBrokerOrder.empty(), BeError.auth(response.body));
+    return BeBrokerOrderResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeBrokerOrderResult(BeBrokerOrder.empty(), BeError.network());
+  return BeBrokerOrderResult.error(BeError2.network());
 }
 
 Future<BeBrokerOrderResult> beOrderStatus(String token) async {
   var baseUrl = await _server();
-  if (baseUrl == null)
-    return BeBrokerOrderResult(BeBrokerOrder.empty(), BeError.network());
+  if (baseUrl == null) return BeBrokerOrderResult.error(BeError2.network());
   var url = baseUrl + "broker_order_status";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1593,20 +1446,18 @@ Future<BeBrokerOrderResult> beOrderStatus(String token) async {
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null)
-    return BeBrokerOrderResult(BeBrokerOrder.empty(), BeError.network());
+  if (response == null) return BeBrokerOrderResult.error(BeError2.network());
   if (response.statusCode == 200) {
     return BeBrokerOrderResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return BeBrokerOrderResult(
-        BeBrokerOrder.empty(), BeError.auth(response.body));
+    return BeBrokerOrderResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeBrokerOrderResult(BeBrokerOrder.empty(), BeError.network());
+  return BeBrokerOrderResult.error(BeError2.network());
 }
 
 Future<BeBrokerOrdersResult> beOrderList(int offset, int limit) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return BeBrokerOrdersResult.network();
+  if (baseUrl == null) return BeBrokerOrdersResult.error(BeError2.network());
   var url = baseUrl + "broker_orders";
   var apikey = await Prefs.beApiKeyGet();
   var apisecret = await Prefs.beApiSecretGet();
@@ -1617,11 +1468,11 @@ Future<BeBrokerOrdersResult> beOrderList(int offset, int limit) async {
   var sig = createHmacSig(apisecret!, body);
   var response =
       await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeBrokerOrdersResult.network();
+  if (response == null) return BeBrokerOrdersResult.error(BeError2.network());
   if (response.statusCode == 200) {
     return BeBrokerOrdersResult.parse(response.body);
   } else if (response.statusCode == 400)
-    return BeBrokerOrdersResult.auth(response.body);
+    return BeBrokerOrdersResult.error(BeError2.authParseMsg(response.body));
   print(response.statusCode);
-  return BeBrokerOrdersResult.network();
+  return BeBrokerOrdersResult.error(BeError2.network());
 }

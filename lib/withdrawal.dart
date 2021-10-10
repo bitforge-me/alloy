@@ -45,16 +45,19 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
     showAlertDialog(context, 'querying address book..');
     var res = await beAddressBook(asset);
     Navigator.pop(context);
-    if (res.error.type != ErrorType.None) return;
-    var recipient = await Navigator.push<String?>(
-        context,
-        MaterialPageRoute(
-            builder: (context) => AddressBookScreen(asset, res.entries)));
-    if (recipient == null) return;
-    if (widget.asset.isCrypto)
-      _withdrawalAddressController.text = recipient;
-    else
-      _withdrawalBankController.text = recipient;
+    res.when((entries) async {
+      var recipient = await Navigator.push<String?>(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AddressBookScreen(asset, entries)));
+      if (recipient == null) return;
+      if (widget.asset.isCrypto)
+        _withdrawalAddressController.text = recipient;
+      else
+        _withdrawalBankController.text = recipient;
+    },
+        error: (err) => alert(context, 'error',
+            'failed to get address book (${BeError2.msg(err)})'));
   }
 
   void _updateSaveRecipient(bool? value) {
@@ -74,15 +77,14 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
             _saveRecipient,
             _recipientDescriptionController.text);
         Navigator.pop(context);
-        if (res.error.type == ErrorType.None) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => CryptoWithdrawalDetailScreen(
-                      res.withdrawal!, widget.websocket)));
-        } else
-          alert(context, 'error',
-              'failed to create withdrawal (${res.error.msg})');
+        res.when(
+            (withdrawal) => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CryptoWithdrawalDetailScreen(
+                        withdrawal, widget.websocket))),
+            error: (err) => alert(context, 'error',
+                'failed to create withdrawal (${BeError2.msg(err)})'));
       } else {
         showAlertDialog(context, 'creating withdrawal..');
         var res = await beFiatWithdrawalCreate(
@@ -92,15 +94,14 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
             _saveRecipient,
             _recipientDescriptionController.text);
         Navigator.pop(context);
-        if (res.error.type == ErrorType.None) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => FiatWithdrawalDetailScreen(
-                      res.withdrawal!, widget.websocket)));
-        } else
-          alert(context, 'error',
-              'failed to create withdrawal (${res.error.msg})');
+        res.when(
+            (withdrawal) => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FiatWithdrawalDetailScreen(
+                        withdrawal, widget.websocket))),
+            error: (err) => alert(context, 'error',
+                'failed to create withdrawal (${BeError2.msg(err)})'));
       }
     }
   }
@@ -291,13 +292,14 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
     var res = await beCryptoWithdrawals(
         widget.asset.symbol, pageNumber * _itemsPerPage, _itemsPerPage);
     Navigator.pop(context);
-    if (res.error.type == ErrorType.None) {
-      setState(() {
-        _withdrawals = res.withdrawals;
-        _pageNumber = pageNumber;
-        _pageCount = (res.total / _itemsPerPage).ceil();
-      });
-    }
+    res.when(
+        (withdrawals, offset, limit, total) => setState(() {
+              _withdrawals = withdrawals;
+              _pageNumber = pageNumber;
+              _pageCount = (total / _itemsPerPage).ceil();
+            }),
+        error: (err) => alert(context, 'error',
+            'failed to get withdrawals (${BeError2.msg(err)})'));
   }
 
   Future<void> _withdrawalTap(BeCryptoWithdrawal withdrawal) async {
@@ -464,13 +466,14 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
     var res = await beFiatWithdrawals(
         widget.asset.symbol, pageNumber * _itemsPerPage, _itemsPerPage);
     Navigator.pop(context);
-    if (res.error.type == ErrorType.None) {
-      setState(() {
-        _withdrawals = res.withdrawals;
-        _pageNumber = pageNumber;
-        _pageCount = (res.total / _itemsPerPage).ceil();
-      });
-    }
+    res.when(
+        (withdrawals, offset, limit, total) => setState(() {
+              _withdrawals = withdrawals;
+              _pageNumber = pageNumber;
+              _pageCount = (total / _itemsPerPage).ceil();
+            }),
+        error: (err) => alert(context, 'error',
+            'failed to get withdrawals (${BeError2.msg(err)})'));
   }
 
   Future<void> _withdrawalTap(BeFiatWithdrawal withdrawal) async {

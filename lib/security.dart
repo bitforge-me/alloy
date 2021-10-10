@@ -103,43 +103,47 @@ class _SecurityScreenState extends State<SecurityScreen> {
     showAlertDialog(context, 'querying..');
     var result = await beUserTwoFactorDisable(null);
     Navigator.of(context).pop();
-    if (result.error.type == ErrorType.None) {
+    await result.when((twoFactor) async {
       var code = await askString(
           context, 'Enter your two factor code to disable', null);
       if (code != null) {
         showAlertDialog(context, 'disabling..');
         result = await beUserTwoFactorDisable(code);
         Navigator.of(context).pop();
-        if (result.error.type != ErrorType.None)
+        await result.when((twoFactor) => null, error: (err) async {
           alert(context, 'Failed to disable two factor authentication', ':(');
+        });
       }
-    } else
+    }, error: (err) async {
       flushbarMsg(context, 'failed to get two factor authentication details',
           category: MessageCategory.Warning);
+    });
   }
 
   void _tfEnable() async {
     showAlertDialog(context, 'querying..');
     var result = await beUserTwoFactorEnable(null);
     Navigator.of(context).pop();
-    if (result.error.type == ErrorType.None) {
+    await result.when((twoFactor) async {
       String? code;
-      if (result.twoFactor?.method == 'email')
+      if (twoFactor.method == 'email')
         code = await askString(
             context, 'Enter your two factor code to enable', null);
-      if (result.twoFactor?.method == 'authenticator' &&
-          result.twoFactor?.setup != null)
-        code = await twoFactorQr(context, result.twoFactor!.setup!);
+      if (twoFactor.method == 'authenticator' && twoFactor.setup != null)
+        code = await twoFactorQr(context, twoFactor.setup!);
       if (code != null) {
         showAlertDialog(context, 'enabling..');
         result = await beUserTwoFactorEnable(code);
         Navigator.of(context).pop();
-        if (result.error.type != ErrorType.None)
-          alert(context, 'Failed to enable two factor authentication', ':(');
+        await result.when((twoFactor) => null, error: (err) async {
+          await alert(
+              context, 'Failed to enable two factor authentication', ':(');
+        });
       }
-    } else
+    }, error: (err) async {
       flushbarMsg(context, 'failed to get two factor authentication details',
           category: MessageCategory.Warning);
+    });
   }
 
   @override

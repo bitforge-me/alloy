@@ -108,13 +108,15 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
     var res = await beCryptoDeposits(
         widget.asset.symbol, pageNumber * _itemsPerPage, _itemsPerPage);
     Navigator.pop(context);
-    if (res.error.type == ErrorType.None) {
+    res.when((deposits, offset, limit, total) {
       setState(() {
-        _deposits = res.deposits;
+        _deposits = deposits;
         _pageNumber = pageNumber;
-        _pageCount = (res.total / _itemsPerPage).ceil();
+        _pageCount = (total / _itemsPerPage).ceil();
       });
-    }
+    },
+        error: (err) => flushbarMsg(context, 'failed to query deposits',
+            category: MessageCategory.Warning));
   }
 
   Future<void> _depositTap(BeCryptoDeposit deposit) async {
@@ -138,12 +140,14 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
     showAlertDialog(context, 'querying..');
     var res = await beCryptoDepositAddress(widget.asset.symbol);
     Navigator.pop(context);
-    if (res.error.type == ErrorType.None && res.address != null)
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CryptoDepositNewScreen(
-                  widget.asset, res.address!, widget.websocket)));
+    res.when(
+        (address) => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CryptoDepositNewScreen(
+                    widget.asset, address, widget.websocket))),
+        error: (err) => flushbarMsg(context, 'failed to query deposit address',
+            category: MessageCategory.Warning));
   }
 
   @override
@@ -325,13 +329,14 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
     var res = await beFiatDeposits(
         widget.asset.symbol, pageNumber * _itemsPerPage, _itemsPerPage);
     Navigator.pop(context);
-    if (res.error.type == ErrorType.None) {
-      setState(() {
-        _deposits = res.deposits;
-        _pageNumber = pageNumber;
-        _pageCount = (res.total / _itemsPerPage).ceil();
-      });
-    }
+    res.when(
+        (deposits, offset, limit, total) => setState(() {
+              _deposits = deposits;
+              _pageNumber = pageNumber;
+              _pageCount = (total / _itemsPerPage).ceil();
+            }),
+        error: (err) => alert(
+            context, 'error', 'failed to get deposits (${BeError2.msg(err)})'));
   }
 
   Future<void> _depositTap(BeFiatDeposit deposit) async {
@@ -363,12 +368,14 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
     showAlertDialog(context, 'querying..');
     var res = await beFiatDepositCreate(widget.asset.symbol, amount);
     Navigator.pop(context);
-    if (res.error.type == ErrorType.None && res.deposit != null)
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  FiatDepositDetailScreen(res.deposit!, widget.websocket)));
+    res.when(
+        (deposit) => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    FiatDepositDetailScreen(deposit, widget.websocket))),
+        error: (err) => alert(context, 'error',
+            'failed to create deposit (${BeError2.msg(err)})'));
   }
 
   @override

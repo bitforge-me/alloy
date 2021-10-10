@@ -280,3 +280,53 @@ Map<String, dynamic> _$BeAddressBookEntryToJson(BeAddressBookEntry instance) =>
       'recipient': instance.recipient,
       'description': instance.description,
     };
+
+BeBrokerOrder _$BeBrokerOrderFromJson(Map<String, dynamic> json) =>
+    BeBrokerOrder(
+      json['token'] as String,
+      DateTime.parse(json['date'] as String),
+      DateTime.parse(json['expiry'] as String),
+      json['market'] as String,
+      _$enumDecode(_$BeMarketSideEnumMap, json['side']),
+      json['base_asset'] as String,
+      json['quote_asset'] as String,
+      _decimalFromJson(json['base_amount_dec']),
+      _decimalFromJson(json['quote_amount_dec']),
+      json['recipient'] as String,
+      _$enumDecode(_$BeOrderStatusEnumMap, json['status']),
+      json['payment_url'] as String?,
+    );
+
+Map<String, dynamic> _$BeBrokerOrderToJson(BeBrokerOrder instance) =>
+    <String, dynamic>{
+      'token': instance.token,
+      'date': instance.date.toIso8601String(),
+      'expiry': instance.expiry.toIso8601String(),
+      'market': instance.market,
+      'side': _$BeMarketSideEnumMap[instance.side],
+      'base_asset': instance.baseAsset,
+      'quote_asset': instance.quoteAsset,
+      'base_amount_dec': _decimalToJson(instance.baseAmount),
+      'quote_amount_dec': _decimalToJson(instance.quoteAmount),
+      'recipient': instance.recipient,
+      'status': _$BeOrderStatusEnumMap[instance.status],
+      'payment_url': instance.paymentUrl,
+    };
+
+const _$BeMarketSideEnumMap = {
+  BeMarketSide.bid: 'bid',
+  BeMarketSide.ask: 'ask',
+};
+
+const _$BeOrderStatusEnumMap = {
+  BeOrderStatus.none: 'none',
+  BeOrderStatus.created: 'created',
+  BeOrderStatus.ready: 'ready',
+  BeOrderStatus.incoming: 'incoming',
+  BeOrderStatus.confirmed: 'confirmed',
+  BeOrderStatus.exchange: 'exchange',
+  BeOrderStatus.withdrawing: 'withdrawing',
+  BeOrderStatus.completed: 'completed',
+  BeOrderStatus.expired: 'expired',
+  BeOrderStatus.cancelled: 'cancelled',
+};

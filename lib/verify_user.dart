@@ -79,17 +79,19 @@ class _VerifyUserScreenState extends State<VerifyUserScreen> {
     if (_formKey.currentState!.validate()) {
       if (_userInfo.kycUrl == null) {
         var res = await _kycRequestCreate();
-        if (res.error.type != ErrorType.None) {
-          await alert(context, 'Error', res.error.msg);
-          return;
-        }
+        if (!await res.when<Future<bool>>((kycUrl) async => true,
+            error: (err) async {
+          await alert(context, 'Error', 'failed to submit kyc request');
+          return false;
+        })) return;
       }
       if (_phoneNumber == null || _phoneNumber!.phoneNumber == null) return;
       var res = await _kycSendMobileNumber(_phoneNumber!.phoneNumber!);
-      if (res.error.type != ErrorType.None) {
-        await alert(context, 'Error', res.error.msg);
-        return;
-      }
+      if (!await res.when<Future<bool>>((kycUrl) async => true,
+          error: (err) async {
+        await alert(context, 'Error', 'failed to submit kyc request');
+        return false;
+      })) return;
       await alert(context, 'SMS sent',
           'Follow the instructions from the SMS link on your mobile phone');
       Navigator.pop(context);

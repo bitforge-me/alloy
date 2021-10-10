@@ -98,31 +98,29 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       showAlertDialog(context, 'getting account info...');
       var result = await beUserInfo();
       Navigator.pop(context);
-      switch (result.error.type) {
-        case ErrorType.Auth:
-          alert(context, 'Authentication failed', result.error.msg);
-          setState(() {
-            _invalidAuth = true;
-            _retry = false;
-          });
-          break;
-        case ErrorType.Network:
+      result.when((UserInfo info) {
+        setState(() {
+          _invalidAuth = false;
+          _retry = false;
+        });
+        userInfo = info;
+        _websocket.wsEvent.subscribe(_websocketEvent);
+        _websocket.connect(); // connect websocket
+      }, error: (err) {
+        err.when(network: () {
           alert(context, 'Network error', 'A network error occured');
           setState(() {
             _retry = true;
             _invalidAuth = false;
           });
-          break;
-        case ErrorType.None:
+        }, auth: (msg) {
+          alert(context, 'Authentication failed', msg);
           setState(() {
-            _invalidAuth = false;
+            _invalidAuth = true;
             _retry = false;
           });
-          userInfo = result.info!;
-          _websocket.wsEvent.subscribe(_websocketEvent);
-          _websocket.connect(); // connect websocket
-          break;
-      }
+        });
+      });
       setState(() {
         _userInfo = userInfo;
         _alerts = _generateAlerts(userInfo);
@@ -144,19 +142,14 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     }
   }
 
-  Future<void> _loginErrorAlert(BuildContext context, BeError error) async {
-    switch (error.type) {
-      case ErrorType.None:
-        break;
-      case ErrorType.Auth:
-        await alert(context, 'Authentication failed',
-            'The login details you entered are not valid (${error.msg})');
-        break;
-      case ErrorType.Network:
-        await alert(context, 'Network error',
-            'A network error occured when trying to login');
-        break;
-    }
+  Future<void> _loginErrorAlert(BuildContext context, BeError2 error) async {
+    await error.when(network: () async {
+      await alert(context, 'Network error',
+          'A network error occured when trying to login');
+    }, auth: (msg) async {
+      await alert(context, 'Authentication failed',
+          'The login details you entered are not valid ($msg)');
+    });
   }
 
   Future<Acct?> _beLogin(BuildContext context, AccountLogin login,
@@ -164,45 +157,30 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     var devName = await deviceName();
     var result = await beApiKeyCreate(
         login.email, login.password, devName, login.tfCode);
-    switch (result.error.type) {
-      case ErrorType.None:
-        // write api key
-        if (result.apikey != null) {
-          await Prefs.beApiKeySet(result.apikey!.token);
-          await Prefs.beApiSecretSet(result.apikey!.secret);
-        }
-        return Acct(login.email, result.apikey?.token);
-      default:
-        if (!silent) await _loginErrorAlert(context, result.error);
-        break;
-    }
-    return null;
+    return await result.when<Future<Acct?>>((apikey) async {
+      // write api key
+      await Prefs.beApiKeySet(apikey.token);
+      await Prefs.beApiSecretSet(apikey.secret);
+      return Acct(login.email, apikey.token);
+    }, error: (err) async {
+      if (!silent) await _loginErrorAlert(context, err);
+      return null;
+    });
   }
 
   Future<Acct?> _beApiKeyClaim(
       BuildContext context, AccountRequestApiKey req, String token,
       {silent: false}) async {
     var result = await beApiKeyClaim(token);
-    switch (result.error.type) {
-      case ErrorType.Auth:
-        if (!silent)
-          await alert(context, 'Authentication not valid',
-              'The login details you entered are not valid (${result.error.msg})');
-        break;
-      case ErrorType.Network:
-        if (!silent)
-          await alert(context, 'Network error',
-              'A network error occured when trying to login');
-        break;
-      case ErrorType.None:
-        // write api key
-        if (result.apikey != null) {
-          await Prefs.beApiKeySet(result.apikey!.token);
-          await Prefs.beApiSecretSet(result.apikey!.secret);
-        }
-        return Acct(req.email, result.apikey?.token);
-    }
-    return null;
+    return await result.when<Future<Acct?>>((apikey) async {
+      // write api key
+      await Prefs.beApiKeySet(apikey.token);
+      await Prefs.beApiSecretSet(apikey.secret);
+      return Acct(req.email, apikey.token);
+    }, error: (err) async {
+      if (!silent) await _loginErrorAlert(context, err);
+      return null;
+    });
   }
 
   Future<void> _register() async {
@@ -220,34 +198,29 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 locationIqApiKey: locationIqApiKey(),
               )),
     );
-    if (reg != null) {
-      var res = await beUserRegister(reg);
-      switch (res.type) {
-        case ErrorType.Auth:
-          await alert(context, 'Authorisation error',
-              'An authorisation error occured when trying to register (${res.msg})');
-          break;
-        case ErrorType.Network:
-          await alert(context, 'Network error',
-              'A network error occured when trying to register');
-          break;
-        case ErrorType.None:
-          var cancelled = false;
-          Acct? acct;
-          showAlertDialog(context, 'waiting for you to confirm the email...',
-              showCancel: true, onCancel: () => cancelled = true);
-          while (acct == null && !cancelled) {
-            await Future.delayed(Duration(seconds: 5));
-            // save account if login successful
-            acct = await _beLogin(
-                context, AccountLogin(reg.email, reg.newPassword, ''),
-                silent: true);
-          }
-          Navigator.pop(context);
-          _initApi();
-          break;
+    if (reg == null) return;
+    var res = await beUserRegister(reg);
+    res.when(() async {
+      var cancelled = false;
+      Acct? acct;
+      showAlertDialog(context, 'waiting for you to confirm the email...',
+          showCancel: true, onCancel: () => cancelled = true);
+      while (acct == null && !cancelled) {
+        await Future.delayed(Duration(seconds: 5));
+        // save account if login successful
+        acct = await _beLogin(
+            context, AccountLogin(reg!.email, reg.newPassword, ''),
+            silent: true);
       }
-    }
+      Navigator.pop(context);
+      _initApi();
+    }, error: (err) {
+      err.when(
+          network: () => alert(context, 'Network error',
+              'A network error occured when trying to register'),
+          auth: (msg) => alert(context, 'Authorisation error',
+              'An authorisation error occured when trying to register ($msg)'));
+    });
   }
 
   Future<void> _login() async {
@@ -266,11 +239,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       var result =
           await beUserTwoFactorEnabledCheck(login.email, login.password);
       Navigator.pop(context);
-      if (result.error.type == ErrorType.None && result.tfEnabled != null) {
-        tfEnabled = result.tfEnabled!;
-        break;
-      } else
-        await _loginErrorAlert(context, result.error);
+      if (await result.when<Future<bool>>((enabled) async {
+        tfEnabled = enabled;
+        return true;
+      }, error: (err) async {
+        await _loginErrorAlert(context, err);
+        return false;
+      })) break;
     }
     while (true) {
       // get the two factor code if required
@@ -303,27 +278,22 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     );
     if (req == null) return;
     var result = await beApiKeyRequest(req.email, req.deviceName);
-    switch (result.error.type) {
-      case ErrorType.Auth:
-      case ErrorType.Network:
-        await alert(context, 'Network error',
-            'A network error occured when trying to login');
-        break;
-      case ErrorType.None:
-        assert(result.token != null);
-        Acct? acct;
-        var cancelled = false;
-        showAlertDialog(context, 'waiting for you to confirm the email...',
-            showCancel: true, onCancel: () => cancelled = true);
-        while (acct == null && !cancelled) {
-          await Future.delayed(Duration(seconds: 5));
-          // claim api key
-          acct =
-              await _beApiKeyClaim(context, req, result.token!, silent: true);
-        }
-        Navigator.pop(context);
-        if (acct != null) _initApi();
-    }
+    await result.when((token) async {
+      Acct? acct;
+      var cancelled = false;
+      showAlertDialog(context, 'waiting for you to confirm the email...',
+          showCancel: true, onCancel: () => cancelled = true);
+      while (acct == null && !cancelled) {
+        await Future.delayed(Duration(seconds: 5));
+        // claim api key
+        acct = await _beApiKeyClaim(context, req, token, silent: true);
+      }
+      Navigator.pop(context);
+      if (acct != null) _initApi();
+    }, error: (err) async {
+      await alert(context, 'Network error',
+          'A network error occured when trying to login');
+    });
   }
 
   Future<void> _support() async {
@@ -349,35 +319,40 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     showAlertDialog(context, 'querying..');
     var res = await beBalances();
     Navigator.pop(context);
-    if (res.error.type == ErrorType.None)
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BalanceScreen(res.balances, _websocket)));
+    res.when(
+        (balances) => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => BalanceScreen(balances, _websocket))),
+        error: (err) => flushbarMsg(context, 'failed to query balances',
+            category: MessageCategory.Warning));
   }
 
   Future<void> _deposit() async {
     showAlertDialog(context, 'querying..');
     var res = await beAssets();
     Navigator.pop(context);
-    if (res.error.type == ErrorType.None)
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  DepositSelectScreen(res.assets, _websocket)));
+    res.when(
+        (assets) => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DepositSelectScreen(assets, _websocket))),
+        error: (err) => flushbarMsg(context, 'failed to query deposits',
+            category: MessageCategory.Warning));
   }
 
   Future<void> _withdrawal() async {
     showAlertDialog(context, 'querying..');
     var res = await beAssets();
     Navigator.pop(context);
-    if (res.error.type == ErrorType.None)
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  WithdrawalSelectScreen(res.assets, _websocket)));
+    res.when(
+        (assets) => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    WithdrawalSelectScreen(assets, _websocket))),
+        error: (err) => flushbarMsg(context, 'failed to query withdrawals',
+            category: MessageCategory.Warning));
   }
 
   Future<void> _orders() async {
