@@ -200,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     );
     if (reg == null) return;
     var res = await beUserRegister(reg);
-    res.when(() async {
+    res.when((content) async {
       var cancelled = false;
       Acct? acct;
       showAlertDialog(context, 'waiting for you to confirm the email...',

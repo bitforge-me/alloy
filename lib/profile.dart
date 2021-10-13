@@ -81,7 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         showAlertDialog(context, 'updating photo..');
         var result = await beUserUpdatePhoto(newReg.photo, newReg.photoType);
         Navigator.of(context).pop();
-        result.when(() {
+        result.when((content) {
           flushbarMsg(context, 'update photo completed');
           setState(() => _userInfo = userInfo(newReg));
         },
@@ -100,7 +100,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         showAlertDialog(context, 'sending update email request..');
         var result = await beUserUpdateEmail(newEmail);
         Navigator.of(context).pop();
-        result.when(() => flushbarMsg(context, 'update email request created'),
+        result.when(
+            (content) => flushbarMsg(context, 'update email request created'),
             error: (err) => flushbarMsg(
                 context, 'failed to create update email request',
                 category: MessageCategory.Warning));
@@ -128,7 +129,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         var result = await beUserUpdatePassword(
             newReg.currentPassword, newReg.newPassword);
         Navigator.of(context).pop();
-        result.when(() => flushbarMsg(context, 'update password completed'),
+        result.when(
+            (content) => flushbarMsg(context, 'update password completed'),
             error: (err) => flushbarMsg(context, 'failed to update password',
                 category: MessageCategory.Warning));
       }
@@ -142,7 +144,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     var result = await beUserResetPassword();
     Navigator.of(context).pop();
     result.when(
-        () => flushbarMsg(context, 'password reset request sent (check email)'),
+        (content) =>
+            flushbarMsg(context, 'password reset request sent (check email)'),
         error: (err) => flushbarMsg(context, 'failed to reset password',
             category: MessageCategory.Warning));
   }

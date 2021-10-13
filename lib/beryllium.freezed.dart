@@ -337,8 +337,10 @@ abstract class Auth implements BeError2 {
 class _$ErrorResultTearOff {
   const _$ErrorResultTearOff();
 
-  _ErrorResult call() {
-    return const _ErrorResult();
+  _ErrorResult call(String content) {
+    return _ErrorResult(
+      content,
+    );
   }
 
   _ErrorResultErr error(BeError2 err) {
@@ -355,19 +357,19 @@ const $ErrorResult = _$ErrorResultTearOff();
 mixin _$ErrorResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function() $default, {
+    TResult Function(String content) $default, {
     required TResult Function(BeError2 err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function()? $default, {
+    TResult Function(String content)? $default, {
     TResult Function(BeError2 err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function()? $default, {
+    TResult Function(String content)? $default, {
     TResult Function(BeError2 err)? error,
     required TResult orElse(),
   }) =>
@@ -414,6 +416,7 @@ abstract class _$ErrorResultCopyWith<$Res> {
   factory _$ErrorResultCopyWith(
           _ErrorResult value, $Res Function(_ErrorResult) then) =
       __$ErrorResultCopyWithImpl<$Res>;
+  $Res call({String content});
 }
 
 /// @nodoc
@@ -425,59 +428,85 @@ class __$ErrorResultCopyWithImpl<$Res> extends _$ErrorResultCopyWithImpl<$Res>
 
   @override
   _ErrorResult get _value => super._value as _ErrorResult;
+
+  @override
+  $Res call({
+    Object? content = freezed,
+  }) {
+    return _then(_ErrorResult(
+      content == freezed
+          ? _value.content
+          : content // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$_ErrorResult with DiagnosticableTreeMixin implements _ErrorResult {
-  const _$_ErrorResult();
+  const _$_ErrorResult(this.content);
+
+  @override
+  final String content;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ErrorResult()';
+    return 'ErrorResult(content: $content)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties..add(DiagnosticsProperty('type', 'ErrorResult'));
+    properties
+      ..add(DiagnosticsProperty('type', 'ErrorResult'))
+      ..add(DiagnosticsProperty('content', content));
   }
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is _ErrorResult);
+    return identical(this, other) ||
+        (other is _ErrorResult &&
+            (identical(other.content, content) ||
+                const DeepCollectionEquality().equals(other.content, content)));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(content);
+
+  @JsonKey(ignore: true)
+  @override
+  _$ErrorResultCopyWith<_ErrorResult> get copyWith =>
+      __$ErrorResultCopyWithImpl<_ErrorResult>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function() $default, {
+    TResult Function(String content) $default, {
     required TResult Function(BeError2 err) error,
   }) {
-    return $default();
+    return $default(content);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function()? $default, {
+    TResult Function(String content)? $default, {
     TResult Function(BeError2 err)? error,
   }) {
-    return $default?.call();
+    return $default?.call(content);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function()? $default, {
+    TResult Function(String content)? $default, {
     TResult Function(BeError2 err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
-      return $default();
+      return $default(content);
     }
     return orElse();
   }
@@ -515,7 +544,12 @@ class _$_ErrorResult with DiagnosticableTreeMixin implements _ErrorResult {
 }
 
 abstract class _ErrorResult implements ErrorResult {
-  const factory _ErrorResult() = _$_ErrorResult;
+  const factory _ErrorResult(String content) = _$_ErrorResult;
+
+  String get content => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  _$ErrorResultCopyWith<_ErrorResult> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -602,7 +636,7 @@ class _$_ErrorResultErr
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function() $default, {
+    TResult Function(String content) $default, {
     required TResult Function(BeError2 err) error,
   }) {
     return error(err);
@@ -611,7 +645,7 @@ class _$_ErrorResultErr
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function()? $default, {
+    TResult Function(String content)? $default, {
     TResult Function(BeError2 err)? error,
   }) {
     return error?.call(err);
@@ -620,7 +654,7 @@ class _$_ErrorResultErr
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function()? $default, {
+    TResult Function(String content)? $default, {
     TResult Function(BeError2 err)? error,
     required TResult orElse(),
   }) {

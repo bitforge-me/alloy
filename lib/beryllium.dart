@@ -52,7 +52,7 @@ class BeError2 with _$BeError2 {
 
 @freezed
 class ErrorResult with _$ErrorResult {
-  const factory ErrorResult() = _ErrorResult;
+  const factory ErrorResult(String content) = _ErrorResult;
   const factory ErrorResult.error(BeError2 err) = _ErrorResultErr;
   static network() => ErrorResult.error(BeError2.network());
   static auth(String message) =>
@@ -127,6 +127,11 @@ class UserInfo {
 class UserInfoResult with _$UserInfoResult {
   const factory UserInfoResult(UserInfo info) = _UserInfo;
   const factory UserInfoResult.error(BeError2 err) = _UserInfoErr;
+
+  static UserInfoResult parse(String data) {
+    var info = UserInfo.fromJson(jsonDecode(data));
+    return UserInfoResult(info);
+  }
 }
 
 @freezed
@@ -154,6 +159,11 @@ class BeApiKey {
 class BeApiKeyResult with _$BeApiKeyResult {
   const factory BeApiKeyResult(BeApiKey apikey) = _BeApiKeyResult;
   const factory BeApiKeyResult.error(BeError2 err) = _BeApiKeyResultErr;
+
+  static BeApiKeyResult parse(String data) {
+    var jsnObj = json.decode(data);
+    return BeApiKeyResult(BeApiKey(jsnObj["token"], jsnObj["secret"]));
+  }
 }
 
 @freezed
@@ -161,6 +171,12 @@ class BeApiKeyRequestResult with _$BeApiKeyRequestResult {
   const factory BeApiKeyRequestResult(String token) = _BeApiKeyRequestResult;
   const factory BeApiKeyRequestResult.error(BeError2 err) =
       _BeApiKeyRequestResulttErr;
+
+  static BeApiKeyRequestResult parse(String data) {
+    var jsnObj = json.decode(data);
+    var token = jsnObj["token"];
+    return BeApiKeyRequestResult(token);
+  }
 }
 
 @freezed
@@ -169,6 +185,11 @@ class BeKycRequestCreateResult with _$BeKycRequestCreateResult {
       _BeKycRequestCreateResult;
   const factory BeKycRequestCreateResult.error(BeError2 err) =
       _BeKycRequestCreateResultErr;
+
+  static BeKycRequestCreateResult parse(String data) {
+    var jsnObj = json.decode(data);
+    return BeKycRequestCreateResult(jsnObj['kyc_url']);
+  }
 }
 
 @JsonSerializable()
@@ -322,6 +343,10 @@ class BeOrderbook {
 class BeOrderbookResult with _$BeOrderbookResult {
   const factory BeOrderbookResult(BeOrderbook orderbook) = _BeOrderbookResult;
   const factory BeOrderbookResult.error(BeError2 err) = _BeOrderbookResultErr;
+
+  static BeOrderbookResult parse(String data) {
+    return BeOrderbookResult(BeOrderbook.fromJson(jsonDecode(data)));
+  }
 }
 
 @JsonSerializable()
@@ -719,15 +744,36 @@ Future<http.Response?> postAndCatch(String url, String body,
   }
 }
 
-Future<String?> beServer() async {
-  return await _server();
+Future<ErrorResult> post(String endpoint, Map<String, dynamic> params,
+    {bool authRequired = false}) async {
+  var baseUrl = await _server();
+  if (baseUrl == null) return ErrorResult.network();
+  var url = baseUrl + endpoint;
+  var headers = Map<String, String>();
+  var body;
+  if (authRequired) {
+    var apikey = await Prefs.beApiKeyGet();
+    var apisecret = await Prefs.beApiSecretGet();
+    checkApiKey(apikey, apisecret);
+    var nonce = nextNonce();
+    params.addAll({"api_key": apikey, "nonce": nonce});
+    body = jsonEncode(params);
+    var sig = createHmacSig(apisecret!, body);
+    headers.addAll({"X-Signature": sig});
+  } else
+    body = jsonEncode(params);
+  var response = await postAndCatch(url, body, extraHeaders: headers);
+  if (response == null) return ErrorResult.network();
+  if (response.statusCode == 200) {
+    return ErrorResult(response.body);
+  } else if (response.statusCode == 400)
+    return BeError2.authParseMsg(response.body);
+  print(response.statusCode);
+  return ErrorResult.network();
 }
 
 Future<ErrorResult> beUserRegister(AccountRegistration reg) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return ErrorResult.network();
-  var url = baseUrl + "user_register";
-  var body = jsonEncode({
+  return await post('user_register', {
     "first_name": reg.firstName,
     "last_name": reg.lastName,
     "email": reg.email,
@@ -737,438 +783,136 @@ Future<ErrorResult> beUserRegister(AccountRegistration reg) async {
     "photo": reg.photo,
     "photo_type": reg.photoType
   });
-  var response = await postAndCatch(url, body);
-  if (response == null) return ErrorResult.network();
-  if (response.statusCode == 200) {
-    return ErrorResult();
-  } else if (response.statusCode == 400)
-    return BeError2.authParseMsg(response.body);
-  print(response.statusCode);
-  return ErrorResult.network();
 }
 
 Future<BeTwoFactorEnabledResult> beUserTwoFactorEnabledCheck(
     String email, String password) async {
-  var baseUrl = await _server();
-  if (baseUrl == null)
-    return BeTwoFactorEnabledResult.error(BeError2.network());
-  var url = baseUrl + "user_two_factor_enabled_check";
-  var body = jsonEncode({"email": email, "password": password});
-  var response = await postAndCatch(url, body);
-  if (response == null)
-    return BeTwoFactorEnabledResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    return BeTwoFactorEnabledResult.parse(response.body);
-  } else if (response.statusCode == 400)
-    return BeTwoFactorEnabledResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeTwoFactorEnabledResult.error(BeError2.network());
+  var result = await post(
+      'user_two_factor_enabled_check', {"email": email, "password": password});
+  return result.when((content) => BeTwoFactorEnabledResult.parse(content),
+      error: (err) => BeTwoFactorEnabledResult.error(err));
 }
 
 Future<BeApiKeyResult> beApiKeyCreate(
     String email, String password, String deviceName, String tfCode) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return BeApiKeyResult.error(BeError2.network());
-  var url = baseUrl + "api_key_create";
-  var body = jsonEncode({
+  var result = await post('api_key_create', {
     "email": email,
     "password": password,
     "device_name": deviceName,
     "tf_code": tfCode
   });
-  var response = await postAndCatch(url, body);
-  if (response == null) return BeApiKeyResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    var jsnObj = json.decode(response.body);
-    var info = BeApiKey(jsnObj["token"], jsnObj["secret"]);
-    return BeApiKeyResult(info);
-  } else if (response.statusCode == 400)
-    return BeApiKeyResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeApiKeyResult.error(BeError2.network());
+  return result.when((content) => BeApiKeyResult.parse(content),
+      error: (err) => BeApiKeyResult.error(err));
 }
 
 Future<BeApiKeyRequestResult> beApiKeyRequest(
     String email, String deviceName) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return BeApiKeyRequestResult.error(BeError2.network());
-  var url = baseUrl + "api_key_request";
-  var body = jsonEncode({"email": email, "device_name": deviceName});
-  var response = await postAndCatch(url, body);
-  if (response == null) return BeApiKeyRequestResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    var jsnObj = json.decode(response.body);
-    var token = jsnObj["token"];
-    return BeApiKeyRequestResult(token);
-  } else if (response.statusCode == 400)
-    return BeApiKeyRequestResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeApiKeyRequestResult.error(BeError2.network());
+  var result = await post(
+      'api_key_request', {"email": email, "device_name": deviceName});
+  return result.when((content) => BeApiKeyRequestResult.parse(content),
+      error: (err) => BeApiKeyRequestResult.error(err));
 }
 
 Future<BeApiKeyResult> beApiKeyClaim(String token) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return BeApiKeyResult.error(BeError2.network());
-  var url = baseUrl + "api_key_claim";
-  var body = jsonEncode({"token": token});
-  var response = await postAndCatch(url, body);
-  if (response == null) return BeApiKeyResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    var jsnObj = json.decode(response.body);
-    var info = BeApiKey(jsnObj["token"], jsnObj["secret"]);
-    return BeApiKeyResult(info);
-  } else if (response.statusCode == 400)
-    return BeApiKeyResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeApiKeyResult.error(BeError2.network());
+  var result = await post('api_key_claim', {"token": token});
+  return result.when((content) => BeApiKeyResult.parse(content),
+      error: (err) => BeApiKeyResult.error(err));
 }
 
 Future<UserInfoResult> beUserInfo({String? email}) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return UserInfoResult.error(BeError2.network());
-  var url = baseUrl + "user_info";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({"api_key": apikey, "nonce": nonce, "email": email});
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return UserInfoResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    var info = UserInfo.fromJson(jsonDecode(response.body));
-    return UserInfoResult(info);
-  } else if (response.statusCode == 400)
-    return UserInfoResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return UserInfoResult.error(BeError2.network());
+  var result = await post("user_info", {"email": email}, authRequired: true);
+  return result.when((content) => UserInfoResult.parse(content),
+      error: (err) => UserInfoResult.error(err));
 }
 
 Future<ErrorResult> beUserResetPassword() async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return ErrorResult.network();
-  var url = baseUrl + "user_reset_password";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({"api_key": apikey, "nonce": nonce});
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return ErrorResult.network();
-  if (response.statusCode == 200) {
-    return ErrorResult();
-  } else if (response.statusCode == 400) return ErrorResult.auth(response.body);
-  print(response.statusCode);
-  return ErrorResult.network();
+  return await post('user_reset_password', {}, authRequired: true);
 }
 
 Future<ErrorResult> beUserUpdateEmail(String email) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return ErrorResult.network();
-  var url = baseUrl + "user_update_email";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({"api_key": apikey, "nonce": nonce, "email": email});
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return ErrorResult.network();
-  if (response.statusCode == 200) {
-    return ErrorResult();
-  } else if (response.statusCode == 400) return ErrorResult.auth(response.body);
-  print(response.statusCode);
-  return ErrorResult.network();
+  return post('user_update_email', {"email": email}, authRequired: true);
 }
 
 Future<ErrorResult> beUserUpdatePassword(
     String currentPassword, String newPassword) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return ErrorResult.network();
-  var url = baseUrl + "user_update_password";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({
-    "api_key": apikey,
-    "nonce": nonce,
-    "current_password": currentPassword,
-    "new_password": newPassword
-  });
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return ErrorResult.network();
-  if (response.statusCode == 200) {
-    return ErrorResult();
-  } else if (response.statusCode == 400) return ErrorResult.auth(response.body);
-  print(response.statusCode);
-  return ErrorResult.network();
+  return post('user_update_password',
+      {"current_password": currentPassword, "new_password": newPassword},
+      authRequired: true);
 }
 
 Future<ErrorResult> beUserUpdatePhoto(String? photo, String? photoType) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return ErrorResult.network();
-  var url = baseUrl + "user_update_photo";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({
-    "api_key": apikey,
-    "nonce": nonce,
-    "photo": photo,
-    "photo_type": photoType
-  });
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return ErrorResult.network();
-  if (response.statusCode == 200) {
-    return ErrorResult();
-  } else if (response.statusCode == 400) return ErrorResult.auth(response.body);
-  print(response.statusCode);
-  return ErrorResult.network();
+  return post('user_update_photo', {"photo": photo, "photo_type": photoType},
+      authRequired: true);
 }
 
 Future<BeKycRequestCreateResult> beKycRequestCreate() async {
-  var baseUrl = await _server();
-  if (baseUrl == null)
-    return BeKycRequestCreateResult.error(BeError2.network());
-  var url = baseUrl + "user_kyc_request_create";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({"api_key": apikey, "nonce": nonce});
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null)
-    return BeKycRequestCreateResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    var jsnObj = json.decode(response.body);
-    return BeKycRequestCreateResult(jsnObj['kyc_url']);
-  } else if (response.statusCode == 400)
-    return BeKycRequestCreateResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeKycRequestCreateResult.error(BeError2.network());
+  var result = await post("user_kyc_request_create", {}, authRequired: true);
+  return result.when((content) => BeKycRequestCreateResult.parse(content),
+      error: (err) => BeKycRequestCreateResult.error(err));
 }
 
 Future<BeKycRequestCreateResult> beKycRequestSendMobileNumber(
     String mobileNumber) async {
-  var baseUrl = await _server();
-  if (baseUrl == null)
-    return BeKycRequestCreateResult.error(BeError2.network());
-  var url = baseUrl + "user_kyc_request_send_mobile_number";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode(
-      {"api_key": apikey, "nonce": nonce, "mobile_number": mobileNumber});
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null)
-    return BeKycRequestCreateResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    var jsnObj = json.decode(response.body);
-    return BeKycRequestCreateResult(jsnObj['kyc_url']);
-  } else if (response.statusCode == 400)
-    return BeKycRequestCreateResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeKycRequestCreateResult.error(BeError2.network());
+  var result = await post(
+      "user_kyc_request_send_mobile_number", {"mobile_number": mobileNumber},
+      authRequired: true);
+  return result.when((content) => BeKycRequestCreateResult.parse(content),
+      error: (err) => BeKycRequestCreateResult.error(err));
 }
 
 Future<BeTwoFactorResult> beUserTwoFactorEnable(String? code) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return BeTwoFactorResult.error(BeError2.network());
-  var url = baseUrl + "user_two_factor_enable";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({"api_key": apikey, "nonce": nonce, "code": code});
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeTwoFactorResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    return BeTwoFactorResult.parse(response.body);
-  } else if (response.statusCode == 400)
-    return BeTwoFactorResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeTwoFactorResult.error(BeError2.network());
+  var result =
+      await post("user_two_factor_enable", {"code": code}, authRequired: true);
+  return result.when((content) => BeTwoFactorResult.parse(content),
+      error: (err) => BeTwoFactorResult.error(err));
 }
 
 Future<BeTwoFactorResult> beUserTwoFactorDisable(String? code) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return BeTwoFactorResult.error(BeError2.network());
-  var url = baseUrl + "user_two_factor_disable";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({"api_key": apikey, "nonce": nonce, "code": code});
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeTwoFactorResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    return BeTwoFactorResult.parse(response.body);
-  } else if (response.statusCode == 400)
-    return BeTwoFactorResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeTwoFactorResult.error(BeError2.network());
+  var result =
+      await post("user_two_factor_disable", {"code": code}, authRequired: true);
+  return result.when((content) => BeTwoFactorResult.parse(content),
+      error: (err) => BeTwoFactorResult.error(err));
 }
 
 Future<BeAssetResult> beAssets() async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return BeAssetResult.error(BeError2.network());
-  var url = baseUrl + "assets";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({
-    "api_key": apikey,
-    "nonce": nonce,
-  });
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeAssetResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    return BeAssetResult.parse(response.body);
-  } else if (response.statusCode == 400)
-    return BeAssetResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeAssetResult.error(BeError2.network());
+  var result = await post("assets", {}, authRequired: true);
+  return result.when((content) => BeAssetResult.parse(content),
+      error: (err) => BeAssetResult.error(err));
 }
 
 Future<BeMarketResult> beMarkets() async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return BeMarketResult.error(BeError2.network());
-  var url = baseUrl + "markets";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({
-    "api_key": apikey,
-    "nonce": nonce,
-  });
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeMarketResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    return BeMarketResult.parse(response.body);
-  } else if (response.statusCode == 400)
-    return BeMarketResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeMarketResult.error(BeError2.network());
+  var result = await post("markets", {}, authRequired: true);
+  return result.when((content) => BeMarketResult.parse(content),
+      error: (err) => BeMarketResult.error(err));
 }
 
 Future<BeOrderbookResult> beOrderbook(String market) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return BeOrderbookResult.error(BeError2.network());
-  var url = baseUrl + "order_book";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({"api_key": apikey, "nonce": nonce, "market": market});
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeOrderbookResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    return BeOrderbookResult(BeOrderbook.fromJson(jsonDecode(response.body)));
-  } else if (response.statusCode == 400)
-    return BeOrderbookResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeOrderbookResult.error(BeError2.network());
+  var result = await post("order_book", {"market": market}, authRequired: true);
+  return result.when((content) => BeOrderbookResult.parse(content),
+      error: (err) => BeOrderbookResult.error(err));
 }
 
 Future<BeBalancesResult> beBalances() async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return BeBalancesResult.error(BeError2.network());
-  var url = baseUrl + "balances";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({"api_key": apikey, "nonce": nonce});
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeBalancesResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    return BeBalancesResult.parse(response.body);
-  } else if (response.statusCode == 400)
-    return BeBalancesResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeBalancesResult.error(BeError2.network());
+  var result = await post("balances", {}, authRequired: true);
+  return result.when((content) => BeBalancesResult.parse(content),
+      error: (err) => BeBalancesResult.error(err));
 }
 
 Future<BeCryptoDepositAddressResult> beCryptoDepositAddress(
     String asset) async {
-  var baseUrl = await _server();
-  if (baseUrl == null)
-    return BeCryptoDepositAddressResult.error(BeError2.network());
-  var url = baseUrl + "crypto_deposit_address";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({"api_key": apikey, "nonce": nonce, "asset": asset});
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null)
-    return BeCryptoDepositAddressResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    return BeCryptoDepositAddressResult.parse(response.body);
-  } else if (response.statusCode == 400)
-    return BeCryptoDepositAddressResult.error(
-        BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeCryptoDepositAddressResult.error(BeError2.network());
+  var result = await post("crypto_deposit_address", {"asset": asset},
+      authRequired: true);
+  return result.when((content) => BeCryptoDepositAddressResult.parse(content),
+      error: (err) => BeCryptoDepositAddressResult.error(err));
 }
 
 Future<BeCryptoDepositsResult> beCryptoDeposits(
     String asset, int offset, int limit) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return BeCryptoDepositsResult.error(BeError2.network());
-  var url = baseUrl + "crypto_deposits";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({
-    "api_key": apikey,
-    "nonce": nonce,
-    "asset": asset,
-    "offset": offset,
-    "limit": limit
-  });
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeCryptoDepositsResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    return BeCryptoDepositsResult.parse(response.body);
-  } else if (response.statusCode == 400)
-    return BeCryptoDepositsResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeCryptoDepositsResult.error(BeError2.network());
+  var result = await post(
+      "crypto_deposits", {"asset": asset, "offset": offset, "limit": limit},
+      authRequired: true);
+  return result.when((content) => BeCryptoDepositsResult.parse(content),
+      error: (err) => BeCryptoDepositsResult.error(err));
 }
 
 Future<BeCryptoWithdrawalResult> beCryptoWithdrawalCreate(
@@ -1177,120 +921,45 @@ Future<BeCryptoWithdrawalResult> beCryptoWithdrawalCreate(
     String recipient,
     bool saveRecipient,
     String recipientDescription) async {
-  var baseUrl = await _server();
-  if (baseUrl == null)
-    return BeCryptoWithdrawalResult.error(BeError2.network());
-  var url = baseUrl + "crypto_withdrawal_create";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({
-    "api_key": apikey,
-    "nonce": nonce,
-    "asset": asset,
-    "amount_dec": amount.toString(),
-    "recipient": recipient,
-    "save_recipient": saveRecipient,
-    "recipient_description": recipientDescription,
-  });
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null)
-    return BeCryptoWithdrawalResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    return BeCryptoWithdrawalResult.parse(response.body);
-  } else if (response.statusCode == 400)
-    return BeCryptoWithdrawalResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeCryptoWithdrawalResult.error(BeError2.network());
+  var result = await post(
+      "crypto_withdrawal_create",
+      {
+        "asset": asset,
+        "amount_dec": amount.toString(),
+        "recipient": recipient,
+        "save_recipient": saveRecipient,
+        "recipient_description": recipientDescription
+      },
+      authRequired: true);
+  return result.when((content) => BeCryptoWithdrawalResult.parse(content),
+      error: (err) => BeCryptoWithdrawalResult.error(err));
 }
 
 Future<BeCryptoWithdrawalsResult> beCryptoWithdrawals(
     String asset, int offset, int limit) async {
-  var baseUrl = await _server();
-  if (baseUrl == null)
-    return BeCryptoWithdrawalsResult.error(BeError2.network());
-  var url = baseUrl + "crypto_withdrawals";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({
-    "api_key": apikey,
-    "nonce": nonce,
-    "asset": asset,
-    "offset": offset,
-    "limit": limit
-  });
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null)
-    return BeCryptoWithdrawalsResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    return BeCryptoWithdrawalsResult.parse(response.body);
-  } else if (response.statusCode == 400)
-    return BeCryptoWithdrawalsResult.error(
-        BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeCryptoWithdrawalsResult.error(BeError2.network());
+  var result = await post(
+      "crypto_withdrawals", {"asset": asset, "offset": offset, "limit": limit},
+      authRequired: true);
+  return result.when((content) => BeCryptoWithdrawalsResult.parse(content),
+      error: (err) => BeCryptoWithdrawalsResult.error(err));
 }
 
 Future<BeFiatDepositResult> beFiatDepositCreate(
     String asset, Decimal amount) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return BeFiatDepositResult.error(BeError2.network());
-  var url = baseUrl + "fiat_deposit_create";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({
-    "api_key": apikey,
-    "nonce": nonce,
-    "asset": asset,
-    "amount_dec": amount.toString()
-  });
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeFiatDepositResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    return BeFiatDepositResult.parse(response.body);
-  } else if (response.statusCode == 400)
-    return BeFiatDepositResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeFiatDepositResult.error(BeError2.network());
+  var result = await post(
+      "fiat_deposit_create", {"asset": asset, "amount_dec": amount.toString()},
+      authRequired: true);
+  return result.when((content) => BeFiatDepositResult.parse(content),
+      error: (err) => BeFiatDepositResult.error(err));
 }
 
 Future<BeFiatDepositsResult> beFiatDeposits(
     String asset, int offset, int limit) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return BeFiatDepositsResult.error(BeError2.network());
-  var url = baseUrl + "fiat_deposits";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({
-    "api_key": apikey,
-    "nonce": nonce,
-    "asset": asset,
-    "offset": offset,
-    "limit": limit
-  });
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeFiatDepositsResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    return BeFiatDepositsResult.parse(response.body);
-  } else if (response.statusCode == 400)
-    return BeFiatDepositsResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeFiatDepositsResult.error(BeError2.network());
+  var result = await post(
+      "fiat_deposits", {"asset": asset, "offset": offset, "limit": limit},
+      authRequired: true);
+  return result.when((content) => BeFiatDepositsResult.parse(content),
+      error: (err) => BeFiatDepositsResult.error(err));
 }
 
 Future<BeFiatWithdrawalResult> beFiatWithdrawalCreate(
@@ -1299,82 +968,33 @@ Future<BeFiatWithdrawalResult> beFiatWithdrawalCreate(
     String recipient,
     bool saveRecipient,
     String recipientDescription) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return BeFiatWithdrawalResult.error(BeError2.network());
-  var url = baseUrl + "fiat_withdrawal_create";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({
-    "api_key": apikey,
-    "nonce": nonce,
-    "asset": asset,
-    "amount_dec": amount.toString(),
-    "recipient": recipient,
-    "save_recipient": saveRecipient,
-    "recipient_description": recipientDescription,
-  });
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeFiatWithdrawalResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    return BeFiatWithdrawalResult.parse(response.body);
-  } else if (response.statusCode == 400)
-    return BeFiatWithdrawalResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeFiatWithdrawalResult.error(BeError2.network());
+  var result = await post(
+      "fiat_withdrawal_create",
+      {
+        "asset": asset,
+        "amount_dec": amount.toString(),
+        "recipient": recipient,
+        "save_recipient": saveRecipient,
+        "recipient_description": recipientDescription
+      },
+      authRequired: true);
+  return result.when((content) => BeFiatWithdrawalResult.parse(content),
+      error: (err) => BeFiatWithdrawalResult.error(err));
 }
 
 Future<BeFiatWithdrawalsResult> beFiatWithdrawals(
     String asset, int offset, int limit) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return BeFiatWithdrawalsResult.error(BeError2.network());
-  var url = baseUrl + "fiat_withdrawals";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({
-    "api_key": apikey,
-    "nonce": nonce,
-    "asset": asset,
-    "offset": offset,
-    "limit": limit
-  });
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null)
-    return BeFiatWithdrawalsResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    return BeFiatWithdrawalsResult.parse(response.body);
-  } else if (response.statusCode == 400)
-    return BeFiatWithdrawalsResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeFiatWithdrawalsResult.error(BeError2.network());
+  var result = await post(
+      "fiat_withdrawals", {"asset": asset, "offset": offset, "limit": limit},
+      authRequired: true);
+  return result.when((content) => BeFiatWithdrawalsResult.parse(content),
+      error: (err) => BeFiatWithdrawalsResult.error(err));
 }
 
 Future<BeAddressBookResult> beAddressBook(String asset) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return BeAddressBookResult.error(BeError2.network());
-  var url = baseUrl + "address_book";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({"api_key": apikey, "nonce": nonce, "asset": asset});
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeAddressBookResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    return BeAddressBookResult.parse(response.body);
-  } else if (response.statusCode == 400)
-    return BeAddressBookResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeAddressBookResult.error(BeError2.network());
+  var result = await post("address_book", {"asset": asset}, authRequired: true);
+  return result.when((content) => BeAddressBookResult.parse(content),
+      error: (err) => BeAddressBookResult.error(err));
 }
 
 Future<BeBrokerOrderResult> beOrderCreate(
@@ -1384,95 +1004,38 @@ Future<BeBrokerOrderResult> beOrderCreate(
     String recipient,
     bool saveRecipient,
     String? recipientDescription) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return BeBrokerOrderResult.error(BeError2.network());
-  var url = baseUrl + "broker_order_create";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({
-    "api_key": apikey,
-    "nonce": nonce,
-    "market": market,
-    "side": describeEnum(side),
-    "amount_dec": amount.toString(),
-    "recipient": recipient,
-    "save_recipient": saveRecipient,
-    "recipient_description": recipientDescription
-  });
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeBrokerOrderResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    return BeBrokerOrderResult.parse(response.body);
-  } else if (response.statusCode == 400)
-    return BeBrokerOrderResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeBrokerOrderResult.error(BeError2.network());
+  var result = await post(
+      "broker_order_create",
+      {
+        "market": market,
+        "side": describeEnum(side),
+        "amount_dec": amount.toString(),
+        "recipient": recipient,
+        "save_recipient": saveRecipient,
+        "recipient_description": recipientDescription
+      },
+      authRequired: true);
+  return result.when((content) => BeBrokerOrderResult.parse(content),
+      error: (err) => BeBrokerOrderResult.error(err));
 }
 
 Future<BeBrokerOrderResult> beOrderAccept(String token) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return BeBrokerOrderResult.error(BeError2.network());
-  var url = baseUrl + "broker_order_accept";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({"api_key": apikey, "nonce": nonce, "token": token});
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeBrokerOrderResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    return BeBrokerOrderResult.parse(response.body);
-  } else if (response.statusCode == 400)
-    return BeBrokerOrderResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeBrokerOrderResult.error(BeError2.network());
+  var result =
+      await post("broker_order_accept", {"token": token}, authRequired: true);
+  return result.when((content) => BeBrokerOrderResult.parse(content),
+      error: (err) => BeBrokerOrderResult.error(err));
 }
 
 Future<BeBrokerOrderResult> beOrderStatus(String token) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return BeBrokerOrderResult.error(BeError2.network());
-  var url = baseUrl + "broker_order_status";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode({"api_key": apikey, "nonce": nonce, "token": token});
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeBrokerOrderResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    return BeBrokerOrderResult.parse(response.body);
-  } else if (response.statusCode == 400)
-    return BeBrokerOrderResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeBrokerOrderResult.error(BeError2.network());
+  var result =
+      await post("broker_order_status", {"token": token}, authRequired: true);
+  return result.when((content) => BeBrokerOrderResult.parse(content),
+      error: (err) => BeBrokerOrderResult.error(err));
 }
 
 Future<BeBrokerOrdersResult> beOrderList(int offset, int limit) async {
-  var baseUrl = await _server();
-  if (baseUrl == null) return BeBrokerOrdersResult.error(BeError2.network());
-  var url = baseUrl + "broker_orders";
-  var apikey = await Prefs.beApiKeyGet();
-  var apisecret = await Prefs.beApiSecretGet();
-  checkApiKey(apikey, apisecret);
-  var nonce = nextNonce();
-  var body = jsonEncode(
-      {"api_key": apikey, "nonce": nonce, "offset": offset, "limit": limit});
-  var sig = createHmacSig(apisecret!, body);
-  var response =
-      await postAndCatch(url, body, extraHeaders: {"X-Signature": sig});
-  if (response == null) return BeBrokerOrdersResult.error(BeError2.network());
-  if (response.statusCode == 200) {
-    return BeBrokerOrdersResult.parse(response.body);
-  } else if (response.statusCode == 400)
-    return BeBrokerOrdersResult.error(BeError2.authParseMsg(response.body));
-  print(response.statusCode);
-  return BeBrokerOrdersResult.error(BeError2.network());
+  var result = await post("broker_orders", {"offset": offset, "limit": limit},
+      authRequired: true);
+  return result.when((content) => BeBrokerOrdersResult.parse(content),
+      error: (err) => BeBrokerOrdersResult.error(err));
 }
