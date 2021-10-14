@@ -627,13 +627,11 @@ enum BeOrderStatus {
   none,
   created,
   ready,
-  incoming,
-  confirmed,
-  exchange,
-  withdrawing,
+  fiat_debited,
+  exchanging,
   completed,
   expired,
-  cancelled
+  failed
 }
 
 extension EnumEx on String {
@@ -665,10 +663,7 @@ class BeBrokerOrder {
       fromJson: _decimalFromJson,
       toJson: _decimalToJson)
   final Decimal quoteAmount;
-  final String recipient;
   final BeOrderStatus status;
-  @JsonKey(name: 'payment_url')
-  final String? paymentUrl;
 
   BeBrokerOrder(
       this.token,
@@ -680,9 +675,7 @@ class BeBrokerOrder {
       this.quoteAsset,
       this.baseAmount,
       this.quoteAmount,
-      this.recipient,
-      this.status,
-      this.paymentUrl);
+      this.status);
 
   factory BeBrokerOrder.fromJson(Map<String, dynamic> json) =>
       _$BeBrokerOrderFromJson(json);
@@ -1000,19 +993,13 @@ Future<BeAddressBookResult> beAddressBook(String asset) async {
 Future<BeBrokerOrderResult> beOrderCreate(
     String market,
     BeMarketSide side,
-    Decimal amount,
-    String recipient,
-    bool saveRecipient,
-    String? recipientDescription) async {
+    Decimal amount) async {
   var result = await post(
       "broker_order_create",
       {
         "market": market,
         "side": describeEnum(side),
-        "amount_dec": amount.toString(),
-        "recipient": recipient,
-        "save_recipient": saveRecipient,
-        "recipient_description": recipientDescription
+        "amount_dec": amount.toString()
       },
       authRequired: true);
   return result.when((content) => BeBrokerOrderResult.parse(content),

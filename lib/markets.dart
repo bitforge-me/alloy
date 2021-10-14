@@ -3,11 +3,8 @@ import 'package:decimal/decimal.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
-import 'package:zapdart/form_ui.dart';
 
 import 'beryllium.dart';
-import 'cryptocurrency.dart';
-import 'prefs.dart';
 import 'websocket.dart';
 import 'assets.dart';
 import 'orders.dart';
@@ -73,17 +70,10 @@ class QuoteScreen extends StatefulWidget {
 class _QuoteScreenState extends State<QuoteScreen> {
   final _formKey = GlobalKey<FormState>();
   final _amountController = TextEditingController();
-  final _withdrawalAddressController = TextEditingController();
-  final _withdrawalBankController = TextEditingController();
-  final _recipientDescriptionController = TextEditingController();
 
   var _quote = '-';
   var _amount = Decimal.zero;
-  var _price = Decimal.zero;
   var _side = BeMarketSide.bid;
-  var _recipient = '-';
-  var _saveRecipient = false;
-  var _testnet = false;
 
   @override
   void initState() {
@@ -91,11 +81,6 @@ class _QuoteScreenState extends State<QuoteScreen> {
 
     // Start listening to changes.
     _amountController.addListener(_updateQuote);
-    _withdrawalAddressController.addListener(_updateAddress);
-    _withdrawalBankController.addListener(_updateBank);
-
-    // get testnet
-    Prefs.testnetGet().then((value) => _testnet = value);
   }
 
   QuoteTotalPrice _bidQuoteAmount(Decimal amount) {
@@ -165,17 +150,12 @@ class _QuoteScreenState extends State<QuoteScreen> {
     setState(() {
       _side = side;
       _updateQuote();
-      if (side == BeMarketSide.bid)
-        _updateAddress();
-      else
-        _updateBank();
     });
   }
 
   void _updateQuote() {
     var quote = '-';
     var amount = Decimal.zero;
-    var price = Decimal.zero;
     var value = Decimal.tryParse(_amountController.text.trim());
     if (value != null && value > Decimal.zero) {
       amount = value;
@@ -196,64 +176,19 @@ class _QuoteScreenState extends State<QuoteScreen> {
             assetFormat(widget.market.quoteAsset, totalPrice.amount);
         quote =
             '$baseAmount ${widget.market.baseAsset} = $quoteAmount ${widget.market.quoteAsset}';
-        price = totalPrice.amount;
       }
     }
     setState(() {
       _quote = quote;
       _amount = amount;
-      _price = price;
     });
-  }
-
-  void _updateAddress() {
-    var addr = '-';
-    var res = addressValidate(
-        widget.market.baseAsset, _testnet, _withdrawalAddressController.text);
-    if (res.result) addr = _withdrawalAddressController.text.trim();
-    setState(() => _recipient = addr);
-  }
-
-  void _updateBank() {
-    var bank = '-';
-    var res = bankValidate(_withdrawalBankController.text);
-    if (res.result) bank = bankFormat(_withdrawalBankController.text);
-    setState(() => _recipient = bank);
-  }
-
-  Future<void> _addressBook() async {
-    var asset = _side == BeMarketSide.bid
-        ? widget.market.baseAsset
-        : widget.market.quoteAsset;
-    showAlertDialog(context, 'querying address book..');
-    var res = await beAddressBook(asset);
-    Navigator.pop(context);
-    res.when((entries) async {
-      var recipient = await Navigator.push<String?>(
-          context,
-          MaterialPageRoute(
-              builder: (context) => AddressBookScreen(asset, entries)));
-      if (recipient == null) return;
-      if (_side == BeMarketSide.bid)
-        _withdrawalAddressController.text = recipient;
-      else
-        _withdrawalBankController.text = recipient;
-    },
-        error: (err) => alert(context, 'error',
-            'failed to get address book (${BeError2.msg(err)})'));
-  }
-
-  void _updateSaveRecipient(bool? value) {
-    if (value == null) return;
-    setState(() => _saveRecipient = value);
   }
 
   void _orderCreate() async {
     if (_formKey.currentState == null) return;
     if (_formKey.currentState!.validate()) {
       showAlertDialog(context, 'creating order..');
-      var res = await beOrderCreate(widget.market.symbol, _side, _amount,
-          _recipient, _saveRecipient, _recipientDescriptionController.text);
+      var res = await beOrderCreate(widget.market.symbol, _side, _amount);
       Navigator.pop(context);
       res.when(
           (order) => Navigator.push(
@@ -283,13 +218,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                       margin: EdgeInsets.all(20),
                       child: Column(children: [
                         Text(_quote),
-                        SizedBox(height: 10),
-                        _side == BeMarketSide.bid
-                            ? Text(
-                                'Send ${assetFormat(widget.market.baseAsset, _amount)} ${widget.market.baseAsset} to $_recipient')
-                            : Text(
-                                'Send ${assetFormat(widget.market.quoteAsset, _price)} ${widget.market.quoteAsset} to $_recipient')
-                      ])),
+                  ])),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     Radio<BeMarketSide>(
                       value: BeMarketSide.bid,
@@ -329,63 +258,6 @@ class _QuoteScreenState extends State<QuoteScreen> {
                         if (totalPrice.errMsg != null) return totalPrice.errMsg;
                         return null;
                       }),
-                  Visibility(
-                      visible: _side == BeMarketSide.bid,
-                      child: TextFormField(
-                          controller: _withdrawalAddressController,
-                          decoration: InputDecoration(
-                              labelText: 'Wallet Address',
-                              suffix: IconButton(
-                                  icon: Icon(Icons.alternate_email),
-                                  tooltip: 'Address Book',
-                                  onPressed: _addressBook)),
-                          keyboardType: TextInputType.text,
-                          validator: (value) {
-                            if (value == null || value.isEmpty)
-                              return 'Please enter a value';
-                            var res = addressValidate(
-                                widget.market.baseAsset, _testnet, value);
-                            if (!res.result) return res.reason;
-                            return null;
-                          })),
-                  Visibility(
-                      visible: _side == BeMarketSide.ask,
-                      child: TextFormField(
-                          controller: _withdrawalBankController,
-                          decoration: InputDecoration(
-                              labelText: 'Bank Account',
-                              suffix: IconButton(
-                                  icon: Icon(Icons.alternate_email),
-                                  tooltip: 'Address Book',
-                                  onPressed: _addressBook)),
-                          keyboardType: TextInputType.number,
-                          validator: (value) {
-                            if (value == null || value.isEmpty)
-                              return 'Please enter a value';
-                            var res = bankValidate(value);
-                            if (!res.result) return res.reason;
-                            return null;
-                          })),
-                  CheckboxFormField(
-                      Text(_side == BeMarketSide.bid
-                          ? 'Save Wallet Address'
-                          : 'Save Bank Account'),
-                      _saveRecipient,
-                      onChanged: _updateSaveRecipient),
-                  Visibility(
-                      visible: _saveRecipient,
-                      child: TextFormField(
-                          controller: _recipientDescriptionController,
-                          decoration: InputDecoration(
-                              labelText: _side == BeMarketSide.bid
-                                  ? 'Wallet Address Description'
-                                  : 'Bank Account Description'),
-                          keyboardType: TextInputType.text,
-                          validator: (value) {
-                            if (value == null || value.isEmpty)
-                              return 'Please enter a value';
-                            return null;
-                          })),
                   raisedButton(
                       onPressed: _orderCreate, child: Text('Create Order'))
                 ]))));

@@ -292,9 +292,7 @@ BeBrokerOrder _$BeBrokerOrderFromJson(Map<String, dynamic> json) =>
       json['quote_asset'] as String,
       _decimalFromJson(json['base_amount_dec']),
       _decimalFromJson(json['quote_amount_dec']),
-      json['recipient'] as String,
       _$enumDecode(_$BeOrderStatusEnumMap, json['status']),
-      json['payment_url'] as String?,
     );
 
 Map<String, dynamic> _$BeBrokerOrderToJson(BeBrokerOrder instance) =>
@@ -308,9 +306,7 @@ Map<String, dynamic> _$BeBrokerOrderToJson(BeBrokerOrder instance) =>
       'quote_asset': instance.quoteAsset,
       'base_amount_dec': _decimalToJson(instance.baseAmount),
       'quote_amount_dec': _decimalToJson(instance.quoteAmount),
-      'recipient': instance.recipient,
       'status': _$BeOrderStatusEnumMap[instance.status],
-      'payment_url': instance.paymentUrl,
     };
 
 const _$BeMarketSideEnumMap = {
@@ -322,11 +318,9 @@ const _$BeOrderStatusEnumMap = {
   BeOrderStatus.none: 'none',
   BeOrderStatus.created: 'created',
   BeOrderStatus.ready: 'ready',
-  BeOrderStatus.incoming: 'incoming',
-  BeOrderStatus.confirmed: 'confirmed',
-  BeOrderStatus.exchange: 'exchange',
-  BeOrderStatus.withdrawing: 'withdrawing',
+  BeOrderStatus.fiat_debited: 'fiat_debited',
+  BeOrderStatus.exchanging: 'exchanging',
   BeOrderStatus.completed: 'completed',
   BeOrderStatus.expired: 'expired',
-  BeOrderStatus.cancelled: 'cancelled',
+  BeOrderStatus.failed: 'failed',
 };

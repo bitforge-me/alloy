@@ -6,11 +6,9 @@ import 'dart:convert';
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
 import 'package:zapdart/colors.dart';
-import 'package:zapdart/qrwidget.dart';
 
 import 'beryllium.dart';
 import 'websocket.dart';
-import 'utils.dart';
 import 'assets.dart';
 import 'markets.dart';
 
@@ -27,7 +25,6 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   BeBrokerOrder _order;
   var processOrderUpdates = true;
-  var _testnet = false;
 
   _OrderScreenState(this._order);
 
@@ -54,19 +51,6 @@ class _OrderScreenState extends State<OrderScreen> {
             'broker order updated ${newOrder.token} - ${describeEnum(newOrder.status).toUpperCase()}');
       }
     }
-  }
-
-  String _recipientAsset() {
-    return _order.side == BeMarketSide.bid
-        ? _order.baseAsset
-        : _order.quoteAsset;
-  }
-
-  void _addrLaunch() {
-    var url =
-        addressBlockExplorer(_recipientAsset(), _testnet, _order.recipient);
-    if (url == null) return;
-    urlLaunch(url);
   }
 
   Future<void> _accept() async {
@@ -116,28 +100,15 @@ class _OrderScreenState extends State<OrderScreen> {
                   title: Text('Expiry'), subtitle: Text('${_order.expiry}'))
               : SizedBox(),
           ListTile(
-              title: Text('Recipient'),
-              subtitle: Text('${_order.recipient}'),
-              onTap: assetIsCrypto(_recipientAsset()) ? _addrLaunch : null),
-          ListTile(
               title: Text('Status'),
               subtitle: Text('${describeEnum(_order.status).toUpperCase()}')),
-          _order.paymentUrl != null && _order.status == BeOrderStatus.ready
-              ? ListTile(
-                  title: Text('Payment URL'),
-                  subtitle: Column(children: [
-                    QrWidget(_order.paymentUrl!, size: 100),
-                    Text('${_order.paymentUrl}')
-                  ]),
-                  onTap: () => urlLaunch(_order.paymentUrl))
-              : SizedBox(),
           _order.status == BeOrderStatus.created
               ? ListTile(
                   title:
                       raisedButton(onPressed: _accept, child: Text('Accept')))
               : SizedBox(),
           _order.status != BeOrderStatus.expired &&
-                  _order.status != BeOrderStatus.cancelled &&
+                  _order.status != BeOrderStatus.failed &&
                   _order.status != BeOrderStatus.completed
               ? ListTile(
                   title:
@@ -235,7 +206,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         subtitle: Text(
             '${order.market} - ${marketSideNice(order.side)} $baseAmount ${order.baseAsset} - ${describeEnum(order.status).toUpperCase()}',
             style: order.status == BeOrderStatus.expired ||
-                    order.status == BeOrderStatus.cancelled
+                    order.status == BeOrderStatus.failed
                 ? TextStyle(color: ZapBlackLight)
                 : order.status == BeOrderStatus.created ||
                         order.status == BeOrderStatus.ready

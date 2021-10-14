@@ -16,7 +16,8 @@ String _svgAsset(String symbol) {
       return 'assets/crypto_logos/dogecoin.svg';
     case 'LTC':
       return 'assets/crypto_logos/litecoin.svg';
-  }
+    case 'WAVES':
+      return 'assets/crypto_logos/waves.svg';  }
   return 'assets/crypto_logos/default.svg';
 }
 
@@ -40,7 +41,8 @@ int assetDecimals(String symbol) {
       return 8;
     case 'LTC':
       return 8;
-  }
+    case 'WAVES':
+      return 8;  }
   return -1;
 }
 
@@ -50,6 +52,7 @@ bool assetIsCrypto(String asset) {
     case 'ETH':
     case 'DOGE':
     case 'LTC':
+    case 'WAVES':
       return true;
   }
   return false;
@@ -76,7 +79,9 @@ String? addressBlockExplorer(String symbol, bool testnet, String address) {
     case 'LTC':
       if (testnet) return null;
       return 'https://blockchair.com/litecoin/address/$address';
-  }
+    case 'WAVES':
+      if (testnet) return 'https://testnet.wavesexplorer.com/address/$address';
+      return 'https://wavesexplorer.com/address/$address';  }
   return null;
 }
 
