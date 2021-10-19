@@ -119,6 +119,12 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             _invalidAuth = true;
             _retry = false;
           });
+        }, format: () {
+          alert(context, 'Format error', 'A format error occured');
+          setState(() {
+            _retry = true;
+            _invalidAuth = false;
+          });
         });
       });
       setState(() {
@@ -142,13 +148,16 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     }
   }
 
-  Future<void> _loginErrorAlert(BuildContext context, BeError2 error) async {
+  Future<void> _loginErrorAlert(BuildContext context, BeError error) async {
     await error.when(network: () async {
       await alert(context, 'Network error',
           'A network error occured when trying to login');
     }, auth: (msg) async {
       await alert(context, 'Authentication failed',
           'The login details you entered are not valid ($msg)');
+    }, format: () async {
+      await alert(context, 'Format error',
+          'A format error occured when trying to login');
     });
   }
 
@@ -219,7 +228,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           network: () => alert(context, 'Network error',
               'A network error occured when trying to register'),
           auth: (msg) => alert(context, 'Authorisation error',
-              'An authorisation error occured when trying to register ($msg)'));
+              'An authorisation error occured when trying to register ($msg)'),
+          format: () => alert(context, 'Format error',
+              'A format error occured when trying to register'));
     });
   }
 

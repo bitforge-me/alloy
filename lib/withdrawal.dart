@@ -57,7 +57,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
         _withdrawalBankController.text = recipient;
     },
         error: (err) => alert(context, 'error',
-            'failed to get address book (${BeError2.msg(err)})'));
+            'failed to get address book (${BeError.msg(err)})'));
   }
 
   void _updateSaveRecipient(bool? value) {
@@ -84,7 +84,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                     builder: (context) => CryptoWithdrawalDetailScreen(
                         withdrawal, widget.websocket))),
             error: (err) => alert(context, 'error',
-                'failed to create withdrawal (${BeError2.msg(err)})'));
+                'failed to create withdrawal (${BeError.msg(err)})'));
       } else {
         showAlertDialog(context, 'creating withdrawal..');
         var res = await beFiatWithdrawalCreate(
@@ -101,7 +101,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                     builder: (context) => FiatWithdrawalDetailScreen(
                         withdrawal, widget.websocket))),
             error: (err) => alert(context, 'error',
-                'failed to create withdrawal (${BeError2.msg(err)})'));
+                'failed to create withdrawal (${BeError.msg(err)})'));
       }
     }
   }
@@ -299,7 +299,7 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
               _pageCount = (total / _itemsPerPage).ceil();
             }),
         error: (err) => alert(context, 'error',
-            'failed to get withdrawals (${BeError2.msg(err)})'));
+            'failed to get withdrawals (${BeError.msg(err)})'));
   }
 
   Future<void> _withdrawalTap(BeCryptoWithdrawal withdrawal) async {
@@ -473,7 +473,7 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
               _pageCount = (total / _itemsPerPage).ceil();
             }),
         error: (err) => alert(context, 'error',
-            'failed to get withdrawals (${BeError2.msg(err)})'));
+            'failed to get withdrawals (${BeError.msg(err)})'));
   }
 
   Future<void> _withdrawalTap(BeFiatWithdrawal withdrawal) async {

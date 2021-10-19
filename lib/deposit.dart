@@ -336,7 +336,7 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
               _pageCount = (total / _itemsPerPage).ceil();
             }),
         error: (err) => alert(
-            context, 'error', 'failed to get deposits (${BeError2.msg(err)})'));
+            context, 'error', 'failed to get deposits (${BeError.msg(err)})'));
   }
 
   Future<void> _depositTap(BeFiatDeposit deposit) async {
@@ -375,7 +375,7 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
                 builder: (context) =>
                     FiatDepositDetailScreen(deposit, widget.websocket))),
         error: (err) => alert(context, 'error',
-            'failed to create deposit (${BeError2.msg(err)})'));
+            'failed to create deposit (${BeError.msg(err)})'));
   }
 
   @override

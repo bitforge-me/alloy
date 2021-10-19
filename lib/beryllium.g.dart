@@ -15,9 +15,9 @@ UserInfo _$UserInfoFromJson(Map<String, dynamic> json) => UserInfo(
       json['photo'] as String?,
       json['photo_type'] as String?,
       (json['permissions'] as List<dynamic>?)
-          ?.map((e) => _$enumDecode(_$BePermissionEnumMap, e)),
+          ?.map((e) => $enumDecode(_$BePermissionEnumMap, e)),
       (json['roles'] as List<dynamic>)
-          .map((e) => _$enumDecode(_$BeRoleEnumMap, e)),
+          .map((e) => $enumDecode(_$BeRoleEnumMap, e)),
       json['kyc_validated'] as bool,
       json['kyc_url'] as String?,
       json['aplyid_req_exists'] as bool,
@@ -40,32 +40,6 @@ Map<String, dynamic> _$UserInfoToJson(UserInfo instance) => <String, dynamic>{
       'aplyid_req_exists': instance.aplyidReqExists,
       'tf_enabled': instance.tfEnabled,
     };
-
-K _$enumDecode<K, V>(
-  Map<K, V> enumValues,
-  Object? source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError(
-      'A value must be provided. Supported values: '
-      '${enumValues.values.join(', ')}',
-    );
-  }
-
-  return enumValues.entries.singleWhere(
-    (e) => e.value == source,
-    orElse: () {
-      if (unknownValue == null) {
-        throw ArgumentError(
-          '`$source` is not one of the supported values: '
-          '${enumValues.values.join(', ')}',
-        );
-      }
-      return MapEntry(unknownValue, enumValues.values.first);
-    },
-  ).key;
-}
 
 const _$BePermissionEnumMap = {
   BePermission.receive: 'receive',
@@ -287,12 +261,12 @@ BeBrokerOrder _$BeBrokerOrderFromJson(Map<String, dynamic> json) =>
       DateTime.parse(json['date'] as String),
       DateTime.parse(json['expiry'] as String),
       json['market'] as String,
-      _$enumDecode(_$BeMarketSideEnumMap, json['side']),
+      $enumDecode(_$BeMarketSideEnumMap, json['side']),
       json['base_asset'] as String,
       json['quote_asset'] as String,
       _decimalFromJson(json['base_amount_dec']),
       _decimalFromJson(json['quote_amount_dec']),
-      _$enumDecode(_$BeOrderStatusEnumMap, json['status']),
+      $enumDecode(_$BeOrderStatusEnumMap, json['status']),
     );
 
 Map<String, dynamic> _$BeBrokerOrderToJson(BeBrokerOrder instance) =>

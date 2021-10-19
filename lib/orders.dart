@@ -61,7 +61,7 @@ class _OrderScreenState extends State<OrderScreen> {
     processOrderUpdates = true;
     res.when((order) => setState(() => _order = order),
         error: (err) => alert(
-            context, 'error', 'failed to accept order (${BeError2.msg(err)})'));
+            context, 'error', 'failed to accept order (${BeError.msg(err)})'));
   }
 
   Future<void> _update() async {
@@ -72,7 +72,7 @@ class _OrderScreenState extends State<OrderScreen> {
     processOrderUpdates = true;
     res.when((order) => setState(() => _order = order),
         error: (err) => alert(
-            context, 'error', 'failed to update order (${BeError2.msg(err)})'));
+            context, 'error', 'failed to update order (${BeError.msg(err)})'));
   }
 
   @override
@@ -161,7 +161,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               _pageCount = (total / _itemsPerPage).ceil();
             }),
         error: (err) => alert(
-            context, 'error', 'failed to query orders (${BeError2.msg(err)})'));
+            context, 'error', 'failed to query orders (${BeError.msg(err)})'));
   }
 
   void _websocketEvent(WsEventArgs? args) {

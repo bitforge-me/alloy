@@ -32,31 +32,35 @@ enum BePermission { receive, balance, history, transfer, issue }
 enum BeRole { admin, proposer, authorizer }
 
 @freezed
-class BeError2 with _$BeError2 {
-  const factory BeError2.network() = Network;
-  const factory BeError2.auth(String message) = Auth;
+class BeError with _$BeError {
+  const factory BeError.network() = Network;
+  const factory BeError.auth(String message) = Auth;
+  const factory BeError.format() = Format;
   // helper to parse the '{"message": "<MSG>"}' json if exists
   static authParseMsg(String message) {
     try {
       var json = jsonDecode(message);
-      return BeError2.auth(json['message']);
+      return BeError.auth(json['message']);
     } catch (_) {
-      return BeError2.auth(message);
+      return BeError.auth(message);
     }
   }
 
-  static String msg(BeError2 err) {
-    return err.when<String>(network: () => 'network error', auth: (msg) => msg);
+  static String msg(BeError err) {
+    return err.when<String>(
+        network: () => 'network error',
+        auth: (msg) => msg,
+        format: () => 'format error');
   }
 }
 
 @freezed
 class ErrorResult with _$ErrorResult {
   const factory ErrorResult(String content) = _ErrorResult;
-  const factory ErrorResult.error(BeError2 err) = _ErrorResultErr;
-  static network() => ErrorResult.error(BeError2.network());
+  const factory ErrorResult.error(BeError err) = _ErrorResultErr;
+  static network() => ErrorResult.error(BeError.network());
   static auth(String message) =>
-      ErrorResult.error(BeError2.authParseMsg(message));
+      ErrorResult.error(BeError.authParseMsg(message));
 }
 
 @JsonSerializable()
@@ -126,11 +130,15 @@ class UserInfo {
 @freezed
 class UserInfoResult with _$UserInfoResult {
   const factory UserInfoResult(UserInfo info) = _UserInfo;
-  const factory UserInfoResult.error(BeError2 err) = _UserInfoErr;
+  const factory UserInfoResult.error(BeError err) = _UserInfoErr;
 
   static UserInfoResult parse(String data) {
-    var info = UserInfo.fromJson(jsonDecode(data));
-    return UserInfoResult(info);
+    try {
+      var info = UserInfo.fromJson(jsonDecode(data));
+      return UserInfoResult(info);
+    } catch (_) {
+      return UserInfoResult.error(BeError.format());
+    }
   }
 }
 
@@ -138,13 +146,17 @@ class UserInfoResult with _$UserInfoResult {
 class BeTwoFactorEnabledResult with _$BeTwoFactorEnabledResult {
   const factory BeTwoFactorEnabledResult(bool enabled) =
       _BeTwoFactorEnabledResult;
-  const factory BeTwoFactorEnabledResult.error(BeError2 err) =
+  const factory BeTwoFactorEnabledResult.error(BeError err) =
       _BeTwoFactorEnabledResultErr;
 
   static BeTwoFactorEnabledResult parse(String data) {
-    var json = jsonDecode(data);
-    var tfEnabled = json['tf_enabled'];
-    return BeTwoFactorEnabledResult(tfEnabled);
+    try {
+      var json = jsonDecode(data);
+      var tfEnabled = json['tf_enabled'];
+      return BeTwoFactorEnabledResult(tfEnabled);
+    } catch (_) {
+      return BeTwoFactorEnabledResult.error(BeError.format());
+    }
   }
 }
 
@@ -158,24 +170,32 @@ class BeApiKey {
 @freezed
 class BeApiKeyResult with _$BeApiKeyResult {
   const factory BeApiKeyResult(BeApiKey apikey) = _BeApiKeyResult;
-  const factory BeApiKeyResult.error(BeError2 err) = _BeApiKeyResultErr;
+  const factory BeApiKeyResult.error(BeError err) = _BeApiKeyResultErr;
 
   static BeApiKeyResult parse(String data) {
-    var jsnObj = json.decode(data);
-    return BeApiKeyResult(BeApiKey(jsnObj["token"], jsnObj["secret"]));
+    try {
+      var jsnObj = json.decode(data);
+      return BeApiKeyResult(BeApiKey(jsnObj["token"], jsnObj["secret"]));
+    } catch (_) {
+      return BeApiKeyResult.error(BeError.format());
+    }
   }
 }
 
 @freezed
 class BeApiKeyRequestResult with _$BeApiKeyRequestResult {
   const factory BeApiKeyRequestResult(String token) = _BeApiKeyRequestResult;
-  const factory BeApiKeyRequestResult.error(BeError2 err) =
+  const factory BeApiKeyRequestResult.error(BeError err) =
       _BeApiKeyRequestResulttErr;
 
   static BeApiKeyRequestResult parse(String data) {
-    var jsnObj = json.decode(data);
-    var token = jsnObj["token"];
-    return BeApiKeyRequestResult(token);
+    try {
+      var jsnObj = json.decode(data);
+      var token = jsnObj["token"];
+      return BeApiKeyRequestResult(token);
+    } catch (_) {
+      return BeApiKeyRequestResult.error(BeError.format());
+    }
   }
 }
 
@@ -183,12 +203,16 @@ class BeApiKeyRequestResult with _$BeApiKeyRequestResult {
 class BeKycRequestCreateResult with _$BeKycRequestCreateResult {
   const factory BeKycRequestCreateResult(String kycUrl) =
       _BeKycRequestCreateResult;
-  const factory BeKycRequestCreateResult.error(BeError2 err) =
+  const factory BeKycRequestCreateResult.error(BeError err) =
       _BeKycRequestCreateResultErr;
 
   static BeKycRequestCreateResult parse(String data) {
-    var jsnObj = json.decode(data);
-    return BeKycRequestCreateResult(jsnObj['kyc_url']);
+    try {
+      var jsnObj = json.decode(data);
+      return BeKycRequestCreateResult(jsnObj['kyc_url']);
+    } catch (_) {
+      return BeKycRequestCreateResult.error(BeError.format());
+    }
   }
 }
 
@@ -216,14 +240,19 @@ class BeTwoFactor {
 @freezed
 class BeTwoFactorResult with _$BeTwoFactorResult {
   const factory BeTwoFactorResult(BeTwoFactor twoFactor) = _BeTwoFactorResult;
-  const factory BeTwoFactorResult.error(BeError2 err) = _BeTwoFactorResultErr;
+  const factory BeTwoFactorResult.error(BeError err) = _BeTwoFactorResultErr;
 
   static BeTwoFactorResult parse(String data) {
-    var json = jsonDecode(data);
-    var method = json['method'];
-    BeTwoFactorSetup? setup;
-    if (json['setup'] != null) setup = BeTwoFactorSetup.fromJson(json['setup']);
-    return BeTwoFactorResult(BeTwoFactor(method, setup));
+    try {
+      var json = jsonDecode(data);
+      var method = json['method'];
+      BeTwoFactorSetup? setup;
+      if (json['setup'] != null)
+        setup = BeTwoFactorSetup.fromJson(json['setup']);
+      return BeTwoFactorResult(BeTwoFactor(method, setup));
+    } catch (_) {
+      return BeTwoFactorResult.error(BeError.format());
+    }
   }
 }
 
@@ -254,11 +283,15 @@ class BeAsset {
 @freezed
 class BeAssetResult with _$BeAssetResult {
   const factory BeAssetResult(List<BeAsset> assets) = _BeAssetResult;
-  const factory BeAssetResult.error(BeError2 err) = _BeAssetResultErr;
+  const factory BeAssetResult.error(BeError err) = _BeAssetResultErr;
 
   static BeAssetResult parse(String data) {
-    var assets = BeAsset.parseAssets(jsonDecode(data)['assets']);
-    return BeAssetResult(assets);
+    try {
+      var assets = BeAsset.parseAssets(jsonDecode(data)['assets']);
+      return BeAssetResult(assets);
+    } catch (_) {
+      return BeAssetResult.error(BeError.format());
+    }
   }
 }
 
@@ -291,11 +324,15 @@ class BeMarket {
 @freezed
 class BeMarketResult with _$BeMarketResult {
   const factory BeMarketResult(List<BeMarket> markets) = _BeMarketResult;
-  const factory BeMarketResult.error(BeError2 err) = _BeMarketResultErr;
+  const factory BeMarketResult.error(BeError err) = _BeMarketResultErr;
 
   static BeMarketResult parse(String data) {
-    var markets = BeMarket.parseMarkets(jsonDecode(data)['markets']);
-    return BeMarketResult(markets);
+    try {
+      var markets = BeMarket.parseMarkets(jsonDecode(data)['markets']);
+      return BeMarketResult(markets);
+    } catch (_) {
+      return BeMarketResult.error(BeError.format());
+    }
   }
 }
 
@@ -342,10 +379,14 @@ class BeOrderbook {
 @freezed
 class BeOrderbookResult with _$BeOrderbookResult {
   const factory BeOrderbookResult(BeOrderbook orderbook) = _BeOrderbookResult;
-  const factory BeOrderbookResult.error(BeError2 err) = _BeOrderbookResultErr;
+  const factory BeOrderbookResult.error(BeError err) = _BeOrderbookResultErr;
 
   static BeOrderbookResult parse(String data) {
-    return BeOrderbookResult(BeOrderbook.fromJson(jsonDecode(data)));
+    try {
+      return BeOrderbookResult(BeOrderbook.fromJson(jsonDecode(data)));
+    } catch (_) {
+      return BeOrderbookResult.error(BeError.format());
+    }
   }
 }
 
@@ -368,13 +409,17 @@ class BeBalance {
 @freezed
 class BeBalancesResult with _$BeBalancesResult {
   const factory BeBalancesResult(List<BeBalance> balances) = _BeBalancesResult;
-  const factory BeBalancesResult.error(BeError2 err) = _BeBalancesResultErr;
+  const factory BeBalancesResult.error(BeError err) = _BeBalancesResultErr;
 
   static BeBalancesResult parse(String data) {
-    List<BeBalance> balances = [];
-    for (var item in jsonDecode(data)['balances'])
-      balances.add(BeBalance.fromJson(item));
-    return BeBalancesResult(balances);
+    try {
+      List<BeBalance> balances = [];
+      for (var item in jsonDecode(data)['balances'])
+        balances.add(BeBalance.fromJson(item));
+      return BeBalancesResult(balances);
+    } catch (_) {
+      return BeBalancesResult.error(BeError.format());
+    }
   }
 }
 
@@ -382,11 +427,15 @@ class BeBalancesResult with _$BeBalancesResult {
 class BeCryptoDepositAddressResult with _$BeCryptoDepositAddressResult {
   const factory BeCryptoDepositAddressResult(String address) =
       _BeCryptoDepositAddressResult;
-  const factory BeCryptoDepositAddressResult.error(BeError2 err) =
+  const factory BeCryptoDepositAddressResult.error(BeError err) =
       _BeCryptoDepositAddressResultErr;
 
   static BeCryptoDepositAddressResult parse(String data) {
-    return BeCryptoDepositAddressResult(jsonDecode(data)['address']);
+    try {
+      return BeCryptoDepositAddressResult(jsonDecode(data)['address']);
+    } catch (_) {
+      return BeCryptoDepositAddressResult.error(BeError.format());
+    }
   }
 }
 
@@ -413,18 +462,22 @@ class BeCryptoDepositsResult with _$BeCryptoDepositsResult {
   const factory BeCryptoDepositsResult(
           List<BeCryptoDeposit> deposits, int offset, int limit, int total) =
       _BeCryptoDepositsResult;
-  const factory BeCryptoDepositsResult.error(BeError2 err) =
+  const factory BeCryptoDepositsResult.error(BeError err) =
       _BeCryptoDepositsResultErr;
 
   static BeCryptoDepositsResult parse(String data) {
-    var json = jsonDecode(data);
-    List<BeCryptoDeposit> deposits = [];
-    for (var item in json['deposits'])
-      deposits.add(BeCryptoDeposit.fromJson(item));
-    var offset = json['offset'];
-    var limit = json['limit'];
-    var total = json['total'];
-    return BeCryptoDepositsResult(deposits, offset, limit, total);
+    try {
+      var json = jsonDecode(data);
+      List<BeCryptoDeposit> deposits = [];
+      for (var item in json['deposits'])
+        deposits.add(BeCryptoDeposit.fromJson(item));
+      var offset = json['offset'];
+      var limit = json['limit'];
+      var total = json['total'];
+      return BeCryptoDepositsResult(deposits, offset, limit, total);
+    } catch (_) {
+      return BeCryptoDepositsResult.error(BeError.format());
+    }
   }
 }
 
@@ -451,13 +504,17 @@ class BeCryptoWithdrawal {
 class BeCryptoWithdrawalResult with _$BeCryptoWithdrawalResult {
   const factory BeCryptoWithdrawalResult(BeCryptoWithdrawal withdrawal) =
       _BeCryptoWithdrawalResult;
-  const factory BeCryptoWithdrawalResult.error(BeError2 err) =
+  const factory BeCryptoWithdrawalResult.error(BeError err) =
       _BeCryptoWithdrawalResultErr;
 
   static BeCryptoWithdrawalResult parse(String data) {
-    var json = jsonDecode(data);
-    return BeCryptoWithdrawalResult(
-        BeCryptoWithdrawal.fromJson(json['withdrawal']));
+    try {
+      var json = jsonDecode(data);
+      return BeCryptoWithdrawalResult(
+          BeCryptoWithdrawal.fromJson(json['withdrawal']));
+    } catch (_) {
+      return BeCryptoWithdrawalResult.error(BeError.format());
+    }
   }
 }
 
@@ -465,18 +522,22 @@ class BeCryptoWithdrawalResult with _$BeCryptoWithdrawalResult {
 class BeCryptoWithdrawalsResult with _$BeCryptoWithdrawalsResult {
   const factory BeCryptoWithdrawalsResult(List<BeCryptoWithdrawal> withdrawals,
       int offset, int limit, int total) = _BeCryptoWithdrawalsResult;
-  const factory BeCryptoWithdrawalsResult.error(BeError2 err) =
+  const factory BeCryptoWithdrawalsResult.error(BeError err) =
       _BeCryptoWithdrawalsResultErr;
 
   static BeCryptoWithdrawalsResult parse(String data) {
-    var json = jsonDecode(data);
-    List<BeCryptoWithdrawal> withdrawals = [];
-    for (var item in json['withdrawals'])
-      withdrawals.add(BeCryptoWithdrawal.fromJson(item));
-    var offset = json['offset'];
-    var limit = json['limit'];
-    var total = json['total'];
-    return BeCryptoWithdrawalsResult(withdrawals, offset, limit, total);
+    try {
+      var json = jsonDecode(data);
+      List<BeCryptoWithdrawal> withdrawals = [];
+      for (var item in json['withdrawals'])
+        withdrawals.add(BeCryptoWithdrawal.fromJson(item));
+      var offset = json['offset'];
+      var limit = json['limit'];
+      var total = json['total'];
+      return BeCryptoWithdrawalsResult(withdrawals, offset, limit, total);
+    } catch (_) {
+      return BeCryptoWithdrawalsResult.error(BeError.format());
+    }
   }
 }
 
@@ -504,12 +565,16 @@ class BeFiatDeposit {
 class BeFiatDepositResult with _$BeFiatDepositResult {
   const factory BeFiatDepositResult(BeFiatDeposit deposit) =
       _BeFiatDepositResult;
-  const factory BeFiatDepositResult.error(BeError2 err) =
+  const factory BeFiatDepositResult.error(BeError err) =
       _BeFiatDepositResultErr;
 
   static BeFiatDepositResult parse(String data) {
-    var json = jsonDecode(data);
-    return BeFiatDepositResult(BeFiatDeposit.fromJson(json['deposit']));
+    try {
+      var json = jsonDecode(data);
+      return BeFiatDepositResult(BeFiatDeposit.fromJson(json['deposit']));
+    } catch (_) {
+      return BeFiatDepositResult.error(BeError.format());
+    }
   }
 }
 
@@ -518,18 +583,22 @@ class BeFiatDepositsResult with _$BeFiatDepositsResult {
   const factory BeFiatDepositsResult(
           List<BeFiatDeposit> deposits, int offset, int limit, int total) =
       _BeFiatDepositsResult;
-  const factory BeFiatDepositsResult.error(BeError2 err) =
+  const factory BeFiatDepositsResult.error(BeError err) =
       _BeFiatDepositsResultErr;
 
   static BeFiatDepositsResult parse(String data) {
-    var json = jsonDecode(data);
-    List<BeFiatDeposit> deposits = [];
-    for (var item in json['deposits'])
-      deposits.add(BeFiatDeposit.fromJson(item));
-    var offset = json['offset'];
-    var limit = json['limit'];
-    var total = json['total'];
-    return BeFiatDepositsResult(deposits, offset, limit, total);
+    try {
+      var json = jsonDecode(data);
+      List<BeFiatDeposit> deposits = [];
+      for (var item in json['deposits'])
+        deposits.add(BeFiatDeposit.fromJson(item));
+      var offset = json['offset'];
+      var limit = json['limit'];
+      var total = json['total'];
+      return BeFiatDepositsResult(deposits, offset, limit, total);
+    } catch (_) {
+      return BeFiatDepositsResult.error(BeError.format());
+    }
   }
 }
 
@@ -555,13 +624,17 @@ class BeFiatWithdrawal {
 class BeFiatWithdrawalResult with _$BeFiatWithdrawalResult {
   const factory BeFiatWithdrawalResult(BeFiatWithdrawal withdrawal) =
       _BeFiatWithdrawalResult;
-  const factory BeFiatWithdrawalResult.error(BeError2 err) =
+  const factory BeFiatWithdrawalResult.error(BeError err) =
       _BeFiatWithdrawalResultErr;
 
   static BeFiatWithdrawalResult parse(String data) {
-    var json = jsonDecode(data);
-    return BeFiatWithdrawalResult(
-        BeFiatWithdrawal.fromJson(json['withdrawal']));
+    try {
+      var json = jsonDecode(data);
+      return BeFiatWithdrawalResult(
+          BeFiatWithdrawal.fromJson(json['withdrawal']));
+    } catch (_) {
+      return BeFiatWithdrawalResult.error(BeError.format());
+    }
   }
 }
 
@@ -569,18 +642,22 @@ class BeFiatWithdrawalResult with _$BeFiatWithdrawalResult {
 class BeFiatWithdrawalsResult with _$BeFiatWithdrawalsResult {
   const factory BeFiatWithdrawalsResult(List<BeFiatWithdrawal> withdrawals,
       int offset, int limit, int total) = _BeFiatWithdrawalsResult;
-  const factory BeFiatWithdrawalsResult.error(BeError2 err) =
+  const factory BeFiatWithdrawalsResult.error(BeError err) =
       _BeFiatWithdrawalsResultErr;
 
   static BeFiatWithdrawalsResult parse(String data) {
-    var json = jsonDecode(data);
-    List<BeFiatWithdrawal> withdrawals = [];
-    for (var item in json['withdrawals'])
-      withdrawals.add(BeFiatWithdrawal.fromJson(item));
-    var offset = json['offset'];
-    var limit = json['limit'];
-    var total = json['total'];
-    return BeFiatWithdrawalsResult(withdrawals, offset, limit, total);
+    try {
+      var json = jsonDecode(data);
+      List<BeFiatWithdrawal> withdrawals = [];
+      for (var item in json['withdrawals'])
+        withdrawals.add(BeFiatWithdrawal.fromJson(item));
+      var offset = json['offset'];
+      var limit = json['limit'];
+      var total = json['total'];
+      return BeFiatWithdrawalsResult(withdrawals, offset, limit, total);
+    } catch (_) {
+      return BeFiatWithdrawalsResult.error(BeError.format());
+    }
   }
 }
 
@@ -600,15 +677,19 @@ class BeAddressBookEntry {
 class BeAddressBookResult with _$BeAddressBookResult {
   const factory BeAddressBookResult(List<BeAddressBookEntry> entries) =
       _BeAddressBookResult;
-  const factory BeAddressBookResult.error(BeError2 err) =
+  const factory BeAddressBookResult.error(BeError err) =
       _BeAddressBookResultErr;
 
   static BeAddressBookResult parse(String data) {
-    var json = jsonDecode(data);
-    List<BeAddressBookEntry> entries = [];
-    for (var item in json['entries'])
-      entries.add(BeAddressBookEntry.fromJson(item));
-    return BeAddressBookResult(entries);
+    try {
+      var json = jsonDecode(data);
+      List<BeAddressBookEntry> entries = [];
+      for (var item in json['entries'])
+        entries.add(BeAddressBookEntry.fromJson(item));
+      return BeAddressBookResult(entries);
+    } catch (_) {
+      return BeAddressBookResult.error(BeError.format());
+    }
   }
 }
 
@@ -685,13 +766,17 @@ class BeBrokerOrder {
 @freezed
 class BeBrokerOrderResult with _$BeBrokerOrderResult {
   const factory BeBrokerOrderResult(BeBrokerOrder order) = _BeBrokerOrderResult;
-  const factory BeBrokerOrderResult.error(BeError2 err) =
+  const factory BeBrokerOrderResult.error(BeError err) =
       _BeBrokerOrderResultErr;
 
   static BeBrokerOrderResult parse(String data) {
-    var json = jsonDecode(data);
-    BeBrokerOrder order = BeBrokerOrder.fromJson(json['broker_order']);
-    return BeBrokerOrderResult(order);
+    try {
+      var json = jsonDecode(data);
+      BeBrokerOrder order = BeBrokerOrder.fromJson(json['broker_order']);
+      return BeBrokerOrderResult(order);
+    } catch (_) {
+      return BeBrokerOrderResult.error(BeError.format());
+    }
   }
 }
 
@@ -700,18 +785,22 @@ class BeBrokerOrdersResult with _$BeBrokerOrdersResult {
   const factory BeBrokerOrdersResult(
           List<BeBrokerOrder> orders, int offset, int limit, int total) =
       _BeBrokerOrdersResult;
-  const factory BeBrokerOrdersResult.error(BeError2 err) =
+  const factory BeBrokerOrdersResult.error(BeError err) =
       _BeBrokerOrdersResultErr;
 
   static BeBrokerOrdersResult parse(String data) {
-    var json = jsonDecode(data);
-    List<BeBrokerOrder> orderList = [];
-    var orders = json['broker_orders'];
-    for (var item in orders) orderList.add(BeBrokerOrder.fromJson(item));
-    var offset = json['offset'];
-    var limit = json['limit'];
-    var total = json['total'];
-    return BeBrokerOrdersResult(orderList, offset, limit, total);
+    try {
+      var json = jsonDecode(data);
+      List<BeBrokerOrder> orderList = [];
+      var orders = json['broker_orders'];
+      for (var item in orders) orderList.add(BeBrokerOrder.fromJson(item));
+      var offset = json['offset'];
+      var limit = json['limit'];
+      var total = json['total'];
+      return BeBrokerOrdersResult(orderList, offset, limit, total);
+    } catch (_) {
+      return BeBrokerOrdersResult.error(BeError.format());
+    }
   }
 }
 
@@ -760,7 +849,7 @@ Future<ErrorResult> post(String endpoint, Map<String, dynamic> params,
   if (response.statusCode == 200) {
     return ErrorResult(response.body);
   } else if (response.statusCode == 400)
-    return BeError2.authParseMsg(response.body);
+    return BeError.authParseMsg(response.body);
   print(response.statusCode);
   return ErrorResult.network();
 }
@@ -991,9 +1080,7 @@ Future<BeAddressBookResult> beAddressBook(String asset) async {
 }
 
 Future<BeBrokerOrderResult> beOrderCreate(
-    String market,
-    BeMarketSide side,
-    Decimal amount) async {
+    String market, BeMarketSide side, Decimal amount) async {
   var result = await post(
       "broker_order_create",
       {

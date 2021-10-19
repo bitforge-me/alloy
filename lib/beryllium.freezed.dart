@@ -14,8 +14,8 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-class _$BeError2TearOff {
-  const _$BeError2TearOff();
+class _$BeErrorTearOff {
+  const _$BeErrorTearOff();
 
   Network network() {
     return const Network();
@@ -26,29 +26,36 @@ class _$BeError2TearOff {
       message,
     );
   }
+
+  Format format() {
+    return const Format();
+  }
 }
 
 /// @nodoc
-const $BeError2 = _$BeError2TearOff();
+const $BeError = _$BeErrorTearOff();
 
 /// @nodoc
-mixin _$BeError2 {
+mixin _$BeError {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() network,
     required TResult Function(String message) auth,
+    required TResult Function() format,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? network,
     TResult Function(String message)? auth,
+    TResult Function()? format,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? network,
     TResult Function(String message)? auth,
+    TResult Function()? format,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -56,36 +63,39 @@ mixin _$BeError2 {
   TResult map<TResult extends Object?>({
     required TResult Function(Network value) network,
     required TResult Function(Auth value) auth,
+    required TResult Function(Format value) format,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(Network value)? network,
     TResult Function(Auth value)? auth,
+    TResult Function(Format value)? format,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Network value)? network,
     TResult Function(Auth value)? auth,
+    TResult Function(Format value)? format,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $BeError2CopyWith<$Res> {
-  factory $BeError2CopyWith(BeError2 value, $Res Function(BeError2) then) =
-      _$BeError2CopyWithImpl<$Res>;
+abstract class $BeErrorCopyWith<$Res> {
+  factory $BeErrorCopyWith(BeError value, $Res Function(BeError) then) =
+      _$BeErrorCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$BeError2CopyWithImpl<$Res> implements $BeError2CopyWith<$Res> {
-  _$BeError2CopyWithImpl(this._value, this._then);
+class _$BeErrorCopyWithImpl<$Res> implements $BeErrorCopyWith<$Res> {
+  _$BeErrorCopyWithImpl(this._value, this._then);
 
-  final BeError2 _value;
+  final BeError _value;
   // ignore: unused_field
-  final $Res Function(BeError2) _then;
+  final $Res Function(BeError) _then;
 }
 
 /// @nodoc
@@ -95,7 +105,7 @@ abstract class $NetworkCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$NetworkCopyWithImpl<$Res> extends _$BeError2CopyWithImpl<$Res>
+class _$NetworkCopyWithImpl<$Res> extends _$BeErrorCopyWithImpl<$Res>
     implements $NetworkCopyWith<$Res> {
   _$NetworkCopyWithImpl(Network _value, $Res Function(Network) _then)
       : super(_value, (v) => _then(v as Network));
@@ -111,18 +121,19 @@ class _$Network with DiagnosticableTreeMixin implements Network {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BeError2.network()';
+    return 'BeError.network()';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties..add(DiagnosticsProperty('type', 'BeError2.network'));
+    properties..add(DiagnosticsProperty('type', 'BeError.network'));
   }
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is Network);
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is Network);
   }
 
   @override
@@ -133,6 +144,7 @@ class _$Network with DiagnosticableTreeMixin implements Network {
   TResult when<TResult extends Object?>({
     required TResult Function() network,
     required TResult Function(String message) auth,
+    required TResult Function() format,
   }) {
     return network();
   }
@@ -142,6 +154,7 @@ class _$Network with DiagnosticableTreeMixin implements Network {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? network,
     TResult Function(String message)? auth,
+    TResult Function()? format,
   }) {
     return network?.call();
   }
@@ -151,6 +164,7 @@ class _$Network with DiagnosticableTreeMixin implements Network {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? network,
     TResult Function(String message)? auth,
+    TResult Function()? format,
     required TResult orElse(),
   }) {
     if (network != null) {
@@ -164,6 +178,7 @@ class _$Network with DiagnosticableTreeMixin implements Network {
   TResult map<TResult extends Object?>({
     required TResult Function(Network value) network,
     required TResult Function(Auth value) auth,
+    required TResult Function(Format value) format,
   }) {
     return network(this);
   }
@@ -173,6 +188,7 @@ class _$Network with DiagnosticableTreeMixin implements Network {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(Network value)? network,
     TResult Function(Auth value)? auth,
+    TResult Function(Format value)? format,
   }) {
     return network?.call(this);
   }
@@ -182,6 +198,7 @@ class _$Network with DiagnosticableTreeMixin implements Network {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Network value)? network,
     TResult Function(Auth value)? auth,
+    TResult Function(Format value)? format,
     required TResult orElse(),
   }) {
     if (network != null) {
@@ -191,7 +208,7 @@ class _$Network with DiagnosticableTreeMixin implements Network {
   }
 }
 
-abstract class Network implements BeError2 {
+abstract class Network implements BeError {
   const factory Network() = _$Network;
 }
 
@@ -203,7 +220,7 @@ abstract class $AuthCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$AuthCopyWithImpl<$Res> extends _$BeError2CopyWithImpl<$Res>
+class _$AuthCopyWithImpl<$Res> extends _$BeErrorCopyWithImpl<$Res>
     implements $AuthCopyWith<$Res> {
   _$AuthCopyWithImpl(Auth _value, $Res Function(Auth) _then)
       : super(_value, (v) => _then(v as Auth));
@@ -234,28 +251,27 @@ class _$Auth with DiagnosticableTreeMixin implements Auth {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BeError2.auth(message: $message)';
+    return 'BeError.auth(message: $message)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'BeError2.auth'))
+      ..add(DiagnosticsProperty('type', 'BeError.auth'))
       ..add(DiagnosticsProperty('message', message));
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is Auth &&
-            (identical(other.message, message) ||
-                const DeepCollectionEquality().equals(other.message, message)));
+        (other.runtimeType == runtimeType &&
+            other is Auth &&
+            (identical(other.message, message) || other.message == message));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(message);
+  int get hashCode => Object.hash(runtimeType, message);
 
   @JsonKey(ignore: true)
   @override
@@ -267,6 +283,7 @@ class _$Auth with DiagnosticableTreeMixin implements Auth {
   TResult when<TResult extends Object?>({
     required TResult Function() network,
     required TResult Function(String message) auth,
+    required TResult Function() format,
   }) {
     return auth(message);
   }
@@ -276,6 +293,7 @@ class _$Auth with DiagnosticableTreeMixin implements Auth {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? network,
     TResult Function(String message)? auth,
+    TResult Function()? format,
   }) {
     return auth?.call(message);
   }
@@ -285,6 +303,7 @@ class _$Auth with DiagnosticableTreeMixin implements Auth {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? network,
     TResult Function(String message)? auth,
+    TResult Function()? format,
     required TResult orElse(),
   }) {
     if (auth != null) {
@@ -298,6 +317,7 @@ class _$Auth with DiagnosticableTreeMixin implements Auth {
   TResult map<TResult extends Object?>({
     required TResult Function(Network value) network,
     required TResult Function(Auth value) auth,
+    required TResult Function(Format value) format,
   }) {
     return auth(this);
   }
@@ -307,6 +327,7 @@ class _$Auth with DiagnosticableTreeMixin implements Auth {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(Network value)? network,
     TResult Function(Auth value)? auth,
+    TResult Function(Format value)? format,
   }) {
     return auth?.call(this);
   }
@@ -316,6 +337,7 @@ class _$Auth with DiagnosticableTreeMixin implements Auth {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Network value)? network,
     TResult Function(Auth value)? auth,
+    TResult Function(Format value)? format,
     required TResult orElse(),
   }) {
     if (auth != null) {
@@ -325,12 +347,126 @@ class _$Auth with DiagnosticableTreeMixin implements Auth {
   }
 }
 
-abstract class Auth implements BeError2 {
+abstract class Auth implements BeError {
   const factory Auth(String message) = _$Auth;
 
-  String get message => throw _privateConstructorUsedError;
+  String get message;
   @JsonKey(ignore: true)
   $AuthCopyWith<Auth> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $FormatCopyWith<$Res> {
+  factory $FormatCopyWith(Format value, $Res Function(Format) then) =
+      _$FormatCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$FormatCopyWithImpl<$Res> extends _$BeErrorCopyWithImpl<$Res>
+    implements $FormatCopyWith<$Res> {
+  _$FormatCopyWithImpl(Format _value, $Res Function(Format) _then)
+      : super(_value, (v) => _then(v as Format));
+
+  @override
+  Format get _value => super._value as Format;
+}
+
+/// @nodoc
+
+class _$Format with DiagnosticableTreeMixin implements Format {
+  const _$Format();
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'BeError.format()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties..add(DiagnosticsProperty('type', 'BeError.format'));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is Format);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() network,
+    required TResult Function(String message) auth,
+    required TResult Function() format,
+  }) {
+    return format();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? network,
+    TResult Function(String message)? auth,
+    TResult Function()? format,
+  }) {
+    return format?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? network,
+    TResult Function(String message)? auth,
+    TResult Function()? format,
+    required TResult orElse(),
+  }) {
+    if (format != null) {
+      return format();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Network value) network,
+    required TResult Function(Auth value) auth,
+    required TResult Function(Format value) format,
+  }) {
+    return format(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(Network value)? network,
+    TResult Function(Auth value)? auth,
+    TResult Function(Format value)? format,
+  }) {
+    return format?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Network value)? network,
+    TResult Function(Auth value)? auth,
+    TResult Function(Format value)? format,
+    required TResult orElse(),
+  }) {
+    if (format != null) {
+      return format(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class Format implements BeError {
+  const factory Format() = _$Format;
 }
 
 /// @nodoc
@@ -343,7 +479,7 @@ class _$ErrorResultTearOff {
     );
   }
 
-  _ErrorResultErr error(BeError2 err) {
+  _ErrorResultErr error(BeError err) {
     return _ErrorResultErr(
       err,
     );
@@ -358,19 +494,19 @@ mixin _$ErrorResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(String content) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(String content)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(String content)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -466,14 +602,13 @@ class _$_ErrorResult with DiagnosticableTreeMixin implements _ErrorResult {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _ErrorResult &&
-            (identical(other.content, content) ||
-                const DeepCollectionEquality().equals(other.content, content)));
+        (other.runtimeType == runtimeType &&
+            other is _ErrorResult &&
+            (identical(other.content, content) || other.content == content));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(content);
+  int get hashCode => Object.hash(runtimeType, content);
 
   @JsonKey(ignore: true)
   @override
@@ -484,7 +619,7 @@ class _$_ErrorResult with DiagnosticableTreeMixin implements _ErrorResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(String content) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(content);
   }
@@ -493,7 +628,7 @@ class _$_ErrorResult with DiagnosticableTreeMixin implements _ErrorResult {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(String content)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(content);
   }
@@ -502,7 +637,7 @@ class _$_ErrorResult with DiagnosticableTreeMixin implements _ErrorResult {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(String content)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -546,7 +681,7 @@ class _$_ErrorResult with DiagnosticableTreeMixin implements _ErrorResult {
 abstract class _ErrorResult implements ErrorResult {
   const factory _ErrorResult(String content) = _$_ErrorResult;
 
-  String get content => throw _privateConstructorUsedError;
+  String get content;
   @JsonKey(ignore: true)
   _$ErrorResultCopyWith<_ErrorResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -557,9 +692,9 @@ abstract class _$ErrorResultErrCopyWith<$Res> {
   factory _$ErrorResultErrCopyWith(
           _ErrorResultErr value, $Res Function(_ErrorResultErr) then) =
       __$ErrorResultErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -581,13 +716,13 @@ class __$ErrorResultErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -601,7 +736,7 @@ class _$_ErrorResultErr
   const _$_ErrorResultErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -619,14 +754,13 @@ class _$_ErrorResultErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _ErrorResultErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _ErrorResultErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -637,7 +771,7 @@ class _$_ErrorResultErr
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(String content) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -646,7 +780,7 @@ class _$_ErrorResultErr
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(String content)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -655,7 +789,7 @@ class _$_ErrorResultErr
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(String content)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -697,9 +831,9 @@ class _$_ErrorResultErr
 }
 
 abstract class _ErrorResultErr implements ErrorResult {
-  const factory _ErrorResultErr(BeError2 err) = _$_ErrorResultErr;
+  const factory _ErrorResultErr(BeError err) = _$_ErrorResultErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$ErrorResultErrCopyWith<_ErrorResultErr> get copyWith =>
       throw _privateConstructorUsedError;
@@ -715,7 +849,7 @@ class _$UserInfoResultTearOff {
     );
   }
 
-  _UserInfoErr error(BeError2 err) {
+  _UserInfoErr error(BeError err) {
     return _UserInfoErr(
       err,
     );
@@ -730,19 +864,19 @@ mixin _$UserInfoResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(UserInfo info) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(UserInfo info)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(UserInfo info)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -837,14 +971,13 @@ class _$_UserInfo with DiagnosticableTreeMixin implements _UserInfo {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _UserInfo &&
-            (identical(other.info, info) ||
-                const DeepCollectionEquality().equals(other.info, info)));
+        (other.runtimeType == runtimeType &&
+            other is _UserInfo &&
+            (identical(other.info, info) || other.info == info));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(info);
+  int get hashCode => Object.hash(runtimeType, info);
 
   @JsonKey(ignore: true)
   @override
@@ -855,7 +988,7 @@ class _$_UserInfo with DiagnosticableTreeMixin implements _UserInfo {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(UserInfo info) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(info);
   }
@@ -864,7 +997,7 @@ class _$_UserInfo with DiagnosticableTreeMixin implements _UserInfo {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(UserInfo info)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(info);
   }
@@ -873,7 +1006,7 @@ class _$_UserInfo with DiagnosticableTreeMixin implements _UserInfo {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(UserInfo info)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -917,7 +1050,7 @@ class _$_UserInfo with DiagnosticableTreeMixin implements _UserInfo {
 abstract class _UserInfo implements UserInfoResult {
   const factory _UserInfo(UserInfo info) = _$_UserInfo;
 
-  UserInfo get info => throw _privateConstructorUsedError;
+  UserInfo get info;
   @JsonKey(ignore: true)
   _$UserInfoCopyWith<_UserInfo> get copyWith =>
       throw _privateConstructorUsedError;
@@ -928,9 +1061,9 @@ abstract class _$UserInfoErrCopyWith<$Res> {
   factory _$UserInfoErrCopyWith(
           _UserInfoErr value, $Res Function(_UserInfoErr) then) =
       __$UserInfoErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -952,13 +1085,13 @@ class __$UserInfoErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -970,7 +1103,7 @@ class _$_UserInfoErr with DiagnosticableTreeMixin implements _UserInfoErr {
   const _$_UserInfoErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -988,14 +1121,13 @@ class _$_UserInfoErr with DiagnosticableTreeMixin implements _UserInfoErr {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _UserInfoErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _UserInfoErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -1006,7 +1138,7 @@ class _$_UserInfoErr with DiagnosticableTreeMixin implements _UserInfoErr {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(UserInfo info) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -1015,7 +1147,7 @@ class _$_UserInfoErr with DiagnosticableTreeMixin implements _UserInfoErr {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(UserInfo info)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -1024,7 +1156,7 @@ class _$_UserInfoErr with DiagnosticableTreeMixin implements _UserInfoErr {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(UserInfo info)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -1066,9 +1198,9 @@ class _$_UserInfoErr with DiagnosticableTreeMixin implements _UserInfoErr {
 }
 
 abstract class _UserInfoErr implements UserInfoResult {
-  const factory _UserInfoErr(BeError2 err) = _$_UserInfoErr;
+  const factory _UserInfoErr(BeError err) = _$_UserInfoErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$UserInfoErrCopyWith<_UserInfoErr> get copyWith =>
       throw _privateConstructorUsedError;
@@ -1084,7 +1216,7 @@ class _$BeTwoFactorEnabledResultTearOff {
     );
   }
 
-  _BeTwoFactorEnabledResultErr error(BeError2 err) {
+  _BeTwoFactorEnabledResultErr error(BeError err) {
     return _BeTwoFactorEnabledResultErr(
       err,
     );
@@ -1099,19 +1231,19 @@ mixin _$BeTwoFactorEnabledResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(bool enabled) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(bool enabled)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(bool enabled)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -1212,14 +1344,13 @@ class _$_BeTwoFactorEnabledResult
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeTwoFactorEnabledResult &&
-            (identical(other.enabled, enabled) ||
-                const DeepCollectionEquality().equals(other.enabled, enabled)));
+        (other.runtimeType == runtimeType &&
+            other is _BeTwoFactorEnabledResult &&
+            (identical(other.enabled, enabled) || other.enabled == enabled));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(enabled);
+  int get hashCode => Object.hash(runtimeType, enabled);
 
   @JsonKey(ignore: true)
   @override
@@ -1231,7 +1362,7 @@ class _$_BeTwoFactorEnabledResult
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(bool enabled) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(enabled);
   }
@@ -1240,7 +1371,7 @@ class _$_BeTwoFactorEnabledResult
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(bool enabled)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(enabled);
   }
@@ -1249,7 +1380,7 @@ class _$_BeTwoFactorEnabledResult
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(bool enabled)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -1294,7 +1425,7 @@ abstract class _BeTwoFactorEnabledResult implements BeTwoFactorEnabledResult {
   const factory _BeTwoFactorEnabledResult(bool enabled) =
       _$_BeTwoFactorEnabledResult;
 
-  bool get enabled => throw _privateConstructorUsedError;
+  bool get enabled;
   @JsonKey(ignore: true)
   _$BeTwoFactorEnabledResultCopyWith<_BeTwoFactorEnabledResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -1306,9 +1437,9 @@ abstract class _$BeTwoFactorEnabledResultErrCopyWith<$Res> {
           _BeTwoFactorEnabledResultErr value,
           $Res Function(_BeTwoFactorEnabledResultErr) then) =
       __$BeTwoFactorEnabledResultErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -1332,13 +1463,13 @@ class __$BeTwoFactorEnabledResultErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -1352,7 +1483,7 @@ class _$_BeTwoFactorEnabledResultErr
   const _$_BeTwoFactorEnabledResultErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -1370,14 +1501,13 @@ class _$_BeTwoFactorEnabledResultErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeTwoFactorEnabledResultErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _BeTwoFactorEnabledResultErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -1389,7 +1519,7 @@ class _$_BeTwoFactorEnabledResultErr
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(bool enabled) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -1398,7 +1528,7 @@ class _$_BeTwoFactorEnabledResultErr
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(bool enabled)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -1407,7 +1537,7 @@ class _$_BeTwoFactorEnabledResultErr
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(bool enabled)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -1450,10 +1580,10 @@ class _$_BeTwoFactorEnabledResultErr
 
 abstract class _BeTwoFactorEnabledResultErr
     implements BeTwoFactorEnabledResult {
-  const factory _BeTwoFactorEnabledResultErr(BeError2 err) =
+  const factory _BeTwoFactorEnabledResultErr(BeError err) =
       _$_BeTwoFactorEnabledResultErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$BeTwoFactorEnabledResultErrCopyWith<_BeTwoFactorEnabledResultErr>
       get copyWith => throw _privateConstructorUsedError;
@@ -1469,7 +1599,7 @@ class _$BeApiKeyResultTearOff {
     );
   }
 
-  _BeApiKeyResultErr error(BeError2 err) {
+  _BeApiKeyResultErr error(BeError err) {
     return _BeApiKeyResultErr(
       err,
     );
@@ -1484,19 +1614,19 @@ mixin _$BeApiKeyResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeApiKey apikey) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeApiKey apikey)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeApiKey apikey)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -1596,14 +1726,13 @@ class _$_BeApiKeyResult
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeApiKeyResult &&
-            (identical(other.apikey, apikey) ||
-                const DeepCollectionEquality().equals(other.apikey, apikey)));
+        (other.runtimeType == runtimeType &&
+            other is _BeApiKeyResult &&
+            (identical(other.apikey, apikey) || other.apikey == apikey));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(apikey);
+  int get hashCode => Object.hash(runtimeType, apikey);
 
   @JsonKey(ignore: true)
   @override
@@ -1614,7 +1743,7 @@ class _$_BeApiKeyResult
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeApiKey apikey) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(apikey);
   }
@@ -1623,7 +1752,7 @@ class _$_BeApiKeyResult
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeApiKey apikey)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(apikey);
   }
@@ -1632,7 +1761,7 @@ class _$_BeApiKeyResult
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeApiKey apikey)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -1676,7 +1805,7 @@ class _$_BeApiKeyResult
 abstract class _BeApiKeyResult implements BeApiKeyResult {
   const factory _BeApiKeyResult(BeApiKey apikey) = _$_BeApiKeyResult;
 
-  BeApiKey get apikey => throw _privateConstructorUsedError;
+  BeApiKey get apikey;
   @JsonKey(ignore: true)
   _$BeApiKeyResultCopyWith<_BeApiKeyResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -1687,9 +1816,9 @@ abstract class _$BeApiKeyResultErrCopyWith<$Res> {
   factory _$BeApiKeyResultErrCopyWith(
           _BeApiKeyResultErr value, $Res Function(_BeApiKeyResultErr) then) =
       __$BeApiKeyResultErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -1711,13 +1840,13 @@ class __$BeApiKeyResultErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -1731,7 +1860,7 @@ class _$_BeApiKeyResultErr
   const _$_BeApiKeyResultErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -1749,14 +1878,13 @@ class _$_BeApiKeyResultErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeApiKeyResultErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _BeApiKeyResultErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -1767,7 +1895,7 @@ class _$_BeApiKeyResultErr
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeApiKey apikey) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -1776,7 +1904,7 @@ class _$_BeApiKeyResultErr
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeApiKey apikey)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -1785,7 +1913,7 @@ class _$_BeApiKeyResultErr
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeApiKey apikey)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -1827,9 +1955,9 @@ class _$_BeApiKeyResultErr
 }
 
 abstract class _BeApiKeyResultErr implements BeApiKeyResult {
-  const factory _BeApiKeyResultErr(BeError2 err) = _$_BeApiKeyResultErr;
+  const factory _BeApiKeyResultErr(BeError err) = _$_BeApiKeyResultErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$BeApiKeyResultErrCopyWith<_BeApiKeyResultErr> get copyWith =>
       throw _privateConstructorUsedError;
@@ -1845,7 +1973,7 @@ class _$BeApiKeyRequestResultTearOff {
     );
   }
 
-  _BeApiKeyRequestResulttErr error(BeError2 err) {
+  _BeApiKeyRequestResulttErr error(BeError err) {
     return _BeApiKeyRequestResulttErr(
       err,
     );
@@ -1860,19 +1988,19 @@ mixin _$BeApiKeyRequestResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(String token) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(String token)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(String token)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -1972,14 +2100,13 @@ class _$_BeApiKeyRequestResult
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeApiKeyRequestResult &&
-            (identical(other.token, token) ||
-                const DeepCollectionEquality().equals(other.token, token)));
+        (other.runtimeType == runtimeType &&
+            other is _BeApiKeyRequestResult &&
+            (identical(other.token, token) || other.token == token));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(token);
+  int get hashCode => Object.hash(runtimeType, token);
 
   @JsonKey(ignore: true)
   @override
@@ -1991,7 +2118,7 @@ class _$_BeApiKeyRequestResult
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(String token) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(token);
   }
@@ -2000,7 +2127,7 @@ class _$_BeApiKeyRequestResult
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(String token)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(token);
   }
@@ -2009,7 +2136,7 @@ class _$_BeApiKeyRequestResult
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(String token)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -2053,7 +2180,7 @@ class _$_BeApiKeyRequestResult
 abstract class _BeApiKeyRequestResult implements BeApiKeyRequestResult {
   const factory _BeApiKeyRequestResult(String token) = _$_BeApiKeyRequestResult;
 
-  String get token => throw _privateConstructorUsedError;
+  String get token;
   @JsonKey(ignore: true)
   _$BeApiKeyRequestResultCopyWith<_BeApiKeyRequestResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -2064,9 +2191,9 @@ abstract class _$BeApiKeyRequestResulttErrCopyWith<$Res> {
   factory _$BeApiKeyRequestResulttErrCopyWith(_BeApiKeyRequestResulttErr value,
           $Res Function(_BeApiKeyRequestResulttErr) then) =
       __$BeApiKeyRequestResulttErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -2089,13 +2216,13 @@ class __$BeApiKeyRequestResulttErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -2109,7 +2236,7 @@ class _$_BeApiKeyRequestResulttErr
   const _$_BeApiKeyRequestResulttErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -2127,14 +2254,13 @@ class _$_BeApiKeyRequestResulttErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeApiKeyRequestResulttErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _BeApiKeyRequestResulttErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -2147,7 +2273,7 @@ class _$_BeApiKeyRequestResulttErr
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(String token) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -2156,7 +2282,7 @@ class _$_BeApiKeyRequestResulttErr
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(String token)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -2165,7 +2291,7 @@ class _$_BeApiKeyRequestResulttErr
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(String token)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -2207,10 +2333,10 @@ class _$_BeApiKeyRequestResulttErr
 }
 
 abstract class _BeApiKeyRequestResulttErr implements BeApiKeyRequestResult {
-  const factory _BeApiKeyRequestResulttErr(BeError2 err) =
+  const factory _BeApiKeyRequestResulttErr(BeError err) =
       _$_BeApiKeyRequestResulttErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$BeApiKeyRequestResulttErrCopyWith<_BeApiKeyRequestResulttErr>
       get copyWith => throw _privateConstructorUsedError;
@@ -2226,7 +2352,7 @@ class _$BeKycRequestCreateResultTearOff {
     );
   }
 
-  _BeKycRequestCreateResultErr error(BeError2 err) {
+  _BeKycRequestCreateResultErr error(BeError err) {
     return _BeKycRequestCreateResultErr(
       err,
     );
@@ -2241,19 +2367,19 @@ mixin _$BeKycRequestCreateResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(String kycUrl) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(String kycUrl)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(String kycUrl)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -2354,14 +2480,13 @@ class _$_BeKycRequestCreateResult
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeKycRequestCreateResult &&
-            (identical(other.kycUrl, kycUrl) ||
-                const DeepCollectionEquality().equals(other.kycUrl, kycUrl)));
+        (other.runtimeType == runtimeType &&
+            other is _BeKycRequestCreateResult &&
+            (identical(other.kycUrl, kycUrl) || other.kycUrl == kycUrl));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(kycUrl);
+  int get hashCode => Object.hash(runtimeType, kycUrl);
 
   @JsonKey(ignore: true)
   @override
@@ -2373,7 +2498,7 @@ class _$_BeKycRequestCreateResult
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(String kycUrl) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(kycUrl);
   }
@@ -2382,7 +2507,7 @@ class _$_BeKycRequestCreateResult
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(String kycUrl)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(kycUrl);
   }
@@ -2391,7 +2516,7 @@ class _$_BeKycRequestCreateResult
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(String kycUrl)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -2436,7 +2561,7 @@ abstract class _BeKycRequestCreateResult implements BeKycRequestCreateResult {
   const factory _BeKycRequestCreateResult(String kycUrl) =
       _$_BeKycRequestCreateResult;
 
-  String get kycUrl => throw _privateConstructorUsedError;
+  String get kycUrl;
   @JsonKey(ignore: true)
   _$BeKycRequestCreateResultCopyWith<_BeKycRequestCreateResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -2448,9 +2573,9 @@ abstract class _$BeKycRequestCreateResultErrCopyWith<$Res> {
           _BeKycRequestCreateResultErr value,
           $Res Function(_BeKycRequestCreateResultErr) then) =
       __$BeKycRequestCreateResultErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -2474,13 +2599,13 @@ class __$BeKycRequestCreateResultErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -2494,7 +2619,7 @@ class _$_BeKycRequestCreateResultErr
   const _$_BeKycRequestCreateResultErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -2512,14 +2637,13 @@ class _$_BeKycRequestCreateResultErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeKycRequestCreateResultErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _BeKycRequestCreateResultErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -2531,7 +2655,7 @@ class _$_BeKycRequestCreateResultErr
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(String kycUrl) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -2540,7 +2664,7 @@ class _$_BeKycRequestCreateResultErr
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(String kycUrl)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -2549,7 +2673,7 @@ class _$_BeKycRequestCreateResultErr
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(String kycUrl)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -2592,10 +2716,10 @@ class _$_BeKycRequestCreateResultErr
 
 abstract class _BeKycRequestCreateResultErr
     implements BeKycRequestCreateResult {
-  const factory _BeKycRequestCreateResultErr(BeError2 err) =
+  const factory _BeKycRequestCreateResultErr(BeError err) =
       _$_BeKycRequestCreateResultErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$BeKycRequestCreateResultErrCopyWith<_BeKycRequestCreateResultErr>
       get copyWith => throw _privateConstructorUsedError;
@@ -2611,7 +2735,7 @@ class _$BeTwoFactorResultTearOff {
     );
   }
 
-  _BeTwoFactorResultErr error(BeError2 err) {
+  _BeTwoFactorResultErr error(BeError err) {
     return _BeTwoFactorResultErr(
       err,
     );
@@ -2626,19 +2750,19 @@ mixin _$BeTwoFactorResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeTwoFactor twoFactor) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeTwoFactor twoFactor)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeTwoFactor twoFactor)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -2738,15 +2862,14 @@ class _$_BeTwoFactorResult
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeTwoFactorResult &&
+        (other.runtimeType == runtimeType &&
+            other is _BeTwoFactorResult &&
             (identical(other.twoFactor, twoFactor) ||
-                const DeepCollectionEquality()
-                    .equals(other.twoFactor, twoFactor)));
+                other.twoFactor == twoFactor));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(twoFactor);
+  int get hashCode => Object.hash(runtimeType, twoFactor);
 
   @JsonKey(ignore: true)
   @override
@@ -2757,7 +2880,7 @@ class _$_BeTwoFactorResult
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeTwoFactor twoFactor) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(twoFactor);
   }
@@ -2766,7 +2889,7 @@ class _$_BeTwoFactorResult
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeTwoFactor twoFactor)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(twoFactor);
   }
@@ -2775,7 +2898,7 @@ class _$_BeTwoFactorResult
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeTwoFactor twoFactor)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -2820,7 +2943,7 @@ abstract class _BeTwoFactorResult implements BeTwoFactorResult {
   const factory _BeTwoFactorResult(BeTwoFactor twoFactor) =
       _$_BeTwoFactorResult;
 
-  BeTwoFactor get twoFactor => throw _privateConstructorUsedError;
+  BeTwoFactor get twoFactor;
   @JsonKey(ignore: true)
   _$BeTwoFactorResultCopyWith<_BeTwoFactorResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -2831,9 +2954,9 @@ abstract class _$BeTwoFactorResultErrCopyWith<$Res> {
   factory _$BeTwoFactorResultErrCopyWith(_BeTwoFactorResultErr value,
           $Res Function(_BeTwoFactorResultErr) then) =
       __$BeTwoFactorResultErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -2855,13 +2978,13 @@ class __$BeTwoFactorResultErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -2875,7 +2998,7 @@ class _$_BeTwoFactorResultErr
   const _$_BeTwoFactorResultErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -2893,14 +3016,13 @@ class _$_BeTwoFactorResultErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeTwoFactorResultErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _BeTwoFactorResultErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -2912,7 +3034,7 @@ class _$_BeTwoFactorResultErr
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeTwoFactor twoFactor) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -2921,7 +3043,7 @@ class _$_BeTwoFactorResultErr
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeTwoFactor twoFactor)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -2930,7 +3052,7 @@ class _$_BeTwoFactorResultErr
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeTwoFactor twoFactor)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -2972,9 +3094,9 @@ class _$_BeTwoFactorResultErr
 }
 
 abstract class _BeTwoFactorResultErr implements BeTwoFactorResult {
-  const factory _BeTwoFactorResultErr(BeError2 err) = _$_BeTwoFactorResultErr;
+  const factory _BeTwoFactorResultErr(BeError err) = _$_BeTwoFactorResultErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$BeTwoFactorResultErrCopyWith<_BeTwoFactorResultErr> get copyWith =>
       throw _privateConstructorUsedError;
@@ -2990,7 +3112,7 @@ class _$BeAssetResultTearOff {
     );
   }
 
-  _BeAssetResultErr error(BeError2 err) {
+  _BeAssetResultErr error(BeError err) {
     return _BeAssetResultErr(
       err,
     );
@@ -3005,19 +3127,19 @@ mixin _$BeAssetResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(List<BeAsset> assets) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(List<BeAsset> assets)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(List<BeAsset> assets)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -3115,14 +3237,14 @@ class _$_BeAssetResult with DiagnosticableTreeMixin implements _BeAssetResult {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeAssetResult &&
-            (identical(other.assets, assets) ||
-                const DeepCollectionEquality().equals(other.assets, assets)));
+        (other.runtimeType == runtimeType &&
+            other is _BeAssetResult &&
+            const DeepCollectionEquality().equals(other.assets, assets));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(assets);
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(assets));
 
   @JsonKey(ignore: true)
   @override
@@ -3133,7 +3255,7 @@ class _$_BeAssetResult with DiagnosticableTreeMixin implements _BeAssetResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(List<BeAsset> assets) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(assets);
   }
@@ -3142,7 +3264,7 @@ class _$_BeAssetResult with DiagnosticableTreeMixin implements _BeAssetResult {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(List<BeAsset> assets)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(assets);
   }
@@ -3151,7 +3273,7 @@ class _$_BeAssetResult with DiagnosticableTreeMixin implements _BeAssetResult {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(List<BeAsset> assets)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -3195,7 +3317,7 @@ class _$_BeAssetResult with DiagnosticableTreeMixin implements _BeAssetResult {
 abstract class _BeAssetResult implements BeAssetResult {
   const factory _BeAssetResult(List<BeAsset> assets) = _$_BeAssetResult;
 
-  List<BeAsset> get assets => throw _privateConstructorUsedError;
+  List<BeAsset> get assets;
   @JsonKey(ignore: true)
   _$BeAssetResultCopyWith<_BeAssetResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -3206,9 +3328,9 @@ abstract class _$BeAssetResultErrCopyWith<$Res> {
   factory _$BeAssetResultErrCopyWith(
           _BeAssetResultErr value, $Res Function(_BeAssetResultErr) then) =
       __$BeAssetResultErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -3230,13 +3352,13 @@ class __$BeAssetResultErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -3250,7 +3372,7 @@ class _$_BeAssetResultErr
   const _$_BeAssetResultErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -3268,14 +3390,13 @@ class _$_BeAssetResultErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeAssetResultErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _BeAssetResultErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -3286,7 +3407,7 @@ class _$_BeAssetResultErr
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(List<BeAsset> assets) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -3295,7 +3416,7 @@ class _$_BeAssetResultErr
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(List<BeAsset> assets)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -3304,7 +3425,7 @@ class _$_BeAssetResultErr
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(List<BeAsset> assets)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -3346,9 +3467,9 @@ class _$_BeAssetResultErr
 }
 
 abstract class _BeAssetResultErr implements BeAssetResult {
-  const factory _BeAssetResultErr(BeError2 err) = _$_BeAssetResultErr;
+  const factory _BeAssetResultErr(BeError err) = _$_BeAssetResultErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$BeAssetResultErrCopyWith<_BeAssetResultErr> get copyWith =>
       throw _privateConstructorUsedError;
@@ -3364,7 +3485,7 @@ class _$BeMarketResultTearOff {
     );
   }
 
-  _BeMarketResultErr error(BeError2 err) {
+  _BeMarketResultErr error(BeError err) {
     return _BeMarketResultErr(
       err,
     );
@@ -3379,19 +3500,19 @@ mixin _$BeMarketResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(List<BeMarket> markets) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(List<BeMarket> markets)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(List<BeMarket> markets)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -3491,14 +3612,14 @@ class _$_BeMarketResult
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeMarketResult &&
-            (identical(other.markets, markets) ||
-                const DeepCollectionEquality().equals(other.markets, markets)));
+        (other.runtimeType == runtimeType &&
+            other is _BeMarketResult &&
+            const DeepCollectionEquality().equals(other.markets, markets));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(markets);
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(markets));
 
   @JsonKey(ignore: true)
   @override
@@ -3509,7 +3630,7 @@ class _$_BeMarketResult
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(List<BeMarket> markets) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(markets);
   }
@@ -3518,7 +3639,7 @@ class _$_BeMarketResult
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(List<BeMarket> markets)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(markets);
   }
@@ -3527,7 +3648,7 @@ class _$_BeMarketResult
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(List<BeMarket> markets)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -3571,7 +3692,7 @@ class _$_BeMarketResult
 abstract class _BeMarketResult implements BeMarketResult {
   const factory _BeMarketResult(List<BeMarket> markets) = _$_BeMarketResult;
 
-  List<BeMarket> get markets => throw _privateConstructorUsedError;
+  List<BeMarket> get markets;
   @JsonKey(ignore: true)
   _$BeMarketResultCopyWith<_BeMarketResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -3582,9 +3703,9 @@ abstract class _$BeMarketResultErrCopyWith<$Res> {
   factory _$BeMarketResultErrCopyWith(
           _BeMarketResultErr value, $Res Function(_BeMarketResultErr) then) =
       __$BeMarketResultErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -3606,13 +3727,13 @@ class __$BeMarketResultErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -3626,7 +3747,7 @@ class _$_BeMarketResultErr
   const _$_BeMarketResultErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -3644,14 +3765,13 @@ class _$_BeMarketResultErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeMarketResultErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _BeMarketResultErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -3662,7 +3782,7 @@ class _$_BeMarketResultErr
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(List<BeMarket> markets) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -3671,7 +3791,7 @@ class _$_BeMarketResultErr
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(List<BeMarket> markets)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -3680,7 +3800,7 @@ class _$_BeMarketResultErr
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(List<BeMarket> markets)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -3722,9 +3842,9 @@ class _$_BeMarketResultErr
 }
 
 abstract class _BeMarketResultErr implements BeMarketResult {
-  const factory _BeMarketResultErr(BeError2 err) = _$_BeMarketResultErr;
+  const factory _BeMarketResultErr(BeError err) = _$_BeMarketResultErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$BeMarketResultErrCopyWith<_BeMarketResultErr> get copyWith =>
       throw _privateConstructorUsedError;
@@ -3740,7 +3860,7 @@ class _$BeOrderbookResultTearOff {
     );
   }
 
-  _BeOrderbookResultErr error(BeError2 err) {
+  _BeOrderbookResultErr error(BeError err) {
     return _BeOrderbookResultErr(
       err,
     );
@@ -3755,19 +3875,19 @@ mixin _$BeOrderbookResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeOrderbook orderbook) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeOrderbook orderbook)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeOrderbook orderbook)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -3867,15 +3987,14 @@ class _$_BeOrderbookResult
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeOrderbookResult &&
+        (other.runtimeType == runtimeType &&
+            other is _BeOrderbookResult &&
             (identical(other.orderbook, orderbook) ||
-                const DeepCollectionEquality()
-                    .equals(other.orderbook, orderbook)));
+                other.orderbook == orderbook));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(orderbook);
+  int get hashCode => Object.hash(runtimeType, orderbook);
 
   @JsonKey(ignore: true)
   @override
@@ -3886,7 +4005,7 @@ class _$_BeOrderbookResult
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeOrderbook orderbook) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(orderbook);
   }
@@ -3895,7 +4014,7 @@ class _$_BeOrderbookResult
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeOrderbook orderbook)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(orderbook);
   }
@@ -3904,7 +4023,7 @@ class _$_BeOrderbookResult
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeOrderbook orderbook)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -3949,7 +4068,7 @@ abstract class _BeOrderbookResult implements BeOrderbookResult {
   const factory _BeOrderbookResult(BeOrderbook orderbook) =
       _$_BeOrderbookResult;
 
-  BeOrderbook get orderbook => throw _privateConstructorUsedError;
+  BeOrderbook get orderbook;
   @JsonKey(ignore: true)
   _$BeOrderbookResultCopyWith<_BeOrderbookResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -3960,9 +4079,9 @@ abstract class _$BeOrderbookResultErrCopyWith<$Res> {
   factory _$BeOrderbookResultErrCopyWith(_BeOrderbookResultErr value,
           $Res Function(_BeOrderbookResultErr) then) =
       __$BeOrderbookResultErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -3984,13 +4103,13 @@ class __$BeOrderbookResultErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -4004,7 +4123,7 @@ class _$_BeOrderbookResultErr
   const _$_BeOrderbookResultErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -4022,14 +4141,13 @@ class _$_BeOrderbookResultErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeOrderbookResultErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _BeOrderbookResultErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -4041,7 +4159,7 @@ class _$_BeOrderbookResultErr
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeOrderbook orderbook) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -4050,7 +4168,7 @@ class _$_BeOrderbookResultErr
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeOrderbook orderbook)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -4059,7 +4177,7 @@ class _$_BeOrderbookResultErr
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeOrderbook orderbook)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -4101,9 +4219,9 @@ class _$_BeOrderbookResultErr
 }
 
 abstract class _BeOrderbookResultErr implements BeOrderbookResult {
-  const factory _BeOrderbookResultErr(BeError2 err) = _$_BeOrderbookResultErr;
+  const factory _BeOrderbookResultErr(BeError err) = _$_BeOrderbookResultErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$BeOrderbookResultErrCopyWith<_BeOrderbookResultErr> get copyWith =>
       throw _privateConstructorUsedError;
@@ -4119,7 +4237,7 @@ class _$BeBalancesResultTearOff {
     );
   }
 
-  _BeBalancesResultErr error(BeError2 err) {
+  _BeBalancesResultErr error(BeError err) {
     return _BeBalancesResultErr(
       err,
     );
@@ -4134,19 +4252,19 @@ mixin _$BeBalancesResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(List<BeBalance> balances) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(List<BeBalance> balances)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(List<BeBalance> balances)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -4246,15 +4364,14 @@ class _$_BeBalancesResult
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeBalancesResult &&
-            (identical(other.balances, balances) ||
-                const DeepCollectionEquality()
-                    .equals(other.balances, balances)));
+        (other.runtimeType == runtimeType &&
+            other is _BeBalancesResult &&
+            const DeepCollectionEquality().equals(other.balances, balances));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(balances);
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(balances));
 
   @JsonKey(ignore: true)
   @override
@@ -4265,7 +4382,7 @@ class _$_BeBalancesResult
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(List<BeBalance> balances) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(balances);
   }
@@ -4274,7 +4391,7 @@ class _$_BeBalancesResult
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(List<BeBalance> balances)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(balances);
   }
@@ -4283,7 +4400,7 @@ class _$_BeBalancesResult
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(List<BeBalance> balances)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -4328,7 +4445,7 @@ abstract class _BeBalancesResult implements BeBalancesResult {
   const factory _BeBalancesResult(List<BeBalance> balances) =
       _$_BeBalancesResult;
 
-  List<BeBalance> get balances => throw _privateConstructorUsedError;
+  List<BeBalance> get balances;
   @JsonKey(ignore: true)
   _$BeBalancesResultCopyWith<_BeBalancesResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -4339,9 +4456,9 @@ abstract class _$BeBalancesResultErrCopyWith<$Res> {
   factory _$BeBalancesResultErrCopyWith(_BeBalancesResultErr value,
           $Res Function(_BeBalancesResultErr) then) =
       __$BeBalancesResultErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -4363,13 +4480,13 @@ class __$BeBalancesResultErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -4383,7 +4500,7 @@ class _$_BeBalancesResultErr
   const _$_BeBalancesResultErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -4401,14 +4518,13 @@ class _$_BeBalancesResultErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeBalancesResultErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _BeBalancesResultErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -4420,7 +4536,7 @@ class _$_BeBalancesResultErr
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(List<BeBalance> balances) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -4429,7 +4545,7 @@ class _$_BeBalancesResultErr
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(List<BeBalance> balances)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -4438,7 +4554,7 @@ class _$_BeBalancesResultErr
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(List<BeBalance> balances)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -4480,9 +4596,9 @@ class _$_BeBalancesResultErr
 }
 
 abstract class _BeBalancesResultErr implements BeBalancesResult {
-  const factory _BeBalancesResultErr(BeError2 err) = _$_BeBalancesResultErr;
+  const factory _BeBalancesResultErr(BeError err) = _$_BeBalancesResultErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$BeBalancesResultErrCopyWith<_BeBalancesResultErr> get copyWith =>
       throw _privateConstructorUsedError;
@@ -4498,7 +4614,7 @@ class _$BeCryptoDepositAddressResultTearOff {
     );
   }
 
-  _BeCryptoDepositAddressResultErr error(BeError2 err) {
+  _BeCryptoDepositAddressResultErr error(BeError err) {
     return _BeCryptoDepositAddressResultErr(
       err,
     );
@@ -4513,19 +4629,19 @@ mixin _$BeCryptoDepositAddressResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(String address) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(String address)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(String address)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -4629,14 +4745,13 @@ class _$_BeCryptoDepositAddressResult
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeCryptoDepositAddressResult &&
-            (identical(other.address, address) ||
-                const DeepCollectionEquality().equals(other.address, address)));
+        (other.runtimeType == runtimeType &&
+            other is _BeCryptoDepositAddressResult &&
+            (identical(other.address, address) || other.address == address));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(address);
+  int get hashCode => Object.hash(runtimeType, address);
 
   @JsonKey(ignore: true)
   @override
@@ -4648,7 +4763,7 @@ class _$_BeCryptoDepositAddressResult
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(String address) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(address);
   }
@@ -4657,7 +4772,7 @@ class _$_BeCryptoDepositAddressResult
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(String address)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(address);
   }
@@ -4666,7 +4781,7 @@ class _$_BeCryptoDepositAddressResult
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(String address)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -4712,7 +4827,7 @@ abstract class _BeCryptoDepositAddressResult
   const factory _BeCryptoDepositAddressResult(String address) =
       _$_BeCryptoDepositAddressResult;
 
-  String get address => throw _privateConstructorUsedError;
+  String get address;
   @JsonKey(ignore: true)
   _$BeCryptoDepositAddressResultCopyWith<_BeCryptoDepositAddressResult>
       get copyWith => throw _privateConstructorUsedError;
@@ -4724,9 +4839,9 @@ abstract class _$BeCryptoDepositAddressResultErrCopyWith<$Res> {
           _BeCryptoDepositAddressResultErr value,
           $Res Function(_BeCryptoDepositAddressResultErr) then) =
       __$BeCryptoDepositAddressResultErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -4750,13 +4865,13 @@ class __$BeCryptoDepositAddressResultErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -4770,7 +4885,7 @@ class _$_BeCryptoDepositAddressResultErr
   const _$_BeCryptoDepositAddressResultErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -4788,14 +4903,13 @@ class _$_BeCryptoDepositAddressResultErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeCryptoDepositAddressResultErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _BeCryptoDepositAddressResultErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -4807,7 +4921,7 @@ class _$_BeCryptoDepositAddressResultErr
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(String address) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -4816,7 +4930,7 @@ class _$_BeCryptoDepositAddressResultErr
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(String address)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -4825,7 +4939,7 @@ class _$_BeCryptoDepositAddressResultErr
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(String address)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -4868,10 +4982,10 @@ class _$_BeCryptoDepositAddressResultErr
 
 abstract class _BeCryptoDepositAddressResultErr
     implements BeCryptoDepositAddressResult {
-  const factory _BeCryptoDepositAddressResultErr(BeError2 err) =
+  const factory _BeCryptoDepositAddressResultErr(BeError err) =
       _$_BeCryptoDepositAddressResultErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$BeCryptoDepositAddressResultErrCopyWith<_BeCryptoDepositAddressResultErr>
       get copyWith => throw _privateConstructorUsedError;
@@ -4891,7 +5005,7 @@ class _$BeCryptoDepositsResultTearOff {
     );
   }
 
-  _BeCryptoDepositsResultErr error(BeError2 err) {
+  _BeCryptoDepositsResultErr error(BeError err) {
     return _BeCryptoDepositsResultErr(
       err,
     );
@@ -4908,7 +5022,7 @@ mixin _$BeCryptoDepositsResult {
     TResult Function(
             List<BeCryptoDeposit> deposits, int offset, int limit, int total)
         $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -4916,7 +5030,7 @@ mixin _$BeCryptoDepositsResult {
     TResult Function(
             List<BeCryptoDeposit> deposits, int offset, int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -4924,7 +5038,7 @@ mixin _$BeCryptoDepositsResult {
     TResult Function(
             List<BeCryptoDeposit> deposits, int offset, int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -5049,25 +5163,17 @@ class _$_BeCryptoDepositsResult
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeCryptoDepositsResult &&
-            (identical(other.deposits, deposits) ||
-                const DeepCollectionEquality()
-                    .equals(other.deposits, deposits)) &&
-            (identical(other.offset, offset) ||
-                const DeepCollectionEquality().equals(other.offset, offset)) &&
-            (identical(other.limit, limit) ||
-                const DeepCollectionEquality().equals(other.limit, limit)) &&
-            (identical(other.total, total) ||
-                const DeepCollectionEquality().equals(other.total, total)));
+        (other.runtimeType == runtimeType &&
+            other is _BeCryptoDepositsResult &&
+            const DeepCollectionEquality().equals(other.deposits, deposits) &&
+            (identical(other.offset, offset) || other.offset == offset) &&
+            (identical(other.limit, limit) || other.limit == limit) &&
+            (identical(other.total, total) || other.total == total));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(deposits) ^
-      const DeepCollectionEquality().hash(offset) ^
-      const DeepCollectionEquality().hash(limit) ^
-      const DeepCollectionEquality().hash(total);
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(deposits), offset, limit, total);
 
   @JsonKey(ignore: true)
   @override
@@ -5081,7 +5187,7 @@ class _$_BeCryptoDepositsResult
     TResult Function(
             List<BeCryptoDeposit> deposits, int offset, int limit, int total)
         $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(deposits, offset, limit, total);
   }
@@ -5092,7 +5198,7 @@ class _$_BeCryptoDepositsResult
     TResult Function(
             List<BeCryptoDeposit> deposits, int offset, int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(deposits, offset, limit, total);
   }
@@ -5103,7 +5209,7 @@ class _$_BeCryptoDepositsResult
     TResult Function(
             List<BeCryptoDeposit> deposits, int offset, int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -5149,10 +5255,10 @@ abstract class _BeCryptoDepositsResult implements BeCryptoDepositsResult {
           List<BeCryptoDeposit> deposits, int offset, int limit, int total) =
       _$_BeCryptoDepositsResult;
 
-  List<BeCryptoDeposit> get deposits => throw _privateConstructorUsedError;
-  int get offset => throw _privateConstructorUsedError;
-  int get limit => throw _privateConstructorUsedError;
-  int get total => throw _privateConstructorUsedError;
+  List<BeCryptoDeposit> get deposits;
+  int get offset;
+  int get limit;
+  int get total;
   @JsonKey(ignore: true)
   _$BeCryptoDepositsResultCopyWith<_BeCryptoDepositsResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -5163,9 +5269,9 @@ abstract class _$BeCryptoDepositsResultErrCopyWith<$Res> {
   factory _$BeCryptoDepositsResultErrCopyWith(_BeCryptoDepositsResultErr value,
           $Res Function(_BeCryptoDepositsResultErr) then) =
       __$BeCryptoDepositsResultErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -5188,13 +5294,13 @@ class __$BeCryptoDepositsResultErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -5208,7 +5314,7 @@ class _$_BeCryptoDepositsResultErr
   const _$_BeCryptoDepositsResultErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -5226,14 +5332,13 @@ class _$_BeCryptoDepositsResultErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeCryptoDepositsResultErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _BeCryptoDepositsResultErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -5248,7 +5353,7 @@ class _$_BeCryptoDepositsResultErr
     TResult Function(
             List<BeCryptoDeposit> deposits, int offset, int limit, int total)
         $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -5259,7 +5364,7 @@ class _$_BeCryptoDepositsResultErr
     TResult Function(
             List<BeCryptoDeposit> deposits, int offset, int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -5270,7 +5375,7 @@ class _$_BeCryptoDepositsResultErr
     TResult Function(
             List<BeCryptoDeposit> deposits, int offset, int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -5312,10 +5417,10 @@ class _$_BeCryptoDepositsResultErr
 }
 
 abstract class _BeCryptoDepositsResultErr implements BeCryptoDepositsResult {
-  const factory _BeCryptoDepositsResultErr(BeError2 err) =
+  const factory _BeCryptoDepositsResultErr(BeError err) =
       _$_BeCryptoDepositsResultErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$BeCryptoDepositsResultErrCopyWith<_BeCryptoDepositsResultErr>
       get copyWith => throw _privateConstructorUsedError;
@@ -5331,7 +5436,7 @@ class _$BeCryptoWithdrawalResultTearOff {
     );
   }
 
-  _BeCryptoWithdrawalResultErr error(BeError2 err) {
+  _BeCryptoWithdrawalResultErr error(BeError err) {
     return _BeCryptoWithdrawalResultErr(
       err,
     );
@@ -5346,19 +5451,19 @@ mixin _$BeCryptoWithdrawalResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeCryptoWithdrawal withdrawal) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeCryptoWithdrawal withdrawal)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeCryptoWithdrawal withdrawal)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -5459,15 +5564,14 @@ class _$_BeCryptoWithdrawalResult
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeCryptoWithdrawalResult &&
+        (other.runtimeType == runtimeType &&
+            other is _BeCryptoWithdrawalResult &&
             (identical(other.withdrawal, withdrawal) ||
-                const DeepCollectionEquality()
-                    .equals(other.withdrawal, withdrawal)));
+                other.withdrawal == withdrawal));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(withdrawal);
+  int get hashCode => Object.hash(runtimeType, withdrawal);
 
   @JsonKey(ignore: true)
   @override
@@ -5479,7 +5583,7 @@ class _$_BeCryptoWithdrawalResult
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeCryptoWithdrawal withdrawal) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(withdrawal);
   }
@@ -5488,7 +5592,7 @@ class _$_BeCryptoWithdrawalResult
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeCryptoWithdrawal withdrawal)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(withdrawal);
   }
@@ -5497,7 +5601,7 @@ class _$_BeCryptoWithdrawalResult
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeCryptoWithdrawal withdrawal)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -5542,7 +5646,7 @@ abstract class _BeCryptoWithdrawalResult implements BeCryptoWithdrawalResult {
   const factory _BeCryptoWithdrawalResult(BeCryptoWithdrawal withdrawal) =
       _$_BeCryptoWithdrawalResult;
 
-  BeCryptoWithdrawal get withdrawal => throw _privateConstructorUsedError;
+  BeCryptoWithdrawal get withdrawal;
   @JsonKey(ignore: true)
   _$BeCryptoWithdrawalResultCopyWith<_BeCryptoWithdrawalResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -5554,9 +5658,9 @@ abstract class _$BeCryptoWithdrawalResultErrCopyWith<$Res> {
           _BeCryptoWithdrawalResultErr value,
           $Res Function(_BeCryptoWithdrawalResultErr) then) =
       __$BeCryptoWithdrawalResultErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -5580,13 +5684,13 @@ class __$BeCryptoWithdrawalResultErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -5600,7 +5704,7 @@ class _$_BeCryptoWithdrawalResultErr
   const _$_BeCryptoWithdrawalResultErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -5618,14 +5722,13 @@ class _$_BeCryptoWithdrawalResultErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeCryptoWithdrawalResultErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _BeCryptoWithdrawalResultErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -5637,7 +5740,7 @@ class _$_BeCryptoWithdrawalResultErr
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeCryptoWithdrawal withdrawal) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -5646,7 +5749,7 @@ class _$_BeCryptoWithdrawalResultErr
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeCryptoWithdrawal withdrawal)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -5655,7 +5758,7 @@ class _$_BeCryptoWithdrawalResultErr
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeCryptoWithdrawal withdrawal)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -5698,10 +5801,10 @@ class _$_BeCryptoWithdrawalResultErr
 
 abstract class _BeCryptoWithdrawalResultErr
     implements BeCryptoWithdrawalResult {
-  const factory _BeCryptoWithdrawalResultErr(BeError2 err) =
+  const factory _BeCryptoWithdrawalResultErr(BeError err) =
       _$_BeCryptoWithdrawalResultErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$BeCryptoWithdrawalResultErrCopyWith<_BeCryptoWithdrawalResultErr>
       get copyWith => throw _privateConstructorUsedError;
@@ -5721,7 +5824,7 @@ class _$BeCryptoWithdrawalsResultTearOff {
     );
   }
 
-  _BeCryptoWithdrawalsResultErr error(BeError2 err) {
+  _BeCryptoWithdrawalsResultErr error(BeError err) {
     return _BeCryptoWithdrawalsResultErr(
       err,
     );
@@ -5738,7 +5841,7 @@ mixin _$BeCryptoWithdrawalsResult {
     TResult Function(List<BeCryptoWithdrawal> withdrawals, int offset,
             int limit, int total)
         $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -5746,7 +5849,7 @@ mixin _$BeCryptoWithdrawalsResult {
     TResult Function(List<BeCryptoWithdrawal> withdrawals, int offset,
             int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -5754,7 +5857,7 @@ mixin _$BeCryptoWithdrawalsResult {
     TResult Function(List<BeCryptoWithdrawal> withdrawals, int offset,
             int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -5881,25 +5984,18 @@ class _$_BeCryptoWithdrawalsResult
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeCryptoWithdrawalsResult &&
-            (identical(other.withdrawals, withdrawals) ||
-                const DeepCollectionEquality()
-                    .equals(other.withdrawals, withdrawals)) &&
-            (identical(other.offset, offset) ||
-                const DeepCollectionEquality().equals(other.offset, offset)) &&
-            (identical(other.limit, limit) ||
-                const DeepCollectionEquality().equals(other.limit, limit)) &&
-            (identical(other.total, total) ||
-                const DeepCollectionEquality().equals(other.total, total)));
+        (other.runtimeType == runtimeType &&
+            other is _BeCryptoWithdrawalsResult &&
+            const DeepCollectionEquality()
+                .equals(other.withdrawals, withdrawals) &&
+            (identical(other.offset, offset) || other.offset == offset) &&
+            (identical(other.limit, limit) || other.limit == limit) &&
+            (identical(other.total, total) || other.total == total));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(withdrawals) ^
-      const DeepCollectionEquality().hash(offset) ^
-      const DeepCollectionEquality().hash(limit) ^
-      const DeepCollectionEquality().hash(total);
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(withdrawals), offset, limit, total);
 
   @JsonKey(ignore: true)
   @override
@@ -5914,7 +6010,7 @@ class _$_BeCryptoWithdrawalsResult
     TResult Function(List<BeCryptoWithdrawal> withdrawals, int offset,
             int limit, int total)
         $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(withdrawals, offset, limit, total);
   }
@@ -5925,7 +6021,7 @@ class _$_BeCryptoWithdrawalsResult
     TResult Function(List<BeCryptoWithdrawal> withdrawals, int offset,
             int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(withdrawals, offset, limit, total);
   }
@@ -5936,7 +6032,7 @@ class _$_BeCryptoWithdrawalsResult
     TResult Function(List<BeCryptoWithdrawal> withdrawals, int offset,
             int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -5981,11 +6077,10 @@ abstract class _BeCryptoWithdrawalsResult implements BeCryptoWithdrawalsResult {
   const factory _BeCryptoWithdrawalsResult(List<BeCryptoWithdrawal> withdrawals,
       int offset, int limit, int total) = _$_BeCryptoWithdrawalsResult;
 
-  List<BeCryptoWithdrawal> get withdrawals =>
-      throw _privateConstructorUsedError;
-  int get offset => throw _privateConstructorUsedError;
-  int get limit => throw _privateConstructorUsedError;
-  int get total => throw _privateConstructorUsedError;
+  List<BeCryptoWithdrawal> get withdrawals;
+  int get offset;
+  int get limit;
+  int get total;
   @JsonKey(ignore: true)
   _$BeCryptoWithdrawalsResultCopyWith<_BeCryptoWithdrawalsResult>
       get copyWith => throw _privateConstructorUsedError;
@@ -5997,9 +6092,9 @@ abstract class _$BeCryptoWithdrawalsResultErrCopyWith<$Res> {
           _BeCryptoWithdrawalsResultErr value,
           $Res Function(_BeCryptoWithdrawalsResultErr) then) =
       __$BeCryptoWithdrawalsResultErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -6023,13 +6118,13 @@ class __$BeCryptoWithdrawalsResultErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -6043,7 +6138,7 @@ class _$_BeCryptoWithdrawalsResultErr
   const _$_BeCryptoWithdrawalsResultErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -6061,14 +6156,13 @@ class _$_BeCryptoWithdrawalsResultErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeCryptoWithdrawalsResultErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _BeCryptoWithdrawalsResultErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -6082,7 +6176,7 @@ class _$_BeCryptoWithdrawalsResultErr
     TResult Function(List<BeCryptoWithdrawal> withdrawals, int offset,
             int limit, int total)
         $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -6093,7 +6187,7 @@ class _$_BeCryptoWithdrawalsResultErr
     TResult Function(List<BeCryptoWithdrawal> withdrawals, int offset,
             int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -6104,7 +6198,7 @@ class _$_BeCryptoWithdrawalsResultErr
     TResult Function(List<BeCryptoWithdrawal> withdrawals, int offset,
             int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -6147,10 +6241,10 @@ class _$_BeCryptoWithdrawalsResultErr
 
 abstract class _BeCryptoWithdrawalsResultErr
     implements BeCryptoWithdrawalsResult {
-  const factory _BeCryptoWithdrawalsResultErr(BeError2 err) =
+  const factory _BeCryptoWithdrawalsResultErr(BeError err) =
       _$_BeCryptoWithdrawalsResultErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$BeCryptoWithdrawalsResultErrCopyWith<_BeCryptoWithdrawalsResultErr>
       get copyWith => throw _privateConstructorUsedError;
@@ -6166,7 +6260,7 @@ class _$BeFiatDepositResultTearOff {
     );
   }
 
-  _BeFiatDepositResultErr error(BeError2 err) {
+  _BeFiatDepositResultErr error(BeError err) {
     return _BeFiatDepositResultErr(
       err,
     );
@@ -6181,19 +6275,19 @@ mixin _$BeFiatDepositResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeFiatDeposit deposit) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeFiatDeposit deposit)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeFiatDeposit deposit)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -6293,14 +6387,13 @@ class _$_BeFiatDepositResult
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeFiatDepositResult &&
-            (identical(other.deposit, deposit) ||
-                const DeepCollectionEquality().equals(other.deposit, deposit)));
+        (other.runtimeType == runtimeType &&
+            other is _BeFiatDepositResult &&
+            (identical(other.deposit, deposit) || other.deposit == deposit));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(deposit);
+  int get hashCode => Object.hash(runtimeType, deposit);
 
   @JsonKey(ignore: true)
   @override
@@ -6312,7 +6405,7 @@ class _$_BeFiatDepositResult
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeFiatDeposit deposit) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(deposit);
   }
@@ -6321,7 +6414,7 @@ class _$_BeFiatDepositResult
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeFiatDeposit deposit)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(deposit);
   }
@@ -6330,7 +6423,7 @@ class _$_BeFiatDepositResult
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeFiatDeposit deposit)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -6375,7 +6468,7 @@ abstract class _BeFiatDepositResult implements BeFiatDepositResult {
   const factory _BeFiatDepositResult(BeFiatDeposit deposit) =
       _$_BeFiatDepositResult;
 
-  BeFiatDeposit get deposit => throw _privateConstructorUsedError;
+  BeFiatDeposit get deposit;
   @JsonKey(ignore: true)
   _$BeFiatDepositResultCopyWith<_BeFiatDepositResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -6386,9 +6479,9 @@ abstract class _$BeFiatDepositResultErrCopyWith<$Res> {
   factory _$BeFiatDepositResultErrCopyWith(_BeFiatDepositResultErr value,
           $Res Function(_BeFiatDepositResultErr) then) =
       __$BeFiatDepositResultErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -6410,13 +6503,13 @@ class __$BeFiatDepositResultErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -6430,7 +6523,7 @@ class _$_BeFiatDepositResultErr
   const _$_BeFiatDepositResultErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -6448,14 +6541,13 @@ class _$_BeFiatDepositResultErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeFiatDepositResultErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _BeFiatDepositResultErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -6467,7 +6559,7 @@ class _$_BeFiatDepositResultErr
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeFiatDeposit deposit) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -6476,7 +6568,7 @@ class _$_BeFiatDepositResultErr
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeFiatDeposit deposit)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -6485,7 +6577,7 @@ class _$_BeFiatDepositResultErr
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeFiatDeposit deposit)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -6527,10 +6619,10 @@ class _$_BeFiatDepositResultErr
 }
 
 abstract class _BeFiatDepositResultErr implements BeFiatDepositResult {
-  const factory _BeFiatDepositResultErr(BeError2 err) =
+  const factory _BeFiatDepositResultErr(BeError err) =
       _$_BeFiatDepositResultErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$BeFiatDepositResultErrCopyWith<_BeFiatDepositResultErr> get copyWith =>
       throw _privateConstructorUsedError;
@@ -6550,7 +6642,7 @@ class _$BeFiatDepositsResultTearOff {
     );
   }
 
-  _BeFiatDepositsResultErr error(BeError2 err) {
+  _BeFiatDepositsResultErr error(BeError err) {
     return _BeFiatDepositsResultErr(
       err,
     );
@@ -6567,7 +6659,7 @@ mixin _$BeFiatDepositsResult {
     TResult Function(
             List<BeFiatDeposit> deposits, int offset, int limit, int total)
         $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -6575,7 +6667,7 @@ mixin _$BeFiatDepositsResult {
     TResult Function(
             List<BeFiatDeposit> deposits, int offset, int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -6583,7 +6675,7 @@ mixin _$BeFiatDepositsResult {
     TResult Function(
             List<BeFiatDeposit> deposits, int offset, int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -6708,25 +6800,17 @@ class _$_BeFiatDepositsResult
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeFiatDepositsResult &&
-            (identical(other.deposits, deposits) ||
-                const DeepCollectionEquality()
-                    .equals(other.deposits, deposits)) &&
-            (identical(other.offset, offset) ||
-                const DeepCollectionEquality().equals(other.offset, offset)) &&
-            (identical(other.limit, limit) ||
-                const DeepCollectionEquality().equals(other.limit, limit)) &&
-            (identical(other.total, total) ||
-                const DeepCollectionEquality().equals(other.total, total)));
+        (other.runtimeType == runtimeType &&
+            other is _BeFiatDepositsResult &&
+            const DeepCollectionEquality().equals(other.deposits, deposits) &&
+            (identical(other.offset, offset) || other.offset == offset) &&
+            (identical(other.limit, limit) || other.limit == limit) &&
+            (identical(other.total, total) || other.total == total));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(deposits) ^
-      const DeepCollectionEquality().hash(offset) ^
-      const DeepCollectionEquality().hash(limit) ^
-      const DeepCollectionEquality().hash(total);
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(deposits), offset, limit, total);
 
   @JsonKey(ignore: true)
   @override
@@ -6740,7 +6824,7 @@ class _$_BeFiatDepositsResult
     TResult Function(
             List<BeFiatDeposit> deposits, int offset, int limit, int total)
         $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(deposits, offset, limit, total);
   }
@@ -6751,7 +6835,7 @@ class _$_BeFiatDepositsResult
     TResult Function(
             List<BeFiatDeposit> deposits, int offset, int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(deposits, offset, limit, total);
   }
@@ -6762,7 +6846,7 @@ class _$_BeFiatDepositsResult
     TResult Function(
             List<BeFiatDeposit> deposits, int offset, int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -6808,10 +6892,10 @@ abstract class _BeFiatDepositsResult implements BeFiatDepositsResult {
           List<BeFiatDeposit> deposits, int offset, int limit, int total) =
       _$_BeFiatDepositsResult;
 
-  List<BeFiatDeposit> get deposits => throw _privateConstructorUsedError;
-  int get offset => throw _privateConstructorUsedError;
-  int get limit => throw _privateConstructorUsedError;
-  int get total => throw _privateConstructorUsedError;
+  List<BeFiatDeposit> get deposits;
+  int get offset;
+  int get limit;
+  int get total;
   @JsonKey(ignore: true)
   _$BeFiatDepositsResultCopyWith<_BeFiatDepositsResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -6822,9 +6906,9 @@ abstract class _$BeFiatDepositsResultErrCopyWith<$Res> {
   factory _$BeFiatDepositsResultErrCopyWith(_BeFiatDepositsResultErr value,
           $Res Function(_BeFiatDepositsResultErr) then) =
       __$BeFiatDepositsResultErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -6847,13 +6931,13 @@ class __$BeFiatDepositsResultErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -6867,7 +6951,7 @@ class _$_BeFiatDepositsResultErr
   const _$_BeFiatDepositsResultErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -6885,14 +6969,13 @@ class _$_BeFiatDepositsResultErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeFiatDepositsResultErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _BeFiatDepositsResultErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -6906,7 +6989,7 @@ class _$_BeFiatDepositsResultErr
     TResult Function(
             List<BeFiatDeposit> deposits, int offset, int limit, int total)
         $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -6917,7 +7000,7 @@ class _$_BeFiatDepositsResultErr
     TResult Function(
             List<BeFiatDeposit> deposits, int offset, int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -6928,7 +7011,7 @@ class _$_BeFiatDepositsResultErr
     TResult Function(
             List<BeFiatDeposit> deposits, int offset, int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -6970,10 +7053,10 @@ class _$_BeFiatDepositsResultErr
 }
 
 abstract class _BeFiatDepositsResultErr implements BeFiatDepositsResult {
-  const factory _BeFiatDepositsResultErr(BeError2 err) =
+  const factory _BeFiatDepositsResultErr(BeError err) =
       _$_BeFiatDepositsResultErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$BeFiatDepositsResultErrCopyWith<_BeFiatDepositsResultErr> get copyWith =>
       throw _privateConstructorUsedError;
@@ -6989,7 +7072,7 @@ class _$BeFiatWithdrawalResultTearOff {
     );
   }
 
-  _BeFiatWithdrawalResultErr error(BeError2 err) {
+  _BeFiatWithdrawalResultErr error(BeError err) {
     return _BeFiatWithdrawalResultErr(
       err,
     );
@@ -7004,19 +7087,19 @@ mixin _$BeFiatWithdrawalResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeFiatWithdrawal withdrawal) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeFiatWithdrawal withdrawal)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeFiatWithdrawal withdrawal)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -7116,15 +7199,14 @@ class _$_BeFiatWithdrawalResult
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeFiatWithdrawalResult &&
+        (other.runtimeType == runtimeType &&
+            other is _BeFiatWithdrawalResult &&
             (identical(other.withdrawal, withdrawal) ||
-                const DeepCollectionEquality()
-                    .equals(other.withdrawal, withdrawal)));
+                other.withdrawal == withdrawal));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(withdrawal);
+  int get hashCode => Object.hash(runtimeType, withdrawal);
 
   @JsonKey(ignore: true)
   @override
@@ -7136,7 +7218,7 @@ class _$_BeFiatWithdrawalResult
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeFiatWithdrawal withdrawal) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(withdrawal);
   }
@@ -7145,7 +7227,7 @@ class _$_BeFiatWithdrawalResult
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeFiatWithdrawal withdrawal)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(withdrawal);
   }
@@ -7154,7 +7236,7 @@ class _$_BeFiatWithdrawalResult
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeFiatWithdrawal withdrawal)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -7199,7 +7281,7 @@ abstract class _BeFiatWithdrawalResult implements BeFiatWithdrawalResult {
   const factory _BeFiatWithdrawalResult(BeFiatWithdrawal withdrawal) =
       _$_BeFiatWithdrawalResult;
 
-  BeFiatWithdrawal get withdrawal => throw _privateConstructorUsedError;
+  BeFiatWithdrawal get withdrawal;
   @JsonKey(ignore: true)
   _$BeFiatWithdrawalResultCopyWith<_BeFiatWithdrawalResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -7210,9 +7292,9 @@ abstract class _$BeFiatWithdrawalResultErrCopyWith<$Res> {
   factory _$BeFiatWithdrawalResultErrCopyWith(_BeFiatWithdrawalResultErr value,
           $Res Function(_BeFiatWithdrawalResultErr) then) =
       __$BeFiatWithdrawalResultErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -7235,13 +7317,13 @@ class __$BeFiatWithdrawalResultErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -7255,7 +7337,7 @@ class _$_BeFiatWithdrawalResultErr
   const _$_BeFiatWithdrawalResultErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -7273,14 +7355,13 @@ class _$_BeFiatWithdrawalResultErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeFiatWithdrawalResultErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _BeFiatWithdrawalResultErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -7293,7 +7374,7 @@ class _$_BeFiatWithdrawalResultErr
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeFiatWithdrawal withdrawal) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -7302,7 +7383,7 @@ class _$_BeFiatWithdrawalResultErr
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeFiatWithdrawal withdrawal)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -7311,7 +7392,7 @@ class _$_BeFiatWithdrawalResultErr
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeFiatWithdrawal withdrawal)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -7353,10 +7434,10 @@ class _$_BeFiatWithdrawalResultErr
 }
 
 abstract class _BeFiatWithdrawalResultErr implements BeFiatWithdrawalResult {
-  const factory _BeFiatWithdrawalResultErr(BeError2 err) =
+  const factory _BeFiatWithdrawalResultErr(BeError err) =
       _$_BeFiatWithdrawalResultErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$BeFiatWithdrawalResultErrCopyWith<_BeFiatWithdrawalResultErr>
       get copyWith => throw _privateConstructorUsedError;
@@ -7376,7 +7457,7 @@ class _$BeFiatWithdrawalsResultTearOff {
     );
   }
 
-  _BeFiatWithdrawalsResultErr error(BeError2 err) {
+  _BeFiatWithdrawalsResultErr error(BeError err) {
     return _BeFiatWithdrawalsResultErr(
       err,
     );
@@ -7393,7 +7474,7 @@ mixin _$BeFiatWithdrawalsResult {
     TResult Function(List<BeFiatWithdrawal> withdrawals, int offset, int limit,
             int total)
         $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -7401,7 +7482,7 @@ mixin _$BeFiatWithdrawalsResult {
     TResult Function(List<BeFiatWithdrawal> withdrawals, int offset, int limit,
             int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -7409,7 +7490,7 @@ mixin _$BeFiatWithdrawalsResult {
     TResult Function(List<BeFiatWithdrawal> withdrawals, int offset, int limit,
             int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -7536,25 +7617,18 @@ class _$_BeFiatWithdrawalsResult
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeFiatWithdrawalsResult &&
-            (identical(other.withdrawals, withdrawals) ||
-                const DeepCollectionEquality()
-                    .equals(other.withdrawals, withdrawals)) &&
-            (identical(other.offset, offset) ||
-                const DeepCollectionEquality().equals(other.offset, offset)) &&
-            (identical(other.limit, limit) ||
-                const DeepCollectionEquality().equals(other.limit, limit)) &&
-            (identical(other.total, total) ||
-                const DeepCollectionEquality().equals(other.total, total)));
+        (other.runtimeType == runtimeType &&
+            other is _BeFiatWithdrawalsResult &&
+            const DeepCollectionEquality()
+                .equals(other.withdrawals, withdrawals) &&
+            (identical(other.offset, offset) || other.offset == offset) &&
+            (identical(other.limit, limit) || other.limit == limit) &&
+            (identical(other.total, total) || other.total == total));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(withdrawals) ^
-      const DeepCollectionEquality().hash(offset) ^
-      const DeepCollectionEquality().hash(limit) ^
-      const DeepCollectionEquality().hash(total);
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(withdrawals), offset, limit, total);
 
   @JsonKey(ignore: true)
   @override
@@ -7568,7 +7642,7 @@ class _$_BeFiatWithdrawalsResult
     TResult Function(List<BeFiatWithdrawal> withdrawals, int offset, int limit,
             int total)
         $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(withdrawals, offset, limit, total);
   }
@@ -7579,7 +7653,7 @@ class _$_BeFiatWithdrawalsResult
     TResult Function(List<BeFiatWithdrawal> withdrawals, int offset, int limit,
             int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(withdrawals, offset, limit, total);
   }
@@ -7590,7 +7664,7 @@ class _$_BeFiatWithdrawalsResult
     TResult Function(List<BeFiatWithdrawal> withdrawals, int offset, int limit,
             int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -7635,10 +7709,10 @@ abstract class _BeFiatWithdrawalsResult implements BeFiatWithdrawalsResult {
   const factory _BeFiatWithdrawalsResult(List<BeFiatWithdrawal> withdrawals,
       int offset, int limit, int total) = _$_BeFiatWithdrawalsResult;
 
-  List<BeFiatWithdrawal> get withdrawals => throw _privateConstructorUsedError;
-  int get offset => throw _privateConstructorUsedError;
-  int get limit => throw _privateConstructorUsedError;
-  int get total => throw _privateConstructorUsedError;
+  List<BeFiatWithdrawal> get withdrawals;
+  int get offset;
+  int get limit;
+  int get total;
   @JsonKey(ignore: true)
   _$BeFiatWithdrawalsResultCopyWith<_BeFiatWithdrawalsResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -7650,9 +7724,9 @@ abstract class _$BeFiatWithdrawalsResultErrCopyWith<$Res> {
           _BeFiatWithdrawalsResultErr value,
           $Res Function(_BeFiatWithdrawalsResultErr) then) =
       __$BeFiatWithdrawalsResultErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -7675,13 +7749,13 @@ class __$BeFiatWithdrawalsResultErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -7695,7 +7769,7 @@ class _$_BeFiatWithdrawalsResultErr
   const _$_BeFiatWithdrawalsResultErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -7713,14 +7787,13 @@ class _$_BeFiatWithdrawalsResultErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeFiatWithdrawalsResultErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _BeFiatWithdrawalsResultErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -7734,7 +7807,7 @@ class _$_BeFiatWithdrawalsResultErr
     TResult Function(List<BeFiatWithdrawal> withdrawals, int offset, int limit,
             int total)
         $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -7745,7 +7818,7 @@ class _$_BeFiatWithdrawalsResultErr
     TResult Function(List<BeFiatWithdrawal> withdrawals, int offset, int limit,
             int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -7756,7 +7829,7 @@ class _$_BeFiatWithdrawalsResultErr
     TResult Function(List<BeFiatWithdrawal> withdrawals, int offset, int limit,
             int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -7798,10 +7871,10 @@ class _$_BeFiatWithdrawalsResultErr
 }
 
 abstract class _BeFiatWithdrawalsResultErr implements BeFiatWithdrawalsResult {
-  const factory _BeFiatWithdrawalsResultErr(BeError2 err) =
+  const factory _BeFiatWithdrawalsResultErr(BeError err) =
       _$_BeFiatWithdrawalsResultErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$BeFiatWithdrawalsResultErrCopyWith<_BeFiatWithdrawalsResultErr>
       get copyWith => throw _privateConstructorUsedError;
@@ -7817,7 +7890,7 @@ class _$BeAddressBookResultTearOff {
     );
   }
 
-  _BeAddressBookResultErr error(BeError2 err) {
+  _BeAddressBookResultErr error(BeError err) {
     return _BeAddressBookResultErr(
       err,
     );
@@ -7832,19 +7905,19 @@ mixin _$BeAddressBookResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(List<BeAddressBookEntry> entries) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(List<BeAddressBookEntry> entries)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(List<BeAddressBookEntry> entries)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -7944,14 +8017,14 @@ class _$_BeAddressBookResult
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeAddressBookResult &&
-            (identical(other.entries, entries) ||
-                const DeepCollectionEquality().equals(other.entries, entries)));
+        (other.runtimeType == runtimeType &&
+            other is _BeAddressBookResult &&
+            const DeepCollectionEquality().equals(other.entries, entries));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(entries);
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(entries));
 
   @JsonKey(ignore: true)
   @override
@@ -7963,7 +8036,7 @@ class _$_BeAddressBookResult
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(List<BeAddressBookEntry> entries) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(entries);
   }
@@ -7972,7 +8045,7 @@ class _$_BeAddressBookResult
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(List<BeAddressBookEntry> entries)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(entries);
   }
@@ -7981,7 +8054,7 @@ class _$_BeAddressBookResult
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(List<BeAddressBookEntry> entries)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -8026,7 +8099,7 @@ abstract class _BeAddressBookResult implements BeAddressBookResult {
   const factory _BeAddressBookResult(List<BeAddressBookEntry> entries) =
       _$_BeAddressBookResult;
 
-  List<BeAddressBookEntry> get entries => throw _privateConstructorUsedError;
+  List<BeAddressBookEntry> get entries;
   @JsonKey(ignore: true)
   _$BeAddressBookResultCopyWith<_BeAddressBookResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -8037,9 +8110,9 @@ abstract class _$BeAddressBookResultErrCopyWith<$Res> {
   factory _$BeAddressBookResultErrCopyWith(_BeAddressBookResultErr value,
           $Res Function(_BeAddressBookResultErr) then) =
       __$BeAddressBookResultErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -8061,13 +8134,13 @@ class __$BeAddressBookResultErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -8081,7 +8154,7 @@ class _$_BeAddressBookResultErr
   const _$_BeAddressBookResultErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -8099,14 +8172,13 @@ class _$_BeAddressBookResultErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeAddressBookResultErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _BeAddressBookResultErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -8118,7 +8190,7 @@ class _$_BeAddressBookResultErr
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(List<BeAddressBookEntry> entries) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -8127,7 +8199,7 @@ class _$_BeAddressBookResultErr
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(List<BeAddressBookEntry> entries)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -8136,7 +8208,7 @@ class _$_BeAddressBookResultErr
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(List<BeAddressBookEntry> entries)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -8178,10 +8250,10 @@ class _$_BeAddressBookResultErr
 }
 
 abstract class _BeAddressBookResultErr implements BeAddressBookResult {
-  const factory _BeAddressBookResultErr(BeError2 err) =
+  const factory _BeAddressBookResultErr(BeError err) =
       _$_BeAddressBookResultErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$BeAddressBookResultErrCopyWith<_BeAddressBookResultErr> get copyWith =>
       throw _privateConstructorUsedError;
@@ -8197,7 +8269,7 @@ class _$BeBrokerOrderResultTearOff {
     );
   }
 
-  _BeBrokerOrderResultErr error(BeError2 err) {
+  _BeBrokerOrderResultErr error(BeError err) {
     return _BeBrokerOrderResultErr(
       err,
     );
@@ -8212,19 +8284,19 @@ mixin _$BeBrokerOrderResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeBrokerOrder order) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeBrokerOrder order)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeBrokerOrder order)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -8324,14 +8396,13 @@ class _$_BeBrokerOrderResult
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeBrokerOrderResult &&
-            (identical(other.order, order) ||
-                const DeepCollectionEquality().equals(other.order, order)));
+        (other.runtimeType == runtimeType &&
+            other is _BeBrokerOrderResult &&
+            (identical(other.order, order) || other.order == order));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(order);
+  int get hashCode => Object.hash(runtimeType, order);
 
   @JsonKey(ignore: true)
   @override
@@ -8343,7 +8414,7 @@ class _$_BeBrokerOrderResult
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeBrokerOrder order) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(order);
   }
@@ -8352,7 +8423,7 @@ class _$_BeBrokerOrderResult
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeBrokerOrder order)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(order);
   }
@@ -8361,7 +8432,7 @@ class _$_BeBrokerOrderResult
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeBrokerOrder order)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -8406,7 +8477,7 @@ abstract class _BeBrokerOrderResult implements BeBrokerOrderResult {
   const factory _BeBrokerOrderResult(BeBrokerOrder order) =
       _$_BeBrokerOrderResult;
 
-  BeBrokerOrder get order => throw _privateConstructorUsedError;
+  BeBrokerOrder get order;
   @JsonKey(ignore: true)
   _$BeBrokerOrderResultCopyWith<_BeBrokerOrderResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -8417,9 +8488,9 @@ abstract class _$BeBrokerOrderResultErrCopyWith<$Res> {
   factory _$BeBrokerOrderResultErrCopyWith(_BeBrokerOrderResultErr value,
           $Res Function(_BeBrokerOrderResultErr) then) =
       __$BeBrokerOrderResultErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -8441,13 +8512,13 @@ class __$BeBrokerOrderResultErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -8461,7 +8532,7 @@ class _$_BeBrokerOrderResultErr
   const _$_BeBrokerOrderResultErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -8479,14 +8550,13 @@ class _$_BeBrokerOrderResultErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeBrokerOrderResultErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _BeBrokerOrderResultErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -8498,7 +8568,7 @@ class _$_BeBrokerOrderResultErr
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeBrokerOrder order) $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -8507,7 +8577,7 @@ class _$_BeBrokerOrderResultErr
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(BeBrokerOrder order)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -8516,7 +8586,7 @@ class _$_BeBrokerOrderResultErr
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(BeBrokerOrder order)? $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -8558,10 +8628,10 @@ class _$_BeBrokerOrderResultErr
 }
 
 abstract class _BeBrokerOrderResultErr implements BeBrokerOrderResult {
-  const factory _BeBrokerOrderResultErr(BeError2 err) =
+  const factory _BeBrokerOrderResultErr(BeError err) =
       _$_BeBrokerOrderResultErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$BeBrokerOrderResultErrCopyWith<_BeBrokerOrderResultErr> get copyWith =>
       throw _privateConstructorUsedError;
@@ -8581,7 +8651,7 @@ class _$BeBrokerOrdersResultTearOff {
     );
   }
 
-  _BeBrokerOrdersResultErr error(BeError2 err) {
+  _BeBrokerOrdersResultErr error(BeError err) {
     return _BeBrokerOrdersResultErr(
       err,
     );
@@ -8598,7 +8668,7 @@ mixin _$BeBrokerOrdersResult {
     TResult Function(
             List<BeBrokerOrder> orders, int offset, int limit, int total)
         $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -8606,7 +8676,7 @@ mixin _$BeBrokerOrdersResult {
     TResult Function(
             List<BeBrokerOrder> orders, int offset, int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -8614,7 +8684,7 @@ mixin _$BeBrokerOrdersResult {
     TResult Function(
             List<BeBrokerOrder> orders, int offset, int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -8739,24 +8809,17 @@ class _$_BeBrokerOrdersResult
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeBrokerOrdersResult &&
-            (identical(other.orders, orders) ||
-                const DeepCollectionEquality().equals(other.orders, orders)) &&
-            (identical(other.offset, offset) ||
-                const DeepCollectionEquality().equals(other.offset, offset)) &&
-            (identical(other.limit, limit) ||
-                const DeepCollectionEquality().equals(other.limit, limit)) &&
-            (identical(other.total, total) ||
-                const DeepCollectionEquality().equals(other.total, total)));
+        (other.runtimeType == runtimeType &&
+            other is _BeBrokerOrdersResult &&
+            const DeepCollectionEquality().equals(other.orders, orders) &&
+            (identical(other.offset, offset) || other.offset == offset) &&
+            (identical(other.limit, limit) || other.limit == limit) &&
+            (identical(other.total, total) || other.total == total));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(orders) ^
-      const DeepCollectionEquality().hash(offset) ^
-      const DeepCollectionEquality().hash(limit) ^
-      const DeepCollectionEquality().hash(total);
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(orders), offset, limit, total);
 
   @JsonKey(ignore: true)
   @override
@@ -8770,7 +8833,7 @@ class _$_BeBrokerOrdersResult
     TResult Function(
             List<BeBrokerOrder> orders, int offset, int limit, int total)
         $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return $default(orders, offset, limit, total);
   }
@@ -8781,7 +8844,7 @@ class _$_BeBrokerOrdersResult
     TResult Function(
             List<BeBrokerOrder> orders, int offset, int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return $default?.call(orders, offset, limit, total);
   }
@@ -8792,7 +8855,7 @@ class _$_BeBrokerOrdersResult
     TResult Function(
             List<BeBrokerOrder> orders, int offset, int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -8838,10 +8901,10 @@ abstract class _BeBrokerOrdersResult implements BeBrokerOrdersResult {
           List<BeBrokerOrder> orders, int offset, int limit, int total) =
       _$_BeBrokerOrdersResult;
 
-  List<BeBrokerOrder> get orders => throw _privateConstructorUsedError;
-  int get offset => throw _privateConstructorUsedError;
-  int get limit => throw _privateConstructorUsedError;
-  int get total => throw _privateConstructorUsedError;
+  List<BeBrokerOrder> get orders;
+  int get offset;
+  int get limit;
+  int get total;
   @JsonKey(ignore: true)
   _$BeBrokerOrdersResultCopyWith<_BeBrokerOrdersResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -8852,9 +8915,9 @@ abstract class _$BeBrokerOrdersResultErrCopyWith<$Res> {
   factory _$BeBrokerOrdersResultErrCopyWith(_BeBrokerOrdersResultErr value,
           $Res Function(_BeBrokerOrdersResultErr) then) =
       __$BeBrokerOrdersResultErrCopyWithImpl<$Res>;
-  $Res call({BeError2 err});
+  $Res call({BeError err});
 
-  $BeError2CopyWith<$Res> get err;
+  $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
@@ -8877,13 +8940,13 @@ class __$BeBrokerOrdersResultErrCopyWithImpl<$Res>
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
-              as BeError2,
+              as BeError,
     ));
   }
 
   @override
-  $BeError2CopyWith<$Res> get err {
-    return $BeError2CopyWith<$Res>(_value.err, (value) {
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
       return _then(_value.copyWith(err: value));
     });
   }
@@ -8897,7 +8960,7 @@ class _$_BeBrokerOrdersResultErr
   const _$_BeBrokerOrdersResultErr(this.err);
 
   @override
-  final BeError2 err;
+  final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -8915,14 +8978,13 @@ class _$_BeBrokerOrdersResultErr
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _BeBrokerOrdersResultErr &&
-            (identical(other.err, err) ||
-                const DeepCollectionEquality().equals(other.err, err)));
+        (other.runtimeType == runtimeType &&
+            other is _BeBrokerOrdersResultErr &&
+            (identical(other.err, err) || other.err == err));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(err);
+  int get hashCode => Object.hash(runtimeType, err);
 
   @JsonKey(ignore: true)
   @override
@@ -8936,7 +8998,7 @@ class _$_BeBrokerOrdersResultErr
     TResult Function(
             List<BeBrokerOrder> orders, int offset, int limit, int total)
         $default, {
-    required TResult Function(BeError2 err) error,
+    required TResult Function(BeError err) error,
   }) {
     return error(err);
   }
@@ -8947,7 +9009,7 @@ class _$_BeBrokerOrdersResultErr
     TResult Function(
             List<BeBrokerOrder> orders, int offset, int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
   }
@@ -8958,7 +9020,7 @@ class _$_BeBrokerOrdersResultErr
     TResult Function(
             List<BeBrokerOrder> orders, int offset, int limit, int total)?
         $default, {
-    TResult Function(BeError2 err)? error,
+    TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -9000,10 +9062,10 @@ class _$_BeBrokerOrdersResultErr
 }
 
 abstract class _BeBrokerOrdersResultErr implements BeBrokerOrdersResult {
-  const factory _BeBrokerOrdersResultErr(BeError2 err) =
+  const factory _BeBrokerOrdersResultErr(BeError err) =
       _$_BeBrokerOrdersResultErr;
 
-  BeError2 get err => throw _privateConstructorUsedError;
+  BeError get err;
   @JsonKey(ignore: true)
   _$BeBrokerOrdersResultErrCopyWith<_BeBrokerOrdersResultErr> get copyWith =>
       throw _privateConstructorUsedError;

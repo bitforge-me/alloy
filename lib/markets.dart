@@ -196,7 +196,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
               MaterialPageRoute(
                   builder: (context) => OrderScreen(order, widget.websocket))),
           error: (err) => alert(context, 'error',
-              'failed to create order (${BeError2.msg(err)})'));
+              'failed to create order (${BeError.msg(err)})'));
     }
   }
 
@@ -218,7 +218,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                       margin: EdgeInsets.all(20),
                       child: Column(children: [
                         Text(_quote),
-                  ])),
+                      ])),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     Radio<BeMarketSide>(
                       value: BeMarketSide.bid,
