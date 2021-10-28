@@ -37,7 +37,7 @@ class BeError with _$BeError {
   const factory BeError.auth(String message) = Auth;
   const factory BeError.format() = Format;
   // helper to parse the '{"message": "<MSG>"}' json if exists
-  static authParseMsg(String message) {
+  static BeError authParseMsg(String message) {
     try {
       var json = jsonDecode(message);
       return BeError.auth(json['message']);
@@ -848,8 +848,7 @@ Future<ErrorResult> post(String endpoint, Map<String, dynamic> params,
   if (response == null) return ErrorResult.network();
   if (response.statusCode == 200) {
     return ErrorResult(response.body);
-  } else if (response.statusCode == 400)
-    return BeError.authParseMsg(response.body);
+  } else if (response.statusCode == 400) return ErrorResult.auth(response.body);
   print(response.statusCode);
   return ErrorResult.network();
 }
