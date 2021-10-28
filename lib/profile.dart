@@ -8,6 +8,7 @@ import 'package:zapdart/account_forms.dart';
 import 'beryllium.dart';
 import 'utils.dart';
 import 'websocket.dart';
+import 'snack.dart';
 
 class ProfileScreen extends StatefulWidget {
   final Websocket websocket;
@@ -41,7 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (args.event == WebsocketEvent.userInfoUpdate) {
       var info = UserInfo.fromJson(jsonDecode(args.msg));
       setState(() => _userInfo = info);
-      flushbarMsg(context, 'user updated');
+      snackMsg(context, 'user updated');
     }
   }
 
@@ -82,10 +83,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         var result = await beUserUpdatePhoto(newReg.photo, newReg.photoType);
         Navigator.of(context).pop();
         result.when((content) {
-          flushbarMsg(context, 'update photo completed');
+          snackMsg(context, 'update photo completed');
           setState(() => _userInfo = userInfo(newReg));
         },
-            error: (err) => flushbarMsg(context, 'failed to update photo',
+            error: (err) => snackMsg(context, 'failed to update photo',
                 category: MessageCategory.Warning));
       }
     }
@@ -101,8 +102,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         var result = await beUserUpdateEmail(newEmail);
         Navigator.of(context).pop();
         result.when(
-            (content) => flushbarMsg(context, 'update email request created'),
-            error: (err) => flushbarMsg(
+            (content) => snackMsg(context, 'update email request created'),
+            error: (err) => snackMsg(
                 context, 'failed to create update email request',
                 category: MessageCategory.Warning));
       }
@@ -129,9 +130,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         var result = await beUserUpdatePassword(
             newReg.currentPassword, newReg.newPassword);
         Navigator.of(context).pop();
-        result.when(
-            (content) => flushbarMsg(context, 'update password completed'),
-            error: (err) => flushbarMsg(context, 'failed to update password',
+        result.when((content) => snackMsg(context, 'update password completed'),
+            error: (err) => snackMsg(context, 'failed to update password',
                 category: MessageCategory.Warning));
       }
     }
@@ -145,8 +145,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Navigator.of(context).pop();
     result.when(
         (content) =>
-            flushbarMsg(context, 'password reset request sent (check email)'),
-        error: (err) => flushbarMsg(context, 'failed to reset password',
+            snackMsg(context, 'password reset request sent (check email)'),
+        error: (err) => snackMsg(context, 'failed to reset password',
             category: MessageCategory.Warning));
   }
 

@@ -6,6 +6,7 @@ import 'package:zapdart/widgets.dart';
 
 import 'beryllium.dart';
 import 'websocket.dart';
+import 'snack.dart';
 
 Future<String?> twoFactorQr(BuildContext context, BeTwoFactorSetup setup) {
   final formKey = GlobalKey<FormState>();
@@ -95,7 +96,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
     if (args.event == WebsocketEvent.userInfoUpdate) {
       var info = UserInfo.fromJson(jsonDecode(args.msg));
       setState(() => _userInfo = info);
-      flushbarMsg(context, 'user updated');
+      snackMsg(context, 'user updated');
     }
   }
 
@@ -115,7 +116,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
         });
       }
     }, error: (err) async {
-      flushbarMsg(context, 'failed to get two factor authentication details',
+      snackMsg(context, 'failed to get two factor authentication details',
           category: MessageCategory.Warning);
     });
   }
@@ -141,7 +142,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
         });
       }
     }, error: (err) async {
-      flushbarMsg(context, 'failed to get two factor authentication details',
+      snackMsg(context, 'failed to get two factor authentication details',
           category: MessageCategory.Warning);
     });
   }

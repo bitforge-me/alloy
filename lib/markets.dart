@@ -8,6 +8,7 @@ import 'beryllium.dart';
 import 'websocket.dart';
 import 'assets.dart';
 import 'orders.dart';
+import 'snack.dart';
 
 class AddressBookScreen extends StatefulWidget {
   final String asset;
@@ -285,7 +286,7 @@ class _MarketScreenState extends State<MarketScreen> {
             MaterialPageRoute(
                 builder: (context) =>
                     QuoteScreen(market, orderbook, widget.websocket))),
-        error: (err) => flushbarMsg(context, 'failed to get orderbook',
+        error: (err) => snackMsg(context, 'failed to get orderbook',
             category: MessageCategory.Warning));
   }
 

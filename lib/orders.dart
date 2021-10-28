@@ -11,6 +11,7 @@ import 'beryllium.dart';
 import 'websocket.dart';
 import 'assets.dart';
 import 'markets.dart';
+import 'snack.dart';
 
 class OrderScreen extends StatefulWidget {
   final BeBrokerOrder order;
@@ -47,7 +48,7 @@ class _OrderScreenState extends State<OrderScreen> {
       var newOrder = BeBrokerOrder.fromJson(jsonDecode(args.msg));
       if (_order.token == newOrder.token) {
         setState(() => _order = newOrder);
-        flushbarMsg(context,
+        snackMsg(context,
             'broker order updated ${newOrder.token} - ${describeEnum(newOrder.status).toUpperCase()}');
       }
     }
@@ -173,7 +174,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         if (_orders.length > _itemsPerPage) _orders.removeLast();
         setState(() => _orders = _orders);
       }
-      flushbarMsg(context,
+      snackMsg(context,
           'broker order created ${newOrder.token} - ${describeEnum(newOrder.status).toUpperCase()}');
     }
     if (args.event == WebsocketEvent.brokerOrderUpdate) {
@@ -185,7 +186,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         else
           newOrders.add(order);
       setState(() => _orders = newOrders);
-      flushbarMsg(context,
+      snackMsg(context,
           'broker order updated ${newOrder.token} - ${describeEnum(newOrder.status).toUpperCase()}');
     }
   }
@@ -224,7 +225,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
             context,
             MaterialPageRoute(
                 builder: (context) => MarketScreen(markets, widget.websocket))),
-        error: (err) => flushbarMsg(context, 'failed to query markets',
+        error: (err) => snackMsg(context, 'failed to query markets',
             category: MessageCategory.Warning));
   }
 

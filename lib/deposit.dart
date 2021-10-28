@@ -13,6 +13,7 @@ import 'websocket.dart';
 import 'utils.dart';
 import 'assets.dart';
 import 'paginator.dart';
+import 'snack.dart';
 
 class DepositSelectScreen extends StatefulWidget {
   final List<BeAsset> assets;
@@ -115,7 +116,7 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
         _pageCount = (total / _itemsPerPage).ceil();
       });
     },
-        error: (err) => flushbarMsg(context, 'failed to query deposits',
+        error: (err) => snackMsg(context, 'failed to query deposits',
             category: MessageCategory.Warning));
   }
 
@@ -146,7 +147,7 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
             MaterialPageRoute(
                 builder: (context) => CryptoDepositNewScreen(
                     widget.asset, address, widget.websocket))),
-        error: (err) => flushbarMsg(context, 'failed to query deposit address',
+        error: (err) => snackMsg(context, 'failed to query deposit address',
             category: MessageCategory.Warning));
   }
 
@@ -202,7 +203,7 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
       var newDeposit = BeCryptoDeposit.fromJson(jsonDecode(args.msg));
       if (_deposit.token == newDeposit.token) {
         setState(() => _deposit = newDeposit);
-        flushbarMsg(context,
+        snackMsg(context,
             'deposit updated ${newDeposit.token} - ${newDeposit.confirmed ? 'CONFIRMED' : 'PENDING'}');
       }
     }
@@ -258,7 +259,7 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
 
   void _copyAddress() {
     Clipboard.setData(ClipboardData(text: widget.address));
-    flushbarMsg(context, 'copied address');
+    snackMsg(context, 'copied address');
   }
 
   @override
@@ -362,7 +363,7 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
     if (amountStr == null) return;
     var amount = Decimal.tryParse(amountStr);
     if (amount == null) {
-      flushbarMsg(context, 'invalid amount', category: MessageCategory.Warning);
+      snackMsg(context, 'invalid amount', category: MessageCategory.Warning);
       return;
     }
     showAlertDialog(context, 'querying..');
@@ -429,7 +430,7 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
       var newDeposit = BeFiatDeposit.fromJson(jsonDecode(args.msg));
       if (_deposit.token == newDeposit.token) {
         setState(() => _deposit = newDeposit);
-        flushbarMsg(context,
+        snackMsg(context,
             'deposit updated ${newDeposit.token} - ${newDeposit.status.toUpperCase()}');
       }
     }

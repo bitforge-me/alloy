@@ -14,6 +14,7 @@ import 'assets.dart';
 import 'paginator.dart';
 import 'markets.dart';
 import 'cryptocurrency.dart';
+import 'snack.dart';
 
 class WithdrawalFormScreen extends StatefulWidget {
   final BeAsset asset;
@@ -380,7 +381,7 @@ class _CryptoWithdrawalDetailScreenState
       var newWithdrawal = BeCryptoWithdrawal.fromJson(jsonDecode(args.msg));
       if (_withdrawal.token == newWithdrawal.token) {
         setState(() => _withdrawal = newWithdrawal);
-        flushbarMsg(context, 'withdrawal updated ${newWithdrawal.token}');
+        snackMsg(context, 'withdrawal updated ${newWithdrawal.token}');
       }
     }
   }
@@ -553,7 +554,7 @@ class _FiatWithdrawalDetailScreenState
       var newWithdrawal = BeFiatWithdrawal.fromJson(jsonDecode(args.msg));
       if (_withdrawal.token == newWithdrawal.token) {
         setState(() => _withdrawal = newWithdrawal);
-        flushbarMsg(context,
+        snackMsg(context,
             'withdrawal updated ${newWithdrawal.token} - ${newWithdrawal.status.toUpperCase()}');
       }
     }

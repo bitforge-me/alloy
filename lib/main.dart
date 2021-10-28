@@ -19,6 +19,7 @@ import 'balances.dart';
 import 'deposit.dart';
 import 'withdrawal.dart';
 import 'verify_user.dart';
+import 'snack.dart';
 
 void main() {
   runApp(Phoenix(child: MyApp()));
@@ -144,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         _userInfo = info;
         _alerts = _generateAlerts(info);
       });
-      //flushbarMsg(context, 'user updated');
+      //snackMsg(context, 'user updated');
     }
   }
 
@@ -335,7 +336,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             context,
             MaterialPageRoute(
                 builder: (context) => BalanceScreen(balances, _websocket))),
-        error: (err) => flushbarMsg(context, 'failed to query balances',
+        error: (err) => snackMsg(context, 'failed to query balances',
             category: MessageCategory.Warning));
   }
 
@@ -348,7 +349,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             context,
             MaterialPageRoute(
                 builder: (context) => DepositSelectScreen(assets, _websocket))),
-        error: (err) => flushbarMsg(context, 'failed to query deposits',
+        error: (err) => snackMsg(context, 'failed to query deposits',
             category: MessageCategory.Warning));
   }
 
@@ -362,7 +363,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             MaterialPageRoute(
                 builder: (context) =>
                     WithdrawalSelectScreen(assets, _websocket))),
-        error: (err) => flushbarMsg(context, 'failed to query withdrawals',
+        error: (err) => snackMsg(context, 'failed to query withdrawals',
             category: MessageCategory.Warning));
   }
 
