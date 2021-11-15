@@ -22,11 +22,12 @@ String _svgAsset(String symbol) {
   return 'assets/crypto_logos/default.svg';
 }
 
-Widget assetLogo(String symbol, {EdgeInsetsGeometry? margin}) {
+Widget assetLogo(String symbol,
+    {EdgeInsetsGeometry? margin, double size = 32}) {
   return Container(
       margin: margin,
-      width: 32,
-      height: 32,
+      width: size,
+      height: size,
       child: Center(child: SvgPicture.asset(_svgAsset(symbol))));
 }
 

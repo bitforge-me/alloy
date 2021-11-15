@@ -20,6 +20,7 @@ import 'deposit.dart';
 import 'withdrawal.dart';
 import 'verify_user.dart';
 import 'snack.dart';
+import 'exchange.dart';
 
 void main() {
   runApp(Phoenix(child: MyApp()));
@@ -487,6 +488,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   ZapBlueGradient, 'Lost Password',
                   holePunch: true, width: 200),
             ),
+            _userInfo != null ? ExchangeWidget(_websocket) : SizedBox(),
             Visibility(
               visible: _userInfo != null,
               child: RoundedButton(

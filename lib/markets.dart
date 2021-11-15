@@ -9,6 +9,7 @@ import 'websocket.dart';
 import 'assets.dart';
 import 'orders.dart';
 import 'snack.dart';
+import 'quote.dart';
 
 class AddressBookScreen extends StatefulWidget {
   final String asset;
@@ -50,13 +51,6 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   }
 }
 
-class QuoteTotalPrice {
-  final Decimal amount;
-  final String? errMsg;
-
-  QuoteTotalPrice(this.amount, this.errMsg);
-}
-
 class QuoteScreen extends StatefulWidget {
   final BeMarket market;
   final BeOrderbook orderbook;
@@ -84,69 +78,6 @@ class _QuoteScreenState extends State<QuoteScreen> {
     _amountController.addListener(_updateQuote);
   }
 
-  QuoteTotalPrice _bidQuoteAmount(Decimal amount) {
-    if (amount < widget.orderbook.minOrder)
-      return QuoteTotalPrice(Decimal.zero, 'amount too low');
-
-    var amountTotal = amount + widget.orderbook.baseAssetWithdrawFee;
-    var filled = Decimal.zero;
-    var totalPrice = Decimal.zero;
-    var n = 0;
-    while (amountTotal > filled) {
-      if (n >= widget.orderbook.asks.length) {
-        break;
-      }
-      var rate = widget.orderbook.asks[n].rate;
-      var quantity = widget.orderbook.asks[n].quantity;
-      var quantityToUse = quantity;
-      if (quantityToUse > amountTotal - filled)
-        quantityToUse = amountTotal - filled;
-      filled += quantityToUse;
-      totalPrice += quantityToUse * rate;
-      if (filled == amountTotal) {
-        return QuoteTotalPrice(
-            totalPrice *
-                (Decimal.one +
-                    widget.orderbook.brokerFee / Decimal.fromInt(100)),
-            null);
-      }
-      n++;
-    }
-    return QuoteTotalPrice(Decimal.zero, 'not enough liquidity');
-  }
-
-  QuoteTotalPrice _askQuoteAmount(Decimal amount) {
-    if (amount < widget.orderbook.minOrder)
-      return QuoteTotalPrice(Decimal.zero, 'amount too low');
-
-    var amountTotal = amount;
-    var filled = Decimal.zero;
-    var totalPrice = Decimal.zero;
-    var n = 0;
-    while (amountTotal > filled) {
-      if (n >= widget.orderbook.bids.length) {
-        break;
-      }
-      var rate = widget.orderbook.bids[n].rate;
-      var quantity = widget.orderbook.bids[n].quantity;
-      var quantityToUse = quantity;
-      if (quantityToUse > amountTotal - filled)
-        quantityToUse = amountTotal - filled;
-      filled += quantityToUse;
-      totalPrice += quantityToUse * rate;
-      if (filled == amountTotal) {
-        return QuoteTotalPrice(
-            totalPrice *
-                    (Decimal.one -
-                        widget.orderbook.brokerFee / Decimal.fromInt(100)) -
-                widget.orderbook.quoteAssetWithdrawFee,
-            null);
-      }
-      n++;
-    }
-    return QuoteTotalPrice(Decimal.zero, 'not enough liquidity');
-  }
-
   void _updateSide(BeMarketSide side) {
     setState(() {
       _side = side;
@@ -163,10 +94,10 @@ class _QuoteScreenState extends State<QuoteScreen> {
       QuoteTotalPrice totalPrice;
       switch (_side) {
         case BeMarketSide.bid:
-          totalPrice = _bidQuoteAmount(value);
+          totalPrice = bidQuoteAmount(widget.orderbook, value);
           break;
         case BeMarketSide.ask:
-          totalPrice = _askQuoteAmount(value);
+          totalPrice = askQuoteAmount(widget.orderbook, value);
           break;
       }
       if (totalPrice.errMsg != null)
@@ -174,7 +105,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
       else {
         var baseAmount = assetFormat(widget.market.baseAsset, value);
         var quoteAmount =
-            assetFormat(widget.market.quoteAsset, totalPrice.amount);
+            assetFormat(widget.market.quoteAsset, totalPrice.amountQuoteAsset);
         quote =
             '$baseAmount ${widget.market.baseAsset} = $quoteAmount ${widget.market.quoteAsset}';
       }
@@ -250,10 +181,10 @@ class _QuoteScreenState extends State<QuoteScreen> {
                         QuoteTotalPrice totalPrice;
                         switch (_side) {
                           case BeMarketSide.bid:
-                            totalPrice = _bidQuoteAmount(d);
+                            totalPrice = bidQuoteAmount(widget.orderbook, d);
                             break;
                           case BeMarketSide.ask:
-                            totalPrice = _askQuoteAmount(d);
+                            totalPrice = askQuoteAmount(widget.orderbook, d);
                             break;
                         }
                         if (totalPrice.errMsg != null) return totalPrice.errMsg;
