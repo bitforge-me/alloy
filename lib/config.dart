@@ -14,7 +14,7 @@ const SupportUrl = 'https://alloy-support.zap.me/';
 const TestnetDefault = false;
 
 // Zap Crypto settings
-const String? BeServerMainnet = 'https://zap-crypto-be.caprover.acuerdo.dev/';
+const String? BeServerMainnet = 'https://beryllium.zap.me/';
 const String? BeServerTestnet = null;
 // registration
 const bool RequireMobileNumber = true;
