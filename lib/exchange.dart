@@ -192,13 +192,29 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
           // double check result with 'bidQuoteAmount()'
           var smallestAmount =
               Decimal.one / power(Decimal.fromInt(10), assetDecimals(_toAsset));
+          var adjustAmount = smallestAmount * Decimal.fromInt(100);
           var estAmount =
               roundAt(estimate.amountBaseAsset, assetDecimals(_toAsset));
           estimate = bidQuoteAmount(orderbook, estAmount);
-          while (estimate.amountQuoteAsset > value) {
-            estAmount -= smallestAmount;
+          var n = 0;
+          while (estimate.amountQuoteAsset > value &&
+              adjustAmount > smallestAmount) {
+            estAmount -= adjustAmount;
             estimate = bidQuoteAmount(orderbook, estAmount);
             if (estimate.errMsg != null) return estimate;
+            if (estimate.amountQuoteAsset < value &&
+                adjustAmount > smallestAmount) {
+              n = 0;
+              estAmount += adjustAmount;
+              adjustAmount = adjustAmount / Decimal.fromInt(2);
+              if (adjustAmount < smallestAmount) adjustAmount = smallestAmount;
+              continue;
+            }
+            if (n > 10) {
+              n = 0;
+              adjustAmount = adjustAmount * Decimal.fromInt(10);
+            } else
+              n = n + 1;
           }
           return estimate;
         case BeMarketSide.ask:
