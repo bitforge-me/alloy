@@ -10,12 +10,11 @@ const AppTitle = 'Alloy';
 const AppLogo = 'assets/logo.png';
 const SupportUrl = 'https://alloy-support.zap.me/';
 
-// the default testnet value
-const TestnetDefault = false;
+// the testnet value
+const Testnet = false;
 
 // Zap Crypto settings
-const String? BeServerMainnet = 'https://beryllium.zap.me/';
-const String? BeServerTestnet = null;
+const String BeServerUrl = 'https://beryllium.zap.me/';
 // registration
 const bool RequireMobileNumber = true;
 const String? InitialMobileCountry = 'NZ';

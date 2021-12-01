@@ -21,10 +21,8 @@ part 'beryllium.freezed.dart';
 Decimal _decimalFromJson(input) => Decimal.parse(input);
 String _decimalToJson(input) => input.toString();
 
-Future<String?> _server() async {
-  var testnet = await Prefs.testnetGet();
-  var baseUrl = testnet ? BeServerTestnet : BeServerMainnet;
-  if (baseUrl != null) baseUrl = baseUrl + 'apiv1/';
+Future<String> _server() async {
+  var baseUrl = BeServerUrl + 'apiv1/';
   return baseUrl;
 }
 
@@ -829,7 +827,6 @@ Future<http.Response?> postAndCatch(String url, String body,
 Future<ErrorResult> post(String endpoint, Map<String, dynamic> params,
     {bool authRequired = false}) async {
   var baseUrl = await _server();
-  if (baseUrl == null) return ErrorResult.network();
   var url = baseUrl + endpoint;
   var headers = Map<String, String>();
   var body;
@@ -1076,6 +1073,20 @@ Future<BeAddressBookResult> beAddressBook(String asset) async {
   var result = await post("address_book", {"asset": asset}, authRequired: true);
   return result.when((content) => BeAddressBookResult.parse(content),
       error: (err) => BeAddressBookResult.error(err));
+}
+
+Future<BeBrokerOrderResult> beOrderValidate(
+    String market, BeMarketSide side, Decimal amount) async {
+  var result = await post(
+      "broker_order_validate",
+      {
+        "market": market,
+        "side": describeEnum(side),
+        "amount_dec": amount.toString()
+      },
+      authRequired: true);
+  return result.when((content) => BeBrokerOrderResult.parse(content),
+      error: (err) => BeBrokerOrderResult.error(err));
 }
 
 Future<BeBrokerOrderResult> beOrderCreate(

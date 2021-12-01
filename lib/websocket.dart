@@ -29,10 +29,8 @@ class WsEventArgs extends EventArgs {
   WsEventArgs(this.event, this.msg);
 }
 
-Future<String?> _server() async {
-  var testnet = await Prefs.testnetGet();
-  var baseUrl = testnet ? BeServerTestnet : BeServerMainnet;
-  if (baseUrl != null) baseUrl = baseUrl + 'events';
+Future<String> _server() async {
+  var baseUrl = BeServerUrl + 'events';
   return baseUrl;
 }
 

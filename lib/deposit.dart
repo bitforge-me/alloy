@@ -14,6 +14,7 @@ import 'utils.dart';
 import 'assets.dart';
 import 'paginator.dart';
 import 'snack.dart';
+import 'config.dart';
 
 class DepositSelectScreen extends StatefulWidget {
   final List<BeAsset> assets;
@@ -181,7 +182,7 @@ class CryptoDepositDetailScreen extends StatefulWidget {
 
 class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
   BeCryptoDeposit _deposit;
-  var _testnet = false;
+  var _testnet = Testnet;
 
   _CryptoDepositDetailScreenState(this._deposit);
 

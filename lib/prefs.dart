@@ -4,8 +4,7 @@ import 'config.dart';
 
 class Prefs {
   static Future<String> getKeyNetworkSpecific(String key) async {
-    var testnet = await testnetGet();
-    if (!testnet) key = '${key}_mainnet';
+    if (!Testnet) key = '${key}_mainnet';
     return key;
   }
 
@@ -20,16 +19,6 @@ class Prefs {
     final prefs = PrefHelper();
     prefs.setString(await getKeyNetworkSpecific(key), value);
     return true;
-  }
-
-  static Future<bool> testnetGet() async {
-    final prefs = PrefHelper();
-    return await prefs.getBool("testnet", TestnetDefault);
-  }
-
-  static Future<void> testnetSet(bool value) async {
-    final prefs = PrefHelper();
-    await prefs.setBool("testnet", value);
   }
 
   static Future<String?> beApiKeyGet() async {

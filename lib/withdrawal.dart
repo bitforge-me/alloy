@@ -15,6 +15,7 @@ import 'paginator.dart';
 import 'markets.dart';
 import 'cryptocurrency.dart';
 import 'snack.dart';
+import 'config.dart';
 
 class WithdrawalFormScreen extends StatefulWidget {
   final BeAsset asset;
@@ -34,7 +35,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
   final _recipientDescriptionController = TextEditingController();
 
   var _saveRecipient = false;
-  var _testnet = false;
+  var _testnet = Testnet;
 
   @override
   void initState() {
@@ -359,7 +360,7 @@ class CryptoWithdrawalDetailScreen extends StatefulWidget {
 class _CryptoWithdrawalDetailScreenState
     extends State<CryptoWithdrawalDetailScreen> {
   BeCryptoWithdrawal _withdrawal;
-  var _testnet = false;
+  var _testnet = Testnet;
 
   _CryptoWithdrawalDetailScreenState(this._withdrawal);
 
