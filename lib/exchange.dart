@@ -12,6 +12,7 @@ import 'assets.dart';
 import 'snack.dart';
 import 'quote.dart';
 import 'orders.dart';
+import 'utils.dart';
 
 class ExchangeWidget extends StatefulWidget {
   final Websocket websocket;
@@ -138,22 +139,6 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     });
   }
 
-  Decimal roundAt(Decimal value, int digit) {
-    final m = Decimal.parse('1' + '0' * digit);
-    return (value * m).round() / m;
-  }
-
-  Decimal power(Decimal value, int n) {
-    var result = value;
-    while (n > 1) {
-      result = result * value;
-      n--;
-    }
-    if (n == 1) return result;
-    if (n == 0) return Decimal.one;
-    throw ArgumentError();
-  }
-
   Future<void> _updateQuote() async {
     // check value is valid
     if (_amountController.text.isEmpty) return;
@@ -197,9 +182,10 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
               roundAt(estimate.amountBaseAsset, assetDecimals(_toAsset));
           estimate = bidQuoteAmount(orderbook, estAmount);
           var n = 0;
-          while (estimate.amountQuoteAsset > value &&
+          while (estimate.amountQuoteAsset > value ||
               adjustAmount > smallestAmount) {
             estAmount -= adjustAmount;
+            estAmount = roundAt(estAmount, assetDecimals(_toAsset));
             estimate = bidQuoteAmount(orderbook, estAmount);
             if (estimate.errMsg != null) return estimate;
             if (estimate.amountQuoteAsset < value &&
@@ -216,7 +202,11 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
             } else
               n = n + 1;
           }
-          return estimate;
+          return QuoteTotalPrice(
+              estimate.amountBaseAsset,
+              roundAt(
+                  estimate.amountQuoteAsset, assetDecimals(market!.quoteAsset)),
+              estimate.errMsg);
         case BeMarketSide.ask:
           return askQuoteAmount(orderbook, value);
       }
@@ -225,12 +215,20 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
           category: MessageCategory.Warning);
       return null;
     });
-    // set amount
     if (quote == null) return;
     if (quote.errMsg != null) {
       snackMsg(context, quote.errMsg!, category: MessageCategory.Warning);
       return;
     }
+    // double check amount with server
+    BeBrokerOrderResult res2 =
+        await beOrderValidate(market.symbol, side, quote.amountBaseAsset);
+    res2.when(
+        (order) => alert(context, 'info',
+            '$side ${order.baseAmount} ${order.baseAsset}, ${order.quoteAmount} ${order.quoteAsset}'),
+        error: (err) => alert(context, 'error',
+            'failed to validate order (${BeError.msg(err)})'));
+    // set amount
     switch (side) {
       case BeMarketSide.bid:
         _receiveController.text = quote.amountBaseAsset.toString();

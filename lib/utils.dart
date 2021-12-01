@@ -1,4 +1,5 @@
 import 'package:url_launcher/url_launcher.dart';
+import 'package:decimal/decimal.dart';
 
 var lastNonce = 0;
 int nextNonce() {
@@ -16,4 +17,20 @@ String vs(String? s) {
 Future<void> urlLaunch(String? url) async {
   if (url == null) return;
   await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+}
+
+Decimal roundAt(Decimal value, int digit) {
+  final m = Decimal.parse('1' + '0' * digit);
+  return (value * m).round() / m;
+}
+
+Decimal power(Decimal value, int n) {
+  var result = value;
+  while (n > 1) {
+    result = result * value;
+    n--;
+  }
+  if (n == 1) return result;
+  if (n == 0) return Decimal.one;
+  throw ArgumentError();
 }
