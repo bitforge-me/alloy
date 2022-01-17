@@ -412,7 +412,7 @@ class BeBalancesResult with _$BeBalancesResult {
   static BeBalancesResult parse(String data) {
     try {
       List<BeBalance> balances = [];
-      for (var item in jsonDecode(data)['balances'])
+      for (var item in jsonDecode(data)['balances'].values)
         balances.add(BeBalance.fromJson(item));
       return BeBalancesResult(balances);
     } catch (_) {
