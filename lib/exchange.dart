@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
 import 'dart:async';
+import 'package:logging/logging.dart';
 
 import 'package:zapdart/widgets.dart';
 import 'package:zapdart/colors.dart';
@@ -13,6 +14,8 @@ import 'snack.dart';
 import 'quote.dart';
 import 'orders.dart';
 import 'utils.dart';
+
+final log = Logger('Exchange');
 
 class ExchangeWidget extends StatefulWidget {
   final Websocket websocket;
@@ -223,11 +226,15 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     // double check amount with server
     BeBrokerOrderResult res2 =
         await beOrderValidate(market.symbol, side, quote.amountBaseAsset);
-    res2.when(
-        (order) => alert(context, 'info',
-            '$side ${order.baseAmount} ${order.baseAsset}, ${order.quoteAmount} ${order.quoteAsset}'),
-        error: (err) => alert(context, 'error',
-            'failed to validate order (${BeError.msg(err)})'));
+    if (!res2.when<bool>((order) {
+      log.info(
+          '$side ${order.baseAmount} ${order.baseAsset}, ${order.quoteAmount} ${order.quoteAsset}');
+      return true;
+    }, error: (err) {
+      snackMsg(context, 'failed to validate order (${BeError.msg(err)})',
+          category: MessageCategory.Warning);
+      return false;
+    })) return;
     // set amount
     switch (side) {
       case BeMarketSide.bid:

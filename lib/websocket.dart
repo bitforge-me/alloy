@@ -1,11 +1,14 @@
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:event/event.dart';
+import 'package:logging/logging.dart';
 
 import 'package:zapdart/hmac.dart';
 
 import 'prefs.dart';
 import 'config.dart';
 import 'utils.dart';
+
+final log = Logger('Websocket');
 
 enum WebsocketEvent {
   none,
@@ -76,40 +79,40 @@ class Websocket {
       'secure': true,
       'transports': ['websocket'],
     });
-    print('socket namespace: ${socket.nsp}');
+    log.info('socket namespace: ${socket.nsp}');
     socket.on('connect', (_) {
-      print('ws connect');
+      log.info('ws connect');
       var nonce = nextNonce();
       var sig = createHmacSig(apisecret!, nonce.toString());
       var auth = {"signature": sig, "api_key": apikey, "nonce": nonce};
       socket.emit('auth', auth);
     });
     socket.on('connecting', (_) {
-      print('ws connecting');
+      log.info('ws connecting');
     });
     socket.on('connect_error', (err) {
-      print('ws connect error ($err)');
+      log.info('ws connect error ($err)');
     });
     socket.on('connect_timeout', (_) {
-      print('ws connect timeout');
+      log.info('ws connect timeout');
     });
     socket.on('info', (data) {
-      print(data);
+      log.info(data);
     });
     socket.on('user_info_update', (data) {
       call('user_info_update', data);
-      print(data);
+      log.info(data);
     });
     socket.on('broker_order_new', (data) {
       call('broker_order_new', data);
-      print(data);
+      log.info(data);
     });
     socket.on('broker_order_update', (data) {
       call('broker_order_update', data);
-      print(data);
+      log.info(data);
     });
     socket.on('disconnect', (_) {
-      print('ws disconnect');
+      log.info('ws disconnect');
     });
 
     return socket;

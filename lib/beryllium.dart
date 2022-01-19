@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:decimal/decimal.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:logging/logging.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/hmac.dart';
@@ -17,6 +18,7 @@ import 'utils.dart';
 part 'beryllium.g.dart';
 part 'beryllium.freezed.dart';
 
+final log = Logger('Beryllium');
 Decimal _decimalFromJson(input) => Decimal.parse(input);
 String _decimalToJson(input) => input.toString();
 
@@ -804,21 +806,22 @@ class BeBrokerOrdersResult with _$BeBrokerOrdersResult {
 Future<http.Response?> postAndCatch(String url, String body,
     {Map<String, String>? extraHeaders}) async {
   try {
+    log.info('post - $url');
     return await httpPost(Uri.parse(url), body, extraHeaders: extraHeaders);
   } on SocketException catch (e) {
-    print(e);
+    log.severe('socket exception', e);
     return null;
   } on TimeoutException catch (e) {
-    print(e);
+    log.severe('timeout exception', e);
     return null;
   } on http.ClientException catch (e) {
-    print(e);
+    log.severe('client exception', e);
     return null;
   } on ArgumentError catch (e) {
-    print(e);
+    log.severe('argument error', e);
     return null;
   } on HandshakeException catch (e) {
-    print(e);
+    log.severe('handshake exception', e);
     return null;
   }
 }
@@ -845,7 +848,7 @@ Future<ErrorResult> post(String endpoint, Map<String, dynamic> params,
   if (response.statusCode == 200) {
     return ErrorResult(response.body);
   } else if (response.statusCode == 400) return ErrorResult.auth(response.body);
-  print(response.statusCode);
+  log.info(response.statusCode);
   return ErrorResult.network();
 }
 

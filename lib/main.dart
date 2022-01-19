@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'dart:convert';
+import 'package:logging/logging.dart';
 
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
@@ -22,7 +23,15 @@ import 'verify_user.dart';
 import 'snack.dart';
 import 'exchange.dart';
 
+final log = Logger('Main');
+
 void main() {
+  // setup logging
+  Logger.root.level = Level.INFO;
+  Logger.root.onRecord.listen((record) {
+    print('${record.level.name}: ${record.time}: ${record.message}');
+  });
+  // run app
   runApp(Phoenix(child: MyApp()));
 }
 
@@ -86,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    print('App lifestyle state changed: $state');
+    log.info('App lifestyle state changed: $state');
     if (state == AppLifecycleState.resumed)
       _websocket.connect(); // reconnect websocket
   }
