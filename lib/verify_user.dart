@@ -118,8 +118,9 @@ class _VerifyUserScreenState extends State<VerifyUserScreen> {
                       padding: EdgeInsets.all(10),
                       child: Image.asset('assets/aplyid-logo.webp')),
                   phoneNumberInput(
-                      _mobileNumberController, (pn) => _phoneNumber = pn,
-                      validator: (value) {
+                      _mobileNumberController,
+                      (pn) => _phoneNumber = pn,
+                      (validated) => print(validated), validator: (value) {
                     if (value == null || value.isEmpty)
                       return 'Please enter a value';
                     return null;

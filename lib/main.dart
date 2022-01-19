@@ -29,21 +29,26 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final theme = ThemeData();
     return MaterialApp(
       title: AppTitle,
-      theme: theme.copyWith(
-        // TODO - flutter 2.5.1 has some theme bugs which make it difficult to use
-        // a theme with a primary color of white at the moment
-        primaryColor: ZapBlue, //ZapWhite,
-        textTheme: ZapTextThemer(Theme.of(context).textTheme),
-        primaryTextTheme: ZapTextThemer(Theme.of(context).textTheme),
-        colorScheme: theme.colorScheme.copyWith(
-          //brightness: ZapBrightness,
-          primary: ZapBlue, //ZapWhite,
-          //secondary: ZapBlue
-        ),
-      ),
+      theme: ThemeData(
+          textTheme: ZapTextThemer(Theme.of(context).textTheme),
+          primaryTextTheme: ZapTextThemer(Theme.of(context).textTheme),
+          colorScheme: ColorScheme(
+            brightness: ZapBrightness,
+            primary: ZapPrimary,
+            primaryVariant: ZapPrimaryDark,
+            secondary: ZapSecondary,
+            secondaryVariant: ZapSecondaryDark,
+            surface: ZapSurface,
+            background: ZapBackground,
+            error: ZapError,
+            onPrimary: ZapOnPrimary,
+            onSecondary: ZapOnSecondary,
+            onSurface: ZapOnSurface,
+            onBackground: ZapOnBackground,
+            onError: ZapOnError,
+          )),
       debugShowCheckedModeBanner: false,
       home: MyHomePage(title: AppTitle),
     );
@@ -397,13 +402,14 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Drawer makeDrawer(BuildContext contex) {
     var header = DrawerHeader(
         decoration: BoxDecoration(
-          color: ZapBlue,
+          color: ZapSecondary,
         ),
         child: _userInfo != null
             ? Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                 accountImage(_userInfo?.photo, _userInfo?.photoType),
                 SizedBox(height: 5),
-                Text('${_userInfo?.email}', style: TextStyle(color: ZapWhite)),
+                Text('${_userInfo?.email}',
+                    style: TextStyle(color: ZapOnSecondary)),
                 //SizedBox(height: 5),
                 //Text('Validated: ${_userInfo?.kycValidated}'),
               ])
@@ -472,57 +478,57 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           children: <Widget>[
             Visibility(
               visible: _userInfo == null,
-              child: RoundedButton(
-                  _register, ZapWhite, ZapBlue, ZapBlueGradient, 'Register',
+              child: RoundedButton(_register, ZapOnSecondary, ZapSecondary,
+                  ZapSecondaryGradient, 'Register',
                   holePunch: true, width: 200),
             ),
             Visibility(
               visible: _userInfo == null,
-              child: RoundedButton(
-                  _login, ZapWhite, ZapBlue, ZapBlueGradient, 'Login',
+              child: RoundedButton(_login, ZapOnSecondary, ZapSecondary,
+                  ZapSecondaryGradient, 'Login',
                   holePunch: true, width: 200),
             ),
             Visibility(
               visible: _userInfo == null,
-              child: RoundedButton(_loginWithEmail, ZapWhite, ZapBlue,
-                  ZapBlueGradient, 'Lost Password',
+              child: RoundedButton(_loginWithEmail, ZapOnSecondary,
+                  ZapSecondary, ZapSecondaryGradient, 'Lost Password',
                   holePunch: true, width: 200),
             ),
             _userInfo != null ? ExchangeWidget(_websocket) : SizedBox(),
             Visibility(
               visible: _userInfo != null,
-              child: RoundedButton(
-                  _orders, ZapWhite, ZapBlue, ZapBlueGradient, 'Orders',
+              child: RoundedButton(_orders, ZapOnSecondary, ZapSecondary,
+                  ZapSecondaryGradient, 'Orders',
                   holePunch: true, width: 200),
             ),
             Visibility(
               visible: _userInfo != null,
-              child: RoundedButton(
-                  _balances, ZapWhite, ZapBlue, ZapBlueGradient, 'Balances',
+              child: RoundedButton(_balances, ZapOnSecondary, ZapSecondary,
+                  ZapSecondaryGradient, 'Balances',
                   holePunch: true, width: 200),
             ),
             Visibility(
               visible: _userInfo != null,
-              child: RoundedButton(
-                  _deposit, ZapWhite, ZapBlue, ZapBlueGradient, 'Deposits',
+              child: RoundedButton(_deposit, ZapOnSecondary, ZapSecondary,
+                  ZapSecondaryGradient, 'Deposits',
                   holePunch: true, width: 200),
             ),
             Visibility(
               visible: _userInfo != null,
-              child: RoundedButton(_withdrawal, ZapWhite, ZapBlue,
-                  ZapBlueGradient, 'Withdrawals',
+              child: RoundedButton(_withdrawal, ZapOnSecondary, ZapSecondary,
+                  ZapSecondaryGradient, 'Withdrawals',
                   holePunch: true, width: 200),
             ),
             Visibility(
               visible: _invalidAuth,
-              child: RoundedButton(
-                  _logout, ZapWhite, ZapBlue, ZapBlueGradient, 'Reset',
+              child: RoundedButton(_logout, ZapOnSecondary, ZapSecondary,
+                  ZapSecondaryGradient, 'Reset',
                   holePunch: true, width: 200),
             ),
             Visibility(
               visible: _retry,
-              child: RoundedButton(
-                  _retryAuth, ZapWhite, ZapBlue, ZapBlueGradient, 'Retry',
+              child: RoundedButton(_retryAuth, ZapOnSecondary, ZapSecondary,
+                  ZapSecondaryGradient, 'Retry',
                   holePunch: true, width: 200),
             ),
           ],

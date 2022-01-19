@@ -34,7 +34,7 @@ dependencies:
   zapdart:
     git:
       url: https://github.com/zap-me/zapdart.git
-      ref: d3ca499217f15eed4aa031511dd7a68829b890f2
+      ref: 7f1631a96440a4119df8c97b5b3188c4743892b5
     #path: ../zapdart
 
 dev_dependencies:

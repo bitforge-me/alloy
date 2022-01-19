@@ -28,13 +28,14 @@ class _PaginatorState extends State<Paginator> {
   }
 
   Widget _currentButton(String title) {
-    return RoundedButton(() => {}, ZapWhite, ZapBlue, ZapBlueGradient, title,
+    return RoundedButton(
+        () => {}, ZapOnSecondary, ZapSecondary, ZapSecondaryGradient, title,
         width: 35);
   }
 
   Widget _activeButton(String title, int toPage) {
-    return RoundedButton(
-        () => widget.activatePage(toPage), ZapBlue, ZapWhite, null, title,
+    return RoundedButton(() => widget.activatePage(toPage), ZapOnPrimary,
+        ZapPrimary, null, title,
         width: 35);
   }
 

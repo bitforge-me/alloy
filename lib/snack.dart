@@ -10,7 +10,7 @@ void snackMsg(BuildContext context, String msg,
   switch (category) {
     case MessageCategory.Info:
       icon = Icons.info;
-      color = ZapBlue;
+      color = ZapSecondary;
       break;
     case MessageCategory.Warning:
       icon = Icons.warning;
@@ -19,7 +19,7 @@ void snackMsg(BuildContext context, String msg,
   }
   var snackBar = SnackBar(
       duration: Duration(seconds: seconds),
-      backgroundColor: ZapWhite,
+      backgroundColor: ZapPrimary,
       content: Row(children: [
         SizedBox(
           width: 5,
@@ -31,7 +31,7 @@ void snackMsg(BuildContext context, String msg,
         SizedBox(width: 10),
         Icon(icon, size: 28.0, color: color),
         SizedBox(width: 10),
-        Text(msg, style: TextStyle(color: ZapBlue))
+        Text(msg, style: TextStyle(color: ZapSecondary))
       ]));
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }

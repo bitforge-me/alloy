@@ -265,7 +265,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
                 isExpanded: true,
                 underline: Container(
                   height: 2,
-                  color: ZapBlue,
+                  color: ZapSecondary,
                 ),
                 items: _fromAssets
                     .map((e) => DropdownMenuItem<String>(
@@ -280,14 +280,14 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
             margin: EdgeInsets.all(20),
             child: _calculating
                 ? CircularProgressIndicator()
-                : Icon(Icons.arrow_forward, color: ZapBlue, size: 24)),
+                : Icon(Icons.arrow_forward, color: ZapSecondary, size: 24)),
         SizedBox(
             width: 200,
             child: DropdownButton<String>(
                 isExpanded: true,
                 underline: Container(
                   height: 2,
-                  color: ZapBlue,
+                  color: ZapSecondary,
                 ),
                 items: _toAssets
                     .map((e) => DropdownMenuItem<String>(
@@ -317,8 +317,8 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
                 decoration: InputDecoration(border: OutlineInputBorder()))),
       ]),
       _validAmount
-          ? RoundedButton(
-              _exchange, ZapWhite, ZapBlue, ZapBlueGradient, 'Create Order',
+          ? RoundedButton(_exchange, ZapOnSecondary, ZapSecondary,
+              ZapSecondaryGradient, 'Create Order',
               holePunch: true, width: 200)
           : SizedBox()
     ]);
