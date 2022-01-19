@@ -6,7 +6,7 @@ import 'package:universal_platform/universal_platform.dart';
 
 import 'package:zapdart/colors.dart';
 
-const AppVersion = 1;
+const AppVersion = 2;
 const AppTitle = 'Alloy';
 const AppLogo = 'assets/logo.png';
 const SupportUrl = 'https://alloy-support.zap.me/';
