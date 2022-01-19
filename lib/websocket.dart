@@ -12,6 +12,7 @@ final log = Logger('Websocket');
 
 enum WebsocketEvent {
   none,
+  version,
   userInfoUpdate,
   brokerOrderNew,
   brokerOrderUpdate,
@@ -47,26 +48,7 @@ class Websocket {
     _socket = await _socketCreate();
   }
 
-  void call(String event, String msg) {
-    var wevent = WebsocketEvent.none;
-    if (event == 'user_info_update') wevent = WebsocketEvent.userInfoUpdate;
-    if (event == 'broker_order_new') wevent = WebsocketEvent.brokerOrderNew;
-    if (event == 'broker_order_update')
-      wevent = WebsocketEvent.brokerOrderUpdate;
-    if (event == 'crypto_deposit_new') wevent = WebsocketEvent.cryptoDepositNew;
-    if (event == 'crypto_deposit_update')
-      wevent = WebsocketEvent.cryptoDepositUpdate;
-    if (event == 'fiat_deposit_new') wevent = WebsocketEvent.fiatDepositNew;
-    if (event == 'fiat_deposit_update')
-      wevent = WebsocketEvent.fiatDepositUpdate;
-    if (event == 'crypto_withdrawal_new')
-      wevent = WebsocketEvent.cryptoWithdrawalNew;
-    if (event == 'crypto_withdrawal_update')
-      wevent = WebsocketEvent.cryptoWithdrawalUpdate;
-    if (event == 'fiat_withdrawal_new')
-      wevent = WebsocketEvent.fiatWithdrawalNew;
-    if (event == 'fiat_withdrawal_update')
-      wevent = WebsocketEvent.fiatWithdrawalUpdate;
+  void call(WebsocketEvent wevent, String msg) {
     wsEvent.broadcast(WsEventArgs(wevent, msg));
   }
 
@@ -96,19 +78,23 @@ class Websocket {
     socket.on('connect_timeout', (_) {
       log.info('ws connect timeout');
     });
+    socket.on('version', (data) {
+      call(WebsocketEvent.version, data);
+      log.info(data);
+    });
     socket.on('info', (data) {
       log.info(data);
     });
     socket.on('user_info_update', (data) {
-      call('user_info_update', data);
+      call(WebsocketEvent.userInfoUpdate, data);
       log.info(data);
     });
     socket.on('broker_order_new', (data) {
-      call('broker_order_new', data);
+      call(WebsocketEvent.brokerOrderNew, data);
       log.info(data);
     });
     socket.on('broker_order_update', (data) {
-      call('broker_order_update', data);
+      call(WebsocketEvent.brokerOrderUpdate, data);
       log.info(data);
     });
     socket.on('disconnect', (_) {

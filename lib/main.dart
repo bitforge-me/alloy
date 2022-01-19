@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'dart:convert';
 import 'package:logging/logging.dart';
+import 'package:universal_platform/universal_platform.dart';
+import 'dart:html' as html;
 
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
@@ -150,8 +152,28 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     }
   }
 
+  void checkVersion(BeVersionResult res) {
+    res.when((serverVersion, clientVersionDeployed) {
+      if (clientVersionDeployed > AppVersion) {
+        log.info(
+            'old version $AppVersion, currently deployed version is $clientVersionDeployed');
+        if (UniversalPlatform.isWeb) {
+          askYesNo(context,
+                  'A newer version has been released would you like to reload?')
+              .then((value) {
+            if (value) html.window.location.reload();
+          });
+        } else
+          alert(context, 'Old version',
+              'A newer version has been released, please update');
+      }
+    }, error: (_) => log.severe('failed to parse version result'));
+  }
+
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
+    if (args.event == WebsocketEvent.version)
+      checkVersion(BeVersionResult.parse(args.msg));
     if (args.event == WebsocketEvent.userInfoUpdate) {
       var info = UserInfo.fromJson(jsonDecode(args.msg));
       if (info.email != _userInfo?.email)

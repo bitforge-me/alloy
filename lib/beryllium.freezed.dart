@@ -1590,6 +1590,396 @@ abstract class _BeTwoFactorEnabledResultErr
 }
 
 /// @nodoc
+class _$BeVersionResultTearOff {
+  const _$BeVersionResultTearOff();
+
+  _BeVersionResult call(int serverVersion, int clientVersionDeployed) {
+    return _BeVersionResult(
+      serverVersion,
+      clientVersionDeployed,
+    );
+  }
+
+  _BeVersionResultErr error(BeError err) {
+    return _BeVersionResultErr(
+      err,
+    );
+  }
+}
+
+/// @nodoc
+const $BeVersionResult = _$BeVersionResultTearOff();
+
+/// @nodoc
+mixin _$BeVersionResult {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(int serverVersion, int clientVersionDeployed) $default, {
+    required TResult Function(BeError err) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult Function(int serverVersion, int clientVersionDeployed)? $default, {
+    TResult Function(BeError err)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(int serverVersion, int clientVersionDeployed)? $default, {
+    TResult Function(BeError err)? error,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_BeVersionResult value) $default, {
+    required TResult Function(_BeVersionResultErr value) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult Function(_BeVersionResult value)? $default, {
+    TResult Function(_BeVersionResultErr value)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_BeVersionResult value)? $default, {
+    TResult Function(_BeVersionResultErr value)? error,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $BeVersionResultCopyWith<$Res> {
+  factory $BeVersionResultCopyWith(
+          BeVersionResult value, $Res Function(BeVersionResult) then) =
+      _$BeVersionResultCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$BeVersionResultCopyWithImpl<$Res>
+    implements $BeVersionResultCopyWith<$Res> {
+  _$BeVersionResultCopyWithImpl(this._value, this._then);
+
+  final BeVersionResult _value;
+  // ignore: unused_field
+  final $Res Function(BeVersionResult) _then;
+}
+
+/// @nodoc
+abstract class _$BeVersionResultCopyWith<$Res> {
+  factory _$BeVersionResultCopyWith(
+          _BeVersionResult value, $Res Function(_BeVersionResult) then) =
+      __$BeVersionResultCopyWithImpl<$Res>;
+  $Res call({int serverVersion, int clientVersionDeployed});
+}
+
+/// @nodoc
+class __$BeVersionResultCopyWithImpl<$Res>
+    extends _$BeVersionResultCopyWithImpl<$Res>
+    implements _$BeVersionResultCopyWith<$Res> {
+  __$BeVersionResultCopyWithImpl(
+      _BeVersionResult _value, $Res Function(_BeVersionResult) _then)
+      : super(_value, (v) => _then(v as _BeVersionResult));
+
+  @override
+  _BeVersionResult get _value => super._value as _BeVersionResult;
+
+  @override
+  $Res call({
+    Object? serverVersion = freezed,
+    Object? clientVersionDeployed = freezed,
+  }) {
+    return _then(_BeVersionResult(
+      serverVersion == freezed
+          ? _value.serverVersion
+          : serverVersion // ignore: cast_nullable_to_non_nullable
+              as int,
+      clientVersionDeployed == freezed
+          ? _value.clientVersionDeployed
+          : clientVersionDeployed // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_BeVersionResult
+    with DiagnosticableTreeMixin
+    implements _BeVersionResult {
+  const _$_BeVersionResult(this.serverVersion, this.clientVersionDeployed);
+
+  @override
+  final int serverVersion;
+  @override
+  final int clientVersionDeployed;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'BeVersionResult(serverVersion: $serverVersion, clientVersionDeployed: $clientVersionDeployed)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'BeVersionResult'))
+      ..add(DiagnosticsProperty('serverVersion', serverVersion))
+      ..add(
+          DiagnosticsProperty('clientVersionDeployed', clientVersionDeployed));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _BeVersionResult &&
+            (identical(other.serverVersion, serverVersion) ||
+                other.serverVersion == serverVersion) &&
+            (identical(other.clientVersionDeployed, clientVersionDeployed) ||
+                other.clientVersionDeployed == clientVersionDeployed));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, serverVersion, clientVersionDeployed);
+
+  @JsonKey(ignore: true)
+  @override
+  _$BeVersionResultCopyWith<_BeVersionResult> get copyWith =>
+      __$BeVersionResultCopyWithImpl<_BeVersionResult>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(int serverVersion, int clientVersionDeployed) $default, {
+    required TResult Function(BeError err) error,
+  }) {
+    return $default(serverVersion, clientVersionDeployed);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult Function(int serverVersion, int clientVersionDeployed)? $default, {
+    TResult Function(BeError err)? error,
+  }) {
+    return $default?.call(serverVersion, clientVersionDeployed);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(int serverVersion, int clientVersionDeployed)? $default, {
+    TResult Function(BeError err)? error,
+    required TResult orElse(),
+  }) {
+    if ($default != null) {
+      return $default(serverVersion, clientVersionDeployed);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_BeVersionResult value) $default, {
+    required TResult Function(_BeVersionResultErr value) error,
+  }) {
+    return $default(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult Function(_BeVersionResult value)? $default, {
+    TResult Function(_BeVersionResultErr value)? error,
+  }) {
+    return $default?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_BeVersionResult value)? $default, {
+    TResult Function(_BeVersionResultErr value)? error,
+    required TResult orElse(),
+  }) {
+    if ($default != null) {
+      return $default(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _BeVersionResult implements BeVersionResult {
+  const factory _BeVersionResult(int serverVersion, int clientVersionDeployed) =
+      _$_BeVersionResult;
+
+  int get serverVersion;
+  int get clientVersionDeployed;
+  @JsonKey(ignore: true)
+  _$BeVersionResultCopyWith<_BeVersionResult> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$BeVersionResultErrCopyWith<$Res> {
+  factory _$BeVersionResultErrCopyWith(
+          _BeVersionResultErr value, $Res Function(_BeVersionResultErr) then) =
+      __$BeVersionResultErrCopyWithImpl<$Res>;
+  $Res call({BeError err});
+
+  $BeErrorCopyWith<$Res> get err;
+}
+
+/// @nodoc
+class __$BeVersionResultErrCopyWithImpl<$Res>
+    extends _$BeVersionResultCopyWithImpl<$Res>
+    implements _$BeVersionResultErrCopyWith<$Res> {
+  __$BeVersionResultErrCopyWithImpl(
+      _BeVersionResultErr _value, $Res Function(_BeVersionResultErr) _then)
+      : super(_value, (v) => _then(v as _BeVersionResultErr));
+
+  @override
+  _BeVersionResultErr get _value => super._value as _BeVersionResultErr;
+
+  @override
+  $Res call({
+    Object? err = freezed,
+  }) {
+    return _then(_BeVersionResultErr(
+      err == freezed
+          ? _value.err
+          : err // ignore: cast_nullable_to_non_nullable
+              as BeError,
+    ));
+  }
+
+  @override
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
+      return _then(_value.copyWith(err: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$_BeVersionResultErr
+    with DiagnosticableTreeMixin
+    implements _BeVersionResultErr {
+  const _$_BeVersionResultErr(this.err);
+
+  @override
+  final BeError err;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'BeVersionResult.error(err: $err)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'BeVersionResult.error'))
+      ..add(DiagnosticsProperty('err', err));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _BeVersionResultErr &&
+            (identical(other.err, err) || other.err == err));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, err);
+
+  @JsonKey(ignore: true)
+  @override
+  _$BeVersionResultErrCopyWith<_BeVersionResultErr> get copyWith =>
+      __$BeVersionResultErrCopyWithImpl<_BeVersionResultErr>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(int serverVersion, int clientVersionDeployed) $default, {
+    required TResult Function(BeError err) error,
+  }) {
+    return error(err);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult Function(int serverVersion, int clientVersionDeployed)? $default, {
+    TResult Function(BeError err)? error,
+  }) {
+    return error?.call(err);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(int serverVersion, int clientVersionDeployed)? $default, {
+    TResult Function(BeError err)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(err);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_BeVersionResult value) $default, {
+    required TResult Function(_BeVersionResultErr value) error,
+  }) {
+    return error(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult Function(_BeVersionResult value)? $default, {
+    TResult Function(_BeVersionResultErr value)? error,
+  }) {
+    return error?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_BeVersionResult value)? $default, {
+    TResult Function(_BeVersionResultErr value)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _BeVersionResultErr implements BeVersionResult {
+  const factory _BeVersionResultErr(BeError err) = _$_BeVersionResultErr;
+
+  BeError get err;
+  @JsonKey(ignore: true)
+  _$BeVersionResultErrCopyWith<_BeVersionResultErr> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 class _$BeApiKeyResultTearOff {
   const _$BeApiKeyResultTearOff();
 

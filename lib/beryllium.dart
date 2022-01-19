@@ -159,6 +159,23 @@ class BeTwoFactorEnabledResult with _$BeTwoFactorEnabledResult {
   }
 }
 
+@freezed
+class BeVersionResult with _$BeVersionResult {
+  const factory BeVersionResult(int serverVersion, int clientVersionDeployed) =
+      _BeVersionResult;
+  const factory BeVersionResult.error(BeError err) = _BeVersionResultErr;
+
+  static BeVersionResult parse(String data) {
+    try {
+      var jsnObj = json.decode(data);
+      return BeVersionResult(
+          jsnObj["server_version"], jsnObj["client_version_deployed"]);
+    } catch (_) {
+      return BeVersionResult.error(BeError.format());
+    }
+  }
+}
+
 class BeApiKey {
   final String token;
   final String secret;
@@ -871,6 +888,13 @@ Future<BeTwoFactorEnabledResult> beUserTwoFactorEnabledCheck(
       'user_two_factor_enabled_check', {"email": email, "password": password});
   return result.when((content) => BeTwoFactorEnabledResult.parse(content),
       error: (err) => BeTwoFactorEnabledResult.error(err));
+}
+
+Future<BeVersionResult> beVersion(
+    String email, String password, String deviceName, String tfCode) async {
+  var result = await post('version', {});
+  return result.when((content) => BeVersionResult.parse(content),
+      error: (err) => BeVersionResult.error(err));
 }
 
 Future<BeApiKeyResult> beApiKeyCreate(
