@@ -48,9 +48,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme(
             brightness: ZapBrightness,
             primary: ZapPrimary,
-            primaryVariant: ZapPrimaryDark,
             secondary: ZapSecondary,
-            secondaryVariant: ZapSecondaryDark,
             surface: ZapSurface,
             background: ZapBackground,
             error: ZapError,
