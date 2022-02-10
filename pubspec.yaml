@@ -27,11 +27,6 @@ dependencies:
   json_annotation: ^4.3.0
   freezed_annotation: ^0.15.0
   logging: ^1.0.2
-  flutter_icons:
-    git:
-      url: https://github.com/adarsh-technocrat/flutter-icons
-      ref: 0831af6
-
   zapdart:
     git:
       url: https://github.com/zap-me/zapdart.git
