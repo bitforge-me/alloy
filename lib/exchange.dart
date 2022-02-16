@@ -143,13 +143,26 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   }
 
   Future<void> _updateQuote() async {
-    // check value is valid
+    // get value
     if (_amountController.text.isEmpty) return;
-    var value = Decimal.tryParse(_amountController.text.trim());
-    if (value == null || value <= Decimal.zero) {
-      snackMsg(context, 'Invalid amount', category: MessageCategory.Warning);
+    var tryValue = Decimal.tryParse(_amountController.text.trim());
+    // check value is valid
+    if (tryValue == null || tryValue <= Decimal.zero) {
+      snackMsg(context, 'invalid amount', category: MessageCategory.Warning);
       return;
     }
+    var value = tryValue;
+    // get user balance
+    var resb = await beBalances();
+    resb.when((balances) {
+      for (var bal in balances)
+        if (bal.asset == _fromAsset) if (bal.available < value) {
+          value = bal.available;
+          _amountController.text = value.toString();
+          snackMsg(context, 'adjusted amount to available balance',
+              category: MessageCategory.Warning);
+        }
+    }, error: (err) => log.severe('failed to get user balances $err'));
     // check market is valid
     BeMarket? market;
     BeMarketSide side = BeMarketSide.ask;
@@ -166,7 +179,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       }
     }
     if (market == null) {
-      snackMsg(context, 'Invalid market', category: MessageCategory.Warning);
+      snackMsg(context, 'invalid market', category: MessageCategory.Warning);
       return;
     }
     // get market orderbook and quote
@@ -282,65 +295,79 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   }
 
   Widget _buildWidget() {
+    var from = Column(children: [
+      SizedBox(
+          width: 200,
+          child: DropdownButton<String>(
+              isExpanded: true,
+              underline: Container(
+                height: 2,
+                color: ZapSecondary,
+              ),
+              items: _fromAssets
+                  .map((e) => DropdownMenuItem<String>(
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [Text(e), assetLogo(e, size: 24)]),
+                      value: e))
+                  .toList(),
+              value: _fromAsset,
+              onChanged: _fromChanged)),
+      SizedBox(
+          width: 200,
+          child: TextField(
+              controller: _amountController,
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(), labelText: 'Amount'),
+              keyboardType: TextInputType.numberWithOptions(
+                  signed: false, decimal: true))),
+    ]);
+    var arrow = Container(
+        margin: EdgeInsets.all(20),
+        child: _calculating
+            ? CircularProgressIndicator()
+            : Icon(Icons.arrow_forward, color: ZapSecondary, size: 24));
+    var arrowDown = Container(
+        margin: EdgeInsets.all(20),
+        child: _calculating
+            ? CircularProgressIndicator()
+            : Icon(Icons.arrow_downward, color: ZapSecondary, size: 24));
+    var to = Column(children: [
+      SizedBox(
+          width: 200,
+          child: DropdownButton<String>(
+              isExpanded: true,
+              underline: Container(
+                height: 2,
+                color: ZapSecondary,
+              ),
+              items: _toAssets
+                  .map((e) => DropdownMenuItem<String>(
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [Text(e), assetLogo(e, size: 24)]),
+                      value: e))
+                  .toList(),
+              value: _toAsset,
+              onChanged: _toChanged)),
+      SizedBox(
+          width: 200,
+          child: TextField(
+              controller: _receiveController,
+              readOnly: true,
+              decoration: InputDecoration(border: OutlineInputBorder())))
+    ]);
     return Column(children: [
-      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        SizedBox(
-            width: 200,
-            child: DropdownButton<String>(
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: ZapSecondary,
-                ),
-                items: _fromAssets
-                    .map((e) => DropdownMenuItem<String>(
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [Text(e), assetLogo(e, size: 24)]),
-                        value: e))
-                    .toList(),
-                value: _fromAsset,
-                onChanged: _fromChanged)),
-        Container(
-            margin: EdgeInsets.all(20),
-            child: _calculating
-                ? CircularProgressIndicator()
-                : Icon(Icons.arrow_forward, color: ZapSecondary, size: 24)),
-        SizedBox(
-            width: 200,
-            child: DropdownButton<String>(
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: ZapSecondary,
-                ),
-                items: _toAssets
-                    .map((e) => DropdownMenuItem<String>(
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [Text(e), assetLogo(e, size: 24)]),
-                        value: e))
-                    .toList(),
-                value: _toAsset,
-                onChanged: _toChanged))
-      ]),
-      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        SizedBox(
-            width: 200,
-            child: TextField(
-                controller: _amountController,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(), labelText: 'Amount'),
-                keyboardType: TextInputType.numberWithOptions(
-                    signed: false, decimal: true))),
-        SizedBox(width: 64),
-        SizedBox(
-            width: 200,
-            child: TextField(
-                controller: _receiveController,
-                readOnly: true,
-                decoration: InputDecoration(border: OutlineInputBorder()))),
-      ]),
+      LayoutBuilder(builder: (context, constraints) {
+        if (constraints.maxWidth < 500)
+          return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [from, arrowDown, to]);
+        else
+          return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [from, arrow, to]);
+      }),
       _validAmount
           ? RoundedButton(_exchange, ZapOnSecondary, ZapSecondary,
               ZapSecondaryGradient, 'Create Order',
