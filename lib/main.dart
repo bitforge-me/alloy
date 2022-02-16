@@ -3,7 +3,7 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'dart:convert';
 import 'package:logging/logging.dart';
 import 'package:universal_platform/universal_platform.dart';
-import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
 
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
