@@ -93,7 +93,7 @@ BeMarket _$BeMarketFromJson(Map<String, dynamic> json) => BeMarket(
       json['quote_asset'] as String,
       json['precision'] as int,
       json['status'] as String,
-      json['min_trade'] as String,
+      _decimalFromJson(json['min_trade']),
       json['message'] as String,
     );
 
@@ -103,7 +103,7 @@ Map<String, dynamic> _$BeMarketToJson(BeMarket instance) => <String, dynamic>{
       'quote_asset': instance.quoteAsset,
       'precision': instance.precision,
       'status': instance.status,
-      'min_trade': instance.minTrade,
+      'min_trade': _decimalToJson(instance.minTrade),
       'message': instance.message,
     };
 
@@ -124,7 +124,6 @@ BeOrderbook _$BeOrderbookFromJson(Map<String, dynamic> json) => BeOrderbook(
       (json['asks'] as List<dynamic>)
           .map((e) => BeRate.fromJson(e as Map<String, dynamic>))
           .toList(),
-      _decimalFromJson(json['min_order']),
       _decimalFromJson(json['base_asset_withdraw_fee']),
       _decimalFromJson(json['quote_asset_withdraw_fee']),
       _decimalFromJson(json['broker_fee']),
@@ -134,7 +133,6 @@ Map<String, dynamic> _$BeOrderbookToJson(BeOrderbook instance) =>
     <String, dynamic>{
       'bids': instance.bids,
       'asks': instance.asks,
-      'min_order': _decimalToJson(instance.minOrder),
       'base_asset_withdraw_fee': _decimalToJson(instance.baseAssetWithdrawFee),
       'quote_asset_withdraw_fee':
           _decimalToJson(instance.quoteAssetWithdrawFee),

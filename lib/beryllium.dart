@@ -320,8 +320,9 @@ class BeMarket {
   final String quoteAsset;
   final int precision;
   final String status;
-  @JsonKey(name: 'min_trade')
-  final String minTrade;
+  @JsonKey(
+      name: 'min_trade', fromJson: _decimalFromJson, toJson: _decimalToJson)
+  final Decimal minTrade;
   final String message;
 
   BeMarket(this.symbol, this.baseAsset, this.quoteAsset, this.precision,
@@ -369,9 +370,6 @@ class BeOrderbook {
   final List<BeRate> bids;
   final List<BeRate> asks;
   @JsonKey(
-      name: 'min_order', fromJson: _decimalFromJson, toJson: _decimalToJson)
-  final Decimal minOrder;
-  @JsonKey(
       name: 'base_asset_withdraw_fee',
       fromJson: _decimalFromJson,
       toJson: _decimalToJson)
@@ -385,7 +383,7 @@ class BeOrderbook {
       name: 'broker_fee', fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal brokerFee;
 
-  BeOrderbook(this.bids, this.asks, this.minOrder, this.baseAssetWithdrawFee,
+  BeOrderbook(this.bids, this.asks, this.baseAssetWithdrawFee,
       this.quoteAssetWithdrawFee, this.brokerFee);
   factory BeOrderbook.fromJson(Map<String, dynamic> json) =>
       _$BeOrderbookFromJson(json);

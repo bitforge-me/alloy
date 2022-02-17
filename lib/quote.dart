@@ -10,9 +10,11 @@ class QuoteTotalPrice {
   QuoteTotalPrice(this.amountBaseAsset, this.amountQuoteAsset, this.errMsg);
 }
 
-QuoteTotalPrice bidQuoteAmount(BeOrderbook orderbook, Decimal amount) {
-  if (amount < orderbook.minOrder)
-    return QuoteTotalPrice(Decimal.zero, Decimal.zero, 'amount too low');
+QuoteTotalPrice bidQuoteAmount(
+    BeMarket market, BeOrderbook orderbook, Decimal amount) {
+  if (amount < market.minTrade)
+    return QuoteTotalPrice(amount, Decimal.zero,
+        'minimum trade is ${market.minTrade} ${market.baseAsset}');
 
   var filled = Decimal.zero;
   var totalPrice = Decimal.zero;
@@ -40,7 +42,7 @@ QuoteTotalPrice bidQuoteAmount(BeOrderbook orderbook, Decimal amount) {
 }
 
 QuoteTotalPrice bidEstimateAmountFromQuoteAssetAmount(
-    BeOrderbook orderbook, Decimal amountQuoteAsset) {
+    BeMarket market, BeOrderbook orderbook, Decimal amountQuoteAsset) {
   var filled = Decimal.zero;
   var totalBaseAsset = Decimal.zero;
   var n = 0;
@@ -56,8 +58,9 @@ QuoteTotalPrice bidEstimateAmountFromQuoteAssetAmount(
     filled += quoteAssetToUse;
     totalBaseAsset += quoteAssetToUse / rate;
     if (filled == amountQuoteAsset) {
-      if (totalBaseAsset < orderbook.minOrder)
-        return QuoteTotalPrice(Decimal.zero, Decimal.zero, 'amount too low');
+      if (totalBaseAsset < market.minTrade)
+        return QuoteTotalPrice(totalBaseAsset, amountQuoteAsset,
+            'minimum trade is ${market.minTrade} ${market.baseAsset}');
       return QuoteTotalPrice(totalBaseAsset, amountQuoteAsset, null);
     }
     n++;
@@ -65,9 +68,11 @@ QuoteTotalPrice bidEstimateAmountFromQuoteAssetAmount(
   return QuoteTotalPrice(Decimal.zero, Decimal.zero, 'not enough liquidity');
 }
 
-QuoteTotalPrice askQuoteAmount(BeOrderbook orderbook, Decimal amount) {
-  if (amount < orderbook.minOrder)
-    return QuoteTotalPrice(Decimal.zero, Decimal.zero, 'amount too low');
+QuoteTotalPrice askQuoteAmount(
+    BeMarket market, BeOrderbook orderbook, Decimal amount) {
+  if (amount < market.minTrade)
+    return QuoteTotalPrice(Decimal.zero, Decimal.zero,
+        'minimum trade is ${market.minTrade} ${market.baseAsset}');
 
   var filled = Decimal.zero;
   var totalPrice = Decimal.zero;

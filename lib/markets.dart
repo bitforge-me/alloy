@@ -94,10 +94,10 @@ class _QuoteScreenState extends State<QuoteScreen> {
       QuoteTotalPrice totalPrice;
       switch (_side) {
         case BeMarketSide.bid:
-          totalPrice = bidQuoteAmount(widget.orderbook, value);
+          totalPrice = bidQuoteAmount(widget.market, widget.orderbook, value);
           break;
         case BeMarketSide.ask:
-          totalPrice = askQuoteAmount(widget.orderbook, value);
+          totalPrice = askQuoteAmount(widget.market, widget.orderbook, value);
           break;
       }
       if (totalPrice.errMsg != null)
@@ -181,10 +181,12 @@ class _QuoteScreenState extends State<QuoteScreen> {
                         QuoteTotalPrice totalPrice;
                         switch (_side) {
                           case BeMarketSide.bid:
-                            totalPrice = bidQuoteAmount(widget.orderbook, d);
+                            totalPrice = bidQuoteAmount(
+                                widget.market, widget.orderbook, d);
                             break;
                           case BeMarketSide.ask:
-                            totalPrice = askQuoteAmount(widget.orderbook, d);
+                            totalPrice = askQuoteAmount(
+                                widget.market, widget.orderbook, d);
                             break;
                         }
                         if (totalPrice.errMsg != null) return totalPrice.errMsg;
