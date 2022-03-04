@@ -82,9 +82,9 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
           alert(context, 'error', 'failed to create withdrawal');
           return false;
         })) return;
-        tfCode = await askString(context, 'Enter your two factor code to make your withdrawal', '');
-        if (tfCode == null || tfCode.isEmpty)
-          return;
+        tfCode = await askString(
+            context, 'Enter your two factor code to make your withdrawal', '');
+        if (tfCode == null || tfCode.isEmpty) return;
       }
       if (widget.asset.isCrypto) {
         showAlertDialog(context, 'creating withdrawal..');
