@@ -27,11 +27,11 @@ dependencies:
   json_annotation: ^4.3.0
   freezed_annotation: ^0.15.0
   logging: ^1.0.2
+  universal_html: ^2.0.8
   zapdart:
     git:
       url: https://github.com/zap-me/zapdart.git
       ref: 7a308416f45a319a8555c3cfb506f92ce50d818c
-  universal_html: ^2.0.8
     #path: ../zapdart
 
 dev_dependencies:

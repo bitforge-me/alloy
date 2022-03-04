@@ -397,7 +397,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    WithdrawalSelectScreen(assets, _websocket))),
+                    WithdrawalSelectScreen(assets, _websocket, _userInfo))),
         error: (err) => snackMsg(context, 'failed to query withdrawals',
             category: MessageCategory.Warning));
   }

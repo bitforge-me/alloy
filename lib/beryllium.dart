@@ -896,7 +896,7 @@ Future<BeVersionResult> beVersion(
 }
 
 Future<BeApiKeyResult> beApiKeyCreate(
-    String email, String password, String deviceName, String tfCode) async {
+    String email, String password, String deviceName, String? tfCode) async {
   var result = await post('api_key_create', {
     "email": email,
     "password": password,
@@ -976,6 +976,12 @@ Future<BeTwoFactorResult> beUserTwoFactorDisable(String? code) async {
       error: (err) => BeTwoFactorResult.error(err));
 }
 
+Future<BeTwoFactorResult> beUserTwoFactorSend() async {
+  var result = await post("user_two_factor_send", {}, authRequired: true);
+  return result.when((content) => BeTwoFactorResult.parse(content),
+      error: (err) => BeTwoFactorResult.error(err));
+}
+
 Future<BeAssetResult> beAssets() async {
   var result = await post("assets", {}, authRequired: true);
   return result.when((content) => BeAssetResult.parse(content),
@@ -1022,7 +1028,8 @@ Future<BeCryptoWithdrawalResult> beCryptoWithdrawalCreate(
     Decimal amount,
     String recipient,
     bool saveRecipient,
-    String recipientDescription) async {
+    String recipientDescription,
+    String? tfCode) async {
   var result = await post(
       "crypto_withdrawal_create",
       {
@@ -1030,7 +1037,8 @@ Future<BeCryptoWithdrawalResult> beCryptoWithdrawalCreate(
         "amount_dec": amount.toString(),
         "recipient": recipient,
         "save_recipient": saveRecipient,
-        "recipient_description": recipientDescription
+        "recipient_description": recipientDescription,
+        "tf_code": tfCode
       },
       authRequired: true);
   return result.when((content) => BeCryptoWithdrawalResult.parse(content),
@@ -1069,7 +1077,8 @@ Future<BeFiatWithdrawalResult> beFiatWithdrawalCreate(
     Decimal amount,
     String recipient,
     bool saveRecipient,
-    String recipientDescription) async {
+    String recipientDescription,
+    String? tfCode) async {
   var result = await post(
       "fiat_withdrawal_create",
       {
@@ -1077,7 +1086,8 @@ Future<BeFiatWithdrawalResult> beFiatWithdrawalCreate(
         "amount_dec": amount.toString(),
         "recipient": recipient,
         "save_recipient": saveRecipient,
-        "recipient_description": recipientDescription
+        "recipient_description": recipientDescription,
+        "tf_code": tfCode
       },
       authRequired: true);
   return result.when((content) => BeFiatWithdrawalResult.parse(content),

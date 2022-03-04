@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
+import 'package:logging/logging.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
@@ -17,11 +18,14 @@ import 'cryptocurrency.dart';
 import 'snack.dart';
 import 'config.dart';
 
+final log = Logger('Withdrawal');
+
 class WithdrawalFormScreen extends StatefulWidget {
   final BeAsset asset;
   final Websocket websocket;
+  final UserInfo? userInfo;
 
-  WithdrawalFormScreen(this.asset, this.websocket);
+  WithdrawalFormScreen(this.asset, this.websocket, this.userInfo);
 
   @override
   State<WithdrawalFormScreen> createState() => _WithdrawalFormScreenState();
@@ -70,6 +74,18 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
   void _withdrawalCreate() async {
     if (_formKey.currentState == null) return;
     if (_formKey.currentState!.validate()) {
+      String? tfCode = null;
+      if (widget.userInfo?.tfEnabled == true) {
+        var res = await beUserTwoFactorSend();
+        if (!res.when<bool>((twoFactor) => true, error: (e) {
+          log.severe('failed to send two factor code', e);
+          alert(context, 'error', 'failed to create withdrawal');
+          return false;
+        })) return;
+        tfCode = await askString(context, 'Enter your two factor code to make your withdrawal', '');
+        if (tfCode == null || tfCode.isEmpty)
+          return;
+      }
       if (widget.asset.isCrypto) {
         showAlertDialog(context, 'creating withdrawal..');
         var res = await beCryptoWithdrawalCreate(
@@ -77,7 +93,8 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
             Decimal.parse(_amountController.text),
             _withdrawalAddressController.text,
             _saveRecipient,
-            _recipientDescriptionController.text);
+            _recipientDescriptionController.text,
+            tfCode);
         Navigator.pop(context);
         res.when(
             (withdrawal) => Navigator.push(
@@ -94,7 +111,8 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
             Decimal.parse(_amountController.text),
             _withdrawalBankController.text,
             _saveRecipient,
-            _recipientDescriptionController.text);
+            _recipientDescriptionController.text,
+            tfCode);
         Navigator.pop(context);
         res.when(
             (withdrawal) => Navigator.push(
@@ -201,8 +219,9 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
 class WithdrawalSelectScreen extends StatefulWidget {
   final List<BeAsset> assets;
   final Websocket websocket;
+  final UserInfo? userInfo;
 
-  WithdrawalSelectScreen(this.assets, this.websocket);
+  WithdrawalSelectScreen(this.assets, this.websocket, this.userInfo);
 
   @override
   State<WithdrawalSelectScreen> createState() => _WithdrawalSelectScreenState();
@@ -214,14 +233,14 @@ class _WithdrawalSelectScreenState extends State<WithdrawalSelectScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  CryptoWithdrawalsScreen(asset, widget.websocket)));
+              builder: (context) => CryptoWithdrawalsScreen(
+                  asset, widget.websocket, widget.userInfo)));
     else
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  FiatWithdrawalsScreen(asset, widget.websocket)));
+              builder: (context) => FiatWithdrawalsScreen(
+                  asset, widget.websocket, widget.userInfo)));
   }
 
   Widget _listItem(BuildContext context, int n) {
@@ -248,8 +267,9 @@ class _WithdrawalSelectScreenState extends State<WithdrawalSelectScreen> {
 class CryptoWithdrawalsScreen extends StatefulWidget {
   final BeAsset asset;
   final Websocket websocket;
+  final UserInfo? userInfo;
 
-  CryptoWithdrawalsScreen(this.asset, this.websocket);
+  CryptoWithdrawalsScreen(this.asset, this.websocket, this.userInfo);
 
   @override
   State<CryptoWithdrawalsScreen> createState() =>
@@ -325,8 +345,8 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                WithdrawalFormScreen(widget.asset, widget.websocket)));
+            builder: (context) => WithdrawalFormScreen(
+                widget.asset, widget.websocket, widget.userInfo)));
   }
 
   @override
@@ -424,8 +444,9 @@ class _CryptoWithdrawalDetailScreenState
 class FiatWithdrawalsScreen extends StatefulWidget {
   final BeAsset asset;
   final Websocket websocket;
+  final UserInfo? userInfo;
 
-  FiatWithdrawalsScreen(this.asset, this.websocket);
+  FiatWithdrawalsScreen(this.asset, this.websocket, this.userInfo);
 
   @override
   State<FiatWithdrawalsScreen> createState() => _FiatWithdrawalsScreenState();
@@ -499,8 +520,8 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                WithdrawalFormScreen(widget.asset, widget.websocket)));
+            builder: (context) => WithdrawalFormScreen(
+                widget.asset, widget.websocket, widget.userInfo)));
   }
 
   @override
