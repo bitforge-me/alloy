@@ -8,7 +8,7 @@ import 'package:zapdart/colors.dart';
 const AppVersion = 4;
 const AppTitle = 'Alloy';
 const AppLogo = 'assets/logo.png';
-const SupportUrl = 'https://alloy-support.zap.me/';
+const SupportUrl = 'https://bronze-support.zap.me/';
 
 // the testnet value
 const Testnet = false;
