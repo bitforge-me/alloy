@@ -3,25 +3,27 @@ import 'package:bech32/bech32.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:quiver/iterables.dart';
 import 'package:quiver/strings.dart';
+import 'package:decimal/decimal.dart';
 
 class ValidateResult {
   final bool result;
+  final Decimal? amount;
   final String? reason;
 
-  ValidateResult(this.result, this.reason);
+  ValidateResult(this.result, this.amount, this.reason);
 }
 
 ValidateResult base58Validate(String address, bool testnet,
     List<int> mainnetPrefixes, List<int> testnetPrefixes) {
   var data = decode(address);
   if (data.length <= 0)
-    return ValidateResult(false, 'failed to decode version');
+    return ValidateResult(false, null, 'failed to decode version');
   var version = data[0];
   if (testnet && testnetPrefixes.contains(version) ||
       !testnet && mainnetPrefixes.contains(version))
-    return ValidateResult(true, null);
+    return ValidateResult(true, null, null);
   else
-    return ValidateResult(false, 'invalid address version');
+    return ValidateResult(false, null, 'invalid address version');
 }
 
 ValidateResult addressValidate(String symbol, bool testnet, String address) {
@@ -37,15 +39,15 @@ ValidateResult addressValidate(String symbol, bool testnet, String address) {
       try {
         var addr = segwit.decode(address);
         if (testnet && addr.hrp == 'tb' || !testnet && addr.hrp == 'bc')
-          return ValidateResult(true, null);
+          return ValidateResult(true, null, null);
         else
-          return ValidateResult(false, 'invalid address version');
+          return ValidateResult(false, null, 'invalid address version');
       } on Exception {}
       break;
     case 'ETH':
       try {
         EthereumAddress.fromHex(address, enforceEip55: true);
-        return ValidateResult(true, null);
+        return ValidateResult(true, null, null);
       } on ArgumentError {}
       break;
     case 'DOGE':
@@ -59,9 +61,53 @@ ValidateResult addressValidate(String symbol, bool testnet, String address) {
       } on ArgumentError {}
       break;
     default:
-      return ValidateResult(false, '$symbol not known');
+      return ValidateResult(false, null, '$symbol not known');
   }
-  return ValidateResult(false, 'invalid address');
+  return ValidateResult(false, null, 'invalid address');
+}
+
+ValidateResult l2RecipientValidate(
+    String symbol, bool testnet, String recipient) {
+  switch (symbol) {
+    case 'BTC-LN':
+      try {
+        var codec = Bech32Codec();
+        var bech32 = codec.decode(
+          recipient,
+          recipient.length,
+        );
+        if (bech32.hrp.length < 4)
+          return ValidateResult(false, null, 'invalid invoice');
+        var network = bech32.hrp.substring(0, 4);
+        var amount = '';
+        if (bech32.hrp.length > 4) amount = bech32.hrp.substring(4);
+        if (testnet && network != 'lntb' || !testnet && network != 'lnbc')
+          return ValidateResult(false, null, 'invalid invoice');
+        var amountMultiplier = '';
+        if (!isDigit(amount.codeUnitAt(amount.length - 1))) {
+          amountMultiplier = amount[amount.length - 1];
+          amount = amount.substring(0, amount.length - 1);
+        }
+        var amountDec = Decimal.parse(amount);
+        switch (amountMultiplier) {
+          case 'm':
+            amountDec *= Decimal.parse('0.001');
+            break;
+          case 'u':
+            amountDec *= Decimal.parse('0.000001');
+            break;
+          case 'n':
+            amountDec *= Decimal.parse('0.000000001');
+            break;
+          case 'p':
+            amountDec *= Decimal.parse('0.000000000001');
+            break;
+        }
+        return ValidateResult(true, amountDec, null);
+      } on Exception {}
+      return ValidateResult(false, null, 'invalid invoice');
+  }
+  return ValidateResult(false, null, 'unknown recipient type');
 }
 
 String _compact(String account) {
@@ -92,16 +138,17 @@ ValidateResult bankValidate(String account) {
   // check result is all digits
   for (var i in range(account.length))
     if (!isDigit(account.codeUnitAt(i as int)))
-      return ValidateResult(false, 'invalid digit');
+      return ValidateResult(false, null, 'invalid digit');
 
   // check length
-  if (account.length != 16) return ValidateResult(false, 'invalid length');
+  if (account.length != 16)
+    return ValidateResult(false, null, 'invalid length');
 
   //TODO - check checksum
 
   //TODO - check bank and branch
 
-  return ValidateResult(true, null);
+  return ValidateResult(true, null, null);
 }
 
 String bankFormat(String account) {

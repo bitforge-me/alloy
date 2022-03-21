@@ -76,7 +76,11 @@ BeAsset _$BeAssetFromJson(Map<String, dynamic> json) => BeAsset(
       json['name'] as String,
       json['decimals'] as int,
       _decimalFromJson(json['withdraw_fee']),
+      _decimalFromJson(json['min_withdraw']),
       json['is_crypto'] as bool,
+      json['l2_network'] == null
+          ? null
+          : BeAsset.fromJson(json['l2_network'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$BeAssetToJson(BeAsset instance) => <String, dynamic>{
@@ -84,7 +88,9 @@ Map<String, dynamic> _$BeAssetToJson(BeAsset instance) => <String, dynamic>{
       'name': instance.name,
       'decimals': instance.decimals,
       'withdraw_fee': _decimalToJson(instance.withdrawFee),
+      'min_withdraw': _decimalToJson(instance.minWithdraw),
       'is_crypto': instance.isCrypto,
+      'l2_network': instance.l2Network,
     };
 
 BeMarket _$BeMarketFromJson(Map<String, dynamic> json) => BeMarket(
@@ -157,19 +163,21 @@ BeCryptoDeposit _$BeCryptoDepositFromJson(Map<String, dynamic> json) =>
     BeCryptoDeposit(
       json['token'] as String,
       json['asset'] as String,
-      json['address'] as String,
-      _decimalFromJson(json['amount']),
+      json['l2_network'] as String?,
+      _decimalFromJson(json['amount_dec']),
+      json['recipient'] as String?,
       DateTime.parse(json['date'] as String),
       json['confirmed'] as bool,
-      json['txid'] as String,
+      json['txid'] as String?,
     );
 
 Map<String, dynamic> _$BeCryptoDepositToJson(BeCryptoDeposit instance) =>
     <String, dynamic>{
       'token': instance.token,
       'asset': instance.asset,
-      'address': instance.address,
-      'amount': _decimalToJson(instance.amount),
+      'l2_network': instance.l2Network,
+      'amount_dec': _decimalToJson(instance.amount),
+      'recipient': instance.recipient,
       'date': instance.date.toIso8601String(),
       'confirmed': instance.confirmed,
       'txid': instance.txid,
@@ -179,6 +187,7 @@ BeCryptoWithdrawal _$BeCryptoWithdrawalFromJson(Map<String, dynamic> json) =>
     BeCryptoWithdrawal(
       json['token'] as String,
       json['asset'] as String,
+      json['l2_network'] as String?,
       DateTime.parse(json['date'] as String),
       _decimalFromJson(json['amount_dec']),
       json['recipient'] as String,
@@ -190,6 +199,7 @@ Map<String, dynamic> _$BeCryptoWithdrawalToJson(BeCryptoWithdrawal instance) =>
     <String, dynamic>{
       'token': instance.token,
       'asset': instance.asset,
+      'l2_network': instance.l2Network,
       'date': instance.date.toIso8601String(),
       'amount_dec': _decimalToJson(instance.amount),
       'recipient': instance.recipient,

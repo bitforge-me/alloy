@@ -4995,187 +4995,218 @@ abstract class _BeBalancesResultErr implements BeBalancesResult {
 }
 
 /// @nodoc
-class _$BeCryptoDepositAddressResultTearOff {
-  const _$BeCryptoDepositAddressResultTearOff();
+class _$BeCryptoDepositRecipientResultTearOff {
+  const _$BeCryptoDepositRecipientResultTearOff();
 
-  _BeCryptoDepositAddressResult call(String address) {
-    return _BeCryptoDepositAddressResult(
-      address,
+  _BeCryptoDepositRecipientResult call(
+      String recipient, String asset, String? l2Network) {
+    return _BeCryptoDepositRecipientResult(
+      recipient,
+      asset,
+      l2Network,
     );
   }
 
-  _BeCryptoDepositAddressResultErr error(BeError err) {
-    return _BeCryptoDepositAddressResultErr(
+  _BeCryptoDepositRecipientResultErr error(BeError err) {
+    return _BeCryptoDepositRecipientResultErr(
       err,
     );
   }
 }
 
 /// @nodoc
-const $BeCryptoDepositAddressResult = _$BeCryptoDepositAddressResultTearOff();
+const $BeCryptoDepositRecipientResult =
+    _$BeCryptoDepositRecipientResultTearOff();
 
 /// @nodoc
-mixin _$BeCryptoDepositAddressResult {
+mixin _$BeCryptoDepositRecipientResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String address) $default, {
+    TResult Function(String recipient, String asset, String? l2Network)
+        $default, {
     required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(String address)? $default, {
+    TResult Function(String recipient, String asset, String? l2Network)?
+        $default, {
     TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String address)? $default, {
+    TResult Function(String recipient, String asset, String? l2Network)?
+        $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_BeCryptoDepositAddressResult value) $default, {
-    required TResult Function(_BeCryptoDepositAddressResultErr value) error,
+    TResult Function(_BeCryptoDepositRecipientResult value) $default, {
+    required TResult Function(_BeCryptoDepositRecipientResultErr value) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeCryptoDepositAddressResult value)? $default, {
-    TResult Function(_BeCryptoDepositAddressResultErr value)? error,
+    TResult Function(_BeCryptoDepositRecipientResult value)? $default, {
+    TResult Function(_BeCryptoDepositRecipientResultErr value)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeCryptoDepositAddressResult value)? $default, {
-    TResult Function(_BeCryptoDepositAddressResultErr value)? error,
+    TResult Function(_BeCryptoDepositRecipientResult value)? $default, {
+    TResult Function(_BeCryptoDepositRecipientResultErr value)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $BeCryptoDepositAddressResultCopyWith<$Res> {
-  factory $BeCryptoDepositAddressResultCopyWith(
-          BeCryptoDepositAddressResult value,
-          $Res Function(BeCryptoDepositAddressResult) then) =
-      _$BeCryptoDepositAddressResultCopyWithImpl<$Res>;
+abstract class $BeCryptoDepositRecipientResultCopyWith<$Res> {
+  factory $BeCryptoDepositRecipientResultCopyWith(
+          BeCryptoDepositRecipientResult value,
+          $Res Function(BeCryptoDepositRecipientResult) then) =
+      _$BeCryptoDepositRecipientResultCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$BeCryptoDepositAddressResultCopyWithImpl<$Res>
-    implements $BeCryptoDepositAddressResultCopyWith<$Res> {
-  _$BeCryptoDepositAddressResultCopyWithImpl(this._value, this._then);
+class _$BeCryptoDepositRecipientResultCopyWithImpl<$Res>
+    implements $BeCryptoDepositRecipientResultCopyWith<$Res> {
+  _$BeCryptoDepositRecipientResultCopyWithImpl(this._value, this._then);
 
-  final BeCryptoDepositAddressResult _value;
+  final BeCryptoDepositRecipientResult _value;
   // ignore: unused_field
-  final $Res Function(BeCryptoDepositAddressResult) _then;
+  final $Res Function(BeCryptoDepositRecipientResult) _then;
 }
 
 /// @nodoc
-abstract class _$BeCryptoDepositAddressResultCopyWith<$Res> {
-  factory _$BeCryptoDepositAddressResultCopyWith(
-          _BeCryptoDepositAddressResult value,
-          $Res Function(_BeCryptoDepositAddressResult) then) =
-      __$BeCryptoDepositAddressResultCopyWithImpl<$Res>;
-  $Res call({String address});
+abstract class _$BeCryptoDepositRecipientResultCopyWith<$Res> {
+  factory _$BeCryptoDepositRecipientResultCopyWith(
+          _BeCryptoDepositRecipientResult value,
+          $Res Function(_BeCryptoDepositRecipientResult) then) =
+      __$BeCryptoDepositRecipientResultCopyWithImpl<$Res>;
+  $Res call({String recipient, String asset, String? l2Network});
 }
 
 /// @nodoc
-class __$BeCryptoDepositAddressResultCopyWithImpl<$Res>
-    extends _$BeCryptoDepositAddressResultCopyWithImpl<$Res>
-    implements _$BeCryptoDepositAddressResultCopyWith<$Res> {
-  __$BeCryptoDepositAddressResultCopyWithImpl(
-      _BeCryptoDepositAddressResult _value,
-      $Res Function(_BeCryptoDepositAddressResult) _then)
-      : super(_value, (v) => _then(v as _BeCryptoDepositAddressResult));
+class __$BeCryptoDepositRecipientResultCopyWithImpl<$Res>
+    extends _$BeCryptoDepositRecipientResultCopyWithImpl<$Res>
+    implements _$BeCryptoDepositRecipientResultCopyWith<$Res> {
+  __$BeCryptoDepositRecipientResultCopyWithImpl(
+      _BeCryptoDepositRecipientResult _value,
+      $Res Function(_BeCryptoDepositRecipientResult) _then)
+      : super(_value, (v) => _then(v as _BeCryptoDepositRecipientResult));
 
   @override
-  _BeCryptoDepositAddressResult get _value =>
-      super._value as _BeCryptoDepositAddressResult;
+  _BeCryptoDepositRecipientResult get _value =>
+      super._value as _BeCryptoDepositRecipientResult;
 
   @override
   $Res call({
-    Object? address = freezed,
+    Object? recipient = freezed,
+    Object? asset = freezed,
+    Object? l2Network = freezed,
   }) {
-    return _then(_BeCryptoDepositAddressResult(
-      address == freezed
-          ? _value.address
-          : address // ignore: cast_nullable_to_non_nullable
+    return _then(_BeCryptoDepositRecipientResult(
+      recipient == freezed
+          ? _value.recipient
+          : recipient // ignore: cast_nullable_to_non_nullable
               as String,
+      asset == freezed
+          ? _value.asset
+          : asset // ignore: cast_nullable_to_non_nullable
+              as String,
+      l2Network == freezed
+          ? _value.l2Network
+          : l2Network // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
 
 /// @nodoc
 
-class _$_BeCryptoDepositAddressResult
+class _$_BeCryptoDepositRecipientResult
     with DiagnosticableTreeMixin
-    implements _BeCryptoDepositAddressResult {
-  const _$_BeCryptoDepositAddressResult(this.address);
+    implements _BeCryptoDepositRecipientResult {
+  const _$_BeCryptoDepositRecipientResult(
+      this.recipient, this.asset, this.l2Network);
 
   @override
-  final String address;
+  final String recipient;
+  @override
+  final String asset;
+  @override
+  final String? l2Network;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BeCryptoDepositAddressResult(address: $address)';
+    return 'BeCryptoDepositRecipientResult(recipient: $recipient, asset: $asset, l2Network: $l2Network)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'BeCryptoDepositAddressResult'))
-      ..add(DiagnosticsProperty('address', address));
+      ..add(DiagnosticsProperty('type', 'BeCryptoDepositRecipientResult'))
+      ..add(DiagnosticsProperty('recipient', recipient))
+      ..add(DiagnosticsProperty('asset', asset))
+      ..add(DiagnosticsProperty('l2Network', l2Network));
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _BeCryptoDepositAddressResult &&
-            (identical(other.address, address) || other.address == address));
+            other is _BeCryptoDepositRecipientResult &&
+            (identical(other.recipient, recipient) ||
+                other.recipient == recipient) &&
+            (identical(other.asset, asset) || other.asset == asset) &&
+            (identical(other.l2Network, l2Network) ||
+                other.l2Network == l2Network));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, address);
+  int get hashCode => Object.hash(runtimeType, recipient, asset, l2Network);
 
   @JsonKey(ignore: true)
   @override
-  _$BeCryptoDepositAddressResultCopyWith<_BeCryptoDepositAddressResult>
-      get copyWith => __$BeCryptoDepositAddressResultCopyWithImpl<
-          _BeCryptoDepositAddressResult>(this, _$identity);
+  _$BeCryptoDepositRecipientResultCopyWith<_BeCryptoDepositRecipientResult>
+      get copyWith => __$BeCryptoDepositRecipientResultCopyWithImpl<
+          _BeCryptoDepositRecipientResult>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String address) $default, {
+    TResult Function(String recipient, String asset, String? l2Network)
+        $default, {
     required TResult Function(BeError err) error,
   }) {
-    return $default(address);
+    return $default(recipient, asset, l2Network);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(String address)? $default, {
+    TResult Function(String recipient, String asset, String? l2Network)?
+        $default, {
     TResult Function(BeError err)? error,
   }) {
-    return $default?.call(address);
+    return $default?.call(recipient, asset, l2Network);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String address)? $default, {
+    TResult Function(String recipient, String asset, String? l2Network)?
+        $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
-      return $default(address);
+      return $default(recipient, asset, l2Network);
     }
     return orElse();
   }
@@ -5183,8 +5214,8 @@ class _$_BeCryptoDepositAddressResult
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_BeCryptoDepositAddressResult value) $default, {
-    required TResult Function(_BeCryptoDepositAddressResultErr value) error,
+    TResult Function(_BeCryptoDepositRecipientResult value) $default, {
+    required TResult Function(_BeCryptoDepositRecipientResultErr value) error,
   }) {
     return $default(this);
   }
@@ -5192,8 +5223,8 @@ class _$_BeCryptoDepositAddressResult
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeCryptoDepositAddressResult value)? $default, {
-    TResult Function(_BeCryptoDepositAddressResultErr value)? error,
+    TResult Function(_BeCryptoDepositRecipientResult value)? $default, {
+    TResult Function(_BeCryptoDepositRecipientResultErr value)? error,
   }) {
     return $default?.call(this);
   }
@@ -5201,8 +5232,8 @@ class _$_BeCryptoDepositAddressResult
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeCryptoDepositAddressResult value)? $default, {
-    TResult Function(_BeCryptoDepositAddressResultErr value)? error,
+    TResult Function(_BeCryptoDepositRecipientResult value)? $default, {
+    TResult Function(_BeCryptoDepositRecipientResultErr value)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -5212,46 +5243,49 @@ class _$_BeCryptoDepositAddressResult
   }
 }
 
-abstract class _BeCryptoDepositAddressResult
-    implements BeCryptoDepositAddressResult {
-  const factory _BeCryptoDepositAddressResult(String address) =
-      _$_BeCryptoDepositAddressResult;
+abstract class _BeCryptoDepositRecipientResult
+    implements BeCryptoDepositRecipientResult {
+  const factory _BeCryptoDepositRecipientResult(
+          String recipient, String asset, String? l2Network) =
+      _$_BeCryptoDepositRecipientResult;
 
-  String get address;
+  String get recipient;
+  String get asset;
+  String? get l2Network;
   @JsonKey(ignore: true)
-  _$BeCryptoDepositAddressResultCopyWith<_BeCryptoDepositAddressResult>
+  _$BeCryptoDepositRecipientResultCopyWith<_BeCryptoDepositRecipientResult>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$BeCryptoDepositAddressResultErrCopyWith<$Res> {
-  factory _$BeCryptoDepositAddressResultErrCopyWith(
-          _BeCryptoDepositAddressResultErr value,
-          $Res Function(_BeCryptoDepositAddressResultErr) then) =
-      __$BeCryptoDepositAddressResultErrCopyWithImpl<$Res>;
+abstract class _$BeCryptoDepositRecipientResultErrCopyWith<$Res> {
+  factory _$BeCryptoDepositRecipientResultErrCopyWith(
+          _BeCryptoDepositRecipientResultErr value,
+          $Res Function(_BeCryptoDepositRecipientResultErr) then) =
+      __$BeCryptoDepositRecipientResultErrCopyWithImpl<$Res>;
   $Res call({BeError err});
 
   $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
-class __$BeCryptoDepositAddressResultErrCopyWithImpl<$Res>
-    extends _$BeCryptoDepositAddressResultCopyWithImpl<$Res>
-    implements _$BeCryptoDepositAddressResultErrCopyWith<$Res> {
-  __$BeCryptoDepositAddressResultErrCopyWithImpl(
-      _BeCryptoDepositAddressResultErr _value,
-      $Res Function(_BeCryptoDepositAddressResultErr) _then)
-      : super(_value, (v) => _then(v as _BeCryptoDepositAddressResultErr));
+class __$BeCryptoDepositRecipientResultErrCopyWithImpl<$Res>
+    extends _$BeCryptoDepositRecipientResultCopyWithImpl<$Res>
+    implements _$BeCryptoDepositRecipientResultErrCopyWith<$Res> {
+  __$BeCryptoDepositRecipientResultErrCopyWithImpl(
+      _BeCryptoDepositRecipientResultErr _value,
+      $Res Function(_BeCryptoDepositRecipientResultErr) _then)
+      : super(_value, (v) => _then(v as _BeCryptoDepositRecipientResultErr));
 
   @override
-  _BeCryptoDepositAddressResultErr get _value =>
-      super._value as _BeCryptoDepositAddressResultErr;
+  _BeCryptoDepositRecipientResultErr get _value =>
+      super._value as _BeCryptoDepositRecipientResultErr;
 
   @override
   $Res call({
     Object? err = freezed,
   }) {
-    return _then(_BeCryptoDepositAddressResultErr(
+    return _then(_BeCryptoDepositRecipientResultErr(
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -5269,24 +5303,24 @@ class __$BeCryptoDepositAddressResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeCryptoDepositAddressResultErr
+class _$_BeCryptoDepositRecipientResultErr
     with DiagnosticableTreeMixin
-    implements _BeCryptoDepositAddressResultErr {
-  const _$_BeCryptoDepositAddressResultErr(this.err);
+    implements _BeCryptoDepositRecipientResultErr {
+  const _$_BeCryptoDepositRecipientResultErr(this.err);
 
   @override
   final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BeCryptoDepositAddressResult.error(err: $err)';
+    return 'BeCryptoDepositRecipientResult.error(err: $err)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'BeCryptoDepositAddressResult.error'))
+      ..add(DiagnosticsProperty('type', 'BeCryptoDepositRecipientResult.error'))
       ..add(DiagnosticsProperty('err', err));
   }
 
@@ -5294,7 +5328,7 @@ class _$_BeCryptoDepositAddressResultErr
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _BeCryptoDepositAddressResultErr &&
+            other is _BeCryptoDepositRecipientResultErr &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -5303,14 +5337,16 @@ class _$_BeCryptoDepositAddressResultErr
 
   @JsonKey(ignore: true)
   @override
-  _$BeCryptoDepositAddressResultErrCopyWith<_BeCryptoDepositAddressResultErr>
-      get copyWith => __$BeCryptoDepositAddressResultErrCopyWithImpl<
-          _BeCryptoDepositAddressResultErr>(this, _$identity);
+  _$BeCryptoDepositRecipientResultErrCopyWith<
+          _BeCryptoDepositRecipientResultErr>
+      get copyWith => __$BeCryptoDepositRecipientResultErrCopyWithImpl<
+          _BeCryptoDepositRecipientResultErr>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String address) $default, {
+    TResult Function(String recipient, String asset, String? l2Network)
+        $default, {
     required TResult Function(BeError err) error,
   }) {
     return error(err);
@@ -5319,7 +5355,8 @@ class _$_BeCryptoDepositAddressResultErr
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(String address)? $default, {
+    TResult Function(String recipient, String asset, String? l2Network)?
+        $default, {
     TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
@@ -5328,7 +5365,8 @@ class _$_BeCryptoDepositAddressResultErr
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String address)? $default, {
+    TResult Function(String recipient, String asset, String? l2Network)?
+        $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
@@ -5341,8 +5379,8 @@ class _$_BeCryptoDepositAddressResultErr
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_BeCryptoDepositAddressResult value) $default, {
-    required TResult Function(_BeCryptoDepositAddressResultErr value) error,
+    TResult Function(_BeCryptoDepositRecipientResult value) $default, {
+    required TResult Function(_BeCryptoDepositRecipientResultErr value) error,
   }) {
     return error(this);
   }
@@ -5350,8 +5388,8 @@ class _$_BeCryptoDepositAddressResultErr
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeCryptoDepositAddressResult value)? $default, {
-    TResult Function(_BeCryptoDepositAddressResultErr value)? error,
+    TResult Function(_BeCryptoDepositRecipientResult value)? $default, {
+    TResult Function(_BeCryptoDepositRecipientResultErr value)? error,
   }) {
     return error?.call(this);
   }
@@ -5359,8 +5397,8 @@ class _$_BeCryptoDepositAddressResultErr
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeCryptoDepositAddressResult value)? $default, {
-    TResult Function(_BeCryptoDepositAddressResultErr value)? error,
+    TResult Function(_BeCryptoDepositRecipientResult value)? $default, {
+    TResult Function(_BeCryptoDepositRecipientResultErr value)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -5370,14 +5408,15 @@ class _$_BeCryptoDepositAddressResultErr
   }
 }
 
-abstract class _BeCryptoDepositAddressResultErr
-    implements BeCryptoDepositAddressResult {
-  const factory _BeCryptoDepositAddressResultErr(BeError err) =
-      _$_BeCryptoDepositAddressResultErr;
+abstract class _BeCryptoDepositRecipientResultErr
+    implements BeCryptoDepositRecipientResult {
+  const factory _BeCryptoDepositRecipientResultErr(BeError err) =
+      _$_BeCryptoDepositRecipientResultErr;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$BeCryptoDepositAddressResultErrCopyWith<_BeCryptoDepositAddressResultErr>
+  _$BeCryptoDepositRecipientResultErrCopyWith<
+          _BeCryptoDepositRecipientResultErr>
       get copyWith => throw _privateConstructorUsedError;
 }
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:zapdart/qrwidget.dart';
 import 'package:flutter/services.dart';
 import 'package:decimal/decimal.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
@@ -27,13 +28,13 @@ class DepositSelectScreen extends StatefulWidget {
 }
 
 class _DepositSelectScreenState extends State<DepositSelectScreen> {
-  Future<void> _assetTap(BeAsset asset) async {
+  Future<void> _assetTap(BeAsset asset, BeAsset? l2Network) async {
     if (assetIsCrypto(asset.symbol))
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  CryptoDepositsScreen(asset, widget.websocket)));
+                  CryptoDepositsScreen(asset, l2Network, widget.websocket)));
     else
       Navigator.push(
           context,
@@ -42,12 +43,43 @@ class _DepositSelectScreenState extends State<DepositSelectScreen> {
                   FiatDepositsScreen(asset, widget.websocket)));
   }
 
+  int _listCount() {
+    var count = 0;
+    for (var asset in widget.assets) {
+      count++;
+      if (asset.l2Network != null) count++;
+    }
+    return count;
+  }
+
+  BeAsset? _listAsset(int n) {
+    var count = 0;
+    for (var asset in widget.assets) {
+      if (count == n) return asset;
+      if (asset.l2Network != null) {
+        count++;
+        if (count == n) return asset.l2Network;
+      }
+      count++;
+    }
+    return null;
+  }
+
+  BeAsset _parentAsset(BeAsset child) {
+    for (var asset in widget.assets) if (asset.l2Network == child) return asset;
+    return child;
+  }
+
   Widget _listItem(BuildContext context, int n) {
-    var asset = widget.assets[n];
+    var asset = _listAsset(n);
+    assert(asset != null);
+    var parentAsset = _parentAsset(asset!);
+    BeAsset? l2Network;
+    if (asset != parentAsset) l2Network = asset;
     return ListTile(
-      title: Text('${asset.symbol}'),
+      title: Text('${asset.name} (${asset.symbol})'),
       leading: assetLogo(asset.symbol),
-      onTap: () => _assetTap(asset),
+      onTap: () => _assetTap(parentAsset, l2Network),
     );
   }
 
@@ -57,17 +89,17 @@ class _DepositSelectScreenState extends State<DepositSelectScreen> {
       appBar: AppBar(
         title: Text('Deposits'),
       ),
-      body: ListView.builder(
-          itemBuilder: _listItem, itemCount: widget.assets.length),
+      body: ListView.builder(itemBuilder: _listItem, itemCount: _listCount()),
     );
   }
 }
 
 class CryptoDepositsScreen extends StatefulWidget {
   final BeAsset asset;
+  final BeAsset? l2Network;
   final Websocket websocket;
 
-  CryptoDepositsScreen(this.asset, this.websocket);
+  CryptoDepositsScreen(this.asset, this.l2Network, this.websocket);
 
   @override
   State<CryptoDepositsScreen> createState() => _CryptoDepositsScreenState();
@@ -107,8 +139,8 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
 
   Future<void> _initDeposits(int pageNumber) async {
     showAlertDialog(context, 'querying..');
-    var res = await beCryptoDeposits(
-        widget.asset.symbol, pageNumber * _itemsPerPage, _itemsPerPage);
+    var res = await beCryptoDeposits(widget.asset.symbol,
+        widget.l2Network?.symbol, pageNumber * _itemsPerPage, _itemsPerPage);
     Navigator.pop(context);
     res.when((deposits, offset, limit, total) {
       setState(() {
@@ -139,16 +171,29 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
   }
 
   Future<void> _actionButtonTap() async {
+    var amount = Decimal.zero;
+    if (widget.l2Network != null) {
+      var amountStr = await askString(context,
+          'How much ${widget.asset.symbol} would you like to deposit?', null);
+      if (amountStr == null) return;
+      var amountDec = Decimal.tryParse(amountStr);
+      if (amountDec == null || amountDec <= Decimal.zero) {
+        snackMsg(context, 'invalid amount', category: MessageCategory.Warning);
+        return;
+      }
+      amount = amountDec;
+    }
     showAlertDialog(context, 'querying..');
-    var res = await beCryptoDepositAddress(widget.asset.symbol);
+    var res = await beCryptoDepositRecipient(
+        widget.asset.symbol, widget.l2Network?.symbol, amount);
     Navigator.pop(context);
     res.when(
-        (address) => Navigator.push(
+        (recipient, asset, l2Network) => Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => CryptoDepositNewScreen(
-                    widget.asset, address, widget.websocket))),
-        error: (err) => snackMsg(context, 'failed to query deposit address',
+                builder: (context) => CryptoDepositNewScreen(widget.asset,
+                    widget.l2Network, recipient, widget.websocket))),
+        error: (err) => snackMsg(context, 'failed to query deposit recipient',
             category: MessageCategory.Warning));
   }
 
@@ -156,8 +201,15 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('${widget.asset.symbol} Deposits'),
-          actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
+          title: Text(
+              '${widget.l2Network == null ? widget.asset.symbol : widget.l2Network!.symbol} Deposits'),
+          actions: [
+            assetLogo(
+                widget.l2Network == null
+                    ? widget.asset.symbol
+                    : widget.l2Network!.symbol,
+                margin: EdgeInsets.all(10))
+          ],
         ),
         body: ListView.builder(
             itemBuilder: _listItem, itemCount: _deposits.length),
@@ -211,7 +263,8 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
   }
 
   void _addrLaunch() {
-    var url = addressBlockExplorer(_deposit.asset, _testnet, _deposit.address);
+    var url =
+        addressBlockExplorer(_deposit.asset, _testnet, '${_deposit.recipient}');
     if (url == null) return;
     urlLaunch(url);
   }
@@ -220,8 +273,15 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Deposit ${_deposit.asset}'),
-          actions: [assetLogo(_deposit.asset, margin: EdgeInsets.all(10))],
+          title: Text(
+              'Deposit ${_deposit.l2Network == null ? _deposit.asset : _deposit.l2Network}'),
+          actions: [
+            assetLogo(
+                _deposit.l2Network == null
+                    ? _deposit.asset
+                    : _deposit.l2Network!,
+                margin: EdgeInsets.all(10))
+          ],
         ),
         body: ListView(children: [
           ListTile(
@@ -230,8 +290,14 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
                   '${assetFormat(_deposit.asset, _deposit.amount)} ${_deposit.asset}')),
           ListTile(title: Text('Date'), subtitle: Text('${_deposit.date}')),
           ListTile(
-              title: Text('Address'),
-              subtitle: Text('${_deposit.address}'),
+              title: QrImage(
+            data: '${_deposit.recipient}',
+            version: QrVersions.auto,
+            size: 200.0,
+          )),
+          ListTile(
+              title: Text('Recipient'),
+              subtitle: Text('${_deposit.recipient}'),
               onTap: _addrLaunch),
           ListTile(
               title: Text('Status'),
@@ -243,10 +309,12 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
 
 class CryptoDepositNewScreen extends StatefulWidget {
   final BeAsset asset;
-  final String address;
+  final BeAsset? l2Network;
+  final String recipient;
   final Websocket websocket;
 
-  CryptoDepositNewScreen(this.asset, this.address, this.websocket);
+  CryptoDepositNewScreen(
+      this.asset, this.l2Network, this.recipient, this.websocket);
 
   @override
   State<CryptoDepositNewScreen> createState() => _CryptoDepositNewScreenState();
@@ -258,9 +326,9 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
     super.initState();
   }
 
-  void _copyAddress() {
-    Clipboard.setData(ClipboardData(text: widget.address));
-    snackMsg(context, 'copied address');
+  void _copyRecipient() {
+    Clipboard.setData(ClipboardData(text: widget.recipient));
+    snackMsg(context, 'copied recipient');
   }
 
   @override
@@ -273,13 +341,20 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
         body: Container(
             padding: EdgeInsets.all(20),
             child: Column(children: [
+              ListTile(
+                  title: QrImage(
+                data: '${widget.recipient}',
+                version: QrVersions.auto,
+                size: 200.0,
+              )),
               Container(
-                  child: QrWidget(widget.address), padding: EdgeInsets.all(10)),
+                  child: QrWidget(widget.recipient),
+                  padding: EdgeInsets.all(10)),
               ListTile(
                   leading: SizedBox(),
-                  title: Center(child: SelectableText(widget.address)),
+                  title: Center(child: SelectableText(widget.recipient)),
                   trailing: IconButton(
-                      onPressed: _copyAddress, icon: Icon(Icons.copy)))
+                      onPressed: _copyRecipient, icon: Icon(Icons.copy)))
             ])));
   }
 }

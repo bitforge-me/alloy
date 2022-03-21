@@ -280,11 +280,16 @@ class BeAsset {
   @JsonKey(
       name: 'withdraw_fee', fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal withdrawFee;
+  @JsonKey(
+      name: 'min_withdraw', fromJson: _decimalFromJson, toJson: _decimalToJson)
+  final Decimal minWithdraw;
   @JsonKey(name: 'is_crypto')
   final bool isCrypto;
+  @JsonKey(name: 'l2_network')
+  final BeAsset? l2Network;
 
-  BeAsset(
-      this.symbol, this.name, this.decimals, this.withdrawFee, this.isCrypto);
+  BeAsset(this.symbol, this.name, this.decimals, this.withdrawFee,
+      this.minWithdraw, this.isCrypto, this.l2Network);
   factory BeAsset.fromJson(Map<String, dynamic> json) =>
       _$BeAssetFromJson(json);
   Map<String, dynamic> toJson() => _$BeAssetToJson(this);
@@ -438,17 +443,20 @@ class BeBalancesResult with _$BeBalancesResult {
 }
 
 @freezed
-class BeCryptoDepositAddressResult with _$BeCryptoDepositAddressResult {
-  const factory BeCryptoDepositAddressResult(String address) =
-      _BeCryptoDepositAddressResult;
-  const factory BeCryptoDepositAddressResult.error(BeError err) =
-      _BeCryptoDepositAddressResultErr;
+class BeCryptoDepositRecipientResult with _$BeCryptoDepositRecipientResult {
+  const factory BeCryptoDepositRecipientResult(
+          String recipient, String asset, String? l2Network) =
+      _BeCryptoDepositRecipientResult;
+  const factory BeCryptoDepositRecipientResult.error(BeError err) =
+      _BeCryptoDepositRecipientResultErr;
 
-  static BeCryptoDepositAddressResult parse(String data) {
+  static BeCryptoDepositRecipientResult parse(String data) {
     try {
-      return BeCryptoDepositAddressResult(jsonDecode(data)['address']);
+      var json = jsonDecode(data);
+      return BeCryptoDepositRecipientResult(
+          json['recipient'], json['asset'], json['l2_network']);
     } catch (_) {
-      return BeCryptoDepositAddressResult.error(BeError.format());
+      return BeCryptoDepositRecipientResult.error(BeError.format());
     }
   }
 }
@@ -457,15 +465,18 @@ class BeCryptoDepositAddressResult with _$BeCryptoDepositAddressResult {
 class BeCryptoDeposit {
   final String token;
   final String asset;
-  final String address;
-  @JsonKey(fromJson: _decimalFromJson, toJson: _decimalToJson)
+  @JsonKey(name: 'l2_network')
+  final String? l2Network;
+  @JsonKey(
+      name: 'amount_dec', fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal amount;
+  final String? recipient;
   final DateTime date;
   final bool confirmed;
-  final String txid;
+  final String? txid;
 
-  BeCryptoDeposit(this.token, this.asset, this.address, this.amount, this.date,
-      this.confirmed, this.txid);
+  BeCryptoDeposit(this.token, this.asset, this.l2Network, this.amount,
+      this.recipient, this.date, this.confirmed, this.txid);
   factory BeCryptoDeposit.fromJson(Map<String, dynamic> json) =>
       _$BeCryptoDepositFromJson(json);
   Map<String, dynamic> toJson() => _$BeCryptoDepositToJson(this);
@@ -499,6 +510,8 @@ class BeCryptoDepositsResult with _$BeCryptoDepositsResult {
 class BeCryptoWithdrawal {
   final String token;
   final String asset;
+  @JsonKey(name: 'l2_network')
+  final String? l2Network;
   final DateTime date;
   @JsonKey(
       name: 'amount_dec', fromJson: _decimalFromJson, toJson: _decimalToJson)
@@ -507,8 +520,8 @@ class BeCryptoWithdrawal {
   final String? txid;
   final String status;
 
-  BeCryptoWithdrawal(this.token, this.asset, this.date, this.amount,
-      this.recipient, this.txid, this.status);
+  BeCryptoWithdrawal(this.token, this.asset, this.l2Network, this.date,
+      this.amount, this.recipient, this.txid, this.status);
   factory BeCryptoWithdrawal.fromJson(Map<String, dynamic> json) =>
       _$BeCryptoWithdrawalFromJson(json);
   Map<String, dynamic> toJson() => _$BeCryptoWithdrawalToJson(this);
@@ -1006,18 +1019,30 @@ Future<BeBalancesResult> beBalances() async {
       error: (err) => BeBalancesResult.error(err));
 }
 
-Future<BeCryptoDepositAddressResult> beCryptoDepositAddress(
-    String asset) async {
-  var result = await post("crypto_deposit_address", {"asset": asset},
+Future<BeCryptoDepositRecipientResult> beCryptoDepositRecipient(
+    String asset, String? l2Network, Decimal amount) async {
+  var result = await post(
+      "crypto_deposit_recipient",
+      {
+        "asset": asset,
+        "l2_network": l2Network,
+        "amount_dec": amount.toString()
+      },
       authRequired: true);
-  return result.when((content) => BeCryptoDepositAddressResult.parse(content),
-      error: (err) => BeCryptoDepositAddressResult.error(err));
+  return result.when((content) => BeCryptoDepositRecipientResult.parse(content),
+      error: (err) => BeCryptoDepositRecipientResult.error(err));
 }
 
 Future<BeCryptoDepositsResult> beCryptoDeposits(
-    String asset, int offset, int limit) async {
+    String asset, String? l2Network, int offset, int limit) async {
   var result = await post(
-      "crypto_deposits", {"asset": asset, "offset": offset, "limit": limit},
+      "crypto_deposits",
+      {
+        "asset": asset,
+        "l2_network": l2Network,
+        "offset": offset,
+        "limit": limit
+      },
       authRequired: true);
   return result.when((content) => BeCryptoDepositsResult.parse(content),
       error: (err) => BeCryptoDepositsResult.error(err));
@@ -1025,6 +1050,7 @@ Future<BeCryptoDepositsResult> beCryptoDeposits(
 
 Future<BeCryptoWithdrawalResult> beCryptoWithdrawalCreate(
     String asset,
+    String? l2Network,
     Decimal amount,
     String recipient,
     bool saveRecipient,
@@ -1034,6 +1060,7 @@ Future<BeCryptoWithdrawalResult> beCryptoWithdrawalCreate(
       "crypto_withdrawal_create",
       {
         "asset": asset,
+        "l2_network": l2Network,
         "amount_dec": amount.toString(),
         "recipient": recipient,
         "save_recipient": saveRecipient,
@@ -1046,9 +1073,15 @@ Future<BeCryptoWithdrawalResult> beCryptoWithdrawalCreate(
 }
 
 Future<BeCryptoWithdrawalsResult> beCryptoWithdrawals(
-    String asset, int offset, int limit) async {
+    String asset, String? l2Network, int offset, int limit) async {
   var result = await post(
-      "crypto_withdrawals", {"asset": asset, "offset": offset, "limit": limit},
+      "crypto_withdrawals",
+      {
+        "asset": asset,
+        "l2_network": l2Network,
+        "offset": offset,
+        "limit": limit
+      },
       authRequired: true);
   return result.when((content) => BeCryptoWithdrawalsResult.parse(content),
       error: (err) => BeCryptoWithdrawalsResult.error(err));

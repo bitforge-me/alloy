@@ -8,6 +8,8 @@ String _svgAsset(String symbol) {
   switch (symbol) {
     case 'NZD':
       return 'assets/crypto_logos/nzd.svg';
+    case 'BTC-LN':
+      return 'assets/crypto_logos/bitcoin-lightning.svg';
     case 'BTC':
       return 'assets/crypto_logos/bitcoin.svg';
     case 'ETH':
@@ -35,6 +37,7 @@ int assetDecimals(String symbol) {
   switch (symbol) {
     case 'NZD':
       return 2;
+    case 'BTC-LN':
     case 'BTC':
       return 8;
     case 'ETH':
@@ -51,6 +54,7 @@ int assetDecimals(String symbol) {
 
 bool assetIsCrypto(String asset) {
   switch (asset) {
+    case 'BTC-LN':
     case 'BTC':
     case 'ETH':
     case 'DOGE':

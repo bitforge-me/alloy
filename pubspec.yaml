@@ -28,6 +28,7 @@ dependencies:
   freezed_annotation: ^0.15.0
   logging: ^1.0.2
   universal_html: ^2.0.8
+  qr_flutter: ^4.0.0
   zapdart:
     git:
       url: https://github.com/zap-me/zapdart.git

@@ -766,7 +766,7 @@ packages:
     source: hosted
     version: "2.1.0"
   qr_flutter:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: qr_flutter
       url: "https://pub.dartlang.org"

@@ -5,16 +5,16 @@ import 'package:universal_platform/universal_platform.dart';
 
 import 'package:zapdart/colors.dart';
 
-const AppVersion = 4;
+const AppVersion = 6;
 const AppTitle = 'Alloy';
 const AppLogo = 'assets/logo.png';
 const SupportUrl = 'https://bronze-support.zap.me/';
 
 // the testnet value
-const Testnet = false;
+const Testnet = true;
 
 // Zap Crypto settings
-const String BeServerUrl = 'https://beryllium.zap.me/';
+const String BeServerUrl = 'https://beryllium-test.zap.me/';
 // registration
 const bool RequireMobileNumber = true;
 const String? InitialMobileCountry = 'NZ';
