@@ -33,6 +33,7 @@ void main() {
   Logger.root.onRecord.listen((record) {
     print('${record.level.name}: ${record.time}: ${record.message}');
   });
+  log.info('Git SHA: $GitSha');
   // run app
   runApp(Phoenix(child: MyApp()));
 }
