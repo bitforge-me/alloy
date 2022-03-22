@@ -44,6 +44,11 @@ class _QrScanState extends State<QrScan> {
             controller.stop();
             Navigator.of(context).pop();
           }),
+          actions: [
+            IconButton(
+                onPressed: () => controller.switchCamera(),
+                icon: Icon(Icons.change_circle))
+          ],
           title: Text("QR Code Scan"),
         ),
         body: Container(
