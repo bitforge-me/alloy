@@ -5,7 +5,7 @@ import 'package:universal_platform/universal_platform.dart';
 
 import 'package:zapdart/colors.dart';
 
-const GitSha = '\$<GIT_SHA_REPLACE>\$';
+const GitSha = 'GIT_SHA_REPLACE';
 const AppVersion = 6;
 const AppTitle = 'Alloy';
 const AppLogo = 'assets/logo.png';
