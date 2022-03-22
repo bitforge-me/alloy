@@ -29,7 +29,13 @@ dependencies:
   logging: ^1.0.2
   universal_html: ^2.0.8
   qr_flutter: ^4.0.0
-  mobile_scanner: ^1.0.0
+  #mobile_scanner: ^1.0.0
+  mobile_scanner:
+    git:
+      url: https://github.com/djpnewton/mobile_scanner.git
+      ref: 317fea46ca5152fcf35595567757b3be4a045907
+    #  ref: rear-cam-web
+    #path: ../mobile_scanner
   zapdart:
     git:
       url: https://github.com/zap-me/zapdart.git
