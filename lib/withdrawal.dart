@@ -254,15 +254,17 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                           controller: _recipientController,
                           decoration: InputDecoration(
                               labelText: 'Wallet Address',
-                              suffix: Row(children: [
-                                IconButton(
-                                    icon: Icon(Icons.alternate_email),
-                                    tooltip: 'Address Book',
-                                    onPressed: _addressBook),
-                                IconButton(
-                                    onPressed: _scanRecipient,
-                                    icon: Icon(Icons.qr_code))
-                              ])),
+                              suffix: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                        icon: Icon(Icons.alternate_email),
+                                        tooltip: 'Address Book',
+                                        onPressed: _addressBook),
+                                    IconButton(
+                                        onPressed: _scanRecipient,
+                                        icon: Icon(Icons.qr_code))
+                                  ])),
                           keyboardType: TextInputType.text,
                           validator: (value) {
                             if (value == null || value.isEmpty)
