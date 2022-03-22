@@ -269,6 +269,11 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
     urlLaunch(url);
   }
 
+  void _copyRecipient() {
+    Clipboard.setData(ClipboardData(text: _deposit.recipient));
+    snackMsg(context, 'copied recipient');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -290,15 +295,18 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
                   '${assetFormat(_deposit.asset, _deposit.amount)} ${_deposit.asset}')),
           ListTile(title: Text('Date'), subtitle: Text('${_deposit.date}')),
           ListTile(
-              title: QrImage(
+              title: Center(
+                  child: QrImage(
             data: '${_deposit.recipient}',
             version: QrVersions.auto,
             size: 200.0,
-          )),
+          ))),
           ListTile(
               title: Text('Recipient'),
-              subtitle: Text('${_deposit.recipient}'),
-              onTap: _addrLaunch),
+              subtitle: Text(shortenStr(_deposit.recipient)),
+              onTap: _addrLaunch,
+              trailing: IconButton(
+                  onPressed: _copyRecipient, icon: Icon(Icons.copy))),
           ListTile(
               title: Text('Status'),
               subtitle:
@@ -341,18 +349,17 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
         body: Container(
             padding: EdgeInsets.all(20),
             child: Column(children: [
-              ListTile(
-                  title: QrImage(
-                data: '${widget.recipient}',
-                version: QrVersions.auto,
-                size: 200.0,
-              )),
               Container(
-                  child: QrWidget(widget.recipient),
+                  child: Center(
+                      child: QrImage(
+                    data: '${widget.recipient}',
+                    version: QrVersions.auto,
+                    size: 200.0,
+                  )),
                   padding: EdgeInsets.all(10)),
               ListTile(
                   leading: SizedBox(),
-                  title: Center(child: SelectableText(widget.recipient)),
+                  title: Center(child: Text(shortenStr(widget.recipient))),
                   trailing: IconButton(
                       onPressed: _copyRecipient, icon: Icon(Icons.copy)))
             ])));

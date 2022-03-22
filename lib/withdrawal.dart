@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
 import 'package:logging/logging.dart';
+import 'package:flutter/services.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
@@ -17,6 +18,7 @@ import 'markets.dart';
 import 'cryptocurrency.dart';
 import 'snack.dart';
 import 'config.dart';
+import 'qrscan.dart';
 
 final log = Logger('Withdrawal');
 
@@ -205,6 +207,11 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
     }
   }
 
+  void _scanRecipient() async {
+    var data = await QrScan.scan(context);
+    if (data != null) _recipientController.text = data;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -247,10 +254,15 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                           controller: _recipientController,
                           decoration: InputDecoration(
                               labelText: 'Wallet Address',
-                              suffix: IconButton(
-                                  icon: Icon(Icons.alternate_email),
-                                  tooltip: 'Address Book',
-                                  onPressed: _addressBook)),
+                              suffix: Row(children: [
+                                IconButton(
+                                    icon: Icon(Icons.alternate_email),
+                                    tooltip: 'Address Book',
+                                    onPressed: _addressBook),
+                                IconButton(
+                                    onPressed: _scanRecipient,
+                                    icon: Icon(Icons.qr_code))
+                              ])),
                           keyboardType: TextInputType.text,
                           validator: (value) {
                             if (value == null || value.isEmpty)
@@ -266,7 +278,11 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                       child: TextFormField(
                           controller: _recipientController,
                           maxLines: null,
-                          decoration: InputDecoration(labelText: 'Recipient'),
+                          decoration: InputDecoration(
+                              labelText: 'Recipient',
+                              suffixIcon: IconButton(
+                                  onPressed: _scanRecipient,
+                                  icon: Icon(Icons.qr_code))),
                           keyboardType: TextInputType.text,
                           validator: (value) {
                             if (value == null || value.isEmpty)
@@ -557,6 +573,11 @@ class _CryptoWithdrawalDetailScreenState
     urlLaunch(url);
   }
 
+  void _copyRecipient() {
+    Clipboard.setData(ClipboardData(text: _withdrawal.recipient));
+    snackMsg(context, 'copied recipient');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -579,8 +600,10 @@ class _CryptoWithdrawalDetailScreenState
           ListTile(title: Text('Date'), subtitle: Text('${_withdrawal.date}')),
           ListTile(
               title: Text('Recipient'),
-              subtitle: Text('${_withdrawal.recipient}'),
-              onTap: _addrLaunch),
+              subtitle: Text(shortenStr(_withdrawal.recipient)),
+              onTap: _addrLaunch,
+              trailing: IconButton(
+                  onPressed: _copyRecipient, icon: Icon(Icons.copy))),
           Visibility(
               visible: _withdrawal.txid != null,
               child: ListTile(

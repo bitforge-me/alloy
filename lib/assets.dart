@@ -4,6 +4,12 @@ import 'package:decimal/decimal.dart';
 
 import 'beryllium.dart';
 
+String shortenStr(String? s) {
+  if (s == null) return '';
+  if (s.length <= 100) return s;
+  return '${s.substring(0, 15)}.....${s.substring(s.length - 15)}';
+}
+
 String _svgAsset(String symbol) {
   switch (symbol) {
     case 'NZD':
