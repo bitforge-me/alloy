@@ -33,8 +33,8 @@ dependencies:
   mobile_scanner:
     git:
       url: https://github.com/djpnewton/mobile_scanner.git
-      ref: 317fea46ca5152fcf35595567757b3be4a045907
-    #  ref: rear-cam-web
+      ref: 24ecf7629860da16724121864bb427e0cb7b6707
+    #  ref: more-fixes
     #path: ../mobile_scanner
   zapdart:
     git:

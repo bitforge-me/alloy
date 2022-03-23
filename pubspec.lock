@@ -615,8 +615,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "317fea46ca5152fcf35595567757b3be4a045907"
-      resolved-ref: "317fea46ca5152fcf35595567757b3be4a045907"
+      ref: "24ecf7629860da16724121864bb427e0cb7b6707"
+      resolved-ref: "24ecf7629860da16724121864bb427e0cb7b6707"
       url: "https://github.com/djpnewton/mobile_scanner.git"
     source: git
     version: "1.0.0"
@@ -802,6 +802,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.0"
+  rxdart:
+    dependency: transitive
+    description:
+      name: rxdart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.27.3"
   shared_preferences:
     dependency: transitive
     description:
