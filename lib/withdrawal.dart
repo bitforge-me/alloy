@@ -210,7 +210,8 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
   void _scanRecipient() async {
     var data = await QrScan.scan(context);
     if (data != null)
-      _recipientController.text = assetStripUriPrefix(widget.asset.symbol, widget.l2Network?.symbol, data);
+      _recipientController.text = assetStripUriPrefix(
+          widget.asset.symbol, widget.l2Network?.symbol, data);
   }
 
   @override

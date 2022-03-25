@@ -33,7 +33,7 @@ String _svgAsset(String symbol) {
 String assetStripUriPrefix(String asset, String? l2Network, String recipient) {
   if (asset == 'BTC') {
     if (l2Network == 'BTC-LN' && recipient.startsWith('lightning:'))
-        return recipient.substring('lightning:'.length);
+      return recipient.substring('lightning:'.length);
     else if (l2Network == null && recipient.startsWith('bitcoin:'))
       return recipient.substring('bitcoin:'.length);
   }
