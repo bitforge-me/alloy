@@ -23,7 +23,8 @@ enum WebsocketEvent {
   cryptoWithdrawalNew,
   cryptoWithdrawalUpdate,
   fiatWithdrawalNew,
-  fiatWithdrawalUpdate
+  fiatWithdrawalUpdate,
+  lnInvoicePaid,
 }
 
 class WsEventArgs extends EventArgs {
@@ -95,6 +96,10 @@ class Websocket {
     });
     socket.on('broker_order_update', (data) {
       call(WebsocketEvent.brokerOrderUpdate, data);
+      log.info(data);
+    });
+    socket.on('ln_invoice_paid', (data) {
+      call(WebsocketEvent.lnInvoicePaid, data);
       log.info(data);
     });
     socket.on('disconnect', (_) {

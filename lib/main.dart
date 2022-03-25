@@ -1,3 +1,4 @@
+import 'package:alloy/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'dart:convert';
@@ -182,6 +183,12 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         _alerts = _generateAlerts(info);
       });
       //snackMsg(context, 'user updated');
+    }
+    if (args.event == WebsocketEvent.lnInvoicePaid) {
+      var json = jsonDecode(args.msg);
+      var bolt11 = json['bolt11'];
+      alert(
+          context, 'Invoice paid', Text('The invoice ${shortenStr(bolt11)} has been paid!'));
     }
   }
 
