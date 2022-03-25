@@ -30,6 +30,16 @@ String _svgAsset(String symbol) {
   return 'assets/crypto_logos/default.svg';
 }
 
+String assetStripUriPrefix(String asset, String? l2Network, String recipient) {
+  if (asset == 'BTC') {
+    if (l2Network == 'BTC-LN' && recipient.startsWith('lightning:'))
+        return recipient.substring('lightning:'.length);
+    else if (l2Network == null && recipient.startsWith('bitcoin:'))
+      return recipient.substring('bitcoin:'.length);
+  }
+  return recipient;
+}
+
 Widget assetLogo(String symbol,
     {EdgeInsetsGeometry? margin, double size = 32}) {
   return Container(
