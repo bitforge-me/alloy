@@ -33,7 +33,7 @@ dependencies:
   mobile_scanner:
     git:
       url: https://github.com/djpnewton/mobile_scanner.git
-      ref: 24ecf7629860da16724121864bb427e0cb7b6707
+      ref: 3b3fd862c128c496037d2f8c3d8b53ecdc66b11b
     #  ref: more-fixes
     #path: ../mobile_scanner
   zapdart:

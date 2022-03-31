@@ -615,8 +615,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "24ecf7629860da16724121864bb427e0cb7b6707"
-      resolved-ref: "24ecf7629860da16724121864bb427e0cb7b6707"
+      ref: "3b3fd862c128c496037d2f8c3d8b53ecdc66b11b"
+      resolved-ref: "3b3fd862c128c496037d2f8c3d8b53ecdc66b11b"
       url: "https://github.com/djpnewton/mobile_scanner.git"
     source: git
     version: "1.0.0"
