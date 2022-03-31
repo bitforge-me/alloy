@@ -76,10 +76,15 @@ class _WithdrawalCheckScreenState extends State<WithdrawalCheckScreen> {
         body: Container(
             padding: EdgeInsets.all(10),
             child: Column(children: [
-              Container(
-                  margin: EdgeInsets.all(15),
-                  child: Text(
-                      'Sending ${widget.amount.isNotEmpty ? widget.amount : _extractedAmount} ${widget.asset.symbol} to ${widget.recipient}')),
+              ListView(shrinkWrap: true, children: [
+                ListTile(
+                    title: Text('Amount'),
+                    subtitle: Text(
+                        '${widget.amount.isNotEmpty ? widget.amount : _extractedAmount} ${widget.asset.symbol}')),
+                ListTile(
+                    title: Text('Recipient'),
+                    subtitle: Text(shortenStr(widget.recipient)))
+              ]),
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                 raisedButton(onPressed: _cancel, child: Text('Cancel')),
                 raisedButton(onPressed: _ok, child: Text('Ok')),

@@ -344,7 +344,13 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Deposit'),
-          actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
+          actions: [
+            assetLogo(
+                widget.l2Network != null
+                    ? widget.l2Network!.symbol
+                    : widget.asset.symbol,
+                margin: EdgeInsets.all(10))
+          ],
         ),
         body: Container(
             padding: EdgeInsets.all(20),

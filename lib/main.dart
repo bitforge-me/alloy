@@ -187,8 +187,22 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     if (args.event == WebsocketEvent.lnInvoicePaid) {
       var json = jsonDecode(args.msg);
       var bolt11 = json['bolt11'];
-      alert(context, 'Invoice paid',
-          Text('The invoice ${shortenStr(bolt11)} has been paid!'));
+      var description = json['description'];
+      var sats = json['amount_sat'];
+      alert(
+          context,
+          'Invoice paid',
+          Container(
+              width: 300,
+              height: 200,
+              child: ListView(shrinkWrap: true, children: [
+                ListTile(
+                    title: Text('Invoice data'),
+                    subtitle: Text('${shortenStr(bolt11)}')),
+                ListTile(title: Text('Amount'), subtitle: Text('$sats sats')),
+                ListTile(
+                    title: Text('Description'), subtitle: Text('$description'))
+              ])));
     }
   }
 
