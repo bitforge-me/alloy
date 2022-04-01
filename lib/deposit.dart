@@ -165,7 +165,7 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
     var deposit = _deposits[n];
     return ListTile(
       title: Text(
-          '${assetFormat(deposit.asset, deposit.amount)} ${deposit.asset} - ${deposit.confirmed ? 'CONFIRMED' : 'PENDING'}'),
+          '${assetFormat(deposit.asset, assetAmountToUser(deposit.asset, deposit.amount))} ${assetUnit(deposit.asset)} - ${deposit.confirmed ? 'CONFIRMED' : 'PENDING'}'),
       onTap: () => _depositTap(deposit),
     );
   }
@@ -173,8 +173,10 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
   Future<void> _actionButtonTap() async {
     var amount = Decimal.zero;
     if (widget.l2Network != null) {
-      var amountStr = await askString(context,
-          'How much ${widget.asset.symbol} would you like to deposit?', null);
+      var amountStr = await askString(
+          context,
+          'How much ${widget.asset.name} (${assetUnit(widget.asset.symbol)}) would you like to deposit?',
+          null);
       if (amountStr == null) return;
       var amountDec = Decimal.tryParse(amountStr);
       if (amountDec == null || amountDec <= Decimal.zero) {
@@ -182,6 +184,7 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
         return;
       }
       amount = amountDec;
+      amount = assetAmountFromUser(widget.asset.symbol, amount);
     }
     showAlertDialog(context, 'querying..');
     var res = await beCryptoDepositRecipient(
@@ -292,7 +295,7 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
           ListTile(
               title: Text('Amount'),
               subtitle: Text(
-                  '${assetFormat(_deposit.asset, _deposit.amount)} ${_deposit.asset}')),
+                  '${assetFormat(_deposit.asset, assetAmountToUser(_deposit.asset, _deposit.amount))} ${assetUnit(_deposit.asset)}')),
           ListTile(title: Text('Date'), subtitle: Text('${_deposit.date}')),
           ListTile(
               title: Center(
@@ -441,20 +444,23 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
     var deposit = _deposits[n];
     return ListTile(
       title: Text(
-          '${assetFormat(deposit.asset, deposit.amount)} ${deposit.asset} - ${deposit.status.toUpperCase()}'),
+          '${assetFormat(deposit.asset, assetAmountToUser(deposit.asset, deposit.amount))} ${assetUnit(deposit.asset)} - ${deposit.status.toUpperCase()}'),
       onTap: () => _depositTap(deposit),
     );
   }
 
   Future<void> _actionButtonTap() async {
     var amountStr = await askString(
-        context, 'How much ${widget.asset.symbol} do you want to deposit?', '');
+        context,
+        'How much ${widget.asset.name} (${assetUnit(widget.asset.symbol)}) do you want to deposit?',
+        '');
     if (amountStr == null) return;
     var amount = Decimal.tryParse(amountStr);
     if (amount == null) {
       snackMsg(context, 'invalid amount', category: MessageCategory.Warning);
       return;
     }
+    amount = assetAmountFromUser(widget.asset.symbol, amount);
     showAlertDialog(context, 'querying..');
     var res = await beFiatDepositCreate(widget.asset.symbol, amount);
     Navigator.pop(context);
@@ -536,7 +542,7 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
           ListTile(
               title: Text('Amount'),
               subtitle: Text(
-                  '${assetFormat(_deposit.asset, _deposit.amount)} ${_deposit.asset}')),
+                  '${assetFormat(_deposit.asset, assetAmountToUser(_deposit.asset, _deposit.amount))} ${assetUnit(_deposit.asset)}')),
           ListTile(title: Text('Date'), subtitle: Text('${_deposit.date}')),
           _deposit.paymentUrl != null
               ? ListTile(

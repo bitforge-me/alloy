@@ -78,8 +78,12 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var baseAmount = assetFormat(_order.baseAsset, _order.baseAmount);
-    var quoteAmount = assetFormat(_order.quoteAsset, _order.quoteAmount);
+    var baseAmount = assetFormat(_order.baseAsset,
+        assetAmountToUser(_order.baseAsset, _order.baseAmount));
+    var baseUnit = assetUnit(_order.baseAsset);
+    var quoteAmount = assetFormat(_order.quoteAsset,
+        assetAmountToUser(_order.quoteAsset, _order.quoteAmount));
+    var quoteUnit = assetUnit(_order.quoteAsset);
     return Scaffold(
         appBar: AppBar(
           title: Text('Order ${_order.token}'),
@@ -89,11 +93,11 @@ class _OrderScreenState extends State<OrderScreen> {
           ListTile(
               title: Text('Market'),
               subtitle: Text(
-                  '${_order.market} - ${marketSideNice(_order.side)} $baseAmount ${_order.baseAsset}')),
+                  '${_order.market} - ${marketSideNice(_order.side)} $baseAmount $baseUnit')),
           ListTile(
               title: Text('Price'),
-              subtitle: Text(
-                  '$baseAmount ${_order.baseAsset} for $quoteAmount ${_order.quoteAsset}')),
+              subtitle:
+                  Text('$baseAmount $baseUnit for $quoteAmount $quoteUnit')),
           ListTile(title: Text('Date'), subtitle: Text('${_order.date}')),
           _order.status == BeOrderStatus.created ||
                   _order.status == BeOrderStatus.ready
@@ -200,12 +204,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   Widget _listItem(BuildContext context, int n) {
     var order = _orders[n];
-    var baseAmount = assetFormat(order.baseAsset, order.baseAmount);
+    var baseAmount = assetFormat(
+        order.baseAsset, assetAmountToUser(order.baseAsset, order.baseAmount));
+    var baseUnit = assetUnit(order.baseAsset);
     return ListTile(
         title: Text('${order.token}'),
         leading: assetLogo(order.baseAsset),
         subtitle: Text(
-            '${order.market} - ${marketSideNice(order.side)} $baseAmount ${order.baseAsset} - ${describeEnum(order.status).toUpperCase()}',
+            '${order.market} - ${marketSideNice(order.side)} $baseAmount $baseUnit - ${describeEnum(order.status).toUpperCase()}',
             style: order.status == BeOrderStatus.expired ||
                     order.status == BeOrderStatus.failed
                 ? TextStyle(color: ZapBlackLight)

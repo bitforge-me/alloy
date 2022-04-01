@@ -56,6 +56,8 @@ int assetDecimals(String symbol) {
     case 'BTC-LN':
     case 'BTC':
       return 8;
+    case 'sats':
+      return 0;
     case 'ETH':
       return 18;
     case 'DOGE':
@@ -82,9 +84,54 @@ bool assetIsCrypto(String asset) {
 }
 
 String assetFormat(String symbol, Decimal amount) {
-  var decimals = assetDecimals(symbol);
-  if (decimals <= 0) return amount.toString();
+  var decimals = assetDecimals(assetUnit(symbol));
+  if (decimals <= 0) return amount.round().toString();
   return amount.toStringAsFixed(decimals);
+}
+
+String assetUnit(String symbol) {
+  switch (symbol) {
+    case 'NZD':
+      return symbol;
+    case 'BTC':
+      return 'sats';
+    case 'ETH':
+    case 'DOGE':
+    case 'LTC':
+    case 'WAVES':
+      return symbol;
+  }
+  return '!ERR!';
+}
+
+Decimal assetAmountToUser(String symbol, Decimal amount) {
+  switch (symbol) {
+    case 'NZD':
+      return amount;
+    case 'BTC':
+      return amount * Decimal.fromInt(100000000);
+    case 'ETH':
+    case 'DOGE':
+    case 'LTC':
+    case 'WAVES':
+      return amount;
+  }
+  return -Decimal.one;
+}
+
+Decimal assetAmountFromUser(String symbol, Decimal amount) {
+  switch (symbol) {
+    case 'NZD':
+      return amount;
+    case 'BTC':
+      return amount / Decimal.fromInt(100000000);
+    case 'ETH':
+    case 'DOGE':
+    case 'LTC':
+    case 'WAVES':
+      return amount;
+  }
+  return -Decimal.one;
 }
 
 String? addressBlockExplorer(String symbol, bool testnet, String address) {

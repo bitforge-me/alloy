@@ -26,7 +26,7 @@ class WithdrawalCheckScreen extends StatefulWidget {
   final bool testnet;
   final BeAsset asset;
   final BeAsset? l2Network;
-  final String amount;
+  final Decimal? amount;
   final String recipient;
 
   WithdrawalCheckScreen(
@@ -37,17 +37,14 @@ class WithdrawalCheckScreen extends StatefulWidget {
 }
 
 class _WithdrawalCheckScreenState extends State<WithdrawalCheckScreen> {
-  var _extractedAmount = '';
+  var _extractedAmount = -Decimal.one;
 
   @override
   void initState() {
-    if (widget.amount.isEmpty && widget.l2Network != null) {
+    if (widget.amount == null && widget.l2Network != null) {
       var res = l2RecipientValidate(
           widget.l2Network!.symbol, widget.testnet, widget.recipient);
-      if (res.result && res.amount != null)
-        _extractedAmount = res.amount.toString();
-      else
-        _extractedAmount = '!ERROR!';
+      if (res.result && res.amount != null) _extractedAmount = res.amount!;
     }
     super.initState();
   }
@@ -80,7 +77,7 @@ class _WithdrawalCheckScreenState extends State<WithdrawalCheckScreen> {
                 ListTile(
                     title: Text('Amount'),
                     subtitle: Text(
-                        '${widget.amount.isNotEmpty ? widget.amount : _extractedAmount} ${widget.asset.symbol}')),
+                        '${assetFormat(widget.asset.symbol, assetAmountToUser(widget.asset.symbol, widget.amount != null ? widget.amount! : _extractedAmount))} ${assetUnit(widget.asset.symbol)}')),
                 ListTile(
                     title: Text('Recipient'),
                     subtitle: Text(shortenStr(widget.recipient)))
@@ -146,6 +143,9 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
     if (_formKey.currentState == null) return;
     if (_formKey.currentState!.validate()) {
       // ask user to confirm
+      var amount = Decimal.tryParse(_amountController.text);
+      if (amount != null)
+        amount = assetAmountFromUser(widget.asset.symbol, amount);
       var userOk = await Navigator.push(
           context,
           MaterialPageRoute<bool>(
@@ -153,7 +153,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                   _testnet,
                   widget.asset,
                   widget.l2Network,
-                  _amountController.text,
+                  amount,
                   _recipientController.text)));
       if (userOk == null || !userOk) return;
       // ask two factor code
@@ -242,7 +242,9 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                           !widget.asset.isCrypto || widget.l2Network == null,
                       child: TextFormField(
                           controller: _amountController,
-                          decoration: InputDecoration(labelText: 'Amount'),
+                          decoration: InputDecoration(
+                              labelText:
+                                  'Amount (${assetUnit(widget.asset.symbol)})'),
                           keyboardType: TextInputType.numberWithOptions(
                               signed: false, decimal: true),
                           validator: (value) {
@@ -501,7 +503,7 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
     var withdrawal = _withdrawals[n];
     return ListTile(
       title: Text(
-          '${assetFormat(withdrawal.asset, withdrawal.amount)} ${withdrawal.asset} - ${withdrawal.status.toUpperCase()}'),
+          '${assetFormat(withdrawal.asset, assetAmountToUser(withdrawal.asset, withdrawal.amount))} ${assetUnit(withdrawal.asset)} - ${withdrawal.status.toUpperCase()}'),
       onTap: () => _withdrawalTap(withdrawal),
     );
   }
@@ -605,7 +607,7 @@ class _CryptoWithdrawalDetailScreenState
           ListTile(
               title: Text('Amount'),
               subtitle: Text(
-                  '${assetFormat(_withdrawal.asset, _withdrawal.amount)} ${_withdrawal.asset}')),
+                  '${assetFormat(_withdrawal.asset, assetAmountToUser(_withdrawal.asset, _withdrawal.amount))} ${assetUnit(_withdrawal.asset)}')),
           ListTile(title: Text('Date'), subtitle: Text('${_withdrawal.date}')),
           ListTile(
               title: Text('Recipient'),
@@ -695,7 +697,7 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
     var withdrawal = _withdrawals[n];
     return ListTile(
       title: Text(
-          '${assetFormat(withdrawal.asset, withdrawal.amount)} ${withdrawal.asset} - ${withdrawal.status.toUpperCase()}'),
+          '${assetFormat(withdrawal.asset, assetAmountToUser(withdrawal.asset, withdrawal.amount))} ${withdrawal.asset} - ${withdrawal.status.toUpperCase()}'),
       onTap: () => _withdrawalTap(withdrawal),
     );
   }
@@ -777,7 +779,7 @@ class _FiatWithdrawalDetailScreenState
           ListTile(
               title: Text('Amount'),
               subtitle: Text(
-                  '${assetFormat(_withdrawal.asset, _withdrawal.amount)} ${_withdrawal.asset}')),
+                  '${assetFormat(_withdrawal.asset, assetAmountToUser(_withdrawal.asset, _withdrawal.amount))} ${_withdrawal.asset}')),
           ListTile(title: Text('Date'), subtitle: Text('${_withdrawal.date}')),
           ListTile(
               title: Text('Bank Account'),

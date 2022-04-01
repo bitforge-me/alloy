@@ -152,6 +152,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       return;
     }
     var value = tryValue;
+    value = assetAmountFromUser(_fromAsset, value);
     // get user balance
     var resb = await beBalances();
     resb.when((balances) {
@@ -195,7 +196,8 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
           if (estimate.errMsg != null) {
             // give user an idea of the estimate if we abort early
             if (estimate.amountBaseAsset != Decimal.zero)
-              _receiveController.text = estimate.amountBaseAsset.toString();
+              _receiveController.text = assetFormat(_toAsset,
+                  assetAmountToUser(_toAsset, estimate.amountBaseAsset));
             return estimate;
           }
           // find the `smallestAmount` using the number of decimal places in the asset
@@ -223,7 +225,8 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
             if (estimate.errMsg != null) {
               // give user an idea of the estimate if we abort early
               if (estimate.amountBaseAsset != Decimal.zero)
-                _receiveController.text = estimate.amountBaseAsset.toString();
+                _receiveController.text = assetFormat(_toAsset,
+                    assetAmountToUser(_toAsset, estimate.amountBaseAsset));
               return estimate;
             }
             // if we overshoot we need to walk back the estimate input a bit
@@ -280,10 +283,12 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     // set amount
     switch (side) {
       case BeMarketSide.bid:
-        _receiveController.text = quote.amountBaseAsset.toString();
+        _receiveController.text = assetFormat(
+            _toAsset, assetAmountToUser(_toAsset, quote.amountBaseAsset));
         break;
       case BeMarketSide.ask:
-        _receiveController.text = quote.amountQuoteAsset.toString();
+        _receiveController.text = assetFormat(
+            _toAsset, assetAmountToUser(_toAsset, quote.amountQuoteAsset));
         break;
     }
     _side = side;
@@ -329,7 +334,8 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
           child: TextField(
               controller: _amountController,
               decoration: InputDecoration(
-                  border: OutlineInputBorder(), labelText: 'Amount'),
+                  border: OutlineInputBorder(),
+                  labelText: 'Amount (${assetUnit(_fromAsset)})'),
               keyboardType: TextInputType.numberWithOptions(
                   signed: false, decimal: true))),
     ]);
@@ -366,7 +372,9 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
           child: TextField(
               controller: _receiveController,
               readOnly: true,
-              decoration: InputDecoration(border: OutlineInputBorder())))
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Receive (${assetUnit(_toAsset)})')))
     ]);
     return Column(children: [
       LayoutBuilder(builder: (context, constraints) {
