@@ -22,7 +22,7 @@ jobs:
           sed -i -e "s|GIT_SHA_REPLACE|$GITHUB_SHA|g" lib/config.dart
       - name: Insert build date
         run: |
-          sed -i -e "s|BUILD_DATE_REPLACE|$(date +%s)|g" lib/config.dart
+          sed -i -e "s|BUILD_DATE_REPLACE|$(date)|g" lib/config.dart
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '2.10.x'
