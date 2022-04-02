@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:decimal/decimal.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
+import 'package:universal_platform/universal_platform.dart';
+import 'package:universal_html/html.dart' as html;
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/hmac.dart';
@@ -24,6 +26,11 @@ String _decimalToJson(input) => input.toString();
 
 Future<String> _server() async {
   var baseUrl = BeServerUrl + 'apiv1/';
+  if (UniversalPlatform.isWeb) {
+    var location = html.window.location;
+    if (BeServerLocationOverrides.contains(location.hostname))
+      baseUrl = location.origin + '/apiv1/';
+  }
   return baseUrl;
 }
 

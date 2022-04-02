@@ -16,6 +16,10 @@ const Testnet = true;
 
 // Zap Crypto settings
 const String BeServerUrl = 'https://beryllium-test.zap.me/';
+const List<String> BeServerLocationOverrides = [
+  'beryllium.zap.me',
+  'beryllium-test.zap.me'
+];
 // registration
 const bool RequireMobileNumber = true;
 const String? InitialMobileCountry = 'NZ';
