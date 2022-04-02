@@ -37,6 +37,7 @@ void main() {
     print('${record.level.name}: ${record.time}: ${record.message}');
   });
   log.info('Git SHA: $GitSha');
+  log.info('Build Date: $BuildDate');
   log.info('Beryllium Server: ${server()}');
   log.info('Testnet: ${testnet()}');
   // run app
@@ -609,7 +610,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 style: TextStyle(color: ZapBlackLight, fontSize: 8)),
             Visibility(
                 visible: GitSha != 'GIT_SHA_REPLACE',
-                child: Text('Build: $GitSha',
+                child: Text('Build: $GitSha - $BuildDate',
                     style: TextStyle(color: ZapBlackLight, fontSize: 8))),
           ],
         ),

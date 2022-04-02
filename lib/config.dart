@@ -7,6 +7,7 @@ import 'package:universal_html/html.dart' as html;
 import 'package:zapdart/colors.dart';
 
 const GitSha = 'GIT_SHA_REPLACE';
+const BuildDate = 'BUILD_DATE_REPLACE';
 const AppVersion = 6;
 const AppTitle = 'Alloy';
 const AppLogo = 'assets/logo.png';
