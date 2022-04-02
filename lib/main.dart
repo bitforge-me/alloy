@@ -37,6 +37,8 @@ void main() {
     print('${record.level.name}: ${record.time}: ${record.message}');
   });
   log.info('Git SHA: $GitSha');
+  log.info('Beryllium Server: ${server()}');
+  log.info('Testnet: ${testnet()}');
   // run app
   runApp(Phoenix(child: MyApp()));
 }
@@ -598,6 +600,17 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   ZapSecondaryGradient, 'Retry',
                   holePunch: true, width: 200),
             ),
+            Visibility(
+              visible: testnet(),
+              child: Text('TESTNET',
+                  style: TextStyle(color: ZapWarning, fontSize: 8)),
+            ),
+            Text('Server: ${server()}',
+                style: TextStyle(color: ZapBlackLight, fontSize: 8)),
+            Visibility(
+                visible: GitSha != 'GIT_SHA_REPLACE',
+                child: Text('Build: $GitSha',
+                    style: TextStyle(color: ZapBlackLight, fontSize: 8))),
           ],
         ),
       ),
