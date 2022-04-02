@@ -3,7 +3,7 @@ import 'package:zapdart/prefhelper.dart';
 import 'config.dart';
 
 class Prefs {
-  static Future<String> getKeyNetworkSpecific(String key) async {
+  static String getKeyNetworkSpecific(String key) {
     if (!Testnet) key = '${key}_mainnet';
     return key;
   }
@@ -11,13 +11,13 @@ class Prefs {
   static Future<String?> getStringNetworkSpecific(
       String key, String? defaultValue) async {
     final prefs = PrefHelper();
-    return prefs.getString(await getKeyNetworkSpecific(key), defaultValue);
+    return prefs.getString(getKeyNetworkSpecific(key), defaultValue);
   }
 
   static Future<bool> setStringNetworkSpecific(
       String key, String? value) async {
     final prefs = PrefHelper();
-    prefs.setString(await getKeyNetworkSpecific(key), value);
+    prefs.setString(getKeyNetworkSpecific(key), value);
     return true;
   }
 
@@ -39,7 +39,7 @@ class Prefs {
     return true;
   }
 
-  static Future<bool> hasZcApiKey() async {
+  static Future<bool> hasBeApiKey() async {
     var apikey = await Prefs.beApiKeyGet();
     if (apikey == null || apikey.isEmpty) return false;
     var apisecret = await Prefs.beApiSecretGet();
@@ -47,21 +47,14 @@ class Prefs {
     return true;
   }
 
-  static Future<String?> bronzeKycTokenGet() async {
-    return await getStringNetworkSpecific("bronze_kyc_token", null);
+  static Future<String> assetUnitGet(String asset, String defaultVal) async {
+    var res = await getStringNetworkSpecific("{$asset}_unit", null);
+    if (res == null) return defaultVal;
+    return res;
   }
 
-  static Future<bool> bronzeKycTokenSet(String? value) async {
-    await setStringNetworkSpecific("bronze_kyc_token", value);
-    return true;
-  }
-
-  static Future<String?> bronzeBankAccountGet() async {
-    return await getStringNetworkSpecific("bronze_bank_account", null);
-  }
-
-  static Future<bool> bronzeBankAccountSet(String? value) async {
-    await setStringNetworkSpecific("bronze_bank_account", value);
+  static Future<bool> assetUnitSet(String asset, String value) async {
+    await setStringNetworkSpecific("{$asset}_unit", value);
     return true;
   }
 

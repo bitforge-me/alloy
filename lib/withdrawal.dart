@@ -77,7 +77,7 @@ class _WithdrawalCheckScreenState extends State<WithdrawalCheckScreen> {
                 ListTile(
                     title: Text('Amount'),
                     subtitle: Text(
-                        '${assetFormat(widget.asset.symbol, assetAmountToUser(widget.asset.symbol, widget.amount != null ? widget.amount! : _extractedAmount))} ${assetUnit(widget.asset.symbol)}')),
+                        '${assetFormatWithUnit(widget.asset.symbol, assetAmountToUser(widget.asset.symbol, widget.amount != null ? widget.amount! : _extractedAmount))}')),
                 ListTile(
                     title: Text('Recipient'),
                     subtitle: Text(shortenStr(widget.recipient)))
@@ -503,7 +503,7 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
     var withdrawal = _withdrawals[n];
     return ListTile(
       title: Text(
-          '${assetFormat(withdrawal.asset, assetAmountToUser(withdrawal.asset, withdrawal.amount))} ${assetUnit(withdrawal.asset)} - ${withdrawal.status.toUpperCase()}'),
+          '${assetFormatWithUnit(withdrawal.asset, assetAmountToUser(withdrawal.asset, withdrawal.amount))} - ${withdrawal.status.toUpperCase()}'),
       onTap: () => _withdrawalTap(withdrawal),
     );
   }
@@ -607,7 +607,7 @@ class _CryptoWithdrawalDetailScreenState
           ListTile(
               title: Text('Amount'),
               subtitle: Text(
-                  '${assetFormat(_withdrawal.asset, assetAmountToUser(_withdrawal.asset, _withdrawal.amount))} ${assetUnit(_withdrawal.asset)}')),
+                  '${assetFormatWithUnit(_withdrawal.asset, assetAmountToUser(_withdrawal.asset, _withdrawal.amount))}')),
           ListTile(title: Text('Date'), subtitle: Text('${_withdrawal.date}')),
           ListTile(
               title: Text('Recipient'),
@@ -697,7 +697,7 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
     var withdrawal = _withdrawals[n];
     return ListTile(
       title: Text(
-          '${assetFormat(withdrawal.asset, assetAmountToUser(withdrawal.asset, withdrawal.amount))} ${withdrawal.asset} - ${withdrawal.status.toUpperCase()}'),
+          '${assetFormatWithUnit(withdrawal.asset, assetAmountToUser(withdrawal.asset, withdrawal.amount))} - ${withdrawal.status.toUpperCase()}'),
       onTap: () => _withdrawalTap(withdrawal),
     );
   }
@@ -779,7 +779,7 @@ class _FiatWithdrawalDetailScreenState
           ListTile(
               title: Text('Amount'),
               subtitle: Text(
-                  '${assetFormat(_withdrawal.asset, assetAmountToUser(_withdrawal.asset, _withdrawal.amount))} ${_withdrawal.asset}')),
+                  '${assetFormatWithUnit(_withdrawal.asset, assetAmountToUser(_withdrawal.asset, _withdrawal.amount))}')),
           ListTile(title: Text('Date'), subtitle: Text('${_withdrawal.date}')),
           ListTile(
               title: Text('Bank Account'),

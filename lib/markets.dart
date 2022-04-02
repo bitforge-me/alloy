@@ -103,14 +103,13 @@ class _QuoteScreenState extends State<QuoteScreen> {
       if (totalPrice.errMsg != null)
         quote = totalPrice.errMsg!;
       else {
-        var baseAmount = assetFormat(widget.market.baseAsset,
+        var baseAmount = assetFormatWithUnit(widget.market.baseAsset,
             assetAmountToUser(widget.market.baseAsset, value));
-        var quoteAmount = assetFormat(
+        var quoteAmount = assetFormatWithUnit(
             widget.market.quoteAsset,
             assetAmountToUser(
                 widget.market.quoteAsset, totalPrice.amountQuoteAsset));
-        quote =
-            '$baseAmount ${widget.market.baseAsset} = $quoteAmount ${widget.market.quoteAsset}';
+        quote = '$baseAmount = $quoteAmount';
       }
     }
     setState(() {

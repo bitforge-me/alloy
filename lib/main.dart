@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:logging/logging.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:universal_html/html.dart' as html;
+import 'package:decimal/decimal.dart';
 
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
@@ -25,6 +26,7 @@ import 'withdrawal.dart';
 import 'verify_user.dart';
 import 'snack.dart';
 import 'exchange.dart';
+import 'units.dart';
 
 final log = Logger('Main');
 
@@ -92,6 +94,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    assetUnitsInit();
     _initApi();
   }
 
@@ -111,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   Future<void> _initApi() async {
-    if (await Prefs.hasZcApiKey()) {
+    if (await Prefs.hasBeApiKey()) {
       UserInfo? userInfo;
       showAlertDialog(context, 'getting account info...');
       var result = await beUserInfo();
@@ -189,6 +192,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       var bolt11 = json['bolt11'];
       var description = json['description'];
       var sats = json['amount_sat'];
+      var amount = Decimal.fromInt(sats) / Decimal.fromInt(100000000);
       alert(
           context,
           'Invoice paid',
@@ -199,7 +203,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 ListTile(
                     title: Text('Invoice data'),
                     subtitle: Text('${shortenStr(bolt11)}')),
-                ListTile(title: Text('Amount'), subtitle: Text('$sats sats')),
+                ListTile(
+                    title: Text('Amount'),
+                    subtitle: Text(assetFormatWithUnit(Btc, amount))),
                 ListTile(
                     title: Text('Description'), subtitle: Text('$description'))
               ])));
@@ -443,6 +449,12 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             builder: (context) => SecurityScreen(_websocket, _userInfo!)));
   }
 
+  Future<void> _units() async {
+    await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => UnitsScreen()));
+    setState(() {}); // force rerender
+  }
+
   Future<void> _verifyUser() async {
     await Navigator.push(
         context,
@@ -496,6 +508,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   color: _userInfo?.tfEnabled == true ? null : ZapWarning),
               title: const Text('Security'),
               onTap: _security),
+          ListTile(
+              leading: Icon(Icons.settings),
+              title: const Text('Units'),
+              onTap: _units),
           ListTile(
               leading: Icon(Icons.contact_support),
               title: const Text('Support'),
