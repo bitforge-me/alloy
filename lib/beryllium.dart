@@ -24,11 +24,11 @@ final log = Logger('Beryllium');
 Decimal _decimalFromJson(input) => Decimal.parse(input);
 String _decimalToJson(input) => input.toString();
 
-Future<String> _server() async {
+String _server() {
   var baseUrl = BeServerUrl + 'apiv1/';
   if (UniversalPlatform.isWeb) {
     var location = html.window.location;
-    if (BeServerLocationOverrides.contains(location.hostname))
+    if (BeServerLocationOverrides.keys.contains(location.hostname))
       baseUrl = location.origin + '/apiv1/';
   }
   return baseUrl;
@@ -863,7 +863,7 @@ Future<http.Response?> postAndCatch(String url, String body,
 
 Future<ErrorResult> post(String endpoint, Map<String, dynamic> params,
     {bool authRequired = false}) async {
-  var baseUrl = await _server();
+  var baseUrl = _server();
   var url = baseUrl + endpoint;
   var headers = Map<String, String>();
   var body;

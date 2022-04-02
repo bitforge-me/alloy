@@ -110,7 +110,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
   final _recipientDescriptionController = TextEditingController();
 
   var _saveRecipient = false;
-  var _testnet = Testnet;
+  var _testnet = testnet();
 
   @override
   void initState() {
@@ -550,7 +550,7 @@ class CryptoWithdrawalDetailScreen extends StatefulWidget {
 class _CryptoWithdrawalDetailScreenState
     extends State<CryptoWithdrawalDetailScreen> {
   BeCryptoWithdrawal _withdrawal;
-  var _testnet = Testnet;
+  var _testnet = testnet();
 
   _CryptoWithdrawalDetailScreenState(this._withdrawal);
 

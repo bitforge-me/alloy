@@ -4,7 +4,7 @@ import 'config.dart';
 
 class Prefs {
   static String getKeyNetworkSpecific(String key) {
-    if (!Testnet) key = '${key}_mainnet';
+    if (!testnet()) key = '${key}_mainnet';
     return key;
   }
 

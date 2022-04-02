@@ -1,4 +1,5 @@
 import 'package:universal_platform/universal_platform.dart';
+import 'package:universal_html/html.dart' as html;
 // uncomment if you need to override the app theme
 //import 'package:flutter/material.dart';
 //import 'package:google_fonts/google_fonts.dart';
@@ -11,15 +12,16 @@ const AppTitle = 'Alloy';
 const AppLogo = 'assets/logo.png';
 const SupportUrl = 'https://bronze-support.zap.me/';
 
-// the testnet value
-const Testnet = true;
+// the default testnet value
+const _DefaultTestnet = true;
 
 // Zap Crypto settings
 const String BeServerUrl = 'https://beryllium-test.zap.me/';
-const List<String> BeServerLocationOverrides = [
-  'beryllium.zap.me',
-  'beryllium-test.zap.me'
-];
+// key is server hostname, and value is 'testnet'
+const Map<String, bool> BeServerLocationOverrides = {
+  'beryllium.zap.me': false,
+  'beryllium-test.zap.me': true
+};
 // registration
 const bool RequireMobileNumber = true;
 const String? InitialMobileCountry = 'NZ';
@@ -46,6 +48,15 @@ String? locationIqApiKey() {
   if (UniversalPlatform.isAndroid) return LocationIqApiKeyIOS;
   if (UniversalPlatform.isIOS) return LocationIqApiKeyAndroid;
   return LocationIqApiKeyWeb;
+}
+
+bool testnet() {
+  if (UniversalPlatform.isWeb) {
+    var location = html.window.location;
+    if (BeServerLocationOverrides.keys.contains(location.hostname))
+      return BeServerLocationOverrides[location.hostname]!;
+  }
+  return _DefaultTestnet;
 }
 
 void initConfig() {

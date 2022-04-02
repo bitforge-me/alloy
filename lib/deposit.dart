@@ -237,7 +237,7 @@ class CryptoDepositDetailScreen extends StatefulWidget {
 
 class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
   BeCryptoDeposit _deposit;
-  var _testnet = Testnet;
+  var _testnet = testnet();
 
   _CryptoDepositDetailScreenState(this._deposit);
 
