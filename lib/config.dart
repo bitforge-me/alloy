@@ -17,7 +17,7 @@ const SupportUrl = 'https://bronze-support.zap.me/';
 const _DefaultTestnet = true;
 
 // Zap Crypto settings
-const String BeServerUrl = 'https://beryllium-test.zap.me/';
+const String _BeServerUrl = 'https://beryllium-test.zap.me/';
 // key is server hostname, and value is 'testnet'
 const Map<String, bool> BeServerLocationOverrides = {
   'beryllium.zap.me': false,
@@ -49,6 +49,16 @@ String? locationIqApiKey() {
   if (UniversalPlatform.isAndroid) return LocationIqApiKeyIOS;
   if (UniversalPlatform.isIOS) return LocationIqApiKeyAndroid;
   return LocationIqApiKeyWeb;
+}
+
+String server() {
+  var serverUrl = _BeServerUrl;
+  if (UniversalPlatform.isWeb) {
+    var location = html.window.location;
+    if (BeServerLocationOverrides.keys.contains(location.hostname))
+      serverUrl = location.origin + '/';
+  }
+  return serverUrl;
 }
 
 bool testnet() {

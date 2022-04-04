@@ -35,7 +35,7 @@ class WsEventArgs extends EventArgs {
 }
 
 Future<String> _server() async {
-  var baseUrl = BeServerUrl + 'events';
+  var baseUrl = server() + 'events';
   return baseUrl;
 }
 

@@ -6,8 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:decimal/decimal.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
-import 'package:universal_platform/universal_platform.dart';
-import 'package:universal_html/html.dart' as html;
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/hmac.dart';
@@ -23,16 +21,6 @@ part 'beryllium.freezed.dart';
 final log = Logger('Beryllium');
 Decimal _decimalFromJson(input) => Decimal.parse(input);
 String _decimalToJson(input) => input.toString();
-
-String server() {
-  var baseUrl = BeServerUrl + 'apiv1/';
-  if (UniversalPlatform.isWeb) {
-    var location = html.window.location;
-    if (BeServerLocationOverrides.keys.contains(location.hostname))
-      baseUrl = location.origin + '/apiv1/';
-  }
-  return baseUrl;
-}
 
 enum BePermission { receive, balance, history, transfer, issue }
 enum BeRole { admin, proposer, authorizer }
@@ -863,7 +851,7 @@ Future<http.Response?> postAndCatch(String url, String body,
 
 Future<ErrorResult> post(String endpoint, Map<String, dynamic> params,
     {bool authRequired = false}) async {
-  var baseUrl = server();
+  var baseUrl = server() + 'apiv1/';
   var url = baseUrl + endpoint;
   var headers = Map<String, String>();
   var body;
