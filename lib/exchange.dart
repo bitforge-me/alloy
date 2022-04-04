@@ -335,7 +335,8 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
               controller: _amountController,
               decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Amount (${assetUnit(_fromAsset)})'),
+                  suffixText: assetUnit(_fromAsset),
+                  labelText: 'Amount'),
               keyboardType: TextInputType.numberWithOptions(
                   signed: false, decimal: true))),
     ]);
@@ -374,7 +375,8 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
               readOnly: true,
               decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Receive (${assetUnit(_toAsset)})')))
+                  suffixText: assetUnit(_toAsset),
+                  labelText: 'Receive')))
     ]);
     return Column(children: [
       LayoutBuilder(builder: (context, constraints) {
