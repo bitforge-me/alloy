@@ -23,6 +23,7 @@ Decimal _decimalFromJson(input) => Decimal.parse(input);
 String _decimalToJson(input) => input.toString();
 
 enum BePermission { receive, balance, history, transfer, issue }
+
 enum BeRole { admin, proposer, authorizer }
 
 @freezed

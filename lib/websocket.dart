@@ -68,6 +68,7 @@ class Websocket {
       var nonce = nextNonce();
       var sig = createHmacSig(apisecret!, nonce.toString());
       var auth = {"signature": sig, "api_key": apikey, "nonce": nonce};
+      log.info('auth: $auth');
       socket.emit('auth', auth);
     });
     socket.on('connecting', (_) {
@@ -81,26 +82,26 @@ class Websocket {
     });
     socket.on('version', (data) {
       call(WebsocketEvent.version, data);
-      log.info(data);
+      log.info('version: $data');
     });
     socket.on('info', (data) {
-      log.info(data);
+      log.info('info: $data');
     });
     socket.on('user_info_update', (data) {
       call(WebsocketEvent.userInfoUpdate, data);
-      log.info(data);
+      log.info('user_info_update: $data');
     });
     socket.on('broker_order_new', (data) {
       call(WebsocketEvent.brokerOrderNew, data);
-      log.info(data);
+      log.info('broker_order_new: $data');
     });
     socket.on('broker_order_update', (data) {
       call(WebsocketEvent.brokerOrderUpdate, data);
-      log.info(data);
+      log.info('broker_order_update: $data');
     });
     socket.on('ln_invoice_paid', (data) {
       call(WebsocketEvent.lnInvoicePaid, data);
-      log.info(data);
+      log.info('ln_invoice_paid: $data');
     });
     socket.on('disconnect', (_) {
       log.info('ws disconnect');
