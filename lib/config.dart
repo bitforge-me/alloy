@@ -56,9 +56,9 @@ String server() {
   if (UniversalPlatform.isWeb) {
     var location = html.window.location;
     if (BeServerLocationOverrides.keys.contains(location.hostname))
-      serverUrl = location.origin + '/';
+			String serverUrl = location.origin ?? '';
   }
-  return serverUrl;
+  return serverUrl + '/';
 }
 
 bool testnet() {
