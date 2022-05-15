@@ -52,19 +52,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           textTheme: ZapTextThemer(Theme.of(context).textTheme),
           primaryTextTheme: ZapTextThemer(Theme.of(context).textTheme),
-          colorScheme: ColorScheme(
-            brightness: ZapBrightness,
-            primary: ZapPrimary,
-            secondary: ZapSecondary,
-            surface: ZapSurface,
-            background: ZapBackground,
-            error: ZapError,
-            onPrimary: ZapOnPrimary,
-            onSecondary: ZapOnSecondary,
-            onSurface: ZapOnSurface,
-            onBackground: ZapOnBackground,
-            onError: ZapOnError,
-          )),
+          colorScheme: ColorScheme.dark(),),
       debugShowCheckedModeBanner: false,
       home: MyHomePage(title: AppTitle),
     );
