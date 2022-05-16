@@ -48,6 +48,9 @@
 		#circle-4 {
 			animation: circle-4-move 5s infinite;
 		}
+		#bronze-logo {
+			animation: bronze-logo-move 5s infinite;
+		}
 		@keyframes circle-1-move {
 			0% {
 				transform: translate(-2.5%, 0%);
@@ -80,6 +83,14 @@
 				transform: translate(0%, 2.5%);
 			}
 		}
+		@keyframes bronze-logo-move {
+			0% {
+				transform: translate(20%, -2.5%)
+			}
+			100% {
+				transform: translate(20%, 2.5%)
+			}
+		}
 
   </style>
 </head>
@@ -96,7 +107,7 @@
 			<circle id="circle-3" opacity="0.25" cx="180" cy="93" r="93" fill="#C4C4C4"/>
 			<circle id="circle-4" opacity="0.25" cx="93" cy="142" r="93" fill="#C4C4C4"/>
 			</g>
-			<g filter="url(#filter0_d_18_410)" transform="translate(60,10)">
+			<g id="bronze-logo" filter="url(#filter0_d_18_410)" transform="translate(60,10)">
 			<path d="M92.2578 95.7158L121.542 78.6641L135.999 87.1899L107.456 104.983L92.2578 95.7158Z" fill="#C4C4C4"/>
 			<path d="M92.2578 95.7158L121.542 78.6641L135.999 87.1899L107.456 104.983L92.2578 95.7158Z" fill="url(#paint0_linear_18_410)"/>
 			<path d="M134.887 120.923L92.2578 95.7158V110.543L134.887 136.492V120.923Z" fill="url(#paint1_linear_18_410)"/>
