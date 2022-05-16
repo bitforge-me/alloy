@@ -87,4 +87,3 @@ void initConfig() {
     zapTextThemer: GoogleFonts.sansitaTextTheme);
     */
 }
-
