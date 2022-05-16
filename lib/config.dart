@@ -56,9 +56,9 @@ String server() {
   if (UniversalPlatform.isWeb) {
     var location = html.window.location;
     if (BeServerLocationOverrides.keys.contains(location.hostname))
-			String serverUrl = location.origin ?? '';
+      serverUrl = location.origin + '/';
   }
-  return serverUrl + '/';
+  return serverUrl;
 }
 
 bool testnet() {
@@ -87,3 +87,4 @@ void initConfig() {
     zapTextThemer: GoogleFonts.sansitaTextTheme);
     */
 }
+
