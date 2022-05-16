@@ -141,7 +141,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   void initState() {
     super.initState();
     widget.websocket.wsEvent.subscribe(_websocketEvent);
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _initOrders(0);
     });
   }

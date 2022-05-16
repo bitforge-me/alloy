@@ -453,7 +453,7 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
   void initState() {
     super.initState();
     widget.websocket.wsEvent.subscribe(_websocketEvent);
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _initWithdrawals(0);
     });
   }
@@ -648,7 +648,7 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
   void initState() {
     super.initState();
     widget.websocket.wsEvent.subscribe(_websocketEvent);
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _initWithdrawals(0);
     });
   }
