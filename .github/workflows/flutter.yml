@@ -25,7 +25,7 @@ jobs:
           sed -i -e "s|BUILD_DATE_REPLACE|$(date)|g" lib/config.dart
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '3.0'
+          flutter-version: '3.0.x'
       - run: flutter pub get
       #- run: flutter test
       - run: flutter dartfmt -n --set-exit-if-changed lib
