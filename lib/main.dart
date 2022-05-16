@@ -52,9 +52,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           textTheme: ZapTextThemer(Theme.of(context).textTheme),
           primaryTextTheme: ZapTextThemer(Theme.of(context).textTheme),
-          colorScheme: ColorScheme.dark(
-							primary: Color(0xFF1B1C25)
-							),),
+          colorScheme: ColorScheme(
+            brightness: ZapBrightness,
+            primary: ZapPrimary,
+            secondary: ZapSecondary,
+            surface: ZapSurface,
+            background: ZapBackground,
+            error: ZapError,
+            onPrimary: ZapOnPrimary,
+            onSecondary: ZapOnSecondary,
+            onSurface: ZapOnSurface,
+            onBackground: ZapOnBackground,
+            onError: ZapOnError,
+          )),
       debugShowCheckedModeBanner: false,
       home: MyHomePage(title: AppTitle),
     );
@@ -609,3 +619,4 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     );
   }
 }
+
