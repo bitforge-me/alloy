@@ -28,6 +28,26 @@ import 'snack.dart';
 import 'exchange.dart';
 import 'units.dart';
 
+var bronzeGradient = LinearGradient(
+    begin: Alignment(0.9999999403953552, 8.690536290600903e-9),
+    end: Alignment(-1.540519534160012e-8, 0.2562732696533203),
+    colors: [
+      Color.fromRGBO(114, 57, 32, 1),
+      Color.fromRGBO(139, 76, 40, 1),
+      Color.fromRGBO(149, 75, 41, 1),
+      Color.fromRGBO(195, 100, 55, 1),
+      Color.fromRGBO(143, 75, 42, 1),
+      Color.fromRGBO(168, 86, 45, 1),
+      Color.fromRGBO(237, 120, 66, 1),
+      Color.fromRGBO(166, 83, 45, 1),
+      Color.fromRGBO(123, 62, 32, 1)
+    ]);
+
+Gradient? bronzeSecondaryGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFF808080), Color(0xFF808080)]);
+
 final log = Logger('Main');
 
 void main() {
@@ -50,21 +70,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: AppTitle,
       theme: ThemeData(
-          textTheme: ZapTextThemer(Theme.of(context).textTheme),
-          primaryTextTheme: ZapTextThemer(Theme.of(context).textTheme),
-          colorScheme: ColorScheme(
-            brightness: ZapBrightness,
-            primary: ZapPrimary,
-            secondary: ZapSecondary,
-            surface: ZapSurface,
-            background: ZapBackground,
-            error: ZapError,
-            onPrimary: ZapOnPrimary,
-            onSecondary: ZapOnSecondary,
-            onSurface: ZapOnSurface,
-            onBackground: ZapOnBackground,
-            onError: ZapOnError,
-          )),
+          fontFamily: 'SF-Pro',
+          colorScheme: ColorScheme.dark(primary: Color(0xFF1B1C25))),
       debugShowCheckedModeBanner: false,
       home: MyHomePage(title: AppTitle),
     );
@@ -547,23 +554,36 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Image.asset(
+              'logo.png',
+              height: 200,
+              fit: BoxFit.fitHeight,
+            ),
+	    Text("Hey there!", 
+              style: TextStyle(color:Color(0xFFFFFFFF).withOpacity(0.75), fontSize: 20),
+            ),
+            SizedBox(height: 10),
+	    Text("Let's get started", 
+              style: TextStyle(color:Color(0xFFFFFFFF), fontSize: 34),
+            ),
+            SizedBox(height: 15),
             Visibility(
               visible: _userInfo == null,
-              child: RoundedButton(_register, ZapOnSecondary, ZapSecondary,
-                  ZapSecondaryGradient, 'Register',
-                  holePunch: true, width: 200),
+              child: RoundedButton(
+                  _login, ZapOnSecondary, ZapSecondary, bronzeGradient, 'Login',
+                  holePunch: true, width: 320, height: 50),
             ),
             Visibility(
               visible: _userInfo == null,
-              child: RoundedButton(_login, ZapOnSecondary, ZapSecondary,
-                  ZapSecondaryGradient, 'Login',
-                  holePunch: true, width: 200),
+              child: RoundedButton(
+                  _register, ZapOnSecondary, ZapSecondary, bronzeSecondaryGradient, 'Register',
+                  holePunch: true, width: 320, height: 50),
             ),
             Visibility(
               visible: _userInfo == null,
               child: RoundedButton(_loginWithEmail, ZapOnSecondary,
-                  ZapSecondary, ZapSecondaryGradient, 'Lost Password',
-                  holePunch: true, width: 200),
+                  ZapSecondary, bronzeSecondaryGradient, 'Lost Password',
+                  holePunch: true, width: 320, height: 50),
             ),
             _userInfo != null ? ExchangeWidget(_websocket) : SizedBox(),
             Visibility(
