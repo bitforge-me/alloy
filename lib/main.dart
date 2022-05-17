@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:decimal/decimal.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
@@ -27,26 +28,8 @@ import 'verify_user.dart';
 import 'snack.dart';
 import 'exchange.dart';
 import 'units.dart';
+import 'colors.dart';
 
-var bronzeGradient = LinearGradient(
-    begin: Alignment(0.9999999403953552, 8.690536290600903e-9),
-    end: Alignment(-1.540519534160012e-8, 0.2562732696533203),
-    colors: [
-      Color.fromRGBO(114, 57, 32, 1),
-      Color.fromRGBO(139, 76, 40, 1),
-      Color.fromRGBO(149, 75, 41, 1),
-      Color.fromRGBO(195, 100, 55, 1),
-      Color.fromRGBO(143, 75, 42, 1),
-      Color.fromRGBO(168, 86, 45, 1),
-      Color.fromRGBO(237, 120, 66, 1),
-      Color.fromRGBO(166, 83, 45, 1),
-      Color.fromRGBO(123, 62, 32, 1)
-    ]);
-
-Gradient? bronzeSecondaryGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [Color(0xFF808080), Color(0xFF808080)]);
 
 final log = Logger('Main');
 
