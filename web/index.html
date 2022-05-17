@@ -50,20 +50,17 @@
       background-color: #1B1C25;
     }
 
-    .loading {
+    .splash {
       display: flex;
       flex-flow: column;
       justify-content: center;
       align-items: center;
       margin: 0;
-      top: 30%;
-      left: 35%;
       position: absolute;
-    }
-
-    .loader {
-      width: 50px !important;
-      height: 50px !important;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
     }
   </style>
 </head>
@@ -88,10 +85,8 @@
   </script>
 
   <!-- Splash screen -->
-  <div class="loading">
-    <div class="loader">
-      <img src="splash.svg">
-    </div>
+  <div class="splash">
+    <img src="splash.svg">
   </div>
 </body>
 </html>

@@ -43,7 +43,7 @@
        fill="#c4c4c4"
        style="opacity:0.03">
         <animate attributeType="CSS" attributeName="opacity" 
-            from="0.03" to="0.03" values="0.03; 0.1 ; 0.03;" dur="5s" repeatCount="indefinite" />
+            from="0.03" to="0.03" values="0.03; 0.1 ; 0.03;" dur="3s" repeatCount="indefinite" />
     </circle>
     <circle
        id="circle-2"
@@ -53,7 +53,7 @@
        fill="#c4c4c4"
        style="opacity:0.03">
         <animate attributeType="CSS" attributeName="opacity" 
-            from="0.03" to="0.03" values="0.03; 0.1 ; 0.03;" dur="5s" begin="1s" repeatCount="indefinite" />
+            from="0.03" to="0.03" values="0.03; 0.1 ; 0.03;" dur="3s" begin="1s" repeatCount="indefinite" />
     </circle>
     <circle
        id="circle-3"
@@ -63,7 +63,7 @@
        fill="#c4c4c4"
        style="opacity:0.03">
         <animate attributeType="CSS" attributeName="opacity" 
-            from="0.03" to="0.03" values="0.03; 0.1 ; 0.03;" dur="5s" begin="2s" repeatCount="indefinite" />
+            from="0.03" to="0.03" values="0.03; 0.1 ; 0.03;" dur="3s" begin="2s" repeatCount="indefinite" />
     </circle>
     <circle
        id="circle-4"
@@ -73,7 +73,7 @@
        fill="#c4c4c4"
        style="opacity:0.03">
         <animate attributeType="CSS" attributeName="opacity" 
-            from="0.03" to="0.03" values="0.03; 0.1 ; 0.03;" dur="5s" begin="3s" repeatCount="indefinite" />
+            from="0.03" to="0.03" values="0.03; 0.1 ; 0.03;" dur="3s" begin="3s" repeatCount="indefinite" />
     </circle>
   </g>
   <g
