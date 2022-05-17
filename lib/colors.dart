@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-var bronzeGradient = LinearGradient(
+Gradient? bronzeGradient = LinearGradient(
     begin: Alignment(0.9999999403953552, 8.690536290600903e-9),
     end: Alignment(-1.540519534160012e-8, 0.2562732696533203),
     colors: [
