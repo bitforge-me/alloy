@@ -29,7 +29,7 @@ import 'snack.dart';
 import 'exchange.dart';
 import 'units.dart';
 import 'colors.dart';
-
+import 'accountform.dart';
 
 final log = Logger('Main');
 
@@ -301,7 +301,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                AccountLoginForm(login, showTwoFactorCode: false)),
+                BronzeLoginForm(login, showTwoFactorCode: false)),
       );
       if (login == null) return;
       showAlertDialog(context, 'logging in..');
@@ -323,7 +323,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  AccountLoginForm(login, showTwoFactorCode: tfEnabled)),
+                  BronzeLoginForm(login, showTwoFactorCode: tfEnabled)),
         );
       if (login == null) return;
       // login and save account if login successful
@@ -542,12 +542,15 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               height: 200,
               fit: BoxFit.fitHeight,
             ),
-	    Text("Hey there!", 
-              style: TextStyle(color:Color(0xFFFFFFFF).withOpacity(0.75), fontSize: 20),
+            Text(
+              "Hey there!",
+              style: TextStyle(
+                  color: Color(0xFFFFFFFF).withOpacity(0.75), fontSize: 20),
             ),
             SizedBox(height: 10),
-	    Text("Let's get started", 
-              style: TextStyle(color:Color(0xFFFFFFFF), fontSize: 34),
+            Text(
+              "Let's get started",
+              style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 34),
             ),
             SizedBox(height: 15),
             Visibility(
@@ -558,8 +561,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             ),
             Visibility(
               visible: _userInfo == null,
-              child: RoundedButton(
-                  _register, ZapOnSecondary, ZapSecondary, bronzeSecondaryGradient, 'Register',
+              child: RoundedButton(_register, ZapOnSecondary, ZapSecondary,
+                  bronzeSecondaryGradient, 'Register',
                   holePunch: true, width: 320, height: 50),
             ),
             Visibility(
