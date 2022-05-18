@@ -21,7 +21,7 @@ class BronzeLoginForm extends StatefulWidget {
   final String? instructions;
   final bool showTwoFactorCode;
 
-  BronzeLoginForm({this.login, this.instructions, this.showTwoFactorCode = false})
+  BronzeLoginForm(this.login, {this.instructions, this.showTwoFactorCode = false})
       : super();
 
   @override
