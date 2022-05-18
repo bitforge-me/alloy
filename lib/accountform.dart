@@ -79,9 +79,9 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                     ),
                     SizedBox(height: 15),
                     TextFormField(
+			textAlign: TextAlign.center,
                         controller: _emailController,
                         decoration: InputDecoration(
-                          labelText: 'Email',
                           fillColor: Color(0xFFFFFFFF).withOpacity(0.1),
                           filled: true,
                           constraints:
@@ -105,10 +105,10 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                         }),
                     SizedBox(height: 8),
                     TextFormField(
+			textAlign: TextAlign.center,
                         controller: _passwordController,
                         obscureText: true,
                         decoration: InputDecoration(
-                          labelText: 'Password',
                           fillColor: Color(0xFFFFFFFF).withOpacity(0.1),
                           filled: true,
                           constraints:
