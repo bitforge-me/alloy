@@ -175,7 +175,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
             widget.asset.symbol,
             widget.l2Network?.symbol,
             widget.l2Network == null
-                ? Decimal.parse(_amountController.text)
+                ? assetAmountFromUser(widget.asset.symbol, Decimal.parse(_amountController.text))
                 : Decimal.zero,
             _recipientController.text,
             _saveRecipient,
