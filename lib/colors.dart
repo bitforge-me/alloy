@@ -23,4 +23,7 @@ Gradient? bronzeSecondaryGradient = LinearGradient(
 Gradient? bronzeCancelGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [Color(0xFFFFFFFF).withOpacity(0.28), Color(0xFFFFFFFF).withOpacity(0.28)]);
+    colors: [
+      Color(0xFFFFFFFF).withOpacity(0.28),
+      Color(0xFFFFFFFF).withOpacity(0.28)
+    ]);

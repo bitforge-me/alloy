@@ -83,6 +83,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   bool _invalidAuth = false;
   bool _retry = false;
   List<String> _alerts = [];
+  bool? _userRedirected;
 
   @override
   void initState() {
@@ -255,7 +256,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     reg = await Navigator.push<AccountRegistration>(
       context,
       MaterialPageRoute(
-          builder: (context) => AccountRegisterForm(
+          builder: (context) => BronzeRegisterForm(
                 reg,
                 showMobileNumber: RequireMobileNumber,
                 initialMobileCountry: InitialMobileCountry,
@@ -265,7 +266,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 locationIqApiKey: locationIqApiKey(),
               )),
     );
-    if (reg == null) return;
+    if (reg == null) {
+      setState(() {
+        _userRedirected = false;
+      });
+      return;
+    }
+    ;
     var res = await beUserRegister(reg);
     res.when((content) async {
       var cancelled = false;
@@ -304,9 +311,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 BronzeLoginForm(login, showTwoFactorCode: false)),
       );
       if (login == null) {
-				_register();
-				return null;
-			}
+        setState(() {
+          _userRedirected = true;
+        });
+        return null;
+      }
       showAlertDialog(context, 'logging in..');
       var result =
           await beUserTwoFactorEnabledCheck(login.email, login.password);
@@ -524,6 +533,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    if (_userRedirected == true && _userInfo == null) _register();
+    if (_userRedirected == false && _userInfo == null) _login();
     return Scaffold(
       appBar: AppBar(
           title: Image.asset(AppLogo),
