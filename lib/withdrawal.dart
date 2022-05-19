@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
 import 'package:zapdart/form_ui.dart';
+import 'package:zapdart/colors.dart';
 
 import 'beryllium.dart';
 import 'websocket.dart';
@@ -95,9 +96,10 @@ class WithdrawalFormScreen extends StatefulWidget {
   final BeAsset? l2Network;
   final Websocket websocket;
   final UserInfo? userInfo;
+  final Decimal availableBalance;
 
-  WithdrawalFormScreen(
-      this.asset, this.l2Network, this.websocket, this.userInfo);
+  WithdrawalFormScreen(this.asset, this.l2Network, this.websocket,
+      this.userInfo, this.availableBalance);
 
   @override
   State<WithdrawalFormScreen> createState() => _WithdrawalFormScreenState();
@@ -112,9 +114,19 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
   var _saveRecipient = false;
   var _testnet = testnet();
 
+  var _availableBalance = 'xxx';
+  var _withdrawalFee = 'xxx';
+  var _max = Decimal.zero;
+
   @override
   void initState() {
     super.initState();
+    _availableBalance =
+        assetFormatWithUnit(widget.asset.symbol, widget.availableBalance);
+    _withdrawalFee =
+        assetFormatWithUnit(widget.asset.symbol, widget.asset.withdrawFee);
+    if (widget.availableBalance > widget.asset.withdrawFee)
+      _max = widget.availableBalance - widget.asset.withdrawFee;
   }
 
   Future<void> _addressBook() async {
@@ -175,7 +187,8 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
             widget.asset.symbol,
             widget.l2Network?.symbol,
             widget.l2Network == null
-                ? assetAmountFromUser(widget.asset.symbol, Decimal.parse(_amountController.text))
+                ? assetAmountFromUser(
+                    widget.asset.symbol, Decimal.parse(_amountController.text))
                 : Decimal.zero,
             _recipientController.text,
             _saveRecipient,
@@ -219,6 +232,11 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
           widget.asset.symbol, widget.l2Network?.symbol, data);
   }
 
+  void _setMax() {
+    _amountController.text =
+        assetAmountToUser(widget.asset.symbol, _max).toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -240,22 +258,36 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                   Visibility(
                       visible:
                           !widget.asset.isCrypto || widget.l2Network == null,
-                      child: TextFormField(
-                          controller: _amountController,
-                          decoration: InputDecoration(
-                              labelText:
-                                  'Amount (${assetUnit(widget.asset.symbol)})'),
-                          keyboardType: TextInputType.numberWithOptions(
-                              signed: false, decimal: true),
-                          validator: (value) {
-                            if (value == null || value.isEmpty)
-                              return 'Please enter a value';
-                            var d = Decimal.tryParse(value.trim());
-                            if (d == null) return 'Invalid value';
-                            if (d <= Decimal.fromInt(0))
-                              return 'Please enter a value greater then 0';
-                            return null;
-                          })),
+                      child: Column(children: [
+                        Text(
+                            'Available: $_availableBalance. Withdrawal fee: $_withdrawalFee'),
+                        TextFormField(
+                            controller: _amountController,
+                            decoration: InputDecoration(
+                                labelText:
+                                    'Amount (${assetUnit(widget.asset.symbol)})',
+                                suffix: TextButton(
+                                    child: Text('max',
+                                        style: TextStyle(color: ZapOnPrimary)),
+                                    onPressed: _setMax)),
+                            keyboardType: TextInputType.numberWithOptions(
+                                signed: false, decimal: true),
+                            validator: (value) {
+                              if (value == null || value.isEmpty)
+                                return 'Please enter a value';
+                              var userAmount = Decimal.tryParse(value.trim());
+                              if (userAmount == null) return 'Invalid value';
+                              if (userAmount <= Decimal.zero)
+                                'Please return a value greater then 0';
+                              var sysAmount = assetAmountFromUser(
+                                  widget.asset.symbol, userAmount);
+                              if (sysAmount < widget.asset.minWithdraw)
+                                return 'Please enter a value greater then or equal to ${assetAmountToUser(widget.asset.symbol, widget.asset.minWithdraw)}';
+                              if (sysAmount > _max)
+                                return 'Please enter a value less then or equal to ${assetAmountToUser(widget.asset.symbol, _max)}';
+                              return null;
+                            })
+                      ])),
                   Visibility(
                       visible:
                           widget.asset.isCrypto && widget.l2Network == null,
@@ -509,11 +541,24 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
   }
 
   Future<void> _actionButtonTap() async {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => WithdrawalFormScreen(widget.asset,
-                widget.l2Network, widget.websocket, widget.userInfo)));
+    showAlertDialog(context, 'querying..');
+    var res = await beBalance(widget.asset.symbol);
+    Navigator.pop(context);
+    res.when((balance) {
+      if (balance != null) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => WithdrawalFormScreen(
+                    widget.asset,
+                    widget.l2Network,
+                    widget.websocket,
+                    widget.userInfo,
+                    balance.available)));
+      }
+    },
+        error: (err) => snackMsg(context, 'failed to query balances',
+            category: MessageCategory.Warning));
   }
 
   @override
@@ -703,11 +748,20 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
   }
 
   Future<void> _actionButtonTap() async {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => WithdrawalFormScreen(
-                widget.asset, null, widget.websocket, widget.userInfo)));
+    showAlertDialog(context, 'querying..');
+    var res = await beBalance(widget.asset.symbol);
+    Navigator.pop(context);
+    res.when((balance) {
+      if (balance != null) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => WithdrawalFormScreen(widget.asset, null,
+                    widget.websocket, widget.userInfo, balance.available)));
+      }
+    },
+        error: (err) => snackMsg(context, 'failed to query balances',
+            category: MessageCategory.Warning));
   }
 
   @override

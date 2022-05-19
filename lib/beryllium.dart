@@ -439,6 +439,12 @@ class BeBalancesResult with _$BeBalancesResult {
 }
 
 @freezed
+class BeBalanceResult with _$BeBalanceResult {
+  const factory BeBalanceResult(BeBalance? balance) = _BeBalanceResult;
+  const factory BeBalanceResult.error(BeError err) = _BeBalanceResultErr;
+}
+
+@freezed
 class BeCryptoDepositRecipientResult with _$BeCryptoDepositRecipientResult {
   const factory BeCryptoDepositRecipientResult(
           String recipient, String asset, String? l2Network) =
@@ -1013,6 +1019,15 @@ Future<BeBalancesResult> beBalances() async {
   var result = await post("balances", {}, authRequired: true);
   return result.when((content) => BeBalancesResult.parse(content),
       error: (err) => BeBalancesResult.error(err));
+}
+
+Future<BeBalanceResult> beBalance(String asset) async {
+  var result = await beBalances();
+  return result.when((balances) {
+    var balance =
+        balances.firstWhereOrNull((element) => element.asset == asset);
+    return BeBalanceResult(balance);
+  }, error: (err) => BeBalanceResult.error(err));
 }
 
 Future<BeCryptoDepositRecipientResult> beCryptoDepositRecipient(
