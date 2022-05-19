@@ -303,7 +303,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             builder: (context) =>
                 BronzeLoginForm(login, showTwoFactorCode: false)),
       );
-      if (login == null) return;
+      if (login == null) {
+				_register();
+				return null;
+			}
       showAlertDialog(context, 'logging in..');
       var result =
           await beUserTwoFactorEnabledCheck(login.email, login.password);
