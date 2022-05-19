@@ -16,54 +16,48 @@ import 'package:zapdart/account_forms.dart';
 import 'package:zapdart/colors.dart';
 import 'colors.dart';
 
-FormFieldValidator emailValidate = 
-(value) {
-					value = value?.trim();
-					if (value == null || value.isEmpty)
-						return 'Please enter an email';
-					if (!EmailValidator.validate(value))
-						return 'Invalid email';
-					return null;
-				};
+FormFieldValidator emailValidate = (value) {
+  value = value?.trim();
+  if (value == null || value.isEmpty) return 'Please enter an email';
+  if (!EmailValidator.validate(value)) return 'Invalid email';
+  return null;
+};
 
-FormFieldValidator passwordValidate =
-(value) {
-					if (value == null || value.isEmpty)
-						return 'Please enter a password';
-					return null;
-				};
+FormFieldValidator passwordValidate = (value) {
+  if (value == null || value.isEmpty) return 'Please enter a password';
+  return null;
+};
 
 class BronzeInputForm extends StatelessWidget {
-	TextEditingController? controller;
-	TextInputType? keyboardType;
-	FormFieldValidator<dynamic>? validator;
-	bool? obscureText;
-  BronzeInputForm(this.controller, this.validator, {this.keyboardType, this.obscureText})
+  TextEditingController? controller;
+  TextInputType? keyboardType;
+  FormFieldValidator<dynamic>? validator;
+  bool? obscureText;
+  BronzeInputForm(this.controller, this.validator,
+      {this.keyboardType, this.obscureText})
       : super();
 
   @override
   Widget build(BuildContext context) {
-		return
-			TextFormField(
-textAlign: TextAlign.center,
-					controller: this.controller,
-					decoration: InputDecoration(
-						fillColor: Color(0xFFFFFFFF).withOpacity(0.1),
-						filled: true,
-						constraints:
-								BoxConstraints(minWidth: 320, maxWidth: 320),
-						border: OutlineInputBorder(
-							borderRadius: BorderRadius.circular(8),
-							borderSide: BorderSide(
-								width: 0,
-								style: BorderStyle.none,
-							),
-						),
-					),
-					keyboardType: this.keyboardType ?? null,
-					obscureText: this.obscureText ?? false,
-					validator: this.validator);
-	}
+    return TextFormField(
+        textAlign: TextAlign.center,
+        controller: this.controller,
+        decoration: InputDecoration(
+          fillColor: Color(0xFFFFFFFF).withOpacity(0.1),
+          filled: true,
+          constraints: BoxConstraints(minWidth: 320, maxWidth: 320),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(
+              width: 0,
+              style: BorderStyle.none,
+            ),
+          ),
+        ),
+        keyboardType: this.keyboardType ?? null,
+        obscureText: this.obscureText ?? false,
+        validator: this.validator);
+  }
 }
 
 class BronzeLoginForm extends StatefulWidget {
@@ -71,7 +65,8 @@ class BronzeLoginForm extends StatefulWidget {
   final String? instructions;
   final bool showTwoFactorCode;
 
-  BronzeLoginForm(this.login, {this.instructions, this.showTwoFactorCode = false})
+  BronzeLoginForm(this.login,
+      {this.instructions, this.showTwoFactorCode = false})
       : super();
 
   @override
@@ -128,9 +123,11 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                       style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 34),
                     ),
                     SizedBox(height: 15),
-										BronzeInputForm(_emailController, emailValidate, keyboardType: TextInputType.emailAddress),
+                    BronzeInputForm(_emailController, emailValidate,
+                        keyboardType: TextInputType.emailAddress),
                     SizedBox(height: 8),
-										BronzeInputForm(_passwordController, passwordValidate, obscureText: true),
+                    BronzeInputForm(_passwordController, passwordValidate,
+                        obscureText: true),
                     SizedBox(height: 8),
                     Visibility(
                         visible: widget.showTwoFactorCode,
