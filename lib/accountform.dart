@@ -33,8 +33,7 @@ class BronzeInputForm extends StatelessWidget {
   TextInputType? keyboardType;
   FormFieldValidator<dynamic>? validator;
   bool? obscureText;
-  BronzeInputForm(this.controller, this.validator,
-      {this.keyboardType, this.obscureText})
+  BronzeInputForm(this.controller, {this.validator, this.keyboardType, this.obscureText})
       : super();
 
   @override
@@ -56,7 +55,7 @@ class BronzeInputForm extends StatelessWidget {
         ),
         keyboardType: this.keyboardType ?? null,
         obscureText: this.obscureText ?? false,
-        validator: this.validator);
+        validator: this.validator ?? null);
   }
 }
 
@@ -123,19 +122,16 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                       style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 34),
                     ),
                     SizedBox(height: 15),
-                    BronzeInputForm(_emailController, emailValidate,
+                    BronzeInputForm(_emailController, validator: emailValidate,
                         keyboardType: TextInputType.emailAddress),
                     SizedBox(height: 8),
-                    BronzeInputForm(_passwordController, passwordValidate,
+                    BronzeInputForm(_passwordController, validator: passwordValidate,
                         obscureText: true),
                     SizedBox(height: 8),
                     Visibility(
                         visible: widget.showTwoFactorCode,
-                        child: TextFormField(
-                            controller: _tfCodeController,
-                            obscureText: true,
-                            decoration:
-                                InputDecoration(labelText: 'Two Factor Code'))),
+			child: BronzeInputForm(_tfCodeController, obscureText: true),
+                        ),
                     RoundedButton(() {
                       if (_formKey.currentState == null) return;
                       if (_formKey.currentState!.validate()) {
