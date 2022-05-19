@@ -256,11 +256,17 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                 padding: EdgeInsets.all(10),
                 child: Column(children: [
                   Visibility(
+                      visible: widget.asset.withdrawInstr != null,
+                      child: AlertDrawer(
+                          () {}, ['${widget.asset.withdrawInstr}'])),
+                  Visibility(
                       visible:
                           !widget.asset.isCrypto || widget.l2Network == null,
                       child: Column(children: [
-                        Text(
-                            'Available: $_availableBalance. Withdrawal fee: $_withdrawalFee'),
+                        Container(
+                            margin: EdgeInsets.all(5),
+                            child: Text(
+                                'Available: $_availableBalance. Withdrawal fee: $_withdrawalFee')),
                         TextFormField(
                             controller: _amountController,
                             decoration: InputDecoration(

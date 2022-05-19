@@ -283,9 +283,21 @@ class BeAsset {
   final bool isCrypto;
   @JsonKey(name: 'l2_network')
   final BeAsset? l2Network;
+  @JsonKey(name: 'deposit_instr')
+  final String? depositInstr;
+  @JsonKey(name: 'withdraw_instr')
+  final String? withdrawInstr;
 
-  BeAsset(this.symbol, this.name, this.decimals, this.withdrawFee,
-      this.minWithdraw, this.isCrypto, this.l2Network);
+  BeAsset(
+      this.symbol,
+      this.name,
+      this.decimals,
+      this.withdrawFee,
+      this.minWithdraw,
+      this.isCrypto,
+      this.l2Network,
+      this.depositInstr,
+      this.withdrawInstr);
   factory BeAsset.fromJson(Map<String, dynamic> json) =>
       _$BeAssetFromJson(json);
   Map<String, dynamic> toJson() => _$BeAssetToJson(this);

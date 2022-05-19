@@ -358,6 +358,9 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
         body: Container(
             padding: EdgeInsets.all(20),
             child: Column(children: [
+              Visibility(
+                  visible: widget.asset.depositInstr != null,
+                  child: AlertDrawer(() {}, ['${widget.asset.depositInstr}'])),
               Container(
                   child: Center(
                       child: QrImage(
