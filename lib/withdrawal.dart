@@ -382,6 +382,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                               return 'Please enter a value';
                             return null;
                           })),
+                  SizedBox(height: 15),
                   raisedButton(
                       onPressed: _withdrawalCreate,
                       child: Text('Create Withdrawal'))

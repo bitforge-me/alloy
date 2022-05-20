@@ -194,6 +194,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                         if (totalPrice.errMsg != null) return totalPrice.errMsg;
                         return null;
                       }),
+                  SizedBox(height: 15),
                   raisedButton(
                       onPressed: _orderCreate, child: Text('Create Order'))
                 ]))));

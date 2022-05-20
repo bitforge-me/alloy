@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-import 'package:zapdart/widgets.dart';
-import 'package:zapdart/colors.dart';
-
 class QrScan extends StatefulWidget {
   QrScan() : super();
 
@@ -31,11 +28,6 @@ class _QrScanState extends State<QrScan> {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          leading: backButton(context, color: ZapBlack, onPressed: () {
-            stopped = true;
-            controller.stop();
-            Navigator.of(context).pop();
-          }),
           actions: [
             IconButton(
                 onPressed: () => controller.switchCamera(),
