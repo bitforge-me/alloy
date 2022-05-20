@@ -560,31 +560,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   ZapSecondary, ZapSecondaryGradient, 'Lost Password',
                   holePunch: true, width: 200),
             ),
-            _userInfo != null ? ExchangeWidget(_websocket) : SizedBox(),
-            Visibility(
-              visible: _userInfo != null,
-              child: RoundedButton(_orders, ZapOnSecondary, ZapSecondary,
-                  ZapSecondaryGradient, 'Orders',
-                  holePunch: true, width: 200),
-            ),
-            Visibility(
-              visible: _userInfo != null,
-              child: RoundedButton(_balances, ZapOnSecondary, ZapSecondary,
-                  ZapSecondaryGradient, 'Balances',
-                  holePunch: true, width: 200),
-            ),
-            Visibility(
-              visible: _userInfo != null,
-              child: RoundedButton(_deposit, ZapOnSecondary, ZapSecondary,
-                  ZapSecondaryGradient, 'Deposits',
-                  holePunch: true, width: 200),
-            ),
-            Visibility(
-              visible: _userInfo != null,
-              child: RoundedButton(_withdrawal, ZapOnSecondary, ZapSecondary,
-                  ZapSecondaryGradient, 'Withdrawals',
-                  holePunch: true, width: 200),
-            ),
             Visibility(
               visible: _invalidAuth,
               child: RoundedButton(_logout, ZapOnSecondary, ZapSecondary,
@@ -597,6 +572,42 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   ZapSecondaryGradient, 'Retry',
                   holePunch: true, width: 200),
             ),
+            // exchange widget
+            _userInfo != null ? ExchangeWidget(_websocket) : SizedBox(),
+            // home screen buttons
+            Visibility(
+                visible: _userInfo != null,
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  Row(mainAxisSize: MainAxisSize.min, children: [
+                    SquareButton(_orders, Icons.shopping_cart_rounded,
+                        ZapSecondary, 'Orders',
+                        textColor: ZapOnSecondary,
+                        textOutside: false,
+                        borderSize: 0),
+                    SizedBox(width: 15),
+                    SquareButton(_balances, Icons.wallet_rounded, ZapSecondary,
+                        'Balances',
+                        textColor: ZapOnSecondary,
+                        textOutside: false,
+                        borderSize: 0)
+                  ]),
+                  SizedBox(height: 15),
+                  Row(mainAxisSize: MainAxisSize.min, children: [
+                    SquareButton(_deposit, Icons.keyboard_arrow_down_rounded,
+                        ZapSecondary, 'Deposits',
+                        textColor: ZapOnSecondary,
+                        textOutside: false,
+                        borderSize: 0),
+                    SizedBox(width: 15),
+                    SquareButton(_withdrawal, Icons.keyboard_arrow_up_rounded,
+                        ZapSecondary, 'Withdrawals',
+                        textColor: ZapOnSecondary,
+                        textOutside: false,
+                        borderSize: 0)
+                  ]),
+                ])),
+            // debug info
+            SizedBox(height: 15),
             Visibility(
               visible: testnet(),
               child: Text('TESTNET',
