@@ -1,8 +1,8 @@
 import 'package:universal_platform/universal_platform.dart';
 import 'package:universal_html/html.dart' as html;
 // uncomment if you need to override the app theme
-//import 'package:flutter/material.dart';
-//import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:zapdart/colors.dart';
 
@@ -71,19 +71,37 @@ bool testnet() {
 }
 
 void initConfig() {
-  overrideTheme();
-  // example
-  /*overrideTheme(
-    zapWhite: Colors.lightBlue[50],
-    zapYellow: Colors.teal[100],
-    zapWarning: Colors.yellow,
-    zapWarningLight: Colors.yellow[100],
-    zapBlue: Colors.pink[200],
-    zapBlueGradient: LinearGradient(colors: [Colors.pink[200]!, Colors.pink[400]!]),
-    zapGreen: Colors.blueGrey[300],
-    zapGreenGradient: LinearGradient(colors: [Colors.blueGrey[300]!, Colors.blueGrey[500]!]),
-    zapOutgoingFunds: Colors.red,
-    zapIncomingFunds: Colors.green,
-    zapTextThemer: GoogleFonts.sansitaTextTheme);
-    */
+  overrideTheme(
+      zapBrightness: Brightness.dark,
+      zapPrimary: Color(0xffF49E3E),
+      zapPrimaryDark: Color(0xffD47E1E),
+      zapSecondary: Color(0xff22232c),
+      zapSecondaryDark: Color(0xff22232c),
+      zapSecondaryGradient:
+          LinearGradient(colors: [Color(0xff32333c), Color(0xff12131c)]),
+      zapSurface: Colors.white70,
+      zapBackground: Color(0xff1B1C25),
+      zapError: Colors.redAccent,
+      zapOnPrimary: Colors.white,
+      zapOnSecondary: Colors.white,
+      zapOnError: Colors.white,
+      zapOnSurface: Colors.black,
+      zapOnBackground: Colors.white,
+      zapOnBackgroundLight: Colors.white54,
+      zapYellow: Colors.yellow,
+      zapYellowGradient:
+          LinearGradient(colors: [Colors.yellow, Color(0xFFFFD030)]),
+      zapGreen: Color(0xFF009075),
+      zapGreenGradient:
+          LinearGradient(colors: [Color(0xFF009075), Color(0xFF109090)]),
+      zapRed: Colors.redAccent,
+      zapWarning: Colors.yellow,
+      zapWarningLight: Colors.yellow[100],
+      zapBlack: Colors.black,
+      zapBlackLight: Colors.black38,
+      zapBlackMed: Colors.black87,
+      zapOutgoingFunds: Colors.red,
+      zapIncomingFunds: Colors.green,
+      zapSelfFunds: Colors.black,
+      zapTextThemer: GoogleFonts.poppinsTextTheme);
 }

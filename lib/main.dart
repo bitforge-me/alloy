@@ -47,24 +47,19 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    initConfig();
+    var theme = ThemeData(
+      useMaterial3: false,
+      brightness: ZapBrightness,
+      scaffoldBackgroundColor: ZapBackground,
+      appBarTheme: AppBarTheme(centerTitle: true, color: ZapSecondary),
+      // ignore: deprecated_member_use
+      accentColor: ZapPrimary,
+    );
+    ZapTextThemer(theme.textTheme);
     return MaterialApp(
       title: AppTitle,
-      theme: ThemeData(
-          textTheme: ZapTextThemer(Theme.of(context).textTheme),
-          primaryTextTheme: ZapTextThemer(Theme.of(context).textTheme),
-          colorScheme: ColorScheme(
-            brightness: ZapBrightness,
-            primary: ZapPrimary,
-            secondary: ZapSecondary,
-            surface: ZapSurface,
-            background: ZapBackground,
-            error: ZapError,
-            onPrimary: ZapOnPrimary,
-            onSecondary: ZapOnSecondary,
-            onSurface: ZapOnSurface,
-            onBackground: ZapOnBackground,
-            onError: ZapOnError,
-          )),
+      theme: theme,
       debugShowCheckedModeBanner: false,
       home: MyHomePage(title: AppTitle),
     );
@@ -608,7 +603,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   style: TextStyle(color: ZapWarning, fontSize: 8)),
             ),
             Text('Server: ${server()}',
-                style: TextStyle(color: ZapBlackLight, fontSize: 8)),
+                style: TextStyle(color: ZapOnBackgroundLight, fontSize: 8)),
             Visibility(
                 visible: GitSha != 'GIT_SHA_REPLACE',
                 child: Text('Build: ${GitSha.substring(0, 5)} - $BuildDate',

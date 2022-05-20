@@ -34,8 +34,8 @@ class _PaginatorState extends State<Paginator> {
   }
 
   Widget _activeButton(String title, int toPage) {
-    return RoundedButton(() => widget.activatePage(toPage), ZapOnPrimary,
-        ZapPrimary, null, title,
+    return RoundedButton(() => widget.activatePage(toPage), ZapOnSurface,
+        ZapSurface, null, title,
         width: 35);
   }
 

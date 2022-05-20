@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:zapdart/colors.dart';
 import 'package:zapdart/qrwidget.dart';
 import 'package:flutter/services.dart';
 import 'package:decimal/decimal.dart';
@@ -300,6 +301,8 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
           ListTile(
               title: Center(
                   child: QrImage(
+            backgroundColor: ZapSurface,
+            foregroundColor: ZapOnSurface,
             data: '${_deposit.recipient}',
             version: QrVersions.auto,
             size: 200.0,
@@ -364,6 +367,8 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
               Container(
                   child: Center(
                       child: QrImage(
+                    backgroundColor: ZapSurface,
+                    foregroundColor: ZapOnSurface,
                     data: '${widget.recipient}',
                     version: QrVersions.auto,
                     size: 200.0,
