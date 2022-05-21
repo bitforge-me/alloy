@@ -4995,6 +4995,380 @@ abstract class _BeBalancesResultErr implements BeBalancesResult {
 }
 
 /// @nodoc
+class _$BeBalanceResultTearOff {
+  const _$BeBalanceResultTearOff();
+
+  _BeBalanceResult call(BeBalance? balance) {
+    return _BeBalanceResult(
+      balance,
+    );
+  }
+
+  _BeBalanceResultErr error(BeError err) {
+    return _BeBalanceResultErr(
+      err,
+    );
+  }
+}
+
+/// @nodoc
+const $BeBalanceResult = _$BeBalanceResultTearOff();
+
+/// @nodoc
+mixin _$BeBalanceResult {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(BeBalance? balance) $default, {
+    required TResult Function(BeError err) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult Function(BeBalance? balance)? $default, {
+    TResult Function(BeError err)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(BeBalance? balance)? $default, {
+    TResult Function(BeError err)? error,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_BeBalanceResult value) $default, {
+    required TResult Function(_BeBalanceResultErr value) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult Function(_BeBalanceResult value)? $default, {
+    TResult Function(_BeBalanceResultErr value)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_BeBalanceResult value)? $default, {
+    TResult Function(_BeBalanceResultErr value)? error,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $BeBalanceResultCopyWith<$Res> {
+  factory $BeBalanceResultCopyWith(
+          BeBalanceResult value, $Res Function(BeBalanceResult) then) =
+      _$BeBalanceResultCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$BeBalanceResultCopyWithImpl<$Res>
+    implements $BeBalanceResultCopyWith<$Res> {
+  _$BeBalanceResultCopyWithImpl(this._value, this._then);
+
+  final BeBalanceResult _value;
+  // ignore: unused_field
+  final $Res Function(BeBalanceResult) _then;
+}
+
+/// @nodoc
+abstract class _$BeBalanceResultCopyWith<$Res> {
+  factory _$BeBalanceResultCopyWith(
+          _BeBalanceResult value, $Res Function(_BeBalanceResult) then) =
+      __$BeBalanceResultCopyWithImpl<$Res>;
+  $Res call({BeBalance? balance});
+}
+
+/// @nodoc
+class __$BeBalanceResultCopyWithImpl<$Res>
+    extends _$BeBalanceResultCopyWithImpl<$Res>
+    implements _$BeBalanceResultCopyWith<$Res> {
+  __$BeBalanceResultCopyWithImpl(
+      _BeBalanceResult _value, $Res Function(_BeBalanceResult) _then)
+      : super(_value, (v) => _then(v as _BeBalanceResult));
+
+  @override
+  _BeBalanceResult get _value => super._value as _BeBalanceResult;
+
+  @override
+  $Res call({
+    Object? balance = freezed,
+  }) {
+    return _then(_BeBalanceResult(
+      balance == freezed
+          ? _value.balance
+          : balance // ignore: cast_nullable_to_non_nullable
+              as BeBalance?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_BeBalanceResult
+    with DiagnosticableTreeMixin
+    implements _BeBalanceResult {
+  const _$_BeBalanceResult(this.balance);
+
+  @override
+  final BeBalance? balance;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'BeBalanceResult(balance: $balance)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'BeBalanceResult'))
+      ..add(DiagnosticsProperty('balance', balance));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _BeBalanceResult &&
+            (identical(other.balance, balance) || other.balance == balance));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, balance);
+
+  @JsonKey(ignore: true)
+  @override
+  _$BeBalanceResultCopyWith<_BeBalanceResult> get copyWith =>
+      __$BeBalanceResultCopyWithImpl<_BeBalanceResult>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(BeBalance? balance) $default, {
+    required TResult Function(BeError err) error,
+  }) {
+    return $default(balance);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult Function(BeBalance? balance)? $default, {
+    TResult Function(BeError err)? error,
+  }) {
+    return $default?.call(balance);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(BeBalance? balance)? $default, {
+    TResult Function(BeError err)? error,
+    required TResult orElse(),
+  }) {
+    if ($default != null) {
+      return $default(balance);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_BeBalanceResult value) $default, {
+    required TResult Function(_BeBalanceResultErr value) error,
+  }) {
+    return $default(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult Function(_BeBalanceResult value)? $default, {
+    TResult Function(_BeBalanceResultErr value)? error,
+  }) {
+    return $default?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_BeBalanceResult value)? $default, {
+    TResult Function(_BeBalanceResultErr value)? error,
+    required TResult orElse(),
+  }) {
+    if ($default != null) {
+      return $default(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _BeBalanceResult implements BeBalanceResult {
+  const factory _BeBalanceResult(BeBalance? balance) = _$_BeBalanceResult;
+
+  BeBalance? get balance;
+  @JsonKey(ignore: true)
+  _$BeBalanceResultCopyWith<_BeBalanceResult> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$BeBalanceResultErrCopyWith<$Res> {
+  factory _$BeBalanceResultErrCopyWith(
+          _BeBalanceResultErr value, $Res Function(_BeBalanceResultErr) then) =
+      __$BeBalanceResultErrCopyWithImpl<$Res>;
+  $Res call({BeError err});
+
+  $BeErrorCopyWith<$Res> get err;
+}
+
+/// @nodoc
+class __$BeBalanceResultErrCopyWithImpl<$Res>
+    extends _$BeBalanceResultCopyWithImpl<$Res>
+    implements _$BeBalanceResultErrCopyWith<$Res> {
+  __$BeBalanceResultErrCopyWithImpl(
+      _BeBalanceResultErr _value, $Res Function(_BeBalanceResultErr) _then)
+      : super(_value, (v) => _then(v as _BeBalanceResultErr));
+
+  @override
+  _BeBalanceResultErr get _value => super._value as _BeBalanceResultErr;
+
+  @override
+  $Res call({
+    Object? err = freezed,
+  }) {
+    return _then(_BeBalanceResultErr(
+      err == freezed
+          ? _value.err
+          : err // ignore: cast_nullable_to_non_nullable
+              as BeError,
+    ));
+  }
+
+  @override
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
+      return _then(_value.copyWith(err: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$_BeBalanceResultErr
+    with DiagnosticableTreeMixin
+    implements _BeBalanceResultErr {
+  const _$_BeBalanceResultErr(this.err);
+
+  @override
+  final BeError err;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'BeBalanceResult.error(err: $err)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'BeBalanceResult.error'))
+      ..add(DiagnosticsProperty('err', err));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _BeBalanceResultErr &&
+            (identical(other.err, err) || other.err == err));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, err);
+
+  @JsonKey(ignore: true)
+  @override
+  _$BeBalanceResultErrCopyWith<_BeBalanceResultErr> get copyWith =>
+      __$BeBalanceResultErrCopyWithImpl<_BeBalanceResultErr>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(BeBalance? balance) $default, {
+    required TResult Function(BeError err) error,
+  }) {
+    return error(err);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult Function(BeBalance? balance)? $default, {
+    TResult Function(BeError err)? error,
+  }) {
+    return error?.call(err);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(BeBalance? balance)? $default, {
+    TResult Function(BeError err)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(err);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_BeBalanceResult value) $default, {
+    required TResult Function(_BeBalanceResultErr value) error,
+  }) {
+    return error(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult Function(_BeBalanceResult value)? $default, {
+    TResult Function(_BeBalanceResultErr value)? error,
+  }) {
+    return error?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_BeBalanceResult value)? $default, {
+    TResult Function(_BeBalanceResultErr value)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _BeBalanceResultErr implements BeBalanceResult {
+  const factory _BeBalanceResultErr(BeError err) = _$_BeBalanceResultErr;
+
+  BeError get err;
+  @JsonKey(ignore: true)
+  _$BeBalanceResultErrCopyWith<_BeBalanceResultErr> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 class _$BeCryptoDepositRecipientResultTearOff {
   const _$BeCryptoDepositRecipientResultTearOff();
 

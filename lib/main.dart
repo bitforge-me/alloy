@@ -1,4 +1,3 @@
-import 'package:alloy/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'dart:convert';
@@ -30,6 +29,8 @@ import 'exchange.dart';
 import 'units.dart';
 import 'colors.dart';
 import 'accountform.dart';
+import 'assets.dart';
+import 'event.dart';
 
 final log = Logger('Main');
 
@@ -50,11 +51,21 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    initConfig();
+    var theme = ThemeData(
+      useMaterial3: false,
+      fontFamily: 'SF-Pro',
+      brightness: ZapBrightness,
+      scaffoldBackgroundColor: ZapBackground,
+      appBarTheme: AppBarTheme(centerTitle: true, color: ZapSecondary),
+      // ignore: deprecated_member_use
+      accentColor: ZapPrimary,
+      colorScheme: ColorScheme.dark(primary: Color(0xFF1B1C25)),
+    );
+    ZapTextThemer(theme.textTheme);
     return MaterialApp(
       title: AppTitle,
-      theme: ThemeData(
-          fontFamily: 'SF-Pro',
-          colorScheme: ColorScheme.dark(primary: Color(0xFF1B1C25))),
+      theme: theme,
       debugShowCheckedModeBanner: false,
       home: MyHomePage(title: AppTitle),
     );
@@ -187,23 +198,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       var description = json['description'];
       var sats = json['amount_sat'];
       var amount = Decimal.fromInt(sats) / Decimal.fromInt(100000000);
-      alert(
+      Navigator.push(
           context,
-          'Invoice paid',
-          Container(
-              width: 300,
-              height: 200,
-              child: ListView(shrinkWrap: true, children: [
-                ListTile(
-                    title: Text('Invoice data'),
-                    subtitle: Text('${shortenStr(bolt11)}')),
-                ListTile(
-                    title: Text('Amount'),
-                    subtitle: Text(assetFormatWithUnit(
-                        Btc, assetAmountToUser(Btc, amount)))),
-                ListTile(
-                    title: Text('Description'), subtitle: Text('$description'))
-              ])));
+          MaterialPageRoute(
+              builder: (context) => DepositReceivedScreen(
+                  Btc, BtcLn, bolt11, amount, description)));
     }
   }
 
@@ -585,31 +584,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   ZapSecondary, bronzeSecondaryGradient, 'Lost Password',
                   holePunch: true, width: 320, height: 50),
             ),
-            _userInfo != null ? ExchangeWidget(_websocket) : SizedBox(),
-            Visibility(
-              visible: _userInfo != null,
-              child: RoundedButton(_orders, ZapOnSecondary, ZapSecondary,
-                  ZapSecondaryGradient, 'Orders',
-                  holePunch: true, width: 200),
-            ),
-            Visibility(
-              visible: _userInfo != null,
-              child: RoundedButton(_balances, ZapOnSecondary, ZapSecondary,
-                  ZapSecondaryGradient, 'Balances',
-                  holePunch: true, width: 200),
-            ),
-            Visibility(
-              visible: _userInfo != null,
-              child: RoundedButton(_deposit, ZapOnSecondary, ZapSecondary,
-                  ZapSecondaryGradient, 'Deposits',
-                  holePunch: true, width: 200),
-            ),
-            Visibility(
-              visible: _userInfo != null,
-              child: RoundedButton(_withdrawal, ZapOnSecondary, ZapSecondary,
-                  ZapSecondaryGradient, 'Withdrawals',
-                  holePunch: true, width: 200),
-            ),
             Visibility(
               visible: _invalidAuth,
               child: RoundedButton(_logout, ZapOnSecondary, ZapSecondary,
@@ -622,13 +596,49 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   ZapSecondaryGradient, 'Retry',
                   holePunch: true, width: 200),
             ),
+            // exchange widget
+            _userInfo != null ? ExchangeWidget(_websocket) : SizedBox(),
+            // home screen buttons
+            Visibility(
+                visible: _userInfo != null,
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  Row(mainAxisSize: MainAxisSize.min, children: [
+                    SquareButton(_orders, Icons.shopping_cart_rounded,
+                        ZapSecondary, 'Orders',
+                        textColor: ZapOnSecondary,
+                        textOutside: false,
+                        borderSize: 0),
+                    SizedBox(width: 15),
+                    SquareButton(_balances, Icons.wallet_rounded, ZapSecondary,
+                        'Balances',
+                        textColor: ZapOnSecondary,
+                        textOutside: false,
+                        borderSize: 0)
+                  ]),
+                  SizedBox(height: 15),
+                  Row(mainAxisSize: MainAxisSize.min, children: [
+                    SquareButton(_deposit, Icons.keyboard_arrow_down_rounded,
+                        ZapSecondary, 'Deposits',
+                        textColor: ZapOnSecondary,
+                        textOutside: false,
+                        borderSize: 0),
+                    SizedBox(width: 15),
+                    SquareButton(_withdrawal, Icons.keyboard_arrow_up_rounded,
+                        ZapSecondary, 'Withdrawals',
+                        textColor: ZapOnSecondary,
+                        textOutside: false,
+                        borderSize: 0)
+                  ]),
+                ])),
+            // debug info
+            SizedBox(height: 15),
             Visibility(
               visible: testnet(),
               child: Text('TESTNET',
                   style: TextStyle(color: ZapWarning, fontSize: 8)),
             ),
             Text('Server: ${server()}',
-                style: TextStyle(color: ZapBlackLight, fontSize: 8)),
+                style: TextStyle(color: ZapOnBackgroundLight, fontSize: 8)),
             Visibility(
                 visible: GitSha != 'GIT_SHA_REPLACE',
                 child: Text('Build: ${GitSha.substring(0, 5)} - $BuildDate',

@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  <base href="$FLUTTER_BASE_HREF">
+  -->
+
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A crypto retailer.">
@@ -10,259 +25,74 @@
   <meta name="apple-mobile-web-app-title" content="Alloy">
   <link rel="apple-touch-icon" href="icons/Icon-50.png">
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
   <title>Alloy</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="favicon.png">
 
-  <style>
-
-		body {
-			background-color: #1B1C25;
-		}
-
-    .loading {
-      display: flex;
-      flex-flow: column;
-      justify-content: center;
-      align-items: center;
-      margin: 0;
-			top: 30%;
-			left: 35%;
-      position: absolute;
-    }
-
-    .loader {
-      width: 50px !important;
-      height: 50px !important;
-    }
-
-		#circle-1 {
-			animation: circle-1-move 5s infinite;
-		}
-		#circle-2 {
-			animation: circle-2-move 5s infinite;
-		}
-		#circle-3 {
-			animation: circle-3-move 5s infinite;
-		}
-		#circle-4 {
-			animation: circle-4-move 5s infinite;
-		}
-		#bronze-logo {
-			animation: bronze-logo-move 5s infinite;
-		}
-		@keyframes circle-1-move {
-			0% {
-				transform: translate(-2.5%, 0%);
-			}
-			100% {
-				transform: translate(2.5%, 0%);
-			}
-		}
-		@keyframes circle-2-move {
-			0% {
-				transform: translate(2.5%, 0%);
-			}
-			100% {
-				transform: translate(-2.5%, 0%);
-			}
-		}
-		@keyframes circle-3-move {
-			0% {
-				transform: translate(0%, 2.5%);
-			}
-			100% {
-				transform: translate(0%, -2.5%);
-			}
-		}
-		@keyframes circle-4-move {
-			0% {
-				transform: translate(0%, -2.5%);
-			}
-			100% {
-				transform: translate(0%, 2.5%);
-			}
-		}
-		@keyframes bronze-logo-move {
-			0% {
-				transform: translate(20%, -2.5%)
-			}
-			100% {
-				transform: translate(20%, 2.5%)
-			}
-		}
-
-  </style>
-</head>
-
-<body>
-
-  <!-- First time loading -->
-  <div class="loading">
-    <div class="loader">
-			<svg width="313" height="321" viewBox="0 0 313 321" fill="none" xmlns="http://www.w3.org/2000/svg">
-			<g opacity="0.5">
-			<circle id="circle-1" opacity="0.25" cx="152" cy="164" r="93" fill="#C4C4C4"/>
-			<circle id="circle-2" opacity="0.25" cx="152" cy="188" r="93" fill="#C4C4C4"/>
-			<circle id="circle-3" opacity="0.25" cx="180" cy="93" r="93" fill="#C4C4C4"/>
-			<circle id="circle-4" opacity="0.25" cx="93" cy="142" r="93" fill="#C4C4C4"/>
-			</g>
-			<g id="bronze-logo" filter="url(#filter0_d_18_410)" transform="translate(60,10)">
-			<path d="M92.2578 95.7158L121.542 78.6641L135.999 87.1899L107.456 104.983L92.2578 95.7158Z" fill="#C4C4C4"/>
-			<path d="M92.2578 95.7158L121.542 78.6641L135.999 87.1899L107.456 104.983L92.2578 95.7158Z" fill="url(#paint0_linear_18_410)"/>
-			<path d="M134.887 120.923L92.2578 95.7158V110.543L134.887 136.492V120.923Z" fill="url(#paint1_linear_18_410)"/>
-			<path d="M62.6034 128.706V79.7754H50V128.706H62.6034Z" fill="url(#paint2_linear_18_410)"/>
-			<path d="M93 46.043L50 70.5085V86.8188L93 61.6119V46.043Z" fill="url(#paint3_linear_18_410)"/>
-			<path d="M93 160.957L50 136.492V120.181L93 145.313V160.957Z" fill="url(#paint4_linear_18_410)"/>
-			<path d="M93 46.043L136 70.8819V87.1922L93 61.9854V46.043Z" fill="url(#paint5_linear_18_410)"/>
-			<path d="M92.9992 160.957L135.258 136.568L134.887 120.925L92.9992 145.303V160.957Z" fill="url(#paint6_linear_18_410)"/>
-			</g>
-			<defs>
-			<filter id="filter0_d_18_410" x="0" y="0.0429688" width="186" height="214.914" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-			<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-			<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-			<feOffset dy="4"/>
-			<feGaussianBlur stdDeviation="25"/>
-			<feComposite in2="hardAlpha" operator="out"/>
-			<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0"/>
-			<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_18_410"/>
-			<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_18_410" result="shape"/>
-			</filter>
-			<linearGradient id="paint0_linear_18_410" x1="114.129" y1="78.6641" x2="114.129" y2="104.983" gradientUnits="userSpaceOnUse">
-			<stop stop-color="#ECECEC"/>
-			<stop offset="1" stop-color="#808184"/>
-			</linearGradient>
-			<linearGradient id="paint1_linear_18_410" x1="92.2578" y1="116.204" x2="134.887" y2="116.204" gradientUnits="userSpaceOnUse">
-			<stop stop-color="#723920"/>
-			<stop offset="0.115979" stop-color="#8B4C28"/>
-			<stop offset="0.229167" stop-color="#954B29"/>
-			<stop offset="0.364583" stop-color="#C36437"/>
-			<stop offset="0.479167" stop-color="#8F4C2A"/>
-			<stop offset="0.588542" stop-color="#A8562D"/>
-			<stop offset="0.708333" stop-color="#ED7842"/>
-			<stop offset="0.833333" stop-color="#A6532D"/>
-			<stop offset="1" stop-color="#7B3E20"/>
-			</linearGradient>
-			<linearGradient id="paint2_linear_18_410" x1="56.3017" y1="79.7754" x2="56.3017" y2="128.706" gradientUnits="userSpaceOnUse">
-			<stop stop-color="#ECECEC"/>
-			<stop offset="1" stop-color="#808184"/>
-			</linearGradient>
-			<linearGradient id="paint3_linear_18_410" x1="50" y1="66.5313" x2="93" y2="66.5313" gradientUnits="userSpaceOnUse">
-			<stop stop-color="#723920"/>
-			<stop offset="0.115979" stop-color="#8B4C28"/>
-			<stop offset="0.229167" stop-color="#954B29"/>
-			<stop offset="0.364583" stop-color="#C36437"/>
-			<stop offset="0.479167" stop-color="#8F4C2A"/>
-			<stop offset="0.588542" stop-color="#A8562D"/>
-			<stop offset="0.708333" stop-color="#ED7842"/>
-			<stop offset="0.833333" stop-color="#A6532D"/>
-			<stop offset="1" stop-color="#7B3E20"/>
-			</linearGradient>
-			<linearGradient id="paint4_linear_18_410" x1="50" y1="140.469" x2="93" y2="140.469" gradientUnits="userSpaceOnUse">
-			<stop stop-color="#723920"/>
-			<stop offset="0.115979" stop-color="#8B4C28"/>
-			<stop offset="0.229167" stop-color="#954B29"/>
-			<stop offset="0.364583" stop-color="#C36437"/>
-			<stop offset="0.479167" stop-color="#8F4C2A"/>
-			<stop offset="0.588542" stop-color="#A8562D"/>
-			<stop offset="0.708333" stop-color="#ED7842"/>
-			<stop offset="0.833333" stop-color="#A6532D"/>
-			<stop offset="1" stop-color="#7B3E20"/>
-			</linearGradient>
-			<linearGradient id="paint5_linear_18_410" x1="136" y1="78.6637" x2="93" y2="54.9395" gradientUnits="userSpaceOnUse">
-			<stop stop-color="#F69F3E"/>
-			<stop offset="1" stop-color="#865E35"/>
-			</linearGradient>
-			<linearGradient id="paint6_linear_18_410" x1="135.258" y1="128.923" x2="93.0181" y2="152.25" gradientUnits="userSpaceOnUse">
-			<stop stop-color="#F69F3E"/>
-			<stop offset="1" stop-color="#865E35"/>
-			</linearGradient>
-			</defs>
-			</svg>
-    </div>
-  </div>
-
-  <!-- Ensure first time loading progress is gone after app loads -->
   <script>
-  window.addEventListener("flutter-first-frame", function() {
-      var element = document.getElementsByClassName("loading");
-      element[0].parentNode.removeChild(element[0]);
-  });
+    // The value below is injected by flutter build, do not touch.
+    var serviceWorkerVersion = null;
   </script>
+  <!-- This script adds the flutter initialization JS code -->  
+  <script src="flutter.js" defer></script>
 
   <!-- Phone number validation script
-       https://pub.dev/packages/intl_phone_number_input#web-support -->
+  https://pub.dev/packages/intl_phone_number_input#web-support -->
   <script src="assets/packages/libphonenumber_plugin/js/libphonenumber.js"></script>
   <script src="assets/packages/libphonenumber_plugin/js/stringbuffer.js"></script>
   <!-- JS QR code detection script -->
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js" integrity="sha384-2EBe4bOCAHoiyZtAsgW2cgo3crpM072svgIIV2pYxOQWejDaa1rMJA9NH6LCkVQb" crossorigin="anonymous"></script>
 
-  <!-- This script installs service_worker.js to provide PWA functionality to
-       application. For more information, see:
-       https://developers.google.com/web/fundamentals/primers/service-workers -->
+  <style>
+    body {
+      background-color: #1B1C25;
+    }
+
+    .flutter-loader {
+      /* hack to remove blue flutter loading bar at the top of page */
+      display: none !important;
+    }
+
+    .splash {
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</head>
+<body>
+  <!-- Flutter web lifecycle -->
   <script>
-    var serviceWorkerVersion = null;
-    var scriptLoaded = false;
-    function loadMainDartJs() {
-      if (scriptLoaded) {
-        return;
-      }
-      scriptLoaded = true;
-      var scriptTag = document.createElement('script');
-      scriptTag.src = 'main.dart.js';
-      scriptTag.type = 'application/javascript';
-      document.body.append(scriptTag);
-    }
-
-    if ('serviceWorker' in navigator) {
-      // Service workers are supported. Use them.
-      window.addEventListener('load', function () {
-        // Wait for registration to finish before dropping the <script> tag.
-        // Otherwise, the browser will load the script multiple times,
-        // potentially different versions.
-        var serviceWorkerUrl = 'flutter_service_worker.js?v=' + serviceWorkerVersion;
-        navigator.serviceWorker.register(serviceWorkerUrl)
-          .then((reg) => {
-            function waitForActivation(serviceWorker) {
-              serviceWorker.addEventListener('statechange', () => {
-                if (serviceWorker.state == 'activated') {
-                  console.log('Installed new service worker.');
-                  loadMainDartJs();
-                }
-              });
-            }
-            if (!reg.active && (reg.installing || reg.waiting)) {
-              // No active web worker and we have installed or are installing
-              // one for the first time. Simply wait for it to activate.
-              waitForActivation(reg.installing ?? reg.waiting);
-            } else if (!reg.active.scriptURL.endsWith(serviceWorkerVersion)) {
-              // When the app updates the serviceWorkerVersion changes, so we
-              // need to ask the service worker to update.
-              console.log('New service worker available.');
-              reg.update();
-              waitForActivation(reg.installing);
-            } else {
-              // Existing service worker is still good.
-              console.log('Loading app from service worker.');
-              loadMainDartJs();
-            }
-          });
-
-        // If service worker doesn't succeed in a reasonable amount of time,
-        // fallback to plaint <script> tag.
-        setTimeout(() => {
-          if (!scriptLoaded) {
-            console.warn(
-              'Failed to load app from service worker. Falling back to plain <script> tag.',
-            );
-            loadMainDartJs();
-          }
-        }, 4000);
+    window.addEventListener('load', function(ev) {
+      console.log( "Loading entrypoint...");
+      // Download main.dart.js
+      _flutter.loader.loadEntrypoint({
+        serviceWorker: {
+          serviceWorkerVersion: serviceWorkerVersion,
+        }
+      }).then(function(engineInitializer) {
+        console.log( "Initializing engine...");
+        return engineInitializer.initializeEngine();
+      }).then(function(appRunner) {
+        console.log( "Running app...");
+        return appRunner.runApp();
       });
-    } else {
-      // Service workers not supported. Just drop the <script> tag.
-      loadMainDartJs();
-    }
+    });
   </script>
+
+  <!-- Splash screen -->
+  <div class="splash">
+    <img src="splash.svg">
+  </div>
 </body>
 </html>
+

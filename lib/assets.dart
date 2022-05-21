@@ -9,6 +9,8 @@ const String Nzd = 'NZD';
 const String Btc = 'BTC';
 const String BtcLn = 'BTC-LN';
 const String Sats = 'sats';
+const String Usdt = 'USDT';
+const String Usdc = 'USDC';
 const String Eth = 'ETH';
 const String Gwei = 'gwei';
 const String Doge = 'DOGE';
@@ -18,6 +20,8 @@ const String Waves = 'WAVES';
 var assetUnits = {
   Nzd: Nzd,
   Btc: Sats,
+  Usdt: Usdt,
+  Usdc: Usdc,
   Eth: Gwei,
   Doge: Doge,
   Ltc: Ltc,
@@ -38,6 +42,10 @@ String _svgAsset(String symbol) {
       return 'assets/crypto_logos/bitcoin-lightning.svg';
     case Btc:
       return 'assets/crypto_logos/bitcoin.svg';
+    case Usdt:
+      return 'assets/crypto_logos/usdt.svg';
+    case Usdc:
+      return 'assets/crypto_logos/usdc.svg';
     case Eth:
       return 'assets/crypto_logos/ethereum.svg';
     case Doge:
@@ -76,8 +84,12 @@ int assetDecimals(String symbol) {
     case BtcLn:
     case Btc:
       return 8;
-    case Btc:
+    case Sats:
       return 0;
+    case Usdt:
+      return 2;
+    case Usdc:
+      return 2;
     case Eth:
       return 18;
     case Gwei:
@@ -96,6 +108,8 @@ bool assetIsCrypto(String asset) {
   switch (asset) {
     case BtcLn:
     case Btc:
+    case Usdt:
+    case Usdc:
     case Eth:
     case Doge:
     case Ltc:
@@ -111,8 +125,12 @@ String assetFormat(String symbol, Decimal amount) {
   return amount.toStringAsFixed(decimals);
 }
 
-String assetFormatWithUnit(String symbol, Decimal amount) {
+String _assetFormatWithUnit(String symbol, Decimal amount) {
   return '${assetFormat(symbol, amount)} ${assetUnit(symbol)}';
+}
+
+String assetFormatWithUnitToUser(String symbol, Decimal amount) {
+  return '${_assetFormatWithUnit(symbol, assetAmountToUser(symbol, amount))}';
 }
 
 String assetUnit(String symbol) {
@@ -128,6 +146,8 @@ List<String> assetUnitOptions(String symbol) {
       return [Btc, Sats];
     case Eth:
       return [Eth, Gwei];
+    case Usdt:
+    case Usdc:
     case Doge:
     case Ltc:
     case Waves:
@@ -159,6 +179,8 @@ Decimal assetAmountToUser(String symbol, Decimal amount) {
       if (assetUnit(symbol) == Gwei)
         return amount * Decimal.fromInt(1000000000);
       return amount;
+    case Usdt:
+    case Usdc:
     case Doge:
     case Ltc:
     case Waves:
@@ -178,6 +200,8 @@ Decimal assetAmountFromUser(String symbol, Decimal amount) {
       if (assetUnit(symbol) == Gwei)
         return amount / Decimal.fromInt(1000000000);
       return amount;
+    case Usdt:
+    case Usdc:
     case Doge:
     case Ltc:
     case Waves:
@@ -191,6 +215,8 @@ String? addressBlockExplorer(String symbol, bool testnet, String address) {
     case Btc:
       if (testnet) return 'https://blockstream.info/testnet/address/$address';
       return 'https://blockstream.info/address/$address';
+    case Usdt:
+    case Usdc:
     case Eth:
       if (testnet)
         return 'https://ropsten.etherscan.io/testnet/address/$address';

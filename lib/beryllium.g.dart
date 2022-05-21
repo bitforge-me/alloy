@@ -81,6 +81,8 @@ BeAsset _$BeAssetFromJson(Map<String, dynamic> json) => BeAsset(
       json['l2_network'] == null
           ? null
           : BeAsset.fromJson(json['l2_network'] as Map<String, dynamic>),
+      json['deposit_instr'] as String?,
+      json['withdraw_instr'] as String?,
     );
 
 Map<String, dynamic> _$BeAssetToJson(BeAsset instance) => <String, dynamic>{
@@ -91,6 +93,8 @@ Map<String, dynamic> _$BeAssetToJson(BeAsset instance) => <String, dynamic>{
       'min_withdraw': _decimalToJson(instance.minWithdraw),
       'is_crypto': instance.isCrypto,
       'l2_network': instance.l2Network,
+      'deposit_instr': instance.depositInstr,
+      'withdraw_instr': instance.withdrawInstr,
     };
 
 BeMarket _$BeMarketFromJson(Map<String, dynamic> json) => BeMarket(

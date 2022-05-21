@@ -78,10 +78,10 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var baseAmount = assetFormatWithUnit(_order.baseAsset,
-        assetAmountToUser(_order.baseAsset, _order.baseAmount));
-    var quoteAmount = assetFormatWithUnit(_order.quoteAsset,
-        assetAmountToUser(_order.quoteAsset, _order.quoteAmount));
+    var baseAmount =
+        assetFormatWithUnitToUser(_order.baseAsset, _order.baseAmount);
+    var quoteAmount =
+        assetFormatWithUnitToUser(_order.quoteAsset, _order.quoteAmount);
     return Scaffold(
         appBar: AppBar(
           title: Text('Order ${_order.token}'),
@@ -141,7 +141,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   void initState() {
     super.initState();
     widget.websocket.wsEvent.subscribe(_websocketEvent);
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _initOrders(0);
     });
   }
@@ -201,8 +201,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   Widget _listItem(BuildContext context, int n) {
     var order = _orders[n];
-    var baseAmount = assetFormatWithUnit(
-        order.baseAsset, assetAmountToUser(order.baseAsset, order.baseAmount));
+    var baseAmount =
+        assetFormatWithUnitToUser(order.baseAsset, order.baseAmount);
     return ListTile(
         title: Text('${order.token}'),
         leading: assetLogo(order.baseAsset),

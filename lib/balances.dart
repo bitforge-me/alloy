@@ -21,7 +21,7 @@ class _BalanceScreenState extends State<BalanceScreen> {
         title: Text('${balance.asset}'),
         leading: assetLogo(balance.asset),
         subtitle: Text(
-            'total: ${assetFormatWithUnit(balance.asset, assetAmountToUser(balance.asset, balance.total))}, available: ${assetFormatWithUnit(balance.asset, assetAmountToUser(balance.asset, balance.available))}'));
+            'total: ${assetFormatWithUnitToUser(balance.asset, balance.total)}, available: ${assetFormatWithUnitToUser(balance.asset, balance.available)}'));
   }
 
   @override

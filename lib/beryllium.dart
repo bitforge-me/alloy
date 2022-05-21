@@ -283,9 +283,21 @@ class BeAsset {
   final bool isCrypto;
   @JsonKey(name: 'l2_network')
   final BeAsset? l2Network;
+  @JsonKey(name: 'deposit_instr')
+  final String? depositInstr;
+  @JsonKey(name: 'withdraw_instr')
+  final String? withdrawInstr;
 
-  BeAsset(this.symbol, this.name, this.decimals, this.withdrawFee,
-      this.minWithdraw, this.isCrypto, this.l2Network);
+  BeAsset(
+      this.symbol,
+      this.name,
+      this.decimals,
+      this.withdrawFee,
+      this.minWithdraw,
+      this.isCrypto,
+      this.l2Network,
+      this.depositInstr,
+      this.withdrawInstr);
   factory BeAsset.fromJson(Map<String, dynamic> json) =>
       _$BeAssetFromJson(json);
   Map<String, dynamic> toJson() => _$BeAssetToJson(this);
@@ -436,6 +448,12 @@ class BeBalancesResult with _$BeBalancesResult {
       return BeBalancesResult.error(BeError.format());
     }
   }
+}
+
+@freezed
+class BeBalanceResult with _$BeBalanceResult {
+  const factory BeBalanceResult(BeBalance? balance) = _BeBalanceResult;
+  const factory BeBalanceResult.error(BeError err) = _BeBalanceResultErr;
 }
 
 @freezed
@@ -1013,6 +1031,15 @@ Future<BeBalancesResult> beBalances() async {
   var result = await post("balances", {}, authRequired: true);
   return result.when((content) => BeBalancesResult.parse(content),
       error: (err) => BeBalancesResult.error(err));
+}
+
+Future<BeBalanceResult> beBalance(String asset) async {
+  var result = await beBalances();
+  return result.when((balances) {
+    var balance =
+        balances.firstWhereOrNull((element) => element.asset == asset);
+    return BeBalanceResult(balance);
+  }, error: (err) => BeBalanceResult.error(err));
 }
 
 Future<BeCryptoDepositRecipientResult> beCryptoDepositRecipient(

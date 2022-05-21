@@ -103,12 +103,10 @@ class _QuoteScreenState extends State<QuoteScreen> {
       if (totalPrice.errMsg != null)
         quote = totalPrice.errMsg!;
       else {
-        var baseAmount = assetFormatWithUnit(widget.market.baseAsset,
-            assetAmountToUser(widget.market.baseAsset, value));
-        var quoteAmount = assetFormatWithUnit(
-            widget.market.quoteAsset,
-            assetAmountToUser(
-                widget.market.quoteAsset, totalPrice.amountQuoteAsset));
+        var baseAmount =
+            assetFormatWithUnitToUser(widget.market.baseAsset, value);
+        var quoteAmount = assetFormatWithUnitToUser(
+            widget.market.quoteAsset, totalPrice.amountQuoteAsset);
         quote = '$baseAmount = $quoteAmount';
       }
     }
@@ -194,6 +192,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                         if (totalPrice.errMsg != null) return totalPrice.errMsg;
                         return null;
                       }),
+                  SizedBox(height: 15),
                   raisedButton(
                       onPressed: _orderCreate, child: Text('Create Order'))
                 ]))));

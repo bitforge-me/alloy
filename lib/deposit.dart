@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:zapdart/colors.dart';
 import 'package:zapdart/qrwidget.dart';
 import 'package:flutter/services.dart';
 import 'package:decimal/decimal.dart';
@@ -115,7 +116,7 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
   void initState() {
     super.initState();
     widget.websocket.wsEvent.subscribe(_websocketEvent);
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _initDeposits(0);
     });
   }
@@ -165,7 +166,7 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
     var deposit = _deposits[n];
     return ListTile(
       title: Text(
-          '${assetFormatWithUnit(deposit.asset, assetAmountToUser(deposit.asset, deposit.amount))} - ${deposit.confirmed ? 'CONFIRMED' : 'PENDING'}'),
+          '${assetFormatWithUnitToUser(deposit.asset, deposit.amount)} - ${deposit.confirmed ? 'CONFIRMED' : 'PENDING'}'),
       onTap: () => _depositTap(deposit),
     );
   }
@@ -295,11 +296,13 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
           ListTile(
               title: Text('Amount'),
               subtitle: Text(
-                  '${assetFormatWithUnit(_deposit.asset, assetAmountToUser(_deposit.asset, _deposit.amount))}')),
+                  '${assetFormatWithUnitToUser(_deposit.asset, _deposit.amount)}')),
           ListTile(title: Text('Date'), subtitle: Text('${_deposit.date}')),
           ListTile(
               title: Center(
                   child: QrImage(
+            backgroundColor: ZapSurface,
+            foregroundColor: ZapOnSurface,
             data: '${_deposit.recipient}',
             version: QrVersions.auto,
             size: 200.0,
@@ -358,9 +361,14 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
         body: Container(
             padding: EdgeInsets.all(20),
             child: Column(children: [
+              Visibility(
+                  visible: widget.asset.depositInstr != null,
+                  child: AlertDrawer(() {}, ['${widget.asset.depositInstr}'])),
               Container(
                   child: Center(
                       child: QrImage(
+                    backgroundColor: ZapSurface,
+                    foregroundColor: ZapOnSurface,
                     data: '${widget.recipient}',
                     version: QrVersions.auto,
                     size: 200.0,
@@ -395,7 +403,7 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
   void initState() {
     super.initState();
     widget.websocket.wsEvent.subscribe(_websocketEvent);
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _initDeposits(0);
     });
   }
@@ -444,7 +452,7 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
     var deposit = _deposits[n];
     return ListTile(
       title: Text(
-          '${assetFormatWithUnit(deposit.asset, assetAmountToUser(deposit.asset, deposit.amount))} - ${deposit.status.toUpperCase()}'),
+          '${assetFormatWithUnitToUser(deposit.asset, deposit.amount)} - ${deposit.status.toUpperCase()}'),
       onTap: () => _depositTap(deposit),
     );
   }
@@ -542,7 +550,7 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
           ListTile(
               title: Text('Amount'),
               subtitle: Text(
-                  '${assetFormatWithUnit(_deposit.asset, assetAmountToUser(_deposit.asset, _deposit.amount))}')),
+                  '${assetFormatWithUnitToUser(_deposit.asset, _deposit.amount)}')),
           ListTile(title: Text('Date'), subtitle: Text('${_deposit.date}')),
           _deposit.paymentUrl != null
               ? ListTile(
