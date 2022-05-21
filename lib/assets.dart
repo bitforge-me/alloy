@@ -84,6 +84,8 @@ int assetDecimals(String symbol) {
     case BtcLn:
     case Btc:
       return 8;
+    case Sats:
+      return 0;
     case Usdt:
       return 2;
     case Usdc:
@@ -123,8 +125,12 @@ String assetFormat(String symbol, Decimal amount) {
   return amount.toStringAsFixed(decimals);
 }
 
-String assetFormatWithUnit(String symbol, Decimal amount) {
+String _assetFormatWithUnit(String symbol, Decimal amount) {
   return '${assetFormat(symbol, amount)} ${assetUnit(symbol)}';
+}
+
+String assetFormatWithUnitToUser(String symbol, Decimal amount) {
+  return '${_assetFormatWithUnit(symbol, assetAmountToUser(symbol, amount))}';
 }
 
 String assetUnit(String symbol) {

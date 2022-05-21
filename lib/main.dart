@@ -203,8 +203,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                     subtitle: Text('${shortenStr(bolt11)}')),
                 ListTile(
                     title: Text('Amount'),
-                    subtitle: Text(assetFormatWithUnit(
-                        Btc, assetAmountToUser(Btc, amount)))),
+                    subtitle: Text(assetFormatWithUnitToUser(Btc, amount))),
                 ListTile(
                     title: Text('Description'), subtitle: Text('$description'))
               ])));

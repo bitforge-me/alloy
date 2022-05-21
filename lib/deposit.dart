@@ -166,7 +166,7 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
     var deposit = _deposits[n];
     return ListTile(
       title: Text(
-          '${assetFormatWithUnit(deposit.asset, assetAmountToUser(deposit.asset, deposit.amount))} - ${deposit.confirmed ? 'CONFIRMED' : 'PENDING'}'),
+          '${assetFormatWithUnitToUser(deposit.asset, deposit.amount)} - ${deposit.confirmed ? 'CONFIRMED' : 'PENDING'}'),
       onTap: () => _depositTap(deposit),
     );
   }
@@ -296,7 +296,7 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
           ListTile(
               title: Text('Amount'),
               subtitle: Text(
-                  '${assetFormatWithUnit(_deposit.asset, assetAmountToUser(_deposit.asset, _deposit.amount))}')),
+                  '${assetFormatWithUnitToUser(_deposit.asset, _deposit.amount)}')),
           ListTile(title: Text('Date'), subtitle: Text('${_deposit.date}')),
           ListTile(
               title: Center(
@@ -452,7 +452,7 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
     var deposit = _deposits[n];
     return ListTile(
       title: Text(
-          '${assetFormatWithUnit(deposit.asset, assetAmountToUser(deposit.asset, deposit.amount))} - ${deposit.status.toUpperCase()}'),
+          '${assetFormatWithUnitToUser(deposit.asset, deposit.amount)} - ${deposit.status.toUpperCase()}'),
       onTap: () => _depositTap(deposit),
     );
   }
@@ -550,7 +550,7 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
           ListTile(
               title: Text('Amount'),
               subtitle: Text(
-                  '${assetFormatWithUnit(_deposit.asset, assetAmountToUser(_deposit.asset, _deposit.amount))}')),
+                  '${assetFormatWithUnitToUser(_deposit.asset, _deposit.amount)}')),
           ListTile(title: Text('Date'), subtitle: Text('${_deposit.date}')),
           _deposit.paymentUrl != null
               ? ListTile(

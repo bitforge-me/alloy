@@ -15,7 +15,7 @@ QuoteTotalPrice bidQuoteAmount(
     BeMarket market, BeOrderbook orderbook, Decimal amount) {
   if (amount < market.minTrade)
     return QuoteTotalPrice(amount, Decimal.zero,
-        'minimum trade is ${assetFormatWithUnit(market.baseAsset, assetAmountToUser(market.baseAsset, market.minTrade))}');
+        'minimum trade is ${assetFormatWithUnitToUser(market.baseAsset, market.minTrade)}');
 
   var filled = Decimal.zero;
   var totalPrice = Decimal.zero;
@@ -61,7 +61,7 @@ QuoteTotalPrice bidEstimateAmountFromQuoteAssetAmount(
     if (filled == amountQuoteAsset) {
       if (totalBaseAsset < market.minTrade)
         return QuoteTotalPrice(totalBaseAsset, amountQuoteAsset,
-            'minimum trade is ${assetFormatWithUnit(market.baseAsset, assetAmountToUser(market.baseAsset, market.minTrade))}');
+            'minimum trade is ${assetFormatWithUnitToUser(market.baseAsset, market.minTrade)}');
       return QuoteTotalPrice(totalBaseAsset, amountQuoteAsset, null);
     }
     n++;
@@ -73,7 +73,7 @@ QuoteTotalPrice askQuoteAmount(
     BeMarket market, BeOrderbook orderbook, Decimal amount) {
   if (amount < market.minTrade)
     return QuoteTotalPrice(Decimal.zero, Decimal.zero,
-        'minimum trade is ${assetFormatWithUnit(market.baseAsset, assetAmountToUser(market.baseAsset, market.minTrade))}');
+        'minimum trade is ${assetFormatWithUnitToUser(market.baseAsset, market.minTrade)}');
 
   var filled = Decimal.zero;
   var totalPrice = Decimal.zero;
