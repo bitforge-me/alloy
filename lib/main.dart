@@ -1,4 +1,3 @@
-import 'package:alloy/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'dart:convert';
@@ -27,6 +26,8 @@ import 'verify_user.dart';
 import 'snack.dart';
 import 'exchange.dart';
 import 'units.dart';
+import 'assets.dart';
+import 'event.dart';
 
 final log = Logger('Main');
 
@@ -191,22 +192,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       var description = json['description'];
       var sats = json['amount_sat'];
       var amount = Decimal.fromInt(sats) / Decimal.fromInt(100000000);
-      alert(
+      Navigator.push(
           context,
-          'Invoice paid',
-          Container(
-              width: 300,
-              height: 200,
-              child: ListView(shrinkWrap: true, children: [
-                ListTile(
-                    title: Text('Invoice data'),
-                    subtitle: Text('${shortenStr(bolt11)}')),
-                ListTile(
-                    title: Text('Amount'),
-                    subtitle: Text(assetFormatWithUnitToUser(Btc, amount))),
-                ListTile(
-                    title: Text('Description'), subtitle: Text('$description'))
-              ])));
+          MaterialPageRoute(
+              builder: (context) => DepositReceivedScreen(
+                  Btc, BtcLn, bolt11, amount, description)));
     }
   }
 
