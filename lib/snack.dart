@@ -10,7 +10,7 @@ void snackMsg(BuildContext context, String msg,
   switch (category) {
     case MessageCategory.Info:
       icon = Icons.info;
-      color = ZapSecondary;
+      color = ZapOnSecondary;
       break;
     case MessageCategory.Warning:
       icon = Icons.warning;
