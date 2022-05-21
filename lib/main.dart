@@ -267,7 +267,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     );
     if (reg == null) {
       setState(() {
-        _userRedirected = false;
+        _login();
       });
       return;
     }
@@ -311,7 +311,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       );
       if (login == null) {
         setState(() {
-          _userRedirected = true;
+          _register();
         });
         return null;
       }
@@ -532,8 +532,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    if (_userRedirected == true && _userInfo == null) _register();
-    if (_userRedirected == false && _userInfo == null) _login();
     return Scaffold(
       appBar: AppBar(
           title: Image.asset(AppLogo),
