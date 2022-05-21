@@ -38,6 +38,11 @@ FormFieldValidator lastNameValidate = (value) {
   return null;
 };
 
+FormFieldValidator newPasswordValidate = (value) {
+  if (value == null || value.isEmpty) return 'Please enter a new password';
+  return null;
+};
+
 class BronzeInputForm extends StatelessWidget {
   TextEditingController? controller;
   TextInputType? keyboardType;
@@ -400,17 +405,14 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                                 return null;
                               })),
                       Visibility(
-                          visible: widget.showNewPassword,
-                          child: TextFormField(
-                              controller: _newPasswordController,
-                              obscureText: true,
-                              decoration:
-                                  InputDecoration(labelText: 'New Password'),
-                              validator: (value) {
-                                if (value == null || value.isEmpty)
-                                  return 'Please enter a new password';
-                                return null;
-                              })),
+                        visible: widget.showNewPassword,
+                        child: BronzeInputForm(
+                          _newPasswordController,
+                          obscureText: true,
+                          labelText: 'New Password',
+                          validator: newPasswordValidate,
+                        ),
+                      ),
                       Visibility(
                           visible: widget.showNewPassword,
                           child: TextFormField(
@@ -425,31 +427,29 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                                   return 'Password does not match';
                                 return null;
                               })),
-                      raisedButton(
-                        child: Text("Ok"),
-                        onPressed: () async {
-                          if (_formKey.currentState == null) return;
-                          if (_formKey.currentState!.validate()) {
-                            var accountReg = AccountRegistration(
-                                _firstNameController.text,
-                                _lastNameController.text,
-                                _emailController.text.trim(),
-                                '$_dialCode ${_mobileNumberController.text}',
-                                _addressController.text,
-                                _currentPasswordController.text,
-                                _newPasswordController.text,
-                                _imgString,
-                                _imgType);
-                            Navigator.of(context).pop(accountReg);
-                          }
-                        },
-                      ),
-                      raisedButton(
-                        child: Text("Cancel"),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
+                      RoundedButton(() async {
+                        if (_formKey.currentState == null) return;
+                        if (_formKey.currentState!.validate()) {
+                          var accountReg = AccountRegistration(
+                              _firstNameController.text,
+                              _lastNameController.text,
+                              _emailController.text.trim(),
+                              '$_dialCode ${_mobileNumberController.text}',
+                              _addressController.text,
+                              _currentPasswordController.text,
+                              _newPasswordController.text,
+                              _imgString,
+                              _imgType);
+                          Navigator.of(context).pop(accountReg);
+                        }
+                      }, ZapOnSecondary, ZapSecondary, bronzeGradient,
+                          'Continue',
+                          holePunch: true, width: 320, height: 50),
+                      RoundedButton(() {
+                        Navigator.of(context).pop();
+                      }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
+                          'Login Instead',
+                          holePunch: true, width: 320, height: 50)
                     ]))))));
   }
 }
