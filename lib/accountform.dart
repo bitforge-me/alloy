@@ -414,19 +414,33 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                         ),
                       ),
                       Visibility(
-                          visible: widget.showNewPassword,
-                          child: TextFormField(
-                              controller: _passwordConfirmController,
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                  labelText: 'Password Confirmation'),
-                              validator: (value) {
-                                if (value == null || value.isEmpty)
-                                  return 'Please confirm your password';
-                                if (value != _newPasswordController.text)
-                                  return 'Password does not match';
-                                return null;
-                              })),
+                        visible: widget.showNewPassword,
+                        child: TextFormField(
+                            textAlign: TextAlign.center,
+                            controller: _passwordConfirmController,
+                            decoration: InputDecoration(
+                              fillColor: Color(0xFFFFFFFF).withOpacity(0.1),
+                              filled: true,
+                              labelText: 'Password Confirmation',
+                              constraints:
+                                  BoxConstraints(minWidth: 320, maxWidth: 320),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  width: 0,
+                                  style: BorderStyle.none,
+                                ),
+                              ),
+                            ),
+                            obscureText: true,
+                            validator: (value) {
+                              if (value == null || value.isEmpty)
+                                return 'Please confirm your password';
+                              if (value != _newPasswordController.text)
+                                return 'Password does not match';
+                              return null;
+                            }),
+                      ),
                       RoundedButton(() async {
                         if (_formKey.currentState == null) return;
                         if (_formKey.currentState!.validate()) {
