@@ -10,7 +10,7 @@ import 'package:zapdart/colors.dart';
 import 'beryllium.dart';
 import 'websocket.dart';
 import 'assets.dart';
-import 'markets.dart';
+//import 'markets.dart';
 import 'snack.dart';
 
 class OrderScreen extends StatefulWidget {
@@ -218,6 +218,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         onTap: () => _orderTap(order));
   }
 
+/*
   Future<void> _actionButtonTap() async {
     showAlertDialog(context, 'querying..');
     var res = await beMarkets();
@@ -230,6 +231,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         error: (err) => snackMsg(context, 'failed to query markets',
             category: MessageCategory.Warning));
   }
+*/
 
   @override
   Widget build(BuildContext context) {
@@ -239,8 +241,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
         ),
         body:
             ListView.builder(itemBuilder: _listItem, itemCount: _orders.length),
+        /*
         floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.add), onPressed: _actionButtonTap),
+        */
         bottomNavigationBar: _pageCount > 0
             ? Paginator(_pageCount, _pageNumber, (n) => _initOrders(n))
             : null);

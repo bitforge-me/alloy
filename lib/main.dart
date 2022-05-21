@@ -607,7 +607,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             Visibility(
                 visible: GitSha != 'GIT_SHA_REPLACE',
                 child: Text('Build: ${GitSha.substring(0, 5)} - $BuildDate',
-                    style: TextStyle(color: ZapBlackLight, fontSize: 8))),
+                    style:
+                        TextStyle(color: ZapOnBackgroundLight, fontSize: 8))),
           ],
         ),
       ),
