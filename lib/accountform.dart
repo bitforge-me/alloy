@@ -438,6 +438,10 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                             textAlign: TextAlign.center,
                             controller: _passwordConfirmController,
                             decoration: InputDecoration(
+                              prefixIcon: Padding(
+                                padding: EdgeInsets.only(top: 5),
+                                child: Icon(Icons.key_outlined),
+                              ),
                               fillColor: Color(0xFFFFFFFF).withOpacity(0.1),
                               filled: true,
                               labelText: 'Password Confirmation',
