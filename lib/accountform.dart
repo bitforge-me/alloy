@@ -388,27 +388,43 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                                 return null;
                               })),
                       Visibility(
-                          visible: widget.showAddress,
-                          child: TextFormField(
-                            controller: _addressController,
-                            readOnly: true,
-                            decoration: InputDecoration(
-                                labelText: 'Address',
-                                suffix: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      availablePlaceApi(
-                                              widget.googlePlaceApiKey,
-                                              widget.locationIqApiKey)
-                                          ? IconButton(
-                                              icon: Icon(Icons.search),
-                                              onPressed: searchAddr)
-                                          : SizedBox(),
-                                      IconButton(
-                                          icon: Icon(Icons.edit),
-                                          onPressed: manualAddr),
-                                    ])),
-                          )),
+                        visible: widget.showAddress,
+                        child: TextFormField(
+                          textAlign: TextAlign.center,
+                          controller: _addressController,
+                          decoration: InputDecoration(
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.only(top: 5),
+                              child: Icon(Icons.home_outlined),
+                            ),
+                            fillColor: Color(0xFFFFFFFF).withOpacity(0.1),
+                            filled: true,
+                            labelText: 'Address',
+                            suffix:
+                                Row(mainAxisSize: MainAxisSize.min, children: [
+                              availablePlaceApi(widget.googlePlaceApiKey,
+                                      widget.locationIqApiKey)
+                                  ? IconButton(
+                                      icon: Icon(Icons.search),
+                                      onPressed: searchAddr)
+                                  : SizedBox(),
+                              IconButton(
+                                  icon: Icon(Icons.edit),
+                                  onPressed: manualAddr),
+                            ]),
+                            constraints:
+                                BoxConstraints(minWidth: 320, maxWidth: 320),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(
+                                width: 0,
+                                style: BorderStyle.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 15),
                       Visibility(
                           visible: widget.showCurrentPassword,
                           child: TextFormField(
