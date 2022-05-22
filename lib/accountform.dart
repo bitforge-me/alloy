@@ -49,9 +49,13 @@ class BronzeInputForm extends StatelessWidget {
   FormFieldValidator<dynamic>? validator;
   String? labelText;
   bool? obscureText;
-	Icon? icon;
+  Icon? icon;
   BronzeInputForm(this.controller,
-      {this.validator, this.keyboardType, this.obscureText, this.labelText, this.icon})
+      {this.validator,
+      this.keyboardType,
+      this.obscureText,
+      this.labelText,
+      this.icon})
       : super();
 
   @override
@@ -60,10 +64,12 @@ class BronzeInputForm extends StatelessWidget {
         textAlign: TextAlign.center,
         controller: this.controller,
         decoration: InputDecoration(
-					prefixIcon: this.icon == null ? null : Padding(
-							padding: EdgeInsets.only(top: 5),
-							child: this.icon,
-						),
+          prefixIcon: this.icon == null
+              ? null
+              : Padding(
+                  padding: EdgeInsets.only(top: 5),
+                  child: this.icon,
+                ),
           fillColor: Color(0xFFFFFFFF).withOpacity(0.1),
           filled: true,
           labelText: this.labelText ?? null,
@@ -147,12 +153,13 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                     SizedBox(height: 15),
                     BronzeInputForm(_emailController,
                         validator: emailValidate,
-												icon: Icon(Icons.person_outline),
+                        icon: Icon(Icons.person_outline),
                         keyboardType: TextInputType.emailAddress),
                     SizedBox(height: 8),
                     BronzeInputForm(_passwordController,
-												icon: Icon(Icons.key_outlined),
-                        validator: passwordValidate, obscureText: true),
+                        icon: Icon(Icons.key_outlined),
+                        validator: passwordValidate,
+                        obscureText: true),
                     SizedBox(height: 8),
                     Visibility(
                       visible: widget.showTwoFactorCode,
@@ -334,7 +341,7 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                         visible: widget.showName,
                         child: BronzeInputForm(_firstNameController,
                             validator: firstNameValidate,
-														icon: Icon(Icons.person_outline),
+                            icon: Icon(Icons.person_outline),
                             labelText: 'First Name',
                             keyboardType: TextInputType.name),
                       ),
@@ -343,14 +350,14 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                           visible: widget.showName,
                           child: BronzeInputForm(_lastNameController,
                               validator: lastNameValidate,
-															icon: Icon(Icons.person_outline),
+                              icon: Icon(Icons.person_outline),
                               labelText: 'Last Name',
                               keyboardType: TextInputType.name)),
                       SizedBox(height: 15),
                       Visibility(
                         visible: widget.showEmail,
                         child: BronzeInputForm(_emailController,
-														icon: Icon(Icons.email_outlined),
+                            icon: Icon(Icons.email_outlined),
                             labelText: 'Email',
                             keyboardType: TextInputType.emailAddress,
                             validator: emailValidate),
@@ -418,13 +425,13 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                         visible: widget.showNewPassword,
                         child: BronzeInputForm(
                           _newPasswordController,
-													icon: Icon(Icons.key_outlined),
+                          icon: Icon(Icons.key_outlined),
                           obscureText: true,
                           labelText: 'New Password',
                           validator: newPasswordValidate,
                         ),
                       ),
-											SizedBox(height: 15),
+                      SizedBox(height: 15),
                       Visibility(
                         visible: widget.showNewPassword,
                         child: TextFormField(
@@ -453,7 +460,7 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                               return null;
                             }),
                       ),
-											SizedBox(height: 15),
+                      SizedBox(height: 15),
                       RoundedButton(() async {
                         if (_formKey.currentState == null) return;
                         if (_formKey.currentState!.validate()) {
@@ -472,7 +479,7 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                       }, ZapOnSecondary, ZapSecondary, bronzeGradient,
                           'Continue',
                           holePunch: true, width: 320, height: 50),
-											SizedBox(height: 15),
+                      SizedBox(height: 15),
                       RoundedButton(() {
                         Navigator.of(context).pop();
                       }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
