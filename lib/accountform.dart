@@ -413,6 +413,7 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                           validator: newPasswordValidate,
                         ),
                       ),
+											SizedBox(height: 15),
                       Visibility(
                         visible: widget.showNewPassword,
                         child: TextFormField(
@@ -441,6 +442,7 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                               return null;
                             }),
                       ),
+											SizedBox(height: 15),
                       RoundedButton(() async {
                         if (_formKey.currentState == null) return;
                         if (_formKey.currentState!.validate()) {
@@ -459,6 +461,7 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                       }, ZapOnSecondary, ZapSecondary, bronzeGradient,
                           'Continue',
                           holePunch: true, width: 320, height: 50),
+											SizedBox(height: 15),
                       RoundedButton(() {
                         Navigator.of(context).pop();
                       }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,

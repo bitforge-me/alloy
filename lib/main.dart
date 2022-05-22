@@ -534,7 +534,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Image.asset(AppLogo),
+          title: Image.asset(AppLogo, scale: 4),
           leading: Builder(builder: (BuildContext context) {
             return IconButton(
               icon: const Icon(Icons.menu),
