@@ -49,8 +49,9 @@ class BronzeInputForm extends StatelessWidget {
   FormFieldValidator<dynamic>? validator;
   String? labelText;
   bool? obscureText;
+	Icon? icon;
   BronzeInputForm(this.controller,
-      {this.validator, this.keyboardType, this.obscureText, this.labelText})
+      {this.validator, this.keyboardType, this.obscureText, this.labelText, this.icon})
       : super();
 
   @override
@@ -59,6 +60,10 @@ class BronzeInputForm extends StatelessWidget {
         textAlign: TextAlign.center,
         controller: this.controller,
         decoration: InputDecoration(
+					prefixIcon: this.icon == null ? null : Padding(
+							padding: EdgeInsets.only(top: 5),
+							child: this.icon,
+						),
           fillColor: Color(0xFFFFFFFF).withOpacity(0.1),
           filled: true,
           labelText: this.labelText ?? null,
@@ -142,9 +147,11 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                     SizedBox(height: 15),
                     BronzeInputForm(_emailController,
                         validator: emailValidate,
+												icon: Icon(Icons.person_outline),
                         keyboardType: TextInputType.emailAddress),
                     SizedBox(height: 8),
                     BronzeInputForm(_passwordController,
+												icon: Icon(Icons.key_outlined),
                         validator: passwordValidate, obscureText: true),
                     SizedBox(height: 8),
                     Visibility(
