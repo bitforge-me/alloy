@@ -88,6 +88,194 @@ class BronzeInputForm extends StatelessWidget {
   }
 }
 
+Widget bronzeaccountImage(String? imgString, String? imgType,
+    {double size = 70,
+    double borderRadius = 10,
+    double dropShadowOffsetX = 0,
+    double dropShadowOffsetY = 3,
+    double dropShadowSpreadRadius = 5,
+    double dropShadowBlurRadius = 7}) {
+  if (imgString != null && imgString.isNotEmpty) {
+    if (imgType == 'raster')
+      // if image is raster then apply corner radius and drop shadow
+      return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(borderRadius),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: dropShadowSpreadRadius,
+                blurRadius: dropShadowBlurRadius,
+                offset: Offset(dropShadowOffsetX, dropShadowOffsetY),
+              )
+            ],
+          ),
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(borderRadius),
+              //TODO: BoxFit.cover should not be necesary if the crop aspect ratio is 1/1 (*shrug*)
+              child: Image.memory(
+                base64Decode(imgString),
+                width: size,
+                height: size,
+                fit: BoxFit.cover,
+              )));
+    if (imgType == 'svg')
+      return SvgPicture.string(imgString, width: size, height: size);
+  }
+  return SvgPicture.asset('assets/user.svg',
+      package: 'zapdart', width: size, height: size);
+}
+
+class BronzeAccountImageUpdate extends StatelessWidget {
+  final Function(String? img, String imgType) _imageUpdate;
+  final String? _imgString;
+  final String? _imgType;
+
+  BronzeAccountImageUpdate(this._imgString, this._imgType, this._imageUpdate)
+      : super();
+
+  Future<String?> _imgDataEdited(BuildContext context, XFile file) async {
+    final editorKey = GlobalKey<ExtendedImageEditorState>();
+    final imageEditor = ExtendedImage.memory(
+      await file.readAsBytes(),
+      fit: BoxFit.contain,
+      mode: ExtendedImageMode.editor,
+      extendedImageEditorKey: editorKey,
+      initEditorConfigHandler: (state) {
+        return EditorConfig(
+            maxScale: 8.0,
+            cropRectPadding: EdgeInsets.all(20.0),
+            hitTestSize: 20.0,
+            cropAspectRatio: CropAspectRatios.ratio1_1);
+      },
+    );
+    await showGeneralDialog(
+      context: context,
+      barrierColor: Colors.black12.withOpacity(0.6),
+      barrierDismissible: false,
+      pageBuilder: (context, __, ___) {
+        return SizedBox.expand(
+            child: Scaffold(
+                body: Column(children: [
+          Expanded(child: imageEditor),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.flip),
+                onPressed: () {
+                  editorKey.currentState?.flip();
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.rotate_left),
+                onPressed: () {
+                  editorKey.currentState?.rotate(right: false);
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.rotate_right),
+                onPressed: () {
+                  editorKey.currentState?.rotate(right: true);
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.restore),
+                onPressed: () {
+                  editorKey.currentState?.reset();
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.done),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          ),
+        ])));
+      },
+    );
+    var editorKeyState = editorKey.currentState;
+    if (editorKeyState == null) return null;
+    var editAction = editorKeyState.editAction;
+    var cropRect = editorKeyState.getCropRect();
+    var src = img.decodeImage(editorKeyState.rawImageData);
+    if (src == null) return null;
+    if (editAction != null && cropRect != null) {
+      if (editAction.needCrop)
+        src = img.copyCrop(src, cropRect.left.toInt(), cropRect.top.toInt(),
+            cropRect.width.toInt(), cropRect.height.toInt());
+      if (editAction.needFlip) {
+        var mode = img.Flip.horizontal;
+        if (editAction.flipY && editAction.flipX)
+          mode = img.Flip.both;
+        else if (editAction.flipY)
+          mode = img.Flip.horizontal;
+        else if (editAction.flipX) mode = img.Flip.vertical;
+        src = img.flip(src, mode);
+      }
+      if (editAction.hasRotateAngle)
+        src = img.copyRotate(src, editAction.rotateAngle);
+    }
+    src = img.copyResize(src, width: 200, height: 200);
+    var jpgBytes = img.encodeJpg(src, quality: 50);
+    return base64Encode(jpgBytes);
+  }
+
+  void _imgFromCamera(BuildContext context) async {
+    var file = await ImagePicker()
+        .pickImage(source: ImageSource.camera, imageQuality: 50);
+    if (file == null) return;
+    var imgString = await _imgDataEdited(context, file);
+    _imageUpdate(imgString, 'raster');
+  }
+
+  void _imgFromGallery(BuildContext context) async {
+    var file = await ImagePicker()
+        .pickImage(source: ImageSource.gallery, imageQuality: 50);
+    if (file == null) return;
+    var imgString = await _imgDataEdited(context, file);
+    _imageUpdate(imgString, 'raster');
+  }
+
+  Widget _imageSizeWidget() {
+    if (_imgString == null || _imgString!.isEmpty) return SizedBox();
+    var kib = (_imgString!.length / 1000.0).ceil();
+    return Text('$kib KiB');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InputDecorator(
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            width: 0,
+            style: BorderStyle.none,
+          ),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            bronzeaccountImage(_imgString, _imgType),
+            SizedBox(width: 25),
+            IconButton(
+                icon: Icon(Icons.folder_open),
+                onPressed: () => _imgFromGallery(context)),
+            IconButton(
+                icon: Icon(Icons.camera),
+                onPressed: () => _imgFromCamera(context)),
+            _imageSizeWidget(),
+          ]),
+        ],
+      ),
+    );
+  }
+}
+
 class BronzeLoginForm extends StatefulWidget {
   final AccountLogin? login;
   final String? instructions;
@@ -330,13 +518,14 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                           : widget.instructions!),
                       Visibility(
                           visible: widget.showImage,
-                          child: AccountImageUpdate(
+                          child: BronzeAccountImageUpdate(
                               _imgString,
                               _imgType,
                               (img, imgType) => setState(() {
                                     _imgString = img;
                                     _imgType = imgType;
                                   }))),
+                      SizedBox(height: 15),
                       Visibility(
                         visible: widget.showName,
                         child: BronzeInputForm(_firstNameController,
