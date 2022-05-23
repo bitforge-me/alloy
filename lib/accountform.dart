@@ -131,6 +131,18 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                 child: Center(
                     child: Column(
                   children: <Widget>[
+                    Image.asset(
+                      'logo.png',
+                      height: 200,
+                      fit: BoxFit.fitHeight,
+                    ),
+                    Text(
+                      "Forgot Password",
+                      style: TextStyle(
+                          color: Color(0xFFFFFFFF).withOpacity(0.75),
+                          fontSize: 20),
+                    ),
+                    SizedBox(height: 10),
                     Text(widget.instructions == null
                         ? "Enter your email and device name to login via email link"
                         : widget.instructions!),
@@ -145,25 +157,22 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                         keyboardType: TextInputType.emailAddress,
                         validator: emailValidate),
                     SizedBox(height: 15),
-                    raisedButton(
-                      child: Text("Ok"),
-                      onPressed: () {
-                        if (_formKey.currentState == null) return;
-                        if (_formKey.currentState!.validate()) {
-                          var req = AccountRequestApiKey(
-                              _emailController.text.trim(),
-                              _deviceNameController.text);
-                          Navigator.of(context).pop(req);
-                        }
-                      },
-                    ),
+                    RoundedButton(() {
+                      if (_formKey.currentState == null) return;
+                      if (_formKey.currentState!.validate()) {
+                        var req = AccountRequestApiKey(
+                            _emailController.text.trim(),
+                            _deviceNameController.text);
+                        Navigator.of(context).pop(req);
+                      }
+                    }, ZapOnSecondary, ZapSecondary, bronzeGradient, 'Continue',
+                        holePunch: true, width: 320, height: 50),
                     SizedBox(height: 15),
-                    raisedButton(
-                      child: Text("Cancel"),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
+                    RoundedButton(() {
+                      Navigator.of(context).pop();
+                    }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
+                        'Cancel',
+                        holePunch: true, width: 320, height: 50),
                   ],
                 )))));
   }
