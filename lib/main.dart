@@ -257,10 +257,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       MaterialPageRoute(
           builder: (context) => BronzeRegisterForm(
                 reg,
-                showMobileNumber: RequireMobileNumber,
+                showMobileNumber: false,
                 initialMobileCountry: InitialMobileCountry,
                 preferredMobileCountries: PreferredMobileCountries,
-                showAddress: RequireAddress,
+                showAddress: false,
                 googlePlaceApiKey: googlePlaceApiKey(),
                 locationIqApiKey: locationIqApiKey(),
               )),

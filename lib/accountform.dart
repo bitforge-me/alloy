@@ -512,188 +512,193 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                 child: Container(
                     padding: EdgeInsets.all(20),
                     child: Center(
-                        child: Column(children: [
-                      Text(widget.instructions == null
-                          ? 'Enter your details to register'
-                          : widget.instructions!),
-                      Visibility(
-                          visible: widget.showImage,
-                          child: BronzeAccountImageUpdate(
-                              _imgString,
-                              _imgType,
-                              (img, imgType) => setState(() {
-                                    _imgString = img;
-                                    _imgType = imgType;
-                                  }))),
-                      SizedBox(height: 15),
-                      Visibility(
-                        visible: widget.showName,
-                        child: BronzeInputForm(_firstNameController,
-                            validator: firstNameValidate,
-                            icon: Icon(Icons.person_outline),
-                            labelText: 'First Name',
-                            keyboardType: TextInputType.name),
-                      ),
-                      SizedBox(height: 15),
-                      Visibility(
-                          visible: widget.showName,
-                          child: BronzeInputForm(_lastNameController,
-                              validator: lastNameValidate,
-                              icon: Icon(Icons.person_outline),
-                              labelText: 'Last Name',
-                              keyboardType: TextInputType.name)),
-                      SizedBox(height: 15),
-                      Visibility(
-                        visible: widget.showEmail,
-                        child: BronzeInputForm(_emailController,
-                            icon: Icon(Icons.email_outlined),
-                            labelText: 'Email',
-                            keyboardType: TextInputType.emailAddress,
-                            validator: emailValidate),
-                      ),
-                      Visibility(
-                          visible: widget.showMobileNumber,
-                          child: phoneNumberInput(
-                              _mobileNumberController,
-                              (number) {
-                                _dialCode = number.dialCode;
-                                _isoCode = number.isoCode;
-                              },
-                              (valid) {
-                                if (valid != null) _valid = valid;
-                              },
-                              countryCode: _countryCode,
-                              initialCountry: widget.initialMobileCountry,
-                              preferredCountries:
-                                  widget.preferredMobileCountries,
-                              validator: (val) {
-                                if (val == null || val.isEmpty) {
-                                  if (widget.requireMobileNumber)
-                                    return 'Invalid phone number';
-                                  return null;
-                                }
-                                if (_isoCode == null || !_valid)
-                                  return 'Invalid phone number';
-                                return null;
-                              })),
-                      Visibility(
-                        visible: widget.showAddress,
-                        child: TextFormField(
-                          textAlign: TextAlign.center,
-                          controller: _addressController,
-                          decoration: InputDecoration(
-                            prefixIcon: Padding(
-                              padding: EdgeInsets.only(top: 5),
-                              child: Icon(Icons.home_outlined),
-                            ),
-                            fillColor: Color(0xFFFFFFFF).withOpacity(0.1),
-                            filled: true,
-                            labelText: 'Address',
-                            suffix:
-                                Row(mainAxisSize: MainAxisSize.min, children: [
-                              availablePlaceApi(widget.googlePlaceApiKey,
-                                      widget.locationIqApiKey)
-                                  ? IconButton(
-                                      icon: Icon(Icons.search),
-                                      onPressed: searchAddr)
-                                  : SizedBox(),
-                              IconButton(
-                                  icon: Icon(Icons.edit),
-                                  onPressed: manualAddr),
-                            ]),
-                            constraints:
-                                BoxConstraints(minWidth: 320, maxWidth: 320),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(
-                                width: 0,
-                                style: BorderStyle.none,
-                              ),
-                            ),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                          Text(widget.instructions == null
+                              ? 'Enter your details to register'
+                              : widget.instructions!),
+                          Visibility(
+                              visible: widget.showImage,
+                              child: BronzeAccountImageUpdate(
+                                  _imgString,
+                                  _imgType,
+                                  (img, imgType) => setState(() {
+                                        _imgString = img;
+                                        _imgType = imgType;
+                                      }))),
+                          SizedBox(height: 15),
+                          Visibility(
+                            visible: widget.showName,
+                            child: BronzeInputForm(_firstNameController,
+                                validator: firstNameValidate,
+                                icon: Icon(Icons.person_outline),
+                                labelText: 'First Name',
+                                keyboardType: TextInputType.name),
                           ),
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      Visibility(
-                          visible: widget.showCurrentPassword,
-                          child: TextFormField(
-                              controller: _currentPasswordController,
-                              obscureText: true,
+                          SizedBox(height: 15),
+                          Visibility(
+                              visible: widget.showName,
+                              child: BronzeInputForm(_lastNameController,
+                                  validator: lastNameValidate,
+                                  icon: Icon(Icons.person_outline),
+                                  labelText: 'Last Name',
+                                  keyboardType: TextInputType.name)),
+                          SizedBox(height: 15),
+                          Visibility(
+                            visible: widget.showEmail,
+                            child: BronzeInputForm(_emailController,
+                                icon: Icon(Icons.email_outlined),
+                                labelText: 'Email',
+                                keyboardType: TextInputType.emailAddress,
+                                validator: emailValidate),
+                          ),
+                          Visibility(
+                              visible: widget.showMobileNumber,
+                              child: phoneNumberInput(
+                                  _mobileNumberController,
+                                  (number) {
+                                    _dialCode = number.dialCode;
+                                    _isoCode = number.isoCode;
+                                  },
+                                  (valid) {
+                                    if (valid != null) _valid = valid;
+                                  },
+                                  countryCode: _countryCode,
+                                  initialCountry: widget.initialMobileCountry,
+                                  preferredCountries:
+                                      widget.preferredMobileCountries,
+                                  validator: (val) {
+                                    if (val == null || val.isEmpty) {
+                                      if (widget.requireMobileNumber)
+                                        return 'Invalid phone number';
+                                      return null;
+                                    }
+                                    if (_isoCode == null || !_valid)
+                                      return 'Invalid phone number';
+                                    return null;
+                                  })),
+                          Visibility(
+                            visible: widget.showAddress,
+                            child: TextFormField(
+                              textAlign: TextAlign.center,
+                              controller: _addressController,
                               decoration: InputDecoration(
-                                  labelText: 'Current Password'),
-                              validator: (value) {
-                                if (value == null || value.isEmpty)
-                                  return 'Please enter your current password';
-                                return null;
-                              })),
-                      Visibility(
-                        visible: widget.showNewPassword,
-                        child: BronzeInputForm(
-                          _newPasswordController,
-                          icon: Icon(Icons.key_outlined),
-                          obscureText: true,
-                          labelText: 'New Password',
-                          validator: newPasswordValidate,
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      Visibility(
-                        visible: widget.showNewPassword,
-                        child: TextFormField(
-                            textAlign: TextAlign.center,
-                            controller: _passwordConfirmController,
-                            decoration: InputDecoration(
-                              prefixIcon: Padding(
-                                padding: EdgeInsets.only(top: 5),
-                                child: Icon(Icons.key_outlined),
-                              ),
-                              fillColor: Color(0xFFFFFFFF).withOpacity(0.1),
-                              filled: true,
-                              labelText: 'Password Confirmation',
-                              constraints:
-                                  BoxConstraints(minWidth: 320, maxWidth: 320),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(
-                                  width: 0,
-                                  style: BorderStyle.none,
+                                prefixIcon: Padding(
+                                  padding: EdgeInsets.only(top: 5),
+                                  child: Icon(Icons.home_outlined),
+                                ),
+                                fillColor: Color(0xFFFFFFFF).withOpacity(0.1),
+                                filled: true,
+                                labelText: 'Address',
+                                suffix: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      availablePlaceApi(
+                                              widget.googlePlaceApiKey,
+                                              widget.locationIqApiKey)
+                                          ? IconButton(
+                                              icon: Icon(Icons.search),
+                                              onPressed: searchAddr)
+                                          : SizedBox(),
+                                      IconButton(
+                                          icon: Icon(Icons.edit),
+                                          onPressed: manualAddr),
+                                    ]),
+                                constraints: BoxConstraints(
+                                    minWidth: 320, maxWidth: 320),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(
+                                    width: 0,
+                                    style: BorderStyle.none,
+                                  ),
                                 ),
                               ),
                             ),
-                            obscureText: true,
-                            validator: (value) {
-                              if (value == null || value.isEmpty)
-                                return 'Please confirm your password';
-                              if (value != _newPasswordController.text)
-                                return 'Password does not match';
-                              return null;
-                            }),
-                      ),
-                      SizedBox(height: 15),
-                      RoundedButton(() async {
-                        if (_formKey.currentState == null) return;
-                        if (_formKey.currentState!.validate()) {
-                          var accountReg = AccountRegistration(
-                              _firstNameController.text,
-                              _lastNameController.text,
-                              _emailController.text.trim(),
-                              '$_dialCode ${_mobileNumberController.text}',
-                              _addressController.text,
-                              _currentPasswordController.text,
-                              _newPasswordController.text,
-                              _imgString,
-                              _imgType);
-                          Navigator.of(context).pop(accountReg);
-                        }
-                      }, ZapOnSecondary, ZapSecondary, bronzeGradient,
-                          'Continue',
-                          holePunch: true, width: 320, height: 50),
-                      SizedBox(height: 15),
-                      RoundedButton(() {
-                        Navigator.of(context).pop();
-                      }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
-                          'Login Instead',
-                          holePunch: true, width: 320, height: 50)
-                    ]))))));
+                          ),
+                          SizedBox(height: 15),
+                          Visibility(
+                              visible: widget.showCurrentPassword,
+                              child: TextFormField(
+                                  controller: _currentPasswordController,
+                                  obscureText: true,
+                                  decoration: InputDecoration(
+                                      labelText: 'Current Password'),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty)
+                                      return 'Please enter your current password';
+                                    return null;
+                                  })),
+                          Visibility(
+                            visible: widget.showNewPassword,
+                            child: BronzeInputForm(
+                              _newPasswordController,
+                              icon: Icon(Icons.key_outlined),
+                              obscureText: true,
+                              labelText: 'New Password',
+                              validator: newPasswordValidate,
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                          Visibility(
+                            visible: widget.showNewPassword,
+                            child: TextFormField(
+                                textAlign: TextAlign.center,
+                                controller: _passwordConfirmController,
+                                decoration: InputDecoration(
+                                  prefixIcon: Padding(
+                                    padding: EdgeInsets.only(top: 5),
+                                    child: Icon(Icons.key_outlined),
+                                  ),
+                                  fillColor: Color(0xFFFFFFFF).withOpacity(0.1),
+                                  filled: true,
+                                  labelText: 'Password Confirmation',
+                                  constraints: BoxConstraints(
+                                      minWidth: 320, maxWidth: 320),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
+                                      width: 0,
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
+                                ),
+                                obscureText: true,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty)
+                                    return 'Please confirm your password';
+                                  if (value != _newPasswordController.text)
+                                    return 'Password does not match';
+                                  return null;
+                                }),
+                          ),
+                          SizedBox(height: 15),
+                          RoundedButton(() async {
+                            if (_formKey.currentState == null) return;
+                            if (_formKey.currentState!.validate()) {
+                              var accountReg = AccountRegistration(
+                                  _firstNameController.text,
+                                  _lastNameController.text,
+                                  _emailController.text.trim(),
+                                  '$_dialCode ${_mobileNumberController.text}',
+                                  _addressController.text,
+                                  _currentPasswordController.text,
+                                  _newPasswordController.text,
+                                  _imgString,
+                                  _imgType);
+                              Navigator.of(context).pop(accountReg);
+                            }
+                          }, ZapOnSecondary, ZapSecondary, bronzeGradient,
+                              'Continue',
+                              holePunch: true, width: 320, height: 50),
+                          SizedBox(height: 15),
+                          RoundedButton(() {
+                            Navigator.of(context).pop();
+                          }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
+                              'Login Instead',
+                              holePunch: true, width: 320, height: 50)
+                        ]))))));
   }
 }
