@@ -299,11 +299,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   Future<void> _login() async {
-    AccountLogin? login;
+    dynamic? login;
     // first check if we need a two factor code
     bool tfEnabled = false;
     while (true) {
-      login = await Navigator.push<AccountLogin>(
+      login = await Navigator.push<dynamic?>(
         context,
         MaterialPageRoute(
             builder: (context) =>
@@ -312,6 +312,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       if (login == null) {
         setState(() {
           _register();
+        });
+        return null;
+      } else if (login == false) {
+        setState(() {
+          _loginWithEmail();
         });
         return null;
       }

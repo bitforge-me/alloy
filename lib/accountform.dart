@@ -370,6 +370,11 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                     }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
                         'Create an Account',
                         holePunch: true, width: 320, height: 50),
+                    RoundedButton(() {
+                      Navigator.of(context).pop(false);
+                    }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
+                        'Lost Password',
+                        holePunch: true, width: 320, height: 50)
                   ],
                 )))));
   }
