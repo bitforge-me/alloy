@@ -16,6 +16,11 @@ import 'package:zapdart/account_forms.dart';
 import 'package:zapdart/colors.dart';
 import 'colors.dart';
 
+FormFieldValidator deviceNameValidate = (value) {
+  if (value == null || value.isEmpty) return 'Please enter a device name';
+  return null;
+};
+
 FormFieldValidator emailValidate = (value) {
   value = value?.trim();
   if (value == null || value.isEmpty) return 'Please enter an email';
@@ -85,6 +90,82 @@ class BronzeInputForm extends StatelessWidget {
         keyboardType: this.keyboardType ?? null,
         obscureText: this.obscureText ?? false,
         validator: this.validator ?? null);
+  }
+}
+
+class BronzeRequestApiKeyForm extends StatefulWidget {
+  final String deviceName;
+  final String? instructions;
+
+  BronzeRequestApiKeyForm(this.deviceName, {this.instructions}) : super();
+
+  @override
+  BronzeRequestApiKeyFormState createState() {
+    return BronzeRequestApiKeyFormState();
+  }
+}
+
+class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _deviceNameController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  @protected
+  @mustCallSuper
+  void initState() {
+    super.initState();
+    _deviceNameController.text = widget.deviceName;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: PreferredSize(
+          child: Container(),
+          preferredSize: Size(0, 0),
+        ),
+        body: Form(
+            key: _formKey,
+            child: Container(
+                padding: EdgeInsets.all(20),
+                child: Center(
+                    child: Column(
+                  children: <Widget>[
+                    Text(widget.instructions == null
+                        ? "Enter your email and device name to login via email link"
+                        : widget.instructions!),
+                    SizedBox(height: 15),
+                    BronzeInputForm(_deviceNameController,
+                        validator: deviceNameValidate,
+                        icon: Icon(Icons.computer_outlined)),
+                    SizedBox(height: 15),
+                    BronzeInputForm(_emailController,
+                        icon: Icon(Icons.email_outlined),
+                        labelText: 'Email',
+                        keyboardType: TextInputType.emailAddress,
+                        validator: emailValidate),
+                    SizedBox(height: 15),
+                    raisedButton(
+                      child: Text("Ok"),
+                      onPressed: () {
+                        if (_formKey.currentState == null) return;
+                        if (_formKey.currentState!.validate()) {
+                          var req = AccountRequestApiKey(
+                              _emailController.text.trim(),
+                              _deviceNameController.text);
+                          Navigator.of(context).pop(req);
+                        }
+                      },
+                    ),
+                    SizedBox(height: 15),
+                    raisedButton(
+                      child: Text("Cancel"),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                )))));
   }
 }
 

@@ -358,8 +358,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     var devName = await deviceName();
     var req = await Navigator.push<AccountRequestApiKey>(
       context,
-      MaterialPageRoute(
-          builder: (context) => AccountRequestApiKeyForm(devName)),
+      MaterialPageRoute(builder: (context) => BronzeRequestApiKeyForm(devName)),
     );
     if (req == null) return;
     var result = await beApiKeyRequest(req.email, req.deviceName);
