@@ -264,9 +264,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               )),
     );
     if (reg == null) {
-      setState(() {
-        _login();
-      });
+      _login();
       return;
     }
     ;
@@ -308,9 +306,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 BronzeLoginForm(login, showTwoFactorCode: false)),
       );
       if (login == null) {
-        setState(() {
-          _register();
-        });
+        _register();
         return null;
       } else if (login == false) {
         setState(() {
@@ -359,9 +355,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       MaterialPageRoute(builder: (context) => BronzeRequestApiKeyForm(devName)),
     );
     if (req == null) {
-      setState(() {
-        _login();
-      });
+      _login();
       return null;
     }
     ;
