@@ -77,6 +77,7 @@ class BronzeInputForm extends StatelessWidget {
                 ),
           fillColor: Color(0xFFFFFFFF).withOpacity(0.1),
           filled: true,
+          floatingLabelBehavior: FloatingLabelBehavior.never,
           labelText: this.labelText ?? null,
           constraints: BoxConstraints(minWidth: 320, maxWidth: 320),
           border: OutlineInputBorder(
