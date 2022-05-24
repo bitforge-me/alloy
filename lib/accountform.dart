@@ -164,7 +164,7 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                     RoundedButton(() {
                       Navigator.of(context).pop();
                     }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
-                        'Cancel',
+                        'Login Instead',
                         holePunch: true, width: 320, height: 50),
                   ],
                 )))));

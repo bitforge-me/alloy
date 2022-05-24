@@ -358,7 +358,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       context,
       MaterialPageRoute(builder: (context) => BronzeRequestApiKeyForm(devName)),
     );
-    if (req == null) return;
+    if (req == null) {
+      setState(() {
+        _login();
+      });
+      return null;
+    }
+    ;
     var result = await beApiKeyRequest(req.email, req.deviceName);
     await result.when((token) async {
       Acct? acct;
