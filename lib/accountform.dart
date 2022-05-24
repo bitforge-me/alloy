@@ -49,12 +49,12 @@ FormFieldValidator newPasswordValidate = (value) {
 };
 
 class BronzeInputForm extends StatelessWidget {
-  TextEditingController? controller;
-  TextInputType? keyboardType;
-  FormFieldValidator<dynamic>? validator;
-  String? labelText;
-  bool? obscureText;
-  Icon? icon;
+  final TextEditingController? controller;
+  final TextInputType? keyboardType;
+  final FormFieldValidator<dynamic>? validator;
+  final String? labelText;
+  final bool? obscureText;
+  final Icon? icon;
   BronzeInputForm(this.controller,
       {this.validator,
       this.keyboardType,

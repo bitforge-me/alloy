@@ -5,7 +5,6 @@ import 'package:logging/logging.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:decimal/decimal.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
@@ -94,7 +93,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   bool _invalidAuth = false;
   bool _retry = false;
   List<String> _alerts = [];
-  bool? _userRedirected;
 
   @override
   void initState() {
@@ -299,11 +297,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   Future<void> _login() async {
-    dynamic? login;
+    dynamic login;
     // first check if we need a two factor code
     bool tfEnabled = false;
     while (true) {
-      login = await Navigator.push<dynamic?>(
+      login = await Navigator.push<dynamic>(
         context,
         MaterialPageRoute(
             builder: (context) =>
