@@ -107,14 +107,12 @@ class BronzeRequestApiKeyForm extends StatefulWidget {
 
 class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _deviceNameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @protected
   @mustCallSuper
   void initState() {
     super.initState();
-    _deviceNameController.text = widget.deviceName;
   }
 
   @override
@@ -147,10 +145,6 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                         ? "Enter your email and device name to login via email link"
                         : widget.instructions!),
                     SizedBox(height: 15),
-                    BronzeInputForm(_deviceNameController,
-                        validator: deviceNameValidate,
-                        icon: Icon(Icons.computer_outlined)),
-                    SizedBox(height: 15),
                     BronzeInputForm(_emailController,
                         icon: Icon(Icons.email_outlined),
                         labelText: 'Email',
@@ -161,8 +155,7 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                       if (_formKey.currentState == null) return;
                       if (_formKey.currentState!.validate()) {
                         var req = AccountRequestApiKey(
-                            _emailController.text.trim(),
-                            _deviceNameController.text);
+                            _emailController.text.trim(), widget.deviceName);
                         Navigator.of(context).pop(req);
                       }
                     }, ZapOnSecondary, ZapSecondary, bronzeGradient, 'Continue',
