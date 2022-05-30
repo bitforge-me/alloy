@@ -156,8 +156,9 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                     RoundedButton(() {
                       if (_formKey.currentState == null) return;
                       if (_formKey.currentState!.validate()) {
-                        PopUpReturn popUpReq = PopUpReturn.accountRequest(AccountRequestApiKey(
-                            _emailController.text.trim(), widget.deviceName));
+                        PopUpReturn popUpReq = PopUpReturn.accountRequest(
+                            AccountRequestApiKey(_emailController.text.trim(),
+                                widget.deviceName));
                         Navigator.of(context).pop(popUpReq);
                       }
                     }, ZapOnSecondary, ZapSecondary, bronzeGradient, 'Continue',
@@ -446,10 +447,11 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                     RoundedButton(() {
                       if (_formKey.currentState == null) return;
                       if (_formKey.currentState!.validate()) {
-                        PopUpReturn returnLogin = PopUpReturn.login(AccountLogin(
-                            _emailController.text.trim(),
-                            _passwordController.text,
-                            _tfCodeController.text));
+                        PopUpReturn returnLogin = PopUpReturn.login(
+                            AccountLogin(
+                                _emailController.text.trim(),
+                                _passwordController.text,
+                                _tfCodeController.text));
                         Navigator.of(context).pop(returnLogin);
                       }
                     }, ZapOnSecondary, ZapSecondary, bronzeGradient, 'Continue',
@@ -772,16 +774,17 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                           RoundedButton(() async {
                             if (_formKey.currentState == null) return;
                             if (_formKey.currentState!.validate()) {
-                              PopUpReturn regPopUp = PopUpReturn.register(AccountRegistration(
-                                  _firstNameController.text,
-                                  _lastNameController.text,
-                                  _emailController.text.trim(),
-                                  '$_dialCode ${_mobileNumberController.text}',
-                                  _addressController.text,
-                                  _currentPasswordController.text,
-                                  _newPasswordController.text,
-                                  _imgString,
-                                  _imgType));
+                              PopUpReturn regPopUp = PopUpReturn.register(
+                                  AccountRegistration(
+                                      _firstNameController.text,
+                                      _lastNameController.text,
+                                      _emailController.text.trim(),
+                                      '$_dialCode ${_mobileNumberController.text}',
+                                      _addressController.text,
+                                      _currentPasswordController.text,
+                                      _newPasswordController.text,
+                                      _imgString,
+                                      _imgType));
                               Navigator.of(context).pop(regPopUp);
                             }
                           }, ZapOnSecondary, ZapSecondary, bronzeGradient,
