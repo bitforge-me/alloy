@@ -5,6 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:decimal/decimal.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
@@ -298,28 +299,30 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     showAlertDialog(context, 'logging in..');
     var result = await beUserTwoFactorEnabledCheck(login.email, login.password);
     Navigator.pop(context);
-    if (await result.when<Future<void>>((enabled) async {
+    await result.when<Future<void>>((enabled) async {
       tfEnabled = enabled;
     }, error: (err) async {
       await _loginErrorAlert(context, err);
-    })) ;
+    });
     while (true) {
+      PopUpReturn? popUpReturn;
       // get the two factor code if required
       if (tfEnabled)
-        PopUpReturn popUpReturn = await Navigator.push<PopUpReturn>(
+        popUpReturn = await Navigator.push<PopUpReturn?>(
           context,
           MaterialPageRoute(
               builder: (context) =>
                   BronzeLoginForm(login, showTwoFactorCode: tfEnabled)),
         );
-      if (popUpReturn.map(
-            login: (AccountLogin lgn) => _beLogin(context, login),
-            register: (AccountRegistration rg) => null,
-            accountRequest: (AccountRequestApiKey req) => null,
-            optionOne: () => null,
-            optionTwo: () => null,
-          ) !=
-          null) {
+      if (popUpReturn != null &&
+          popUpReturn.map(
+                login: (AccountLogin lgn) => _beLogin(context, login),
+                register: (AccountRegistration rg) => null,
+                accountRequest: (AccountRequestApiKey req) => null,
+                optionOne: () => null,
+                optionTwo: () => null,
+              ) !=
+              null) {
         _initApi();
       }
       ;
