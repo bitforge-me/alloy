@@ -30,6 +30,7 @@ import 'colors.dart';
 import 'accountform.dart';
 import 'assets.dart';
 import 'event.dart';
+import 'popupreturn.dart';
 
 final log = Logger('Main');
 
@@ -294,26 +295,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     });
   }
 
-  Future<void> _login() async {
-    dynamic login;
-    // first check if we need a two factor code
-    bool tfEnabled = false;
-    while (true) {
-      login = await Navigator.push<dynamic>(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                BronzeLoginForm(login, showTwoFactorCode: false)),
-      );
-      if (login == null) {
-        _register();
-        return null;
-      } else if (login == false) {
-        setState(() {
-          _loginWithEmail();
-        });
-        return null;
-      }
+	_passLoginDetails(AccountLogin login, BuildContext context, bool tfEnabled) async {
       showAlertDialog(context, 'logging in..');
       var result =
           await beUserTwoFactorEnabledCheck(login.email, login.password);
@@ -325,6 +307,26 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         await _loginErrorAlert(context, err);
         return false;
       })) break;
+	}
+
+  Future<void> _login() async {
+    PopUpReturn popUpReturn;
+    // first check if we need a two factor code
+    bool tfEnabled = false;
+    while (true) {
+      popUpReturn = await Navigator.push<dynamic>(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                BronzeLoginForm(login, showTwoFactorCode: false)),
+      );
+			PopUpReturn.map(
+				login: (AccountLogin login) => _passLoginDetails(login, context, tfEnabled),
+				register: (AccountRegistration reg) => null,
+				accountRequest: (AccountRequestApiKey req) => null,
+				optionOne: () => _register(),
+				optionTwo: () => _loginWithEmail(),
+			);
     }
     while (true) {
       // get the two factor code if required

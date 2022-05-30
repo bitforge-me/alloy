@@ -15,6 +15,7 @@ import 'package:zapdart/form_ui.dart';
 import 'package:zapdart/account_forms.dart';
 import 'package:zapdart/colors.dart';
 import 'colors.dart';
+import 'popupreturn.dart';
 
 FormFieldValidator deviceNameValidate = (value) {
   if (value == null || value.isEmpty) return 'Please enter a device name';
@@ -155,15 +156,15 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                     RoundedButton(() {
                       if (_formKey.currentState == null) return;
                       if (_formKey.currentState!.validate()) {
-                        var req = AccountRequestApiKey(
-                            _emailController.text.trim(), widget.deviceName);
-                        Navigator.of(context).pop(req);
+                        PopUpReturn popUpReq = PopUpReturn.accountRequest(AccountRequestApiKey(
+                            _emailController.text.trim(), widget.deviceName));
+                        Navigator.of(context).pop(popUpReq);
                       }
                     }, ZapOnSecondary, ZapSecondary, bronzeGradient, 'Continue',
                         holePunch: true, width: 320, height: 50),
                     SizedBox(height: 15),
                     RoundedButton(() {
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pop(PopUpReturn.optionOne());
                     }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
                         'Login Instead',
                         holePunch: true, width: 320, height: 50),
@@ -445,21 +446,21 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                     RoundedButton(() {
                       if (_formKey.currentState == null) return;
                       if (_formKey.currentState!.validate()) {
-                        var accountLogin = AccountLogin(
+                        PopUpReturn returnLogin = PopUpReturn.login(AccountLogin(
                             _emailController.text.trim(),
                             _passwordController.text,
-                            _tfCodeController.text);
-                        Navigator.of(context).pop(accountLogin);
+                            _tfCodeController.text));
+                        Navigator.of(context).pop(returnLogin);
                       }
                     }, ZapOnSecondary, ZapSecondary, bronzeGradient, 'Continue',
                         holePunch: true, width: 320, height: 50),
                     RoundedButton(() {
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pop(PopUpReturn.optionOne());
                     }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
                         'Create an Account',
                         holePunch: true, width: 320, height: 50),
                     RoundedButton(() {
-                      Navigator.of(context).pop(false);
+                      Navigator.of(context).pop(PopUpReturn.optionTwo());
                     }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
                         'Lost Password',
                         holePunch: true, width: 320, height: 50)
@@ -771,7 +772,7 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                           RoundedButton(() async {
                             if (_formKey.currentState == null) return;
                             if (_formKey.currentState!.validate()) {
-                              var accountReg = AccountRegistration(
+                              PopUpReturn regPopUp = PopUpReturn.register(AccountRegistration(
                                   _firstNameController.text,
                                   _lastNameController.text,
                                   _emailController.text.trim(),
@@ -780,15 +781,15 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                                   _currentPasswordController.text,
                                   _newPasswordController.text,
                                   _imgString,
-                                  _imgType);
-                              Navigator.of(context).pop(accountReg);
+                                  _imgType));
+                              Navigator.of(context).pop(regPopUp);
                             }
                           }, ZapOnSecondary, ZapSecondary, bronzeGradient,
                               'Continue',
                               holePunch: true, width: 320, height: 50),
                           SizedBox(height: 15),
                           RoundedButton(() {
-                            Navigator.of(context).pop();
+                            Navigator.of(context).pop(PopUpReturn.optionOne());
                           }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
                               'Login Instead',
                               holePunch: true, width: 320, height: 50)
