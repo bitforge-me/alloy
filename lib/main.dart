@@ -298,7 +298,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     showAlertDialog(context, 'logging in..');
     var result = await beUserTwoFactorEnabledCheck(login.email, login.password);
     Navigator.pop(context);
-    if (await result.when<Future<bool>>((enabled) async {
+    if (await result.when<Future<void>>((enabled) async {
       tfEnabled = enabled;
     }, error: (err) async {
       await _loginErrorAlert(context, err);
