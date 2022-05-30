@@ -54,13 +54,11 @@ class MyApp extends StatelessWidget {
     initConfig();
     var theme = ThemeData(
       useMaterial3: false,
-      fontFamily: 'SF-Pro',
       brightness: ZapBrightness,
       scaffoldBackgroundColor: ZapBackground,
       appBarTheme: AppBarTheme(centerTitle: true, color: ZapSecondary),
       // ignore: deprecated_member_use
       accentColor: ZapPrimary,
-      colorScheme: ColorScheme.dark(primary: Color(0xFF1B1C25)),
     );
     ZapTextThemer(theme.textTheme);
     return MaterialApp(
