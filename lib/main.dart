@@ -293,18 +293,34 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     });
   }
 
-	_passLoginDetails(AccountLogin login, BuildContext context, bool tfEnabled) async {
+	Future<void> _passLoginDetails(AccountLogin login, BuildContext context, bool tfEnabled) async {
       showAlertDialog(context, 'logging in..');
       var result =
           await beUserTwoFactorEnabledCheck(login.email, login.password);
       Navigator.pop(context);
       if (await result.when<Future<bool>>((enabled) async {
         tfEnabled = enabled;
-        return true;
       }, error: (err) async {
         await _loginErrorAlert(context, err);
-        return false;
+        break;
       })) break;
+			while (true) {
+				// get the two factor code if required
+				if (tfEnabled)
+					login = await Navigator.push<AccountLogin>(
+						context,
+						MaterialPageRoute(
+								builder: (context) =>
+										BronzeLoginForm(login, showTwoFactorCode: tfEnabled)),
+					);
+				showAlertDialog(context, 'logging in..');
+				var acct = await _beLogin(context, login);
+				Navigator.pop(context);
+				if (acct != null) {
+					_initApi();
+					break;
+				}
+			}
 	}
 
   Future<void> _login() async {
@@ -325,25 +341,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 				optionOne: () => _register(),
 				optionTwo: () => _loginWithEmail(),
 			);
-    }
-    while (true) {
-      // get the two factor code if required
-      if (tfEnabled)
-        login = await Navigator.push<AccountLogin>(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  BronzeLoginForm(login, showTwoFactorCode: tfEnabled)),
-        );
-      if (login == null) return;
-      // login and save account if login successful
-      showAlertDialog(context, 'logging in..');
-      var acct = await _beLogin(context, login);
-      Navigator.pop(context);
-      if (acct != null) {
-        _initApi();
-        break;
-      }
     }
   }
 
