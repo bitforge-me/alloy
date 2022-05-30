@@ -330,7 +330,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   Future<void> _login() async {
-    PopUpReturn popUpReturn;
+    AccountLogin? loginInfo;
+    PopUpReturn? popUpReturn;
     // first check if we need a two factor code
     bool tfEnabled = false;
     while (true) {
@@ -338,16 +339,17 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                BronzeLoginForm(login, showTwoFactorCode: false)),
+                BronzeLoginForm(loginInfo, showTwoFactorCode: false)),
       );
-      popUpReturn.when(
-        login: (AccountLogin login) =>
-            _passLoginDetails(login, context, tfEnabled),
-        register: (AccountRegistration reg) => null,
-        accountRequest: (AccountRequestApiKey req) => null,
-        optionOne: () => _register(),
-        optionTwo: () => _loginWithEmail(),
-      );
+      if (popUpReturn != null)
+        popUpReturn.when(
+          login: (AccountLogin login) =>
+              _passLoginDetails(login, context, tfEnabled),
+          register: (AccountRegistration reg) => null,
+          accountRequest: (AccountRequestApiKey req) => null,
+          optionOne: () => _register(),
+          optionTwo: () => _loginWithEmail(),
+        );
     }
   }
 
