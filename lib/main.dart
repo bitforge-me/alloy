@@ -315,7 +315,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   BronzeLoginForm(login, showTwoFactorCode: tfEnabled)),
         );
       if (popUpReturn != null &&
-          popUpReturn.map(
+          popUpReturn.when(
                 login: (AccountLogin lgn) => _beLogin(context, login),
                 register: (AccountRegistration rg) => null,
                 accountRequest: (AccountRequestApiKey req) => null,
@@ -340,7 +340,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             builder: (context) =>
                 BronzeLoginForm(login, showTwoFactorCode: false)),
       );
-      PopUpReturn.map(
+      popUpReturn.when(
         login: (AccountLogin login) =>
             _passLoginDetails(login, context, tfEnabled),
         register: (AccountRegistration reg) => null,

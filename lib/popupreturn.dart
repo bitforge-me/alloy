@@ -7,9 +7,10 @@ part 'popupreturn.freezed.dart';
 // to prompt which container should be pushed to the stack next
 @freezed
 class PopUpReturn with _$PopUpReturn {
-  const factory PopUpReturn.register(AccountRegistration reg) = Registered;
-  const factory PopUpReturn.login(AccountLogin login) = LoggedIn;
-  const factory PopUpReturn.accountRequest(AccountRequestApiKey req) = LostPass;
+  const factory PopUpReturn.register(AccountRegistration reg) = Register;
+  const factory PopUpReturn.login(AccountLogin login) = Login;
+  const factory PopUpReturn.accountRequest(AccountRequestApiKey req) =
+      AccountRequest;
   const factory PopUpReturn.optionOne() = OptionOne;
   const factory PopUpReturn.optionTwo() = OptionTwo;
 }
