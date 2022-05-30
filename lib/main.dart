@@ -302,24 +302,27 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         tfEnabled = enabled;
       }, error: (err) async {
         await _loginErrorAlert(context, err);
-        break;
-      })) break;
+      }));
 			while (true) {
 				// get the two factor code if required
 				if (tfEnabled)
-					login = await Navigator.push<AccountLogin>(
+					PopUpReturn popUpReturn = await Navigator.push<PopUpReturn>(
 						context,
 						MaterialPageRoute(
 								builder: (context) =>
 										BronzeLoginForm(login, showTwoFactorCode: tfEnabled)),
 					);
-				showAlertDialog(context, 'logging in..');
-				var acct = await _beLogin(context, login);
-				Navigator.pop(context);
-				if (acct != null) {
+				if (popUpReturn.map(
+					login: (AccountLogin lgn) => await _beLogin(context, login),
+					register: (AccountRegistration rg) => null,
+					accountRequest: (AccountRequestApiKey req) => null,
+					optionOne: () => null,
+					optionTwo: () => null,
+				) != null)
+					{
 					_initApi();
-					break;
-				}
+					}
+				;	
 			}
 	}
 
@@ -328,7 +331,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     // first check if we need a two factor code
     bool tfEnabled = false;
     while (true) {
-      popUpReturn = await Navigator.push<dynamic>(
+      popUpReturn = await Navigator.push<PopUpReturn>(
         context,
         MaterialPageRoute(
             builder: (context) =>
