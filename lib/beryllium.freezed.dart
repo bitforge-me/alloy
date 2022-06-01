@@ -7432,6 +7432,391 @@ abstract class _BeFiatDepositResultErr implements BeFiatDepositResult {
 }
 
 /// @nodoc
+class _$BeFiatAccountNumberResultTearOff {
+  const _$BeFiatAccountNumberResultTearOff();
+
+  _BeFiatAccountNumberResult call(BeFiatAccountNumber accountNumber) {
+    return _BeFiatAccountNumberResult(
+      accountNumber,
+    );
+  }
+
+  _BeFiatAccountNumberResultErr error(BeError err) {
+    return _BeFiatAccountNumberResultErr(
+      err,
+    );
+  }
+}
+
+/// @nodoc
+const $BeFiatAccountNumberResult = _$BeFiatAccountNumberResultTearOff();
+
+/// @nodoc
+mixin _$BeFiatAccountNumberResult {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(BeFiatAccountNumber accountNumber) $default, {
+    required TResult Function(BeError err) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult Function(BeFiatAccountNumber accountNumber)? $default, {
+    TResult Function(BeError err)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(BeFiatAccountNumber accountNumber)? $default, {
+    TResult Function(BeError err)? error,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_BeFiatAccountNumberResult value) $default, {
+    required TResult Function(_BeFiatAccountNumberResultErr value) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult Function(_BeFiatAccountNumberResult value)? $default, {
+    TResult Function(_BeFiatAccountNumberResultErr value)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_BeFiatAccountNumberResult value)? $default, {
+    TResult Function(_BeFiatAccountNumberResultErr value)? error,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $BeFiatAccountNumberResultCopyWith<$Res> {
+  factory $BeFiatAccountNumberResultCopyWith(BeFiatAccountNumberResult value,
+          $Res Function(BeFiatAccountNumberResult) then) =
+      _$BeFiatAccountNumberResultCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$BeFiatAccountNumberResultCopyWithImpl<$Res>
+    implements $BeFiatAccountNumberResultCopyWith<$Res> {
+  _$BeFiatAccountNumberResultCopyWithImpl(this._value, this._then);
+
+  final BeFiatAccountNumberResult _value;
+  // ignore: unused_field
+  final $Res Function(BeFiatAccountNumberResult) _then;
+}
+
+/// @nodoc
+abstract class _$BeFiatAccountNumberResultCopyWith<$Res> {
+  factory _$BeFiatAccountNumberResultCopyWith(_BeFiatAccountNumberResult value,
+          $Res Function(_BeFiatAccountNumberResult) then) =
+      __$BeFiatAccountNumberResultCopyWithImpl<$Res>;
+  $Res call({BeFiatAccountNumber accountNumber});
+}
+
+/// @nodoc
+class __$BeFiatAccountNumberResultCopyWithImpl<$Res>
+    extends _$BeFiatAccountNumberResultCopyWithImpl<$Res>
+    implements _$BeFiatAccountNumberResultCopyWith<$Res> {
+  __$BeFiatAccountNumberResultCopyWithImpl(_BeFiatAccountNumberResult _value,
+      $Res Function(_BeFiatAccountNumberResult) _then)
+      : super(_value, (v) => _then(v as _BeFiatAccountNumberResult));
+
+  @override
+  _BeFiatAccountNumberResult get _value =>
+      super._value as _BeFiatAccountNumberResult;
+
+  @override
+  $Res call({
+    Object? accountNumber = freezed,
+  }) {
+    return _then(_BeFiatAccountNumberResult(
+      accountNumber == freezed
+          ? _value.accountNumber
+          : accountNumber // ignore: cast_nullable_to_non_nullable
+              as BeFiatAccountNumber,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_BeFiatAccountNumberResult
+    with DiagnosticableTreeMixin
+    implements _BeFiatAccountNumberResult {
+  const _$_BeFiatAccountNumberResult(this.accountNumber);
+
+  @override
+  final BeFiatAccountNumber accountNumber;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'BeFiatAccountNumberResult(accountNumber: $accountNumber)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'BeFiatAccountNumberResult'))
+      ..add(DiagnosticsProperty('accountNumber', accountNumber));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _BeFiatAccountNumberResult &&
+            (identical(other.accountNumber, accountNumber) ||
+                other.accountNumber == accountNumber));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, accountNumber);
+
+  @JsonKey(ignore: true)
+  @override
+  _$BeFiatAccountNumberResultCopyWith<_BeFiatAccountNumberResult>
+      get copyWith =>
+          __$BeFiatAccountNumberResultCopyWithImpl<_BeFiatAccountNumberResult>(
+              this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(BeFiatAccountNumber accountNumber) $default, {
+    required TResult Function(BeError err) error,
+  }) {
+    return $default(accountNumber);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult Function(BeFiatAccountNumber accountNumber)? $default, {
+    TResult Function(BeError err)? error,
+  }) {
+    return $default?.call(accountNumber);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(BeFiatAccountNumber accountNumber)? $default, {
+    TResult Function(BeError err)? error,
+    required TResult orElse(),
+  }) {
+    if ($default != null) {
+      return $default(accountNumber);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_BeFiatAccountNumberResult value) $default, {
+    required TResult Function(_BeFiatAccountNumberResultErr value) error,
+  }) {
+    return $default(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult Function(_BeFiatAccountNumberResult value)? $default, {
+    TResult Function(_BeFiatAccountNumberResultErr value)? error,
+  }) {
+    return $default?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_BeFiatAccountNumberResult value)? $default, {
+    TResult Function(_BeFiatAccountNumberResultErr value)? error,
+    required TResult orElse(),
+  }) {
+    if ($default != null) {
+      return $default(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _BeFiatAccountNumberResult implements BeFiatAccountNumberResult {
+  const factory _BeFiatAccountNumberResult(BeFiatAccountNumber accountNumber) =
+      _$_BeFiatAccountNumberResult;
+
+  BeFiatAccountNumber get accountNumber;
+  @JsonKey(ignore: true)
+  _$BeFiatAccountNumberResultCopyWith<_BeFiatAccountNumberResult>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$BeFiatAccountNumberResultErrCopyWith<$Res> {
+  factory _$BeFiatAccountNumberResultErrCopyWith(
+          _BeFiatAccountNumberResultErr value,
+          $Res Function(_BeFiatAccountNumberResultErr) then) =
+      __$BeFiatAccountNumberResultErrCopyWithImpl<$Res>;
+  $Res call({BeError err});
+
+  $BeErrorCopyWith<$Res> get err;
+}
+
+/// @nodoc
+class __$BeFiatAccountNumberResultErrCopyWithImpl<$Res>
+    extends _$BeFiatAccountNumberResultCopyWithImpl<$Res>
+    implements _$BeFiatAccountNumberResultErrCopyWith<$Res> {
+  __$BeFiatAccountNumberResultErrCopyWithImpl(
+      _BeFiatAccountNumberResultErr _value,
+      $Res Function(_BeFiatAccountNumberResultErr) _then)
+      : super(_value, (v) => _then(v as _BeFiatAccountNumberResultErr));
+
+  @override
+  _BeFiatAccountNumberResultErr get _value =>
+      super._value as _BeFiatAccountNumberResultErr;
+
+  @override
+  $Res call({
+    Object? err = freezed,
+  }) {
+    return _then(_BeFiatAccountNumberResultErr(
+      err == freezed
+          ? _value.err
+          : err // ignore: cast_nullable_to_non_nullable
+              as BeError,
+    ));
+  }
+
+  @override
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
+      return _then(_value.copyWith(err: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$_BeFiatAccountNumberResultErr
+    with DiagnosticableTreeMixin
+    implements _BeFiatAccountNumberResultErr {
+  const _$_BeFiatAccountNumberResultErr(this.err);
+
+  @override
+  final BeError err;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'BeFiatAccountNumberResult.error(err: $err)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'BeFiatAccountNumberResult.error'))
+      ..add(DiagnosticsProperty('err', err));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _BeFiatAccountNumberResultErr &&
+            (identical(other.err, err) || other.err == err));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, err);
+
+  @JsonKey(ignore: true)
+  @override
+  _$BeFiatAccountNumberResultErrCopyWith<_BeFiatAccountNumberResultErr>
+      get copyWith => __$BeFiatAccountNumberResultErrCopyWithImpl<
+          _BeFiatAccountNumberResultErr>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(BeFiatAccountNumber accountNumber) $default, {
+    required TResult Function(BeError err) error,
+  }) {
+    return error(err);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult Function(BeFiatAccountNumber accountNumber)? $default, {
+    TResult Function(BeError err)? error,
+  }) {
+    return error?.call(err);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(BeFiatAccountNumber accountNumber)? $default, {
+    TResult Function(BeError err)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(err);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_BeFiatAccountNumberResult value) $default, {
+    required TResult Function(_BeFiatAccountNumberResultErr value) error,
+  }) {
+    return error(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult Function(_BeFiatAccountNumberResult value)? $default, {
+    TResult Function(_BeFiatAccountNumberResultErr value)? error,
+  }) {
+    return error?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_BeFiatAccountNumberResult value)? $default, {
+    TResult Function(_BeFiatAccountNumberResultErr value)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _BeFiatAccountNumberResultErr
+    implements BeFiatAccountNumberResult {
+  const factory _BeFiatAccountNumberResultErr(BeError err) =
+      _$_BeFiatAccountNumberResultErr;
+
+  BeError get err;
+  @JsonKey(ignore: true)
+  _$BeFiatAccountNumberResultErrCopyWith<_BeFiatAccountNumberResultErr>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 class _$BeFiatDepositsResultTearOff {
   const _$BeFiatDepositsResultTearOff();
 

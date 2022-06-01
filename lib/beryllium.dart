@@ -619,6 +619,37 @@ class BeFiatDepositResult with _$BeFiatDepositResult {
   }
 }
 
+@JsonSerializable()
+class BeFiatAccountNumber {
+  @JsonKey(name: 'account_number')
+  final String accountNumber;
+  final String reference;
+  final String code;
+
+  BeFiatAccountNumber(this.accountNumber, this.reference, this.code);
+  factory BeFiatAccountNumber.fromJson(Map<String, dynamic> json) =>
+      _$BeFiatAccountNumberFromJson(json);
+  Map<String, dynamic> toJson() => _$BeFiatAccountNumberToJson(this);
+}
+
+@freezed
+class BeFiatAccountNumberResult with _$BeFiatAccountNumberResult {
+  const factory BeFiatAccountNumberResult(BeFiatAccountNumber accountNumber) =
+      _BeFiatAccountNumberResult;
+  const factory BeFiatAccountNumberResult.error(BeError err) =
+      _BeFiatAccountNumberResultErr;
+
+  static BeFiatAccountNumberResult parse(String data) {
+    try {
+      var json = jsonDecode(data);
+      return BeFiatAccountNumberResult(
+          BeFiatAccountNumber.fromJson(json['deposit']));
+    } catch (_) {
+      return BeFiatAccountNumberResult.error(BeError.format());
+    }
+  }
+}
+
 @freezed
 class BeFiatDepositsResult with _$BeFiatDepositsResult {
   const factory BeFiatDepositsResult(
@@ -1110,13 +1141,20 @@ Future<BeCryptoWithdrawalsResult> beCryptoWithdrawals(
       error: (err) => BeCryptoWithdrawalsResult.error(err));
 }
 
-Future<BeFiatDepositResult> beFiatDepositCreate(
+Future<BeFiatDepositResult> beFiatDepositWindcave(
     String asset, Decimal amount) async {
-  var result = await post(
-      "fiat_deposit_create", {"asset": asset, "amount_dec": amount.toString()},
+  var result = await post("fiat_deposit_windcave",
+      {"asset": asset, "amount_dec": amount.toString()},
       authRequired: true);
   return result.when((content) => BeFiatDepositResult.parse(content),
       error: (err) => BeFiatDepositResult.error(err));
+}
+
+Future<BeFiatAccountNumberResult> beFiatDepositDirect(String asset) async {
+  var result =
+      await post("fiat_deposit_direct", {"asset": asset}, authRequired: true);
+  return result.when((content) => BeFiatAccountNumberResult.parse(content),
+      error: (err) => BeFiatAccountNumberResult.error(err));
 }
 
 Future<BeFiatDepositsResult> beFiatDeposits(

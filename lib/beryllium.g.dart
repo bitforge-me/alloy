@@ -233,6 +233,21 @@ Map<String, dynamic> _$BeFiatDepositToJson(BeFiatDeposit instance) =>
       'payment_url': instance.paymentUrl,
     };
 
+BeFiatAccountNumber _$BeFiatAccountNumberFromJson(Map<String, dynamic> json) =>
+    BeFiatAccountNumber(
+      json['account_number'] as String,
+      json['reference'] as String,
+      json['code'] as String,
+    );
+
+Map<String, dynamic> _$BeFiatAccountNumberToJson(
+        BeFiatAccountNumber instance) =>
+    <String, dynamic>{
+      'account_number': instance.accountNumber,
+      'reference': instance.reference,
+      'code': instance.code,
+    };
+
 BeFiatWithdrawal _$BeFiatWithdrawalFromJson(Map<String, dynamic> json) =>
     BeFiatWithdrawal(
       json['token'] as String,
