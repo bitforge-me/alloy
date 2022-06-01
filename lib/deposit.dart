@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:alloy/event.dart';
 import 'package:flutter/material.dart';
 import 'package:zapdart/colors.dart';
-import 'package:zapdart/qrwidget.dart';
 import 'package:flutter/services.dart';
 import 'package:decimal/decimal.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -469,29 +468,51 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
   }
 
   Future<void> _make() async {
-    var amountStr = await Navigator.push<String>(
+    var method = await Navigator.push<DepositMethodDetails>(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                DepositAmountScreen(widget.asset.symbol, null)));
-    if (amountStr == null) return;
-    var amount = Decimal.tryParse(amountStr);
-    if (amount == null) {
-      snackMsg(context, 'invalid amount', category: MessageCategory.Warning);
-      return;
-    }
-    amount = assetAmountFromUser(widget.asset.symbol, amount);
-    showAlertDialog(context, 'querying..');
-    var res = await beFiatDepositCreate(widget.asset.symbol, amount);
-    Navigator.pop(context);
-    res.when(
-        (deposit) => Navigator.push(
+            builder: (context) => DepositMethodScreen(widget.asset.symbol, null,
+                [DepositMethod.account2account, DepositMethod.bankDeposit])));
+    if (method == null) return;
+    switch (method.method) {
+      case DepositMethod.account2account:
+        var amountStr = await Navigator.push<String>(
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    FiatDepositDetailScreen(deposit, widget.websocket))),
-        error: (err) => alert(context, 'error',
-            'failed to create deposit (${BeError.msg(err)})'));
+                    DepositAmountScreen(widget.asset.symbol, null)));
+        if (amountStr == null) return;
+        var amount = Decimal.tryParse(amountStr);
+        if (amount == null) {
+          snackMsg(context, 'invalid amount',
+              category: MessageCategory.Warning);
+          return;
+        }
+        amount = assetAmountFromUser(widget.asset.symbol, amount);
+        showAlertDialog(context, 'querying..');
+        var res = await beFiatDepositWindcave(widget.asset.symbol, amount);
+        Navigator.pop(context);
+        res.when(
+            (deposit) => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        FiatDepositDetailScreen(deposit, widget.websocket))),
+            error: (err) => alert(context, 'error',
+                'failed to create deposit (${BeError.msg(err)})'));
+        break;
+      case DepositMethod.bankDeposit:
+        var res = await beFiatDepositDirect(widget.asset.symbol);
+        Navigator.pop(context);
+        res.when(
+            (deposit) => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FiatAccountNumberScreen(
+                        widget.asset, deposit, widget.websocket))),
+            error: (err) => alert(context, 'error',
+                'failed to get deposit details (${BeError.msg(err)})'));
+    }
   }
 
   @override
@@ -578,7 +599,13 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
               ? ListTile(
                   title: Text('Payment URL'),
                   subtitle: Column(children: [
-                    QrWidget(_deposit.paymentUrl!, size: 150),
+                    QrImage(
+                      backgroundColor: ZapSurface,
+                      foregroundColor: ZapOnSurface,
+                      data: '${_deposit.paymentUrl}',
+                      version: QrVersions.auto,
+                      size: 200.0,
+                    ),
                     Text('${_deposit.paymentUrl}')
                   ]),
                   onTap: () => urlLaunch(_deposit.paymentUrl))
@@ -586,6 +613,71 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
           ListTile(
               title: Text('Status'),
               subtitle: Text('${_deposit.status.toUpperCase()}')),
+        ]));
+  }
+}
+
+class FiatAccountNumberScreen extends StatefulWidget {
+  final BeAsset asset;
+  final BeFiatAccountNumber account;
+  final Websocket websocket;
+
+  FiatAccountNumberScreen(this.asset, this.account, this.websocket);
+
+  @override
+  State<FiatAccountNumberScreen> createState() =>
+      _FiatAccountNumberScreenState();
+}
+
+class _FiatAccountNumberScreenState extends State<FiatAccountNumberScreen> {
+  @override
+  void initState() {
+    super.initState();
+    widget.websocket.wsEvent.subscribe(_websocketEvent);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.websocket.wsEvent.unsubscribe(_websocketEvent);
+  }
+
+  void _websocketEvent(WsEventArgs? args) {
+    if (args == null) return;
+  }
+
+  void _copy(String name, String value) {
+    Clipboard.setData(ClipboardData(text: value));
+    snackMsg(context, 'copied $name');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Deposit ${widget.asset.symbol}'),
+          actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
+        ),
+        body: ListView(children: [
+          ListTile(
+              title: Text('Account Number'),
+              subtitle: Text(widget.account.accountNumber),
+              trailing: IconButton(
+                  onPressed: () =>
+                      _copy('account number', widget.account.accountNumber),
+                  icon: Icon(Icons.copy))),
+          ListTile(
+              title: Text('Reference'),
+              subtitle: Text(widget.account.reference),
+              trailing: IconButton(
+                  onPressed: () => _copy('reference', widget.account.reference),
+                  icon: Icon(Icons.copy))),
+          ListTile(
+              title: Text('Code'),
+              subtitle: Text(widget.account.code),
+              trailing: IconButton(
+                  onPressed: () => _copy('code', widget.account.code),
+                  icon: Icon(Icons.copy)))
         ]));
   }
 }

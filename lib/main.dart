@@ -582,14 +582,20 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   ]),
                   SizedBox(height: 15),
                   Row(mainAxisSize: MainAxisSize.min, children: [
-                    SquareButton(_deposit, Icons.keyboard_arrow_down_rounded,
-                        ZapSecondary, 'Deposits',
+                    SquareButton(
+                        _deposit,
+                        Icons.keyboard_double_arrow_down_rounded,
+                        ZapSecondary,
+                        'Deposits',
                         textColor: ZapOnSecondary,
                         textOutside: false,
                         borderSize: 0),
                     SizedBox(width: 15),
-                    SquareButton(_withdrawal, Icons.keyboard_arrow_up_rounded,
-                        ZapSecondary, 'Withdrawals',
+                    SquareButton(
+                        _withdrawal,
+                        Icons.keyboard_double_arrow_up_rounded,
+                        ZapSecondary,
+                        'Withdrawals',
                         textColor: ZapOnSecondary,
                         textOutside: false,
                         borderSize: 0)
