@@ -342,23 +342,21 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     PopUpReturn? popUpReturn;
     // first check if we need a two factor code
     bool tfEnabled = false;
-    while (true) {
-      popUpReturn = await Navigator.push<PopUpReturn>(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                BronzeLoginForm(loginInfo, showTwoFactorCode: false)),
+    popUpReturn = await Navigator.push<PopUpReturn>(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              BronzeLoginForm(loginInfo, showTwoFactorCode: false)),
+    );
+    if (popUpReturn != null)
+      popUpReturn.when(
+        login: (AccountLogin login) =>
+            _passLoginDetails(login, context, tfEnabled),
+        register: (AccountRegistration reg) => null,
+        accountRequest: (AccountRequestApiKey req) => null,
+        optionOne: () => _register(),
+        optionTwo: () => _loginWithEmail(),
       );
-      if (popUpReturn != null)
-        popUpReturn.when(
-          login: (AccountLogin login) =>
-              _passLoginDetails(login, context, tfEnabled),
-          register: (AccountRegistration reg) => null,
-          accountRequest: (AccountRequestApiKey req) => null,
-          optionOne: () => _register(),
-          optionTwo: () => _loginWithEmail(),
-        );
-    }
   }
 
   Future<void> _passEmailLogin(
