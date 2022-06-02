@@ -259,7 +259,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         await Future.delayed(Duration(seconds: 5));
         // save account if login successful
         acct = await _beLogin(
-            context, AccountLogin(reg!.email, reg.newPassword, ''),
+            context, AccountLogin(reg.email, reg.newPassword, ''),
             silent: true);
       }
       Navigator.pop(context);
@@ -360,18 +360,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     }
   }
 
-  Future<void> _loginWithEmail() async {
-    // request api key form
-    var devName = await deviceName();
-    var req = await Navigator.push<AccountRequestApiKey>(
-      context,
-      MaterialPageRoute(builder: (context) => BronzeRequestApiKeyForm(devName)),
-    );
-    if (req == null) {
-      _login();
-      return null;
-    }
-    ;
+	Future<void> _passEmailLogin(AccountRequestApiKey req, BuildContext context) async {
     var result = await beApiKeyRequest(req.email, req.deviceName);
     await result.when((token) async {
       Acct? acct;
@@ -389,6 +378,25 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       await alert(context, 'Network error',
           'A network error occured when trying to login');
     });
+	}
+
+  Future<void> _loginWithEmail() async {
+    // request api key form
+    var devName = await deviceName();
+    PopUpReturn? poReturn = await Navigator.push<PopUpReturn>(
+      context,
+      MaterialPageRoute(builder: (context) => BronzeRequestApiKeyForm(devName)),
+    );
+		if (poReturn != null) {
+			poReturn.when(
+				login: (AccountLogin lgn) => null,
+				register: (AccountRegistration reg) => null,
+				accountRequest: (AccountRequestApiKey req) => _passEmailLogin(req, context),
+				optionOne: () => _login(),
+				optionTwo: () => null,
+	
+			);
+		}
   }
 
   Future<void> _support() async {
