@@ -248,26 +248,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     });
   }
 
-  Future<void> _register() async {
-    AccountRegistration? reg;
-    reg = await Navigator.push<AccountRegistration>(
-      context,
-      MaterialPageRoute(
-          builder: (context) => BronzeRegisterForm(
-                reg,
-                showMobileNumber: false,
-                initialMobileCountry: InitialMobileCountry,
-                preferredMobileCountries: PreferredMobileCountries,
-                showAddress: false,
-                googlePlaceApiKey: googlePlaceApiKey(),
-                locationIqApiKey: locationIqApiKey(),
-              )),
-    );
-    if (reg == null) {
-      _login();
-      return;
-    }
-    ;
+	Future<void> _submitRegDetails(AccountRegistration reg, BuildContext context) async {
     var res = await beUserRegister(reg);
     res.when((content) async {
       var cancelled = false;
@@ -292,6 +273,32 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           format: () => alert(context, 'Format error',
               'A format error occured when trying to register'));
     });
+	}
+
+  Future<void> _register() async {
+    AccountRegistration? reg;
+    PopUpReturn? poReturn= await Navigator.push<PopUpReturn>(
+      context,
+      MaterialPageRoute(
+          builder: (context) => BronzeRegisterForm(
+                reg,
+                showMobileNumber: false,
+                initialMobileCountry: InitialMobileCountry,
+                preferredMobileCountries: PreferredMobileCountries,
+                showAddress: false,
+                googlePlaceApiKey: googlePlaceApiKey(),
+                locationIqApiKey: locationIqApiKey(),
+              )),
+    );
+		if (poReturn != null) {
+			poReturn.when(
+				register: (AccountRegistration reg) => _submitRegDetails(reg, context),
+				login: (AccountLogin lgn) => null,
+				accountRequest: (AccountRequestApiKey req) => null,
+				optionOne: () => _login(),
+				optionTwo: () => null,
+			);
+		}
   }
 
   Future<void> _passLoginDetails(
@@ -317,9 +324,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       if (popUpReturn != null &&
           popUpReturn.when(
                 login: (AccountLogin lgn) => _beLogin(context, login),
-                register: (AccountRegistration rg) => null,
+                register: (AccountRegistration rg) => _login(),
                 accountRequest: (AccountRequestApiKey req) => null,
-                optionOne: () => null,
+								optionOne: () => _register(),
                 optionTwo: () => null,
               ) !=
               null) {
