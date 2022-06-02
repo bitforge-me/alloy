@@ -312,29 +312,27 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     }, error: (err) async {
       await _loginErrorAlert(context, err);
     });
-    while (true) {
-      PopUpReturn? popUpReturn;
-      // get the two factor code if required
-      if (tfEnabled)
-        popUpReturn = await Navigator.push<PopUpReturn?>(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  BronzeLoginForm(login, showTwoFactorCode: tfEnabled)),
-        );
-      if (popUpReturn != null &&
-          popUpReturn.when(
-                login: (AccountLogin lgn) => _beLogin(context, login),
-                register: (AccountRegistration rg) => _login(),
-                accountRequest: (AccountRequestApiKey req) => null,
-                optionOne: () => _register(),
-                optionTwo: () => null,
-              ) !=
-              null) {
-        _initApi();
-      }
-      ;
+    PopUpReturn? popUpReturn;
+    // get the two factor code if required
+    if (tfEnabled)
+      popUpReturn = await Navigator.push<PopUpReturn?>(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                BronzeLoginForm(login, showTwoFactorCode: tfEnabled)),
+      );
+    if (popUpReturn != null &&
+        popUpReturn.when(
+              login: (AccountLogin lgn) => _beLogin(context, login),
+              register: (AccountRegistration rg) => _login(),
+              accountRequest: (AccountRequestApiKey req) => null,
+              optionOne: () => _register(),
+              optionTwo: () => null,
+            ) !=
+            null) {
+      _initApi();
     }
+    ;
   }
 
   Future<void> _login() async {
