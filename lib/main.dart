@@ -248,7 +248,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     });
   }
 
-	Future<void> _submitRegDetails(AccountRegistration reg, BuildContext context) async {
+  Future<void> _submitRegDetails(
+      AccountRegistration reg, BuildContext context) async {
     var res = await beUserRegister(reg);
     res.when((content) async {
       var cancelled = false;
@@ -273,11 +274,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           format: () => alert(context, 'Format error',
               'A format error occured when trying to register'));
     });
-	}
+  }
 
   Future<void> _register() async {
     AccountRegistration? reg;
-    PopUpReturn? poReturn= await Navigator.push<PopUpReturn>(
+    PopUpReturn? poReturn = await Navigator.push<PopUpReturn>(
       context,
       MaterialPageRoute(
           builder: (context) => BronzeRegisterForm(
@@ -290,15 +291,15 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 locationIqApiKey: locationIqApiKey(),
               )),
     );
-		if (poReturn != null) {
-			poReturn.when(
-				register: (AccountRegistration reg) => _submitRegDetails(reg, context),
-				login: (AccountLogin lgn) => null,
-				accountRequest: (AccountRequestApiKey req) => null,
-				optionOne: () => _login(),
-				optionTwo: () => null,
-			);
-		}
+    if (poReturn != null) {
+      poReturn.when(
+        register: (AccountRegistration reg) => _submitRegDetails(reg, context),
+        login: (AccountLogin lgn) => null,
+        accountRequest: (AccountRequestApiKey req) => null,
+        optionOne: () => _login(),
+        optionTwo: () => null,
+      );
+    }
   }
 
   Future<void> _passLoginDetails(
@@ -326,7 +327,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 login: (AccountLogin lgn) => _beLogin(context, login),
                 register: (AccountRegistration rg) => _login(),
                 accountRequest: (AccountRequestApiKey req) => null,
-								optionOne: () => _register(),
+                optionOne: () => _register(),
                 optionTwo: () => null,
               ) !=
               null) {
@@ -360,7 +361,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     }
   }
 
-	Future<void> _passEmailLogin(AccountRequestApiKey req, BuildContext context) async {
+  Future<void> _passEmailLogin(
+      AccountRequestApiKey req, BuildContext context) async {
     var result = await beApiKeyRequest(req.email, req.deviceName);
     await result.when((token) async {
       Acct? acct;
@@ -378,7 +380,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       await alert(context, 'Network error',
           'A network error occured when trying to login');
     });
-	}
+  }
 
   Future<void> _loginWithEmail() async {
     // request api key form
@@ -387,16 +389,16 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       context,
       MaterialPageRoute(builder: (context) => BronzeRequestApiKeyForm(devName)),
     );
-		if (poReturn != null) {
-			poReturn.when(
-				login: (AccountLogin lgn) => null,
-				register: (AccountRegistration reg) => null,
-				accountRequest: (AccountRequestApiKey req) => _passEmailLogin(req, context),
-				optionOne: () => _login(),
-				optionTwo: () => null,
-	
-			);
-		}
+    if (poReturn != null) {
+      poReturn.when(
+        login: (AccountLogin lgn) => null,
+        register: (AccountRegistration reg) => null,
+        accountRequest: (AccountRequestApiKey req) =>
+            _passEmailLogin(req, context),
+        optionOne: () => _login(),
+        optionTwo: () => null,
+      );
+    }
   }
 
   Future<void> _support() async {
