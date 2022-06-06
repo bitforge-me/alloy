@@ -304,9 +304,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   Future<void> _passLoginDetails(
       AccountLogin login, BuildContext context, bool tfEnabled) async {
+    Acct? acct;
     showAlertDialog(context, 'logging in..');
     var result = await beUserTwoFactorEnabledCheck(login.email, login.password);
-    Navigator.pop(context);
     await result.when<Future<void>>((enabled) async {
       tfEnabled = enabled;
     }, error: (err) async {
@@ -330,7 +330,12 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               optionTwo: () => null,
             ) !=
             null) {
-      _initApi();
+    } else {
+      Navigator.pop(context);
+      while (acct == null) {
+        acct = await _beLogin(context, login);
+      }
+      if (acct != null) _initApi();
     }
     ;
   }
