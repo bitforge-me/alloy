@@ -547,7 +547,7 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
     );
   }
 
-  Future<void> _actionButtonTap() async {
+  Future<void> _make() async {
     showAlertDialog(context, 'querying..');
     var res = await beBalance(widget.asset.symbol);
     Navigator.pop(context);
@@ -574,17 +574,27 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
         ? widget.l2Network?.symbol
         : widget.asset.symbol;
     return Scaffold(
-        appBar: AppBar(
-          title: Text('$symbol Withdrawals'),
-          actions: [assetLogo('$symbol', margin: EdgeInsets.all(10))],
-        ),
-        body: ListView.builder(
-            itemBuilder: _listItem, itemCount: _withdrawals.length),
-        bottomNavigationBar: _pageCount > 0
-            ? Paginator(_pageCount, _pageNumber, (n) => _initWithdrawals(n))
-            : null,
-        floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.add), onPressed: _actionButtonTap));
+      appBar: AppBar(
+        title: Text('$symbol Withdrawals'),
+        actions: [assetLogo('$symbol', margin: EdgeInsets.all(10))],
+      ),
+      body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        RoundedButton(_make, ZapOnSecondary, ZapSecondary, ZapSecondaryGradient,
+            'Make Withdrawal',
+            width: MediaQuery.of(context).size.width - 80),
+        _withdrawals.length == 0
+            ? Container(
+                margin: EdgeInsets.all(20),
+                child: Center(child: Text('No withdrawals')))
+            : ListView.builder(
+                shrinkWrap: true,
+                itemBuilder: _listItem,
+                itemCount: _withdrawals.length)
+      ]),
+      bottomNavigationBar: _pageCount > 0
+          ? Paginator(_pageCount, _pageNumber, (n) => _initWithdrawals(n))
+          : null,
+    );
   }
 }
 
@@ -754,7 +764,7 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
     );
   }
 
-  Future<void> _actionButtonTap() async {
+  Future<void> _make() async {
     showAlertDialog(context, 'querying..');
     var res = await beBalance(widget.asset.symbol);
     Navigator.pop(context);
@@ -774,17 +784,27 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('${widget.asset.symbol} Withdrawals'),
-          actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
-        ),
-        body: ListView.builder(
-            itemBuilder: _listItem, itemCount: _withdrawals.length),
-        bottomNavigationBar: _pageCount > 0
-            ? Paginator(_pageCount, _pageNumber, (n) => _initWithdrawals(n))
-            : null,
-        floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.add), onPressed: _actionButtonTap));
+      appBar: AppBar(
+        title: Text('${widget.asset.symbol} Withdrawals'),
+        actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
+      ),
+      body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        RoundedButton(_make, ZapOnSecondary, ZapSecondary, ZapSecondaryGradient,
+            'Make Withdrawal',
+            width: MediaQuery.of(context).size.width - 80),
+        _withdrawals.length == 0
+            ? Container(
+                margin: EdgeInsets.all(20),
+                child: Center(child: Text('No withdrawals')))
+            : ListView.builder(
+                shrinkWrap: true,
+                itemBuilder: _listItem,
+                itemCount: _withdrawals.length)
+      ]),
+      bottomNavigationBar: _pageCount > 0
+          ? Paginator(_pageCount, _pageNumber, (n) => _initWithdrawals(n))
+          : null,
+    );
   }
 }
 

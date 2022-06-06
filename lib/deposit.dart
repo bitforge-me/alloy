@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:alloy/event.dart';
 import 'package:flutter/material.dart';
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/qrwidget.dart';
@@ -171,13 +172,14 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
     );
   }
 
-  Future<void> _actionButtonTap() async {
+  Future<void> _make() async {
     var amount = Decimal.zero;
     if (widget.l2Network != null) {
-      var amountStr = await askString(
+      var amountStr = await Navigator.push<String>(
           context,
-          'How much ${widget.asset.name} (${assetUnit(widget.asset.symbol)}) would you like to deposit?',
-          null);
+          MaterialPageRoute(
+              builder: (context) => DepositAmountScreen(
+                  widget.asset.symbol, widget.l2Network?.symbol)));
       if (amountStr == null) return;
       var amountDec = Decimal.tryParse(amountStr);
       if (amountDec == null || amountDec <= Decimal.zero) {
@@ -215,13 +217,22 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: ListView.builder(
-            itemBuilder: _listItem, itemCount: _deposits.length),
+        body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+          RoundedButton(_make, ZapOnSecondary, ZapSecondary,
+              ZapSecondaryGradient, 'Make Deposit',
+              width: MediaQuery.of(context).size.width - 80),
+          _deposits.length == 0
+              ? Container(
+                  margin: EdgeInsets.all(20),
+                  child: Center(child: Text('No deposits')))
+              : ListView.builder(
+                  shrinkWrap: true,
+                  itemBuilder: _listItem,
+                  itemCount: _deposits.length)
+        ]),
         bottomNavigationBar: _pageCount > 0
             ? Paginator(_pageCount, _pageNumber, (n) => _initDeposits(n))
-            : null,
-        floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.add), onPressed: _actionButtonTap));
+            : null);
   }
 }
 
@@ -457,11 +468,12 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
     );
   }
 
-  Future<void> _actionButtonTap() async {
-    var amountStr = await askString(
+  Future<void> _make() async {
+    var amountStr = await Navigator.push<String>(
         context,
-        'How much ${widget.asset.name} (${assetUnit(widget.asset.symbol)}) do you want to deposit?',
-        '');
+        MaterialPageRoute(
+            builder: (context) =>
+                DepositAmountScreen(widget.asset.symbol, null)));
     if (amountStr == null) return;
     var amount = Decimal.tryParse(amountStr);
     if (amount == null) {
@@ -485,17 +497,27 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('${widget.asset.symbol} Deposits'),
-          actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
-        ),
-        body: ListView.builder(
-            itemBuilder: _listItem, itemCount: _deposits.length),
-        bottomNavigationBar: _pageCount > 0
-            ? Paginator(_pageCount, _pageNumber, (n) => _initDeposits(n))
-            : null,
-        floatingActionButton: FloatingActionButton(
-            child: const Icon(Icons.add), onPressed: _actionButtonTap));
+      appBar: AppBar(
+        title: Text('${widget.asset.symbol} Deposits'),
+        actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
+      ),
+      body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        RoundedButton(_make, ZapOnSecondary, ZapSecondary, ZapSecondaryGradient,
+            'Make Deposit',
+            width: MediaQuery.of(context).size.width - 80),
+        _deposits.length == 0
+            ? Container(
+                margin: EdgeInsets.all(20),
+                child: Center(child: Text('No deposits')))
+            : ListView.builder(
+                shrinkWrap: true,
+                itemBuilder: _listItem,
+                itemCount: _deposits.length)
+      ]),
+      bottomNavigationBar: _pageCount > 0
+          ? Paginator(_pageCount, _pageNumber, (n) => _initDeposits(n))
+          : null,
+    );
   }
 }
 
