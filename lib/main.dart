@@ -5,7 +5,6 @@ import 'package:logging/logging.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:decimal/decimal.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
@@ -335,7 +334,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       while (acct == null) {
         acct = await _beLogin(context, login);
       }
-      if (acct != null) _initApi();
+      _initApi();
     }
     ;
   }
