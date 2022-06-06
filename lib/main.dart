@@ -278,7 +278,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   Future<void> _register() async {
     AccountRegistration? reg;
-    PopUpReturn? poReturn = await Navigator.push<PopUpReturn>(
+    PopUpReturn? popUpReturn = await Navigator.push<PopUpReturn>(
       context,
       MaterialPageRoute(
           builder: (context) => BronzeRegisterForm(
@@ -291,8 +291,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 locationIqApiKey: locationIqApiKey(),
               )),
     );
-    if (poReturn != null) {
-      poReturn.when(
+    if (popUpReturn != null) {
+      popUpReturn.when(
         register: (AccountRegistration reg) => _submitRegDetails(reg, context),
         login: (AccountLogin lgn) => null,
         accountRequest: (AccountRequestApiKey req) => null,
@@ -386,12 +386,12 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Future<void> _loginWithEmail() async {
     // request api key form
     var devName = await deviceName();
-    PopUpReturn? poReturn = await Navigator.push<PopUpReturn>(
+    PopUpReturn? popUpReturn = await Navigator.push<PopUpReturn>(
       context,
       MaterialPageRoute(builder: (context) => BronzeRequestApiKeyForm(devName)),
     );
-    if (poReturn != null) {
-      poReturn.when(
+    if (popUpReturn != null) {
+      popUpReturn.when(
         login: (AccountLogin lgn) => null,
         register: (AccountRegistration reg) => null,
         accountRequest: (AccountRequestApiKey req) =>
