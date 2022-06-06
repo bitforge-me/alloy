@@ -132,7 +132,7 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                     child: Column(
                   children: <Widget>[
                     Image.asset(
-                      'logo.png',
+                      'new-logo.png',
                       height: 200,
                       fit: BoxFit.fitHeight,
                     ),
@@ -409,7 +409,7 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                     child: Column(
                   children: <Widget>[
                     Image.asset(
-                      'logo.png',
+                      'new-logo.png',
                       height: 200,
                       fit: BoxFit.fitHeight,
                     ),
