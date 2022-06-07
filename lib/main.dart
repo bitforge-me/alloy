@@ -610,14 +610,14 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             Visibility(
               visible: _invalidAuth,
               child: RoundedButton(_logout, ZapOnSecondary, ZapSecondary,
-                  ZapSecondaryGradient, 'Reset',
-                  holePunch: true, width: 200),
+                  bronzeSecondaryGradient, 'Reset',
+                  holePunch: true, width: 320, height: 50),
             ),
             Visibility(
               visible: _retry,
               child: RoundedButton(_retryAuth, ZapOnSecondary, ZapSecondary,
-                  ZapSecondaryGradient, 'Retry',
-                  holePunch: true, width: 200),
+                  bronzeSecondaryGradient, 'Retry',
+                  holePunch: true, width: 320, height: 50),
             ),
             // exchange widget
             _userInfo != null ? ExchangeWidget(_websocket) : SizedBox(),
