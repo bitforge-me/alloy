@@ -77,13 +77,14 @@ class BronzeInputForm extends StatelessWidget {
                   padding: EdgeInsets.only(top: 5),
                   child: this.icon,
                 ),
+          contentPadding: const EdgeInsets.symmetric(vertical: 25.0),
           fillColor: Color(0xFFFFFFFF).withOpacity(0.1),
           filled: true,
           floatingLabelBehavior: FloatingLabelBehavior.never,
           labelText: this.labelText ?? null,
           constraints: BoxConstraints(minWidth: 320, maxWidth: 320),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(40),
             borderSide: BorderSide(
               width: 0,
               style: BorderStyle.none,

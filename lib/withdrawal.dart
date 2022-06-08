@@ -20,6 +20,8 @@ import 'cryptocurrency.dart';
 import 'snack.dart';
 import 'config.dart';
 import 'qrscan.dart';
+import 'widgets.dart';
+import 'colors.dart';
 
 final log = Logger('Withdrawal');
 
@@ -541,8 +543,9 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
   Widget _listItem(BuildContext context, int n) {
     var withdrawal = _withdrawals[n];
     return ListTile(
-      title: Text(
-          '${assetFormatWithUnitToUser(withdrawal.asset, withdrawal.amount)} - ${withdrawal.status.toUpperCase()}'),
+      title: new Center(
+          child: Text(
+              '${assetFormatWithUnitToUser(withdrawal.asset, withdrawal.amount)} - ${withdrawal.status.toUpperCase()}')),
       onTap: () => _withdrawalTap(withdrawal),
     );
   }
@@ -579,9 +582,10 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
         actions: [assetLogo('$symbol', margin: EdgeInsets.all(10))],
       ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        RoundedButton(_make, ZapOnSecondary, ZapSecondary, ZapSecondaryGradient,
+        SizedBox(height: 15),
+        BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary, bronzeGradient,
             'Make Withdrawal',
-            width: MediaQuery.of(context).size.width - 80),
+            width: 320, height: 65),
         _withdrawals.length == 0
             ? Container(
                 margin: EdgeInsets.all(20),
@@ -789,9 +793,10 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
         actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
       ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        RoundedButton(_make, ZapOnSecondary, ZapSecondary, ZapSecondaryGradient,
+        SizedBox(height: 15),
+        BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary, bronzeGradient,
             'Make Withdrawal',
-            width: MediaQuery.of(context).size.width - 80),
+            width: 320, height: 65),
         _withdrawals.length == 0
             ? Container(
                 margin: EdgeInsets.all(20),
