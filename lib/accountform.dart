@@ -16,6 +16,7 @@ import 'package:zapdart/account_forms.dart';
 import 'package:zapdart/colors.dart';
 import 'colors.dart';
 import 'popupreturn.dart';
+import 'widgets.dart';
 
 FormFieldValidator deviceNameValidate = (value) {
   if (value == null || value.isEmpty) return 'Please enter a device name';
@@ -153,7 +154,7 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                         keyboardType: TextInputType.emailAddress,
                         validator: emailValidate),
                     SizedBox(height: 15),
-                    RoundedButton(() {
+                    BronzeRoundedButton(() {
                       if (_formKey.currentState == null) return;
                       if (_formKey.currentState!.validate()) {
                         PopUpReturn popUpReq = PopUpReturn.accountRequest(
@@ -162,13 +163,13 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                         Navigator.of(context).pop(popUpReq);
                       }
                     }, ZapOnSecondary, ZapSecondary, bronzeGradient, 'Continue',
-                        holePunch: true, width: 320, height: 50),
+                        holePunch: true, width: 320, height: 65),
                     SizedBox(height: 15),
-                    RoundedButton(() {
+                    BronzeRoundedButton(() {
                       Navigator.of(context).pop(PopUpReturn.optionOne());
                     }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
                         'Login Instead',
-                        holePunch: true, width: 320, height: 50),
+                        holePunch: true, width: 320, height: 65),
                   ],
                 )))));
   }
@@ -444,7 +445,7 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                       child: BronzeInputForm(_tfCodeController,
                           obscureText: true, labelText: "2FA Code"),
                     ),
-                    RoundedButton(() {
+                    BronzeRoundedButton(() {
                       if (_formKey.currentState == null) return;
                       if (_formKey.currentState!.validate()) {
                         PopUpReturn returnLogin = PopUpReturn.login(
@@ -455,17 +456,17 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                         Navigator.of(context).pop(returnLogin);
                       }
                     }, ZapOnSecondary, ZapSecondary, bronzeGradient, 'Continue',
-                        holePunch: true, width: 320, height: 50),
-                    RoundedButton(() {
+                        holePunch: true, width: 320, height: 65),
+                    BronzeRoundedButton(() {
                       Navigator.of(context).pop(PopUpReturn.optionOne());
                     }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
                         'Create an Account',
-                        holePunch: true, width: 320, height: 50),
-                    RoundedButton(() {
+                        holePunch: true, width: 320, height: 65),
+                    BronzeRoundedButton(() {
                       Navigator.of(context).pop(PopUpReturn.optionTwo());
                     }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
                         'Lost Password',
-                        holePunch: true, width: 320, height: 50)
+                        holePunch: true, width: 320, height: 65)
                   ],
                 )))));
   }
@@ -771,7 +772,7 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                                 }),
                           ),
                           SizedBox(height: 15),
-                          RoundedButton(() async {
+                          BronzeRoundedButton(() async {
                             if (_formKey.currentState == null) return;
                             if (_formKey.currentState!.validate()) {
                               PopUpReturn regPopUp = PopUpReturn.register(
@@ -789,13 +790,13 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                             }
                           }, ZapOnSecondary, ZapSecondary, bronzeGradient,
                               'Continue',
-                              holePunch: true, width: 320, height: 50),
+                              holePunch: true, width: 320, height: 65),
                           SizedBox(height: 15),
-                          RoundedButton(() {
+                          BronzeRoundedButton(() {
                             Navigator.of(context).pop(PopUpReturn.optionOne());
                           }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
                               'Login Instead',
-                              holePunch: true, width: 320, height: 50)
+                              holePunch: true, width: 320, height: 65)
                         ]))))));
   }
 }

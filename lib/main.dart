@@ -31,6 +31,7 @@ import 'accountform.dart';
 import 'assets.dart';
 import 'event.dart';
 import 'popupreturn.dart';
+import 'widgets.dart';
 
 final log = Logger('Main');
 
@@ -591,33 +592,33 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             SizedBox(height: 15),
             Visibility(
               visible: _userInfo == null,
-              child: RoundedButton(
+              child: BronzeRoundedButton(
                   _login, ZapOnSecondary, ZapSecondary, bronzeGradient, 'Login',
-                  holePunch: true, width: 320, height: 50),
+                  holePunch: true, width: 320, height: 65),
             ),
             Visibility(
               visible: _userInfo == null,
-              child: RoundedButton(_register, ZapOnSecondary, ZapSecondary,
-                  bronzeSecondaryGradient, 'Register',
-                  holePunch: true, width: 320, height: 50),
+              child: BronzeRoundedButton(_register, ZapOnSecondary,
+                  ZapSecondary, bronzeSecondaryGradient, 'Register',
+                  holePunch: true, width: 320, height: 65),
             ),
             Visibility(
               visible: _userInfo == null,
-              child: RoundedButton(_loginWithEmail, ZapOnSecondary,
+              child: BronzeRoundedButton(_loginWithEmail, ZapOnSecondary,
                   ZapSecondary, bronzeSecondaryGradient, 'Lost Password',
-                  holePunch: true, width: 320, height: 50),
+                  holePunch: true, width: 320, height: 65),
             ),
             Visibility(
               visible: _invalidAuth,
-              child: RoundedButton(_logout, ZapOnSecondary, ZapSecondary,
+              child: BronzeRoundedButton(_logout, ZapOnSecondary, ZapSecondary,
                   bronzeSecondaryGradient, 'Reset',
-                  holePunch: true, width: 320, height: 50),
+                  holePunch: true, width: 320, height: 65),
             ),
             Visibility(
               visible: _retry,
-              child: RoundedButton(_retryAuth, ZapOnSecondary, ZapSecondary,
-                  bronzeSecondaryGradient, 'Retry',
-                  holePunch: true, width: 320, height: 50),
+              child: BronzeRoundedButton(_retryAuth, ZapOnSecondary,
+                  ZapSecondary, bronzeSecondaryGradient, 'Retry',
+                  holePunch: true, width: 320, height: 65),
             ),
             // exchange widget
             _userInfo != null ? ExchangeWidget(_websocket) : SizedBox(),
