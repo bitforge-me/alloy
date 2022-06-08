@@ -74,7 +74,7 @@ class BronzeRoundedButton extends StatelessWidget {
                   children: holePunch
                       ? <Widget>[
                           text,
-                          Icon(Icons.arrow_forward_ios),
+                          Icon(Icons.arrow_forward_ios, size: 15.0),
                         ]
                       : <Widget>[
                           text,
