@@ -119,18 +119,27 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
   var _testnet = testnet();
 
   var _availableBalance = 'xxx';
-  var _withdrawalFee = 'xxx';
   var _max = Decimal.zero;
 
   @override
   void initState() {
     super.initState();
-    _availableBalance =
+    var bal =
         assetFormatWithUnitToUser(widget.asset.symbol, widget.availableBalance);
-    _withdrawalFee = assetFormatWithUnitToUser(
-        widget.asset.symbol, widget.asset.withdrawFee);
-    if (widget.availableBalance > widget.asset.withdrawFee)
-      _max = widget.availableBalance - widget.asset.withdrawFee;
+    var withdrawAsset = widget.l2Network ?? widget.asset;
+    if (withdrawAsset.withdrawFeeFixed) {
+      var fee = assetFormatWithUnitToUser(
+          widget.asset.symbol, withdrawAsset.withdrawFee);
+      _availableBalance = 'Available: $bal. Withdrawal fee: $fee';
+      if (widget.availableBalance > withdrawAsset.withdrawFee)
+        _max = widget.availableBalance - withdrawAsset.withdrawFee;
+    } else {
+      var feePercent = withdrawAsset.withdrawFee * Decimal.fromInt(100);
+      _availableBalance = 'Available: $bal. Withdrawal fee: $feePercent%';
+      if (widget.availableBalance > Decimal.zero)
+        _max = widget.availableBalance -
+            widget.availableBalance * withdrawAsset.withdrawFee;
+    }
   }
 
   Future<void> _addressBook() async {
@@ -271,41 +280,40 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                       visible: widget.asset.withdrawInstr != null,
                       child: AlertDrawer(
                           () {}, ['${widget.asset.withdrawInstr}'])),
+                  Container(
+                      margin: EdgeInsets.all(5),
+                      child: Text(_availableBalance)),
                   Visibility(
                       visible:
                           !widget.asset.isCrypto || widget.l2Network == null,
-                      child: Column(children: [
-                        Container(
-                            margin: EdgeInsets.all(5),
-                            child: Text(
-                                'Available: $_availableBalance. Withdrawal fee: $_withdrawalFee')),
-                        TextFormField(
-                            controller: _amountController,
-                            decoration: InputDecoration(
-                                labelText:
-                                    'Amount (${assetUnit(widget.asset.symbol)})',
-                                suffix: TextButton(
-                                    child: Text('max',
-                                        style: TextStyle(color: ZapOnPrimary)),
-                                    onPressed: _setMax)),
-                            keyboardType: TextInputType.numberWithOptions(
-                                signed: false, decimal: true),
-                            validator: (value) {
-                              if (value == null || value.isEmpty)
-                                return 'Please enter a value';
-                              var userAmount = Decimal.tryParse(value.trim());
-                              if (userAmount == null) return 'Invalid value';
-                              if (userAmount <= Decimal.zero)
-                                'Please return a value greater then 0';
-                              var sysAmount = assetAmountFromUser(
-                                  widget.asset.symbol, userAmount);
-                              if (sysAmount < widget.asset.minWithdraw)
-                                return 'Please enter a value greater then or equal to ${assetAmountToUser(widget.asset.symbol, widget.asset.minWithdraw)}';
-                              if (sysAmount > _max)
-                                return 'Please enter a value less then or equal to ${assetAmountToUser(widget.asset.symbol, _max)}';
-                              return null;
-                            })
-                      ])),
+                      child: TextFormField(
+                          controller: _amountController,
+                          decoration: InputDecoration(
+                              labelText:
+                                  'Amount (${assetUnit(widget.asset.symbol)})',
+                              suffix: TextButton(
+                                  child: Text('max',
+                                      style: TextStyle(color: ZapOnPrimary)),
+                                  onPressed: _setMax)),
+                          keyboardType: TextInputType.numberWithOptions(
+                              signed: false, decimal: true),
+                          validator: (value) {
+                            if (value == null || value.isEmpty)
+                              return 'Please enter a value';
+                            var userAmount = Decimal.tryParse(value.trim());
+                            if (userAmount == null) return 'Invalid value';
+                            if (userAmount <= Decimal.zero)
+                              'Please return a value greater then 0';
+                            var withdrawAsset =
+                                widget.l2Network ?? widget.asset;
+                            var sysAmount = assetAmountFromUser(
+                                widget.asset.symbol, userAmount);
+                            if (sysAmount < withdrawAsset.minWithdraw)
+                              return 'Please enter a value greater then or equal to ${assetAmountToUser(widget.asset.symbol, withdrawAsset.minWithdraw)}';
+                            if (sysAmount > _max)
+                              return 'Please enter a value less then or equal to ${assetAmountToUser(widget.asset.symbol, _max)}';
+                            return null;
+                          })),
                   Visibility(
                       visible:
                           widget.asset.isCrypto && widget.l2Network == null,

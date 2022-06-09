@@ -276,6 +276,8 @@ class BeAsset {
   @JsonKey(
       name: 'withdraw_fee', fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal withdrawFee;
+  @JsonKey(name: 'withdraw_fee_fixed')
+  final bool withdrawFeeFixed;
   @JsonKey(
       name: 'min_withdraw', fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal minWithdraw;
@@ -293,6 +295,7 @@ class BeAsset {
       this.name,
       this.decimals,
       this.withdrawFee,
+      this.withdrawFeeFixed,
       this.minWithdraw,
       this.isCrypto,
       this.l2Network,
