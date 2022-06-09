@@ -496,8 +496,8 @@ class BronzeRegisterForm extends StatefulWidget {
 
   BronzeRegisterForm(this.registration,
       {this.instructions,
-      this.showName: true,
-      this.showImage: true,
+      this.showName: false,
+      this.showImage: false,
       this.showEmail: true,
       this.showMobileNumber: false,
       this.requireMobileNumber: false,
@@ -624,7 +624,7 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                             fit: BoxFit.fitHeight,
                           ),
                           Text(
-                            "Hey there!",
+                            "Hi there!",
                             style: TextStyle(
                                 color: Color(0xFFFFFFFF).withOpacity(0.75),
                                 fontSize: 20),
