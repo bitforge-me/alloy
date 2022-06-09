@@ -14,6 +14,7 @@ import 'snack.dart';
 import 'quote.dart';
 import 'orders.dart';
 import 'utils.dart';
+import 'colors.dart';
 
 final log = Logger('Exchange');
 
@@ -313,22 +314,29 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   Widget _buildWidget() {
     var from = Column(children: [
       SizedBox(
-          width: 200,
-          child: DropdownButton<String>(
-              isExpanded: true,
-              underline: Container(
-                height: 2,
-                color: ZapSecondary,
-              ),
-              items: _fromAssets
-                  .map((e) => DropdownMenuItem<String>(
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [Text(e), assetLogo(e, size: 24)]),
-                      value: e))
-                  .toList(),
-              value: _fromAsset,
-              onChanged: _fromChanged)),
+        width: 200,
+        child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: bronzeGradient,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: DropdownButton<String>(
+                isExpanded: true,
+                underline: Container(
+                  height: 2,
+                  color: Colors.transparent,
+                ),
+                items: _fromAssets
+                    .map((e) => DropdownMenuItem<String>(
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [Text('  ' + e), assetLogo(e, size: 24)]),
+                        value: e))
+                    .toList(),
+                value: _fromAsset,
+                onChanged: _fromChanged)),
+      ),
+      SizedBox(height: 15),
       SizedBox(
           width: 200,
           child: TextField(
@@ -353,21 +361,30 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     var to = Column(children: [
       SizedBox(
           width: 200,
-          child: DropdownButton<String>(
-              isExpanded: true,
-              underline: Container(
-                height: 2,
-                color: ZapSecondary,
+          child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: bronzeSecondaryGradient,
+                borderRadius: BorderRadius.circular(10),
               ),
-              items: _toAssets
-                  .map((e) => DropdownMenuItem<String>(
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [Text(e), assetLogo(e, size: 24)]),
-                      value: e))
-                  .toList(),
-              value: _toAsset,
-              onChanged: _toChanged)),
+              child: DropdownButton<String>(
+                  isExpanded: true,
+                  underline: Container(
+                    height: 2,
+                    color: Colors.transparent,
+                  ),
+                  items: _toAssets
+                      .map((e) => DropdownMenuItem<String>(
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('  ' + e),
+                                assetLogo(e, size: 24)
+                              ]),
+                          value: e))
+                      .toList(),
+                  value: _toAsset,
+                  onChanged: _toChanged))),
+      SizedBox(height: 15),
       SizedBox(
           width: 200,
           child: TextField(
