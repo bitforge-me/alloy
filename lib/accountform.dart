@@ -458,15 +458,18 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                     }, ZapOnSecondary, ZapSecondary, bronzeGradient, 'Continue',
                         holePunch: true, width: 320, height: 65),
                     BronzeRoundedButton(() {
+                      Navigator.of(context).pop(PopUpReturn.optionTwo());
+                    }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
+                        'Lost Password',
+                        holePunch: true, width: 320, height: 65),
+                    SizedBox(height: 8),
+                    Text('-' * 35 + ' OR ' + '-' * 35),
+                    SizedBox(height: 8),
+                    BronzeRoundedButton(() {
                       Navigator.of(context).pop(PopUpReturn.optionOne());
                     }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
                         'Create an Account',
                         holePunch: true, width: 320, height: 65),
-                    BronzeRoundedButton(() {
-                      Navigator.of(context).pop(PopUpReturn.optionTwo());
-                    }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
-                        'Lost Password',
-                        holePunch: true, width: 320, height: 65)
                   ],
                 )))));
   }
