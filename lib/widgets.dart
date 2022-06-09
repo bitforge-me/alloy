@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:another_flushbar/flushbar.dart';
-
-import 'package:zapdart/colors.dart';
 
 class BronzeRoundedButton extends StatelessWidget {
   BronzeRoundedButton(this.onPressed, this.textColor, this.fillColor,

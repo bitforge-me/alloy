@@ -8,7 +8,6 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:intl_phone_number_input/src/utils/phone_number/phone_number_util.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:zapdart/widgets.dart';
 import 'package:zapdart/addr_search.dart';
 import 'package:zapdart/autocomplete_service.dart';
 import 'package:zapdart/form_ui.dart';
