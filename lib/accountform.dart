@@ -168,7 +168,7 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                     BronzeRoundedButton(() {
                       Navigator.of(context).pop(PopUpReturn.optionOne());
                     }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
-                        'Login Instead',
+                        'Login',
                         holePunch: true, width: 320, height: 65),
                   ],
                 )))));
@@ -794,7 +794,9 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                           }, ZapOnSecondary, ZapSecondary, bronzeGradient,
                               'Continue',
                               holePunch: true, width: 320, height: 65),
-                          SizedBox(height: 15),
+                          SizedBox(height: 8),
+                          Text('-' * 35 + ' OR ' + '-' * 35),
+                          SizedBox(height: 8),
                           BronzeRoundedButton(() {
                             Navigator.of(context).pop(PopUpReturn.optionOne());
                           }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
