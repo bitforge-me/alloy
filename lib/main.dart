@@ -579,16 +579,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               height: 200,
               fit: BoxFit.fitHeight,
             ),
-            Text(
-              "Hey there!",
-              style: TextStyle(
-                  color: Color(0xFFFFFFFF).withOpacity(0.75), fontSize: 20),
-            ),
-            SizedBox(height: 10),
-            Text(
-              "Let's get started",
-              style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 34),
-            ),
             SizedBox(height: 15),
             Visibility(
               visible: _userInfo == null,
@@ -600,12 +590,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               visible: _userInfo == null,
               child: BronzeRoundedButton(_register, ZapOnSecondary,
                   ZapSecondary, bronzeSecondaryGradient, 'Register',
-                  holePunch: true, width: 320, height: 65),
-            ),
-            Visibility(
-              visible: _userInfo == null,
-              child: BronzeRoundedButton(_loginWithEmail, ZapOnSecondary,
-                  ZapSecondary, bronzeSecondaryGradient, 'Lost Password',
                   holePunch: true, width: 320, height: 65),
             ),
             Visibility(

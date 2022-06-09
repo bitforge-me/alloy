@@ -164,7 +164,9 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                       }
                     }, ZapOnSecondary, ZapSecondary, bronzeGradient, 'Continue',
                         holePunch: true, width: 320, height: 65),
-                    SizedBox(height: 15),
+                    SizedBox(height: 8),
+                    Text('-' * 35 + ' OR ' + '-' * 35),
+                    SizedBox(height: 8),
                     BronzeRoundedButton(() {
                       Navigator.of(context).pop(PopUpReturn.optionOne());
                     }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
@@ -616,9 +618,24 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                          Text(widget.instructions == null
-                              ? 'Enter your details to register'
-                              : widget.instructions!),
+                          Image.asset(
+                            'new-logo.png',
+                            height: 200,
+                            fit: BoxFit.fitHeight,
+                          ),
+                          Text(
+                            "Hey there!",
+                            style: TextStyle(
+                                color: Color(0xFFFFFFFF).withOpacity(0.75),
+                                fontSize: 20),
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            "Let's get started",
+                            style: TextStyle(
+                                color: Color(0xFFFFFFFF), fontSize: 34),
+                          ),
+                          SizedBox(height: 15),
                           Visibility(
                               visible: widget.showImage,
                               child: BronzeAccountImageUpdate(
@@ -800,7 +817,7 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                           BronzeRoundedButton(() {
                             Navigator.of(context).pop(PopUpReturn.optionOne());
                           }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
-                              'Login Instead',
+                              'Login',
                               holePunch: true, width: 320, height: 65)
                         ]))))));
   }
