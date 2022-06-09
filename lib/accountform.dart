@@ -771,11 +771,13 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                                   ),
                                   fillColor: Color(0xFFFFFFFF).withOpacity(0.1),
                                   filled: true,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 25.0),
                                   labelText: 'Password Confirmation',
                                   constraints: BoxConstraints(
                                       minWidth: 320, maxWidth: 320),
                                   border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(40),
                                     borderSide: BorderSide(
                                       width: 0,
                                       style: BorderStyle.none,
