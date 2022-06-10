@@ -470,7 +470,7 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                     BronzeRoundedButton(() {
                       Navigator.of(context).pop(PopUpReturn.optionOne());
                     }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
-                        'Create an Account',
+                        'Register',
                         holePunch: true, width: 320, height: 65),
                   ],
                 )))));
