@@ -589,7 +589,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             Visibility(
               visible: _userInfo == null,
               child: BronzeRoundedButton(_register, ZapOnSecondary,
-                  ZapSecondary, bronzeCancelGradient, 'Register',
+                  ZapSecondary, bronzeCancelGradient, 'Create an Account',
                   holePunch: true, width: 320, height: 65),
             ),
             Visibility(
