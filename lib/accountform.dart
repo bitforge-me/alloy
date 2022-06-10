@@ -49,6 +49,16 @@ FormFieldValidator newPasswordValidate = (value) {
   return null;
 };
 
+class BasicLine extends StatelessWidget {
+  const BasicLine({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        width: 140,
+        child: Divider(height: 4, color: Colors.white, thickness: 2));
+  }
+}
+
 class BronzeInputForm extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputType? keyboardType;
@@ -165,7 +175,15 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                     }, ZapOnSecondary, ZapSecondary, bronzeGradient, 'Continue',
                         holePunch: true, width: 320, height: 65),
                     SizedBox(height: 8),
-                    Text('-' * 35 + ' OR ' + '-' * 35),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        BasicLine(),
+                        Text(' OR '),
+                        BasicLine()
+                      ],
+                    ),
                     SizedBox(height: 8),
                     BronzeRoundedButton(() {
                       Navigator.of(context).pop(PopUpReturn.optionOne());
@@ -465,7 +483,15 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                         'Lost Password',
                         holePunch: true, width: 320, height: 65),
                     SizedBox(height: 8),
-                    Text('-' * 35 + ' OR ' + '-' * 35),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        BasicLine(),
+                        Text(' OR '),
+                        BasicLine()
+                      ],
+                    ),
                     SizedBox(height: 8),
                     BronzeRoundedButton(() {
                       Navigator.of(context).pop(PopUpReturn.optionOne());
@@ -814,7 +840,15 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                               'Continue',
                               holePunch: true, width: 320, height: 65),
                           SizedBox(height: 8),
-                          Text('-' * 35 + ' OR ' + '-' * 35),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              BasicLine(),
+                              Text(' OR '),
+                              BasicLine()
+                            ],
+                          ),
                           SizedBox(height: 8),
                           BronzeRoundedButton(() {
                             Navigator.of(context).pop(PopUpReturn.optionOne());
