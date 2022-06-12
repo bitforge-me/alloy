@@ -9,8 +9,8 @@ import 'package:logging/logging.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/hmac.dart';
-import 'package:zapdart/account_forms.dart';
 
+import 'login.dart';
 import 'config.dart';
 import 'prefs.dart';
 import 'utils.dart';

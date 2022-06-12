@@ -1,5 +1,82 @@
 import 'package:flutter/material.dart';
 
+import 'package:zapdart/colors.dart';
+
+import 'config.dart';
+
+class BigLogoContainer extends StatelessWidget {
+  final List<Widget>? children;
+  BigLogoContainer({this.children});
+
+  @override
+  Widget build(BuildContext context) {
+    var kids = List<Widget>.from(children ?? []);
+    kids.insert(
+        0,
+        Image.asset(
+          'new-logo.png',
+          height: 200,
+          fit: BoxFit.fitHeight,
+        ));
+    return Container(
+        padding: EdgeInsets.all(20),
+        child: Center(child: Column(children: kids)));
+  }
+}
+
+class DebugInfo extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      Visibility(
+        visible: testnet(),
+        child:
+            Text('TESTNET', style: TextStyle(color: ZapWarning, fontSize: 8)),
+      ),
+      Text('Server: ${server()}',
+          style: TextStyle(color: ZapOnBackgroundLight, fontSize: 8)),
+      Visibility(
+          visible: GitSha != 'GIT_SHA_REPLACE',
+          child: Text('Build: ${GitSha.substring(0, 5)} - $BuildDate',
+              style: TextStyle(color: ZapOnBackgroundLight, fontSize: 8)))
+    ]);
+  }
+}
+
+class WordDivider extends StatelessWidget {
+  final String word;
+  final Color color;
+  final double lineLength;
+  final double lineThickness;
+  final double lineHeight;
+
+  const WordDivider(
+      {this.word = ' OR ',
+      this.color = Colors.white,
+      this.lineLength = 140,
+      this.lineHeight = 4,
+      this.lineThickness = 2});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        SizedBox(
+            width: lineLength,
+            child: Divider(
+                height: lineHeight, color: color, thickness: lineThickness)),
+        Text(word, style: TextStyle(color: color)),
+        SizedBox(
+            width: lineLength,
+            child: Divider(
+                height: lineHeight, color: color, thickness: lineThickness))
+      ],
+    );
+  }
+}
+
 class BronzeRoundedButton extends StatelessWidget {
   BronzeRoundedButton(this.onPressed, this.textColor, this.fillColor,
       this.fillGradient, this.title,
