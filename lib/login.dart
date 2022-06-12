@@ -6,7 +6,6 @@ import 'package:zapdart/colors.dart';
 import 'package:zapdart/utils.dart';
 
 import 'beryllium.dart';
-import 'config.dart';
 import 'colors.dart';
 import 'widgets.dart';
 import 'prefs.dart';
@@ -242,14 +241,11 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
 
 class BronzeLoginForm extends StatefulWidget {
   final AccountLogin? login;
-  final String? instructions;
   final bool showTwoFactorCode;
   final bool? twoFactorRequired;
 
   BronzeLoginForm(this.login,
-      {this.instructions,
-      this.showTwoFactorCode = false,
-      this.twoFactorRequired})
+      {this.showTwoFactorCode = false, this.twoFactorRequired})
       : super();
 
   @override
@@ -306,30 +302,32 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                       keyboardType: TextInputType.emailAddress,
                       labelText: 'Email',
                     ),
-                    SizedBox(height: 8),
+                    SizedBox(height: 15),
                     BronzeFormInput(_passwordController,
                         icon: Icon(Icons.key_outlined),
                         validator: passwordValidate,
                         labelText: 'Password',
                         obscureText: true),
-                    SizedBox(height: 8),
+                    SizedBox(height: 15),
                     Visibility(
                       visible: widget.showTwoFactorCode,
                       child: BronzeFormInput(_tfCodeController,
                           labelText: "2FA Code"),
                     ),
+                    SizedBox(height: widget.showTwoFactorCode ? 15 : 0),
                     BronzeRoundedButton(() {
                       if (_formKey.currentState == null) return;
                       if (_formKey.currentState!.validate()) {
-                        var returnLogin = LoginChoice.login(AccountLogin(
+                        var loginChoice = LoginChoice.login(AccountLogin(
                             _emailController.text.trim(),
                             _passwordController.text,
                             _tfCodeController.text,
                             widget.twoFactorRequired));
-                        Navigator.of(context).pop(returnLogin);
+                        Navigator.of(context).pop(loginChoice);
                       }
                     }, ZapOnSecondary, ZapSecondary, bronzeGradient, 'Continue',
                         holePunch: true, width: 320, height: 65),
+                    SizedBox(height: 5),
                     BronzeRoundedButton(() {
                       Navigator.of(context).pop(LoginChoice.doApiKeyRequest());
                     }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
@@ -351,13 +349,7 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
 }
 
 class BronzeRegisterForm extends StatefulWidget {
-  final String? instructions;
-  final bool showEmail;
-  final bool showNewPassword;
-
-  BronzeRegisterForm(
-      {this.instructions, this.showEmail: true, this.showNewPassword: true})
-      : super();
+  BronzeRegisterForm();
 
   @override
   BronzeRegisterFormState createState() {
@@ -401,65 +393,56 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                     style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 34),
                   ),
                   SizedBox(height: 15),
-                  Visibility(
-                    visible: widget.showEmail,
-                    child: BronzeFormInput(_emailController,
-                        icon: Icon(Icons.email_outlined),
-                        labelText: 'Email',
-                        keyboardType: TextInputType.emailAddress,
-                        validator: emailValidate),
+                  BronzeFormInput(_emailController,
+                      icon: Icon(Icons.email_outlined),
+                      labelText: 'Email',
+                      keyboardType: TextInputType.emailAddress,
+                      validator: emailValidate),
+                  SizedBox(height: 15),
+                  BronzeFormInput(
+                    _newPasswordController,
+                    icon: Icon(Icons.key_outlined),
+                    obscureText: true,
+                    labelText: 'New Password',
+                    validator: newPasswordValidate,
                   ),
                   SizedBox(height: 15),
-                  Visibility(
-                    visible: widget.showNewPassword,
-                    child: BronzeFormInput(
-                      _newPasswordController,
-                      icon: Icon(Icons.key_outlined),
-                      obscureText: true,
-                      labelText: 'New Password',
-                      validator: newPasswordValidate,
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                  Visibility(
-                    visible: widget.showNewPassword,
-                    child: TextFormField(
-                        textAlign: TextAlign.center,
-                        controller: _passwordConfirmController,
-                        decoration: InputDecoration(
-                          prefixIcon: Padding(
-                            padding: EdgeInsets.only(top: 5),
-                            child: Icon(Icons.key_outlined),
-                          ),
-                          fillColor: Color(0xFFFFFFFF).withOpacity(0.1),
-                          filled: true,
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 25.0),
-                          labelText: 'Password Confirmation',
-                          constraints:
-                              BoxConstraints(minWidth: 320, maxWidth: 320),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(40),
-                            borderSide: BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
-                            ),
+                  TextFormField(
+                      textAlign: TextAlign.center,
+                      controller: _passwordConfirmController,
+                      decoration: InputDecoration(
+                        prefixIcon: Padding(
+                          padding: EdgeInsets.only(top: 5),
+                          child: Icon(Icons.key_outlined),
+                        ),
+                        fillColor: Color(0xFFFFFFFF).withOpacity(0.1),
+                        filled: true,
+                        contentPadding:
+                            const EdgeInsets.symmetric(vertical: 25.0),
+                        labelText: 'Password Confirmation',
+                        constraints:
+                            BoxConstraints(minWidth: 320, maxWidth: 320),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(40),
+                          borderSide: BorderSide(
+                            width: 0,
+                            style: BorderStyle.none,
                           ),
                         ),
-                        obscureText: true,
-                        validator: (value) {
-                          if (value == null || value.isEmpty)
-                            return 'Please confirm your password';
-                          if (value != _newPasswordController.text)
-                            return 'Password does not match';
-                          return null;
-                        }),
-                  ),
+                      ),
+                      obscureText: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty)
+                          return 'Please confirm your password';
+                        if (value != _newPasswordController.text)
+                          return 'Password does not match';
+                        return null;
+                      }),
                   SizedBox(height: 15),
                   BronzeRoundedButton(() async {
                     if (_formKey.currentState == null) return;
                     if (_formKey.currentState!.validate()) {
-                      LoginChoice regPopUp = LoginChoice.registration(
+                      var loginChoice = LoginChoice.registration(
                           AccountRegistration(
                               '',
                               '',
@@ -470,7 +453,7 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                               _newPasswordController.text,
                               null,
                               null));
-                      Navigator.of(context).pop(regPopUp);
+                      Navigator.of(context).pop(loginChoice);
                     }
                   }, ZapOnSecondary, ZapSecondary, bronzeGradient, 'Continue',
                       holePunch: true, width: 320, height: 65),
