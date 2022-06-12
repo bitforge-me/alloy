@@ -28,7 +28,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   }
 
   Future<void> _entryTap(BeAddressBookEntry entry) async {
-    Navigator.pop<String>(context, entry.recipient);
+    Navigator.pop<BeAddressBookEntry>(context, entry);
   }
 
   Widget _listItem(BuildContext context, int n) {

@@ -233,6 +233,21 @@ Map<String, dynamic> _$BeFiatDepositToJson(BeFiatDeposit instance) =>
       'payment_url': instance.paymentUrl,
     };
 
+BeFiatAccountNumber _$BeFiatAccountNumberFromJson(Map<String, dynamic> json) =>
+    BeFiatAccountNumber(
+      json['account_number'] as String,
+      json['reference'] as String,
+      json['code'] as String,
+    );
+
+Map<String, dynamic> _$BeFiatAccountNumberToJson(
+        BeFiatAccountNumber instance) =>
+    <String, dynamic>{
+      'account_number': instance.accountNumber,
+      'reference': instance.reference,
+      'code': instance.code,
+    };
+
 BeFiatWithdrawal _$BeFiatWithdrawalFromJson(Map<String, dynamic> json) =>
     BeFiatWithdrawal(
       json['token'] as String,
@@ -258,6 +273,10 @@ BeAddressBookEntry _$BeAddressBookEntryFromJson(Map<String, dynamic> json) =>
       DateTime.parse(json['date'] as String),
       json['recipient'] as String,
       json['description'] as String?,
+      json['account_name'] as String?,
+      json['account_addr_01'] as String?,
+      json['account_addr_02'] as String?,
+      json['account_addr_country'] as String?,
     );
 
 Map<String, dynamic> _$BeAddressBookEntryToJson(BeAddressBookEntry instance) =>
@@ -265,6 +284,10 @@ Map<String, dynamic> _$BeAddressBookEntryToJson(BeAddressBookEntry instance) =>
       'date': instance.date.toIso8601String(),
       'recipient': instance.recipient,
       'description': instance.description,
+      'account_name': instance.accountName,
+      'account_addr_01': instance.accountAddr01,
+      'account_addr_02': instance.accountAddr02,
+      'account_addr_country': instance.accountAddrCountry,
     };
 
 BeBrokerOrder _$BeBrokerOrderFromJson(Map<String, dynamic> json) =>

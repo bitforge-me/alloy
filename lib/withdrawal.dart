@@ -111,6 +111,10 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
   final _amountController = TextEditingController();
   final _recipientController = TextEditingController();
   final _recipientDescriptionController = TextEditingController();
+  final _accountNameController = TextEditingController();
+  final _accountAddr01Controller = TextEditingController();
+  final _accountAddr02Controller = TextEditingController();
+  final _accountAddrCountryController = TextEditingController();
 
   var _saveRecipient = false;
   var _testnet = testnet();
@@ -136,12 +140,17 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
     var res = await beAddressBook(asset);
     Navigator.pop(context);
     res.when((entries) async {
-      var recipient = await Navigator.push<String?>(
+      var entry = await Navigator.push<BeAddressBookEntry?>(
           context,
           MaterialPageRoute(
               builder: (context) => AddressBookScreen(asset, entries)));
-      if (recipient == null) return;
-      _recipientController.text = recipient;
+      if (entry == null) return;
+      _recipientController.text = entry.recipient;
+      _recipientDescriptionController.text = entry.description ?? '';
+      _accountNameController.text = entry.accountName ?? '';
+      _accountAddr01Controller.text = entry.accountAddr01 ?? '';
+      _accountAddr02Controller.text = entry.accountAddr02 ?? '';
+      _accountAddrCountryController.text = entry.accountAddrCountry ?? '';
     },
         error: (err) => alert(context, 'error',
             'failed to get address book (${BeError.msg(err)})'));
@@ -210,8 +219,11 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
             widget.asset.symbol,
             Decimal.parse(_amountController.text),
             _recipientController.text,
-            _saveRecipient,
             _recipientDescriptionController.text,
+            _accountNameController.text,
+            _accountAddr01Controller.text,
+            _accountAddr02Controller.text,
+            _accountAddrCountryController.text,
             tfCode);
         Navigator.pop(context);
         res.when(
@@ -367,10 +379,12 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                           Text(widget.asset.isCrypto
                               ? 'Save Wallet Address'
                               : 'Save Bank Account'),
-                          _saveRecipient,
-                          onChanged: _updateSaveRecipient)),
+                          _saveRecipient || !widget.asset.isCrypto,
+                          onChanged: widget.asset.isCrypto
+                              ? _updateSaveRecipient
+                              : null)),
                   Visibility(
-                      visible: _saveRecipient,
+                      visible: _saveRecipient || !widget.asset.isCrypto,
                       child: TextFormField(
                           controller: _recipientDescriptionController,
                           decoration: InputDecoration(
@@ -383,6 +397,57 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                               return 'Please enter a value';
                             return null;
                           })),
+                  Visibility(
+                      visible: !widget.asset.isCrypto,
+                      child: Card(
+                          margin: EdgeInsets.only(top: 10),
+                          child: Container(
+                              padding: EdgeInsets.all(10),
+                              margin: EdgeInsets.zero,
+                              child: Column(children: [
+                                Text('Bank Account Details',
+                                    style: TextStyle(fontSize: 16)),
+                                TextFormField(
+                                    controller: _accountNameController,
+                                    decoration: InputDecoration(
+                                        labelText: 'Account Name'),
+                                    keyboardType: TextInputType.text,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty)
+                                        return 'Please enter a value';
+                                      return null;
+                                    }),
+                                TextFormField(
+                                    controller: _accountAddr01Controller,
+                                    decoration: InputDecoration(
+                                        labelText: 'Address Line 1'),
+                                    keyboardType: TextInputType.text,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty)
+                                        return 'Please enter a value';
+                                      return null;
+                                    }),
+                                TextFormField(
+                                    controller: _accountAddr02Controller,
+                                    decoration: InputDecoration(
+                                        labelText: 'Address Line 2'),
+                                    keyboardType: TextInputType.text,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty)
+                                        return 'Please enter a value';
+                                      return null;
+                                    }),
+                                TextFormField(
+                                    controller: _accountAddrCountryController,
+                                    decoration:
+                                        InputDecoration(labelText: 'Country'),
+                                    keyboardType: TextInputType.text,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty)
+                                        return 'Please enter a value';
+                                      return null;
+                                    }),
+                              ])))),
                   SizedBox(height: 15),
                   raisedButton(
                       onPressed: _withdrawalCreate,

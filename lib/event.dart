@@ -113,7 +113,7 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
               Container(
                   padding: EdgeInsets.only(top: 20, bottom: 20),
                   child: Center(
-                      child: Icon(Icons.keyboard_arrow_down_rounded,
+                      child: Icon(Icons.keyboard_double_arrow_down_rounded,
                           size: 150, color: ZapOnSecondary))),
               Container(
                   padding: EdgeInsets.only(left: 20, right: 20),
@@ -147,6 +147,115 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
               RoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
                   ZapSurface, null, 'Cancel',
                   width: MediaQuery.of(context).size.width - 80)
+            ])));
+  }
+}
+
+enum DepositMethod { account2account, bankDeposit }
+
+class DepositMethodDetails {
+  final DepositMethod method;
+  final String name;
+  final String description;
+  final String asset;
+
+  DepositMethodDetails(this.method, this.name, this.description, this.asset);
+
+  Widget logo({EdgeInsetsGeometry? margin, double size = 48}) {
+    return Container(
+        margin: margin,
+        width: size,
+        height: size,
+        child: Center(child: Image.asset(this.asset)));
+  }
+
+  static String _methodName(DepositMethod method) {
+    switch (method) {
+      case DepositMethod.account2account:
+        return 'Account2Account';
+      case DepositMethod.bankDeposit:
+        return 'Bank Deposit';
+    }
+  }
+
+  static String _methodDescription(DepositMethod method) {
+    switch (method) {
+      case DepositMethod.account2account:
+        return 'Deposit immediately using Account2Account (ANZ, ASB, BNZ, COOP, Kiwibank, TSB, Westpac)';
+      case DepositMethod.bankDeposit:
+        return 'Deposit using a standard bank transfer (all banks)';
+    }
+  }
+
+  static String _methodAsset(DepositMethod method) {
+    switch (method) {
+      case DepositMethod.account2account:
+        return 'assets/deposit_methods/account2account.png';
+      case DepositMethod.bankDeposit:
+        return 'assets/deposit_methods/bank_deposit.jpg';
+    }
+  }
+
+  static DepositMethodDetails fromMethod(DepositMethod method) {
+    var name = _methodName(method);
+    var description = _methodDescription(method);
+    var asset = _methodAsset(method);
+    return DepositMethodDetails(method, name, description, asset);
+  }
+}
+
+class DepositMethodScreen extends StatefulWidget {
+  final String asset;
+  final String? l2Network;
+  final List<DepositMethod> methods;
+
+  DepositMethodScreen(this.asset, this.l2Network, this.methods);
+
+  @override
+  State<DepositMethodScreen> createState() => _DepositMethodScreenState();
+}
+
+class _DepositMethodScreenState extends State<DepositMethodScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Widget _buildMethod(BuildContext context, int index) {
+    var method = DepositMethodDetails.fromMethod(widget.methods[index]);
+    return ListTile(
+      onTap: () => Navigator.of(context).pop(method),
+      leading: method.logo(),
+      title: Text(method.name),
+      subtitle: Text(method.description),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Deposit Method'),
+          actions: [
+            assetLogo(
+                widget.l2Network != null ? widget.l2Network! : widget.asset,
+                margin: EdgeInsets.all(10))
+          ],
+        ),
+        body: Container(
+            padding: EdgeInsets.all(20),
+            child: Column(children: [
+              Container(
+                  padding: EdgeInsets.only(top: 20, bottom: 20),
+                  child: Center(
+                      child: Icon(Icons.keyboard_double_arrow_down_rounded,
+                          size: 150, color: ZapOnSecondary))),
+              Container(
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: widget.methods.length,
+                      itemBuilder: _buildMethod)),
             ])));
   }
 }

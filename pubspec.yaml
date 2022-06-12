@@ -61,6 +61,7 @@ flutter:
   assets:
     - assets/logo.png
     - assets/crypto_logos/
+    - assets/deposit_methods/
     - assets/aplyid-logo.webp
   
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -619,6 +619,37 @@ class BeFiatDepositResult with _$BeFiatDepositResult {
   }
 }
 
+@JsonSerializable()
+class BeFiatAccountNumber {
+  @JsonKey(name: 'account_number')
+  final String accountNumber;
+  final String reference;
+  final String code;
+
+  BeFiatAccountNumber(this.accountNumber, this.reference, this.code);
+  factory BeFiatAccountNumber.fromJson(Map<String, dynamic> json) =>
+      _$BeFiatAccountNumberFromJson(json);
+  Map<String, dynamic> toJson() => _$BeFiatAccountNumberToJson(this);
+}
+
+@freezed
+class BeFiatAccountNumberResult with _$BeFiatAccountNumberResult {
+  const factory BeFiatAccountNumberResult(BeFiatAccountNumber accountNumber) =
+      _BeFiatAccountNumberResult;
+  const factory BeFiatAccountNumberResult.error(BeError err) =
+      _BeFiatAccountNumberResultErr;
+
+  static BeFiatAccountNumberResult parse(String data) {
+    try {
+      var json = jsonDecode(data);
+      return BeFiatAccountNumberResult(
+          BeFiatAccountNumber.fromJson(json['deposit']));
+    } catch (_) {
+      return BeFiatAccountNumberResult.error(BeError.format());
+    }
+  }
+}
+
 @freezed
 class BeFiatDepositsResult with _$BeFiatDepositsResult {
   const factory BeFiatDepositsResult(
@@ -707,8 +738,23 @@ class BeAddressBookEntry {
   final DateTime date;
   final String recipient;
   final String? description;
+  @JsonKey(name: 'account_name')
+  final String? accountName;
+  @JsonKey(name: 'account_addr_01')
+  final String? accountAddr01;
+  @JsonKey(name: 'account_addr_02')
+  final String? accountAddr02;
+  @JsonKey(name: 'account_addr_country')
+  final String? accountAddrCountry;
 
-  BeAddressBookEntry(this.date, this.recipient, this.description);
+  BeAddressBookEntry(
+      this.date,
+      this.recipient,
+      this.description,
+      this.accountName,
+      this.accountAddr01,
+      this.accountAddr02,
+      this.accountAddrCountry);
   factory BeAddressBookEntry.fromJson(Map<String, dynamic> json) =>
       _$BeAddressBookEntryFromJson(json);
   Map<String, dynamic> toJson() => _$BeAddressBookEntryToJson(this);
@@ -1110,13 +1156,20 @@ Future<BeCryptoWithdrawalsResult> beCryptoWithdrawals(
       error: (err) => BeCryptoWithdrawalsResult.error(err));
 }
 
-Future<BeFiatDepositResult> beFiatDepositCreate(
+Future<BeFiatDepositResult> beFiatDepositWindcave(
     String asset, Decimal amount) async {
-  var result = await post(
-      "fiat_deposit_create", {"asset": asset, "amount_dec": amount.toString()},
+  var result = await post("fiat_deposit_windcave",
+      {"asset": asset, "amount_dec": amount.toString()},
       authRequired: true);
   return result.when((content) => BeFiatDepositResult.parse(content),
       error: (err) => BeFiatDepositResult.error(err));
+}
+
+Future<BeFiatAccountNumberResult> beFiatDepositDirect(String asset) async {
+  var result =
+      await post("fiat_deposit_direct", {"asset": asset}, authRequired: true);
+  return result.when((content) => BeFiatAccountNumberResult.parse(content),
+      error: (err) => BeFiatAccountNumberResult.error(err));
 }
 
 Future<BeFiatDepositsResult> beFiatDeposits(
@@ -1132,8 +1185,11 @@ Future<BeFiatWithdrawalResult> beFiatWithdrawalCreate(
     String asset,
     Decimal amount,
     String recipient,
-    bool saveRecipient,
     String recipientDescription,
+    String? accountName,
+    String? accountAddr01,
+    String? accountAddr02,
+    String? accountAddrCountry,
     String? tfCode) async {
   var result = await post(
       "fiat_withdrawal_create",
@@ -1141,8 +1197,11 @@ Future<BeFiatWithdrawalResult> beFiatWithdrawalCreate(
         "asset": asset,
         "amount_dec": amount.toString(),
         "recipient": recipient,
-        "save_recipient": saveRecipient,
         "recipient_description": recipientDescription,
+        "account_name": accountName,
+        "account_addr_01": accountAddr01,
+        "account_addr_02": accountAddr02,
+        "account_addr_country": accountAddrCountry,
         "tf_code": tfCode
       },
       authRequired: true);
