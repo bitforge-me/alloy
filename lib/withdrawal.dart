@@ -21,7 +21,6 @@ import 'snack.dart';
 import 'config.dart';
 import 'qrscan.dart';
 import 'widgets.dart';
-import 'colors.dart';
 
 final log = Logger('Withdrawal');
 
@@ -583,8 +582,8 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
       ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         SizedBox(height: 15),
-        BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary, bronzeGradient,
-            'Make Withdrawal',
+        BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
+            ZapSecondaryGradient, 'Make Withdrawal',
             width: 320, height: 65),
         _withdrawals.length == 0
             ? Container(
@@ -794,8 +793,8 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
       ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         SizedBox(height: 15),
-        BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary, bronzeGradient,
-            'Make Withdrawal',
+        BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
+            ZapSecondaryGradient, 'Make Withdrawal',
             width: 320, height: 65),
         _withdrawals.length == 0
             ? Container(

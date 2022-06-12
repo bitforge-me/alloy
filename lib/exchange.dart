@@ -14,7 +14,6 @@ import 'snack.dart';
 import 'quote.dart';
 import 'orders.dart';
 import 'utils.dart';
-import 'colors.dart';
 
 final log = Logger('Exchange');
 
@@ -317,7 +316,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         width: 200,
         child: DecoratedBox(
             decoration: BoxDecoration(
-              gradient: bronzeGradient,
+              gradient: ZapPrimaryGradient,
               borderRadius: BorderRadius.circular(10),
             ),
             child: DropdownButton<String>(
@@ -363,7 +362,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
           width: 200,
           child: DecoratedBox(
               decoration: BoxDecoration(
-                gradient: bronzeSecondaryGradient,
+                gradient: ZapSecondaryGradient,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: DropdownButton<String>(

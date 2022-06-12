@@ -6,7 +6,6 @@ import 'package:zapdart/colors.dart';
 import 'package:zapdart/utils.dart';
 
 import 'beryllium.dart';
-import 'colors.dart';
 import 'widgets.dart';
 import 'prefs.dart';
 
@@ -222,15 +221,14 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                                 widget.deviceName));
                         Navigator.of(context).pop(loginChoice);
                       }
-                    }, ZapOnSecondary, ZapSecondary, bronzeGradient, 'Continue',
+                    }, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Continue',
                         holePunch: true, width: 320, height: 65),
                     SizedBox(height: 8),
                     WordDivider(),
                     SizedBox(height: 8),
                     BronzeRoundedButton(() {
                       Navigator.of(context).pop(LoginChoice.doLogin());
-                    }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
-                        'Login',
+                    }, ZapOnSurface, ZapSurface, null, 'Login',
                         holePunch: true, width: 320, height: 65),
                     SizedBox(height: 15),
                     DebugInfo()
@@ -325,21 +323,19 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                             widget.twoFactorRequired));
                         Navigator.of(context).pop(loginChoice);
                       }
-                    }, ZapOnSecondary, ZapSecondary, bronzeGradient, 'Continue',
+                    }, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Continue',
                         holePunch: true, width: 320, height: 65),
                     SizedBox(height: 5),
                     BronzeRoundedButton(() {
                       Navigator.of(context).pop(LoginChoice.doApiKeyRequest());
-                    }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
-                        'Lost Password',
+                    }, ZapOnSurface, ZapSurface, null, 'Lost Password',
                         holePunch: true, width: 320, height: 65),
                     SizedBox(height: 8),
                     WordDivider(),
                     SizedBox(height: 8),
                     BronzeRoundedButton(() {
                       Navigator.of(context).pop(LoginChoice.doRegistration());
-                    }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
-                        'Create an Account',
+                    }, ZapOnSurface, ZapSurface, null, 'Create an Account',
                         holePunch: true, width: 320, height: 65),
                     SizedBox(height: 15),
                     DebugInfo()
@@ -455,15 +451,14 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                               null));
                       Navigator.of(context).pop(loginChoice);
                     }
-                  }, ZapOnSecondary, ZapSecondary, bronzeGradient, 'Continue',
+                  }, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Continue',
                       holePunch: true, width: 320, height: 65),
                   SizedBox(height: 8),
                   WordDivider(),
                   SizedBox(height: 8),
                   BronzeRoundedButton(() {
                     Navigator.of(context).pop(LoginChoice.doLogin());
-                  }, ZapOnSecondary, ZapSecondary, bronzeCancelGradient,
-                      'Login',
+                  }, ZapOnSurface, ZapSurface, null, 'Login',
                       holePunch: true, width: 320, height: 65),
                   SizedBox(height: 15),
                   DebugInfo()
@@ -677,13 +672,13 @@ class BeforeLoginForm_KillMeState extends State<BeforeLoginForm_KillMe> {
         ),
         body: BigLogoContainer(children: [
           BronzeRoundedButton(() => startLoginProcess(LoginChoice.doLogin()),
-              ZapOnSecondary, ZapSecondary, bronzeGradient, 'Login',
+              ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Login',
               holePunch: true, width: 320, height: 65),
           BronzeRoundedButton(
               () => startLoginProcess(LoginChoice.doRegistration()),
-              ZapOnSecondary,
-              ZapSecondary,
-              bronzeCancelGradient,
+              ZapOnSurface,
+              ZapSurface,
+              null,
               'Create an Account',
               holePunch: true,
               width: 320,
@@ -691,9 +686,9 @@ class BeforeLoginForm_KillMeState extends State<BeforeLoginForm_KillMe> {
           widget.invalidAuth
               ? BronzeRoundedButton(
                   () => Navigator.pop(context, LoginResult.reset()),
-                  ZapOnSecondary,
-                  ZapSecondary,
-                  bronzeSecondaryGradient,
+                  ZapOnSurface,
+                  ZapSurface,
+                  null,
                   'Reset',
                   holePunch: true,
                   width: 320,
@@ -702,9 +697,9 @@ class BeforeLoginForm_KillMeState extends State<BeforeLoginForm_KillMe> {
           widget.retry
               ? BronzeRoundedButton(
                   () => Navigator.pop(context, LoginResult.retry()),
-                  ZapOnSecondary,
-                  ZapSecondary,
-                  bronzeSecondaryGradient,
+                  ZapOnSurface,
+                  ZapSurface,
+                  null,
                   'Retry',
                   holePunch: true,
                   width: 320,
