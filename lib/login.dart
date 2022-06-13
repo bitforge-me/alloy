@@ -466,18 +466,31 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
   }
 }
 
-class BeforeLoginForm_KillMe extends StatefulWidget {
+class StagingForm extends StatefulWidget {
   final bool invalidAuth;
   final bool retry;
-  BeforeLoginForm_KillMe(this.invalidAuth, this.retry);
+  final String? errTitle;
+  final String? errMessage;
+  StagingForm(this.invalidAuth, this.retry, this.errTitle, this.errMessage);
 
   @override
-  BeforeLoginForm_KillMeState createState() {
-    return BeforeLoginForm_KillMeState();
+  StagingFormState createState() {
+    return StagingFormState();
   }
 }
 
-class BeforeLoginForm_KillMeState extends State<BeforeLoginForm_KillMe> {
+class StagingFormState extends State<StagingForm> {
+  @override
+  void initState() {
+    super.initState();
+    if (!widget.invalidAuth && !widget.retry)
+      WidgetsBinding.instance.addPostFrameCallback(
+          (_) => startLoginProcess(LoginChoice.doRegistration()));
+    else
+      WidgetsBinding.instance.addPostFrameCallback((_) => alert(context,
+          '${widget.errTitle ?? "unknown error"}', '${widget.errMessage}'));
+  }
+
   Future<void> _loginErrorAlert(BuildContext context, BeError error) async {
     await error.when(network: () async {
       await alert(context, 'Network error',

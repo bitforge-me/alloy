@@ -105,11 +105,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     return alerts;
   }
 
-  Future<void> _startLogin(bool invalidAuth, bool retry) async {
+  Future<void> _startLogin(bool invalidAuth, bool retry,
+      {String? errTitle, String? errMessage}) async {
     var result = await Navigator.push<LoginResult>(
         context,
         MaterialPageRoute(
-            builder: (context) => BeforeLoginForm_KillMe(invalidAuth, retry)));
+            builder: (context) =>
+                StagingForm(invalidAuth, retry, errTitle, errMessage)));
     if (result == null) _initApi();
     result!.when(
         acct: (_) => _initApi(),
@@ -130,14 +132,14 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         _websocket.connect(); // connect websocket
       }, error: (err) {
         err.when(network: () {
-          alert(context, 'Network error', 'A network error occured');
-          _startLogin(false, true);
+          _startLogin(false, true,
+              errTitle: 'Network error', errMessage: 'A network error occured');
         }, auth: (msg) {
-          alert(context, 'Authentication failed', msg);
-          _startLogin(true, false);
+          _startLogin(true, false,
+              errTitle: 'Authentication failed', errMessage: msg);
         }, format: () {
-          alert(context, 'Format error', 'A format error occured');
-          _startLogin(false, true);
+          _startLogin(false, true,
+              errTitle: 'Format error', errMessage: 'A format error occured');
         });
       });
       setState(() {
