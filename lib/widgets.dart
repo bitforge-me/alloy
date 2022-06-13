@@ -14,7 +14,7 @@ class BigLogoContainer extends StatelessWidget {
     kids.insert(
         0,
         Image.asset(
-          'new-logo.png',
+          'assets/new-logo.png',
           height: 200,
           fit: BoxFit.fitHeight,
         ));

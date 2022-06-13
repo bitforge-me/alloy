@@ -60,6 +60,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/logo.png
+    - assets/new-logo.png
     - assets/crypto_logos/
     - assets/deposit_methods/
     - assets/aplyid-logo.webp
