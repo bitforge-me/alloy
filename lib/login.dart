@@ -310,7 +310,8 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                     Visibility(
                       visible: widget.showTwoFactorCode,
                       child: BronzeFormInput(_tfCodeController,
-                          labelText: "2FA Code"),
+                          icon: Icon(Icons.lock_outline),
+                          labelText: 'Two factor login code'),
                     ),
                     SizedBox(height: widget.showTwoFactorCode ? 15 : 0),
                     BronzeRoundedButton(() {
