@@ -26,8 +26,10 @@ import 'verify_user.dart';
 import 'snack.dart';
 import 'exchange.dart';
 import 'units.dart';
+import 'login.dart';
 import 'assets.dart';
 import 'event.dart';
+import 'widgets.dart';
 
 final log = Logger('Main');
 
@@ -67,13 +69,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Acct {
-  String? email;
-  String? apiKey;
-
-  Acct(this.email, this.apiKey);
-}
-
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
 
@@ -86,8 +81,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Websocket _websocket = Websocket();
   UserInfo? _userInfo;
-  bool _invalidAuth = false;
-  bool _retry = false;
   List<String> _alerts = [];
 
   @override
@@ -112,6 +105,21 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     return alerts;
   }
 
+  Future<void> _startLogin(bool invalidAuth, bool retry,
+      {String? errTitle, String? errMessage}) async {
+    var result = await Navigator.push<LoginResult>(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                StagingForm(invalidAuth, retry, errTitle, errMessage)));
+    if (result == null) _initApi();
+    result!.when(
+        acct: (_) => _initApi(),
+        reset: () => _logout(),
+        retry: () => _initApi(),
+        nothing: () => _initApi());
+  }
+
   Future<void> _initApi() async {
     if (await Prefs.hasBeApiKey()) {
       UserInfo? userInfo;
@@ -119,39 +127,27 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       var result = await beUserInfo();
       Navigator.pop(context);
       result.when((UserInfo info) {
-        setState(() {
-          _invalidAuth = false;
-          _retry = false;
-        });
         userInfo = info;
         _websocket.wsEvent.subscribe(_websocketEvent);
         _websocket.connect(); // connect websocket
       }, error: (err) {
         err.when(network: () {
-          alert(context, 'Network error', 'A network error occured');
-          setState(() {
-            _retry = true;
-            _invalidAuth = false;
-          });
+          _startLogin(false, true,
+              errTitle: 'Network error', errMessage: 'A network error occured');
         }, auth: (msg) {
-          alert(context, 'Authentication failed', msg);
-          setState(() {
-            _invalidAuth = true;
-            _retry = false;
-          });
+          _startLogin(true, false,
+              errTitle: 'Authentication failed', errMessage: msg);
         }, format: () {
-          alert(context, 'Format error', 'A format error occured');
-          setState(() {
-            _retry = true;
-            _invalidAuth = false;
-          });
+          _startLogin(false, true,
+              errTitle: 'Format error', errMessage: 'A format error occured');
         });
       });
       setState(() {
         _userInfo = userInfo;
         _alerts = _generateAlerts(userInfo);
       });
-    }
+    } else
+      _startLogin(false, false);
   }
 
   void checkVersion(BeVersionResult res) {
@@ -200,165 +196,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     }
   }
 
-  Future<void> _loginErrorAlert(BuildContext context, BeError error) async {
-    await error.when(network: () async {
-      await alert(context, 'Network error',
-          'A network error occured when trying to login');
-    }, auth: (msg) async {
-      await alert(context, 'Authentication failed',
-          'The login details you entered are not valid ($msg)');
-    }, format: () async {
-      await alert(context, 'Format error',
-          'A format error occured when trying to login');
-    });
-  }
-
-  Future<Acct?> _beLogin(BuildContext context, AccountLogin login,
-      {bool silent: false}) async {
-    var devName = await deviceName();
-    var result = await beApiKeyCreate(
-        login.email, login.password, devName, login.tfCode);
-    return await result.when<Future<Acct?>>((apikey) async {
-      // write api key
-      await Prefs.beApiKeySet(apikey.token);
-      await Prefs.beApiSecretSet(apikey.secret);
-      return Acct(login.email, apikey.token);
-    }, error: (err) async {
-      if (!silent) await _loginErrorAlert(context, err);
-      return null;
-    });
-  }
-
-  Future<Acct?> _beApiKeyClaim(
-      BuildContext context, AccountRequestApiKey req, String token,
-      {silent: false}) async {
-    var result = await beApiKeyClaim(token);
-    return await result.when<Future<Acct?>>((apikey) async {
-      // write api key
-      await Prefs.beApiKeySet(apikey.token);
-      await Prefs.beApiSecretSet(apikey.secret);
-      return Acct(req.email, apikey.token);
-    }, error: (err) async {
-      if (!silent) await _loginErrorAlert(context, err);
-      return null;
-    });
-  }
-
-  Future<void> _register() async {
-    AccountRegistration? reg;
-    reg = await Navigator.push<AccountRegistration>(
-      context,
-      MaterialPageRoute(
-          builder: (context) => AccountRegisterForm(
-                reg,
-                showMobileNumber: RequireMobileNumber,
-                initialMobileCountry: InitialMobileCountry,
-                preferredMobileCountries: PreferredMobileCountries,
-                showAddress: RequireAddress,
-                googlePlaceApiKey: googlePlaceApiKey(),
-                locationIqApiKey: locationIqApiKey(),
-              )),
-    );
-    if (reg == null) return;
-    var res = await beUserRegister(reg);
-    res.when((content) async {
-      var cancelled = false;
-      Acct? acct;
-      showAlertDialog(context, 'waiting for you to confirm the email...',
-          showCancel: true, onCancel: () => cancelled = true);
-      while (acct == null && !cancelled) {
-        await Future.delayed(Duration(seconds: 5));
-        // save account if login successful
-        acct = await _beLogin(
-            context, AccountLogin(reg!.email, reg.newPassword, ''),
-            silent: true);
-      }
-      Navigator.pop(context);
-      _initApi();
-    }, error: (err) {
-      err.when(
-          network: () => alert(context, 'Network error',
-              'A network error occured when trying to register'),
-          auth: (msg) => alert(context, 'Authorisation error',
-              'An authorisation error occured when trying to register ($msg)'),
-          format: () => alert(context, 'Format error',
-              'A format error occured when trying to register'));
-    });
-  }
-
-  Future<void> _login() async {
-    AccountLogin? login;
-    // first check if we need a two factor code
-    bool tfEnabled = false;
-    while (true) {
-      login = await Navigator.push<AccountLogin>(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                AccountLoginForm(login, showTwoFactorCode: false)),
-      );
-      if (login == null) return;
-      showAlertDialog(context, 'logging in..');
-      var result =
-          await beUserTwoFactorEnabledCheck(login.email, login.password);
-      Navigator.pop(context);
-      if (await result.when<Future<bool>>((enabled) async {
-        tfEnabled = enabled;
-        return true;
-      }, error: (err) async {
-        await _loginErrorAlert(context, err);
-        return false;
-      })) break;
-    }
-    while (true) {
-      // get the two factor code if required
-      if (tfEnabled)
-        login = await Navigator.push<AccountLogin>(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  AccountLoginForm(login, showTwoFactorCode: tfEnabled)),
-        );
-      if (login == null) return;
-      // login and save account if login successful
-      showAlertDialog(context, 'logging in..');
-      var acct = await _beLogin(context, login);
-      Navigator.pop(context);
-      if (acct != null) {
-        _initApi();
-        break;
-      }
-    }
-  }
-
-  Future<void> _loginWithEmail() async {
-    // request api key form
-    var devName = await deviceName();
-    var req = await Navigator.push<AccountRequestApiKey>(
-      context,
-      MaterialPageRoute(
-          builder: (context) => AccountRequestApiKeyForm(devName)),
-    );
-    if (req == null) return;
-    var result = await beApiKeyRequest(req.email, req.deviceName);
-    await result.when((token) async {
-      Acct? acct;
-      var cancelled = false;
-      showAlertDialog(context, 'waiting for you to confirm the email...',
-          showCancel: true, onCancel: () => cancelled = true);
-      while (acct == null && !cancelled) {
-        await Future.delayed(Duration(seconds: 5));
-        // claim api key
-        acct = await _beApiKeyClaim(context, req, token, silent: true);
-      }
-      Navigator.pop(context);
-      if (acct != null) _initApi();
-    }, error: (err) async {
-      await alert(context, 'Network error',
-          'A network error occured when trying to login');
-    });
-  }
-
   Future<void> _support() async {
     if (_userInfo != null)
       await urlLaunch(
@@ -372,10 +209,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       await Prefs.nukeAll();
       Phoenix.rebirth(context);
     }
-  }
-
-  Future<void> _retryAuth() async {
-    _initApi();
   }
 
   Future<void> _balances() async {
@@ -530,37 +363,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Visibility(
-              visible: _userInfo == null,
-              child: RoundedButton(_register, ZapOnSecondary, ZapSecondary,
-                  ZapSecondaryGradient, 'Register',
-                  holePunch: true, width: 200),
-            ),
-            Visibility(
-              visible: _userInfo == null,
-              child: RoundedButton(_login, ZapOnSecondary, ZapSecondary,
-                  ZapSecondaryGradient, 'Login',
-                  holePunch: true, width: 200),
-            ),
-            Visibility(
-              visible: _userInfo == null,
-              child: RoundedButton(_loginWithEmail, ZapOnSecondary,
-                  ZapSecondary, ZapSecondaryGradient, 'Lost Password',
-                  holePunch: true, width: 200),
-            ),
-            Visibility(
-              visible: _invalidAuth,
-              child: RoundedButton(_logout, ZapOnSecondary, ZapSecondary,
-                  ZapSecondaryGradient, 'Reset',
-                  holePunch: true, width: 200),
-            ),
-            Visibility(
-              visible: _retry,
-              child: RoundedButton(_retryAuth, ZapOnSecondary, ZapSecondary,
-                  ZapSecondaryGradient, 'Retry',
-                  holePunch: true, width: 200),
-            ),
+          children: [
             // exchange widget
             _userInfo != null ? ExchangeWidget(_websocket) : SizedBox(),
             // home screen buttons
@@ -600,21 +403,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                         textOutside: false,
                         borderSize: 0)
                   ]),
+                  SizedBox(height: 15),
+                  DebugInfo()
                 ])),
-            // debug info
-            SizedBox(height: 15),
-            Visibility(
-              visible: testnet(),
-              child: Text('TESTNET',
-                  style: TextStyle(color: ZapWarning, fontSize: 8)),
-            ),
-            Text('Server: ${server()}',
-                style: TextStyle(color: ZapOnBackgroundLight, fontSize: 8)),
-            Visibility(
-                visible: GitSha != 'GIT_SHA_REPLACE',
-                child: Text('Build: ${GitSha.substring(0, 5)} - $BuildDate',
-                    style:
-                        TextStyle(color: ZapOnBackgroundLight, fontSize: 8))),
           ],
         ),
       ),
