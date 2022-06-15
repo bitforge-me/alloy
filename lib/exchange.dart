@@ -362,7 +362,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         width: 200,
         child: DecoratedBox(
             decoration: BoxDecoration(
-							color: ZapSurface,
+              color: ZapSurface,
               borderRadius: BorderRadius.circular(10),
             ),
             child: DropdownButton<String>(
