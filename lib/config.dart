@@ -17,7 +17,7 @@ const SupportUrl = 'https://bronze-support.zap.me/';
 const _DefaultTestnet = true;
 
 // Zap Crypto settings
-const String _BeServerUrl = 'https://beryllium-test.zap.me/';
+const String _BeServerUrl = 'https://beryllium.zap.me/';
 // key is server hostname, and value is 'testnet'
 const Map<String, bool> BeServerLocationOverrides = {
   'beryllium.zap.me': false,
