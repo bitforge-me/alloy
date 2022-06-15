@@ -1,8 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:dotted_border/dotted_border.dart';
 
 import 'package:zapdart/colors.dart';
 
 import 'config.dart';
+
+class DottedBorderBox extends StatelessWidget {
+  final Widget? child;
+  final Gradient? gradient;
+  final Color? color;
+  final double borderRadius;
+  final Color? borderColor;
+
+  DottedBorderBox(
+      {this.child,
+      this.gradient,
+      this.color,
+      this.borderRadius = 10,
+      this.borderColor});
+
+  @override
+  Widget build(BuildContext context) {
+    return DottedBorder(
+        borderType: BorderType.RRect,
+        strokeWidth: 2,
+        radius: Radius.circular(borderRadius),
+        color: borderColor ?? Colors.black,
+        padding: EdgeInsets.zero,
+        child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: gradient,
+              color: color,
+              borderRadius: BorderRadius.circular(borderRadius),
+            ),
+            child: child ?? SizedBox()));
+  }
+}
 
 class BigLogoContainer extends StatelessWidget {
   final List<Widget>? children;

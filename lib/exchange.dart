@@ -14,6 +14,7 @@ import 'snack.dart';
 import 'quote.dart';
 import 'orders.dart';
 import 'utils.dart';
+import 'widgets.dart';
 
 final log = Logger('Exchange');
 
@@ -314,11 +315,9 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     var from = Column(children: [
       SizedBox(
         width: 200,
-        child: DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: ZapPrimaryGradient,
-              borderRadius: BorderRadius.circular(10),
-            ),
+        child: DottedBorderBox(
+            borderColor: Colors.white,
+            gradient: ZapPrimaryGradient,
             child: DropdownButton<String>(
                 isExpanded: true,
                 underline: Container(
@@ -360,11 +359,9 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     var to = Column(children: [
       SizedBox(
         width: 200,
-        child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: ZapSurface,
-              borderRadius: BorderRadius.circular(10),
-            ),
+        child: DottedBorderBox(
+            borderColor: Colors.white,
+            color: ZapSurface,
             child: DropdownButton<String>(
                 isExpanded: true,
                 underline: Container(
