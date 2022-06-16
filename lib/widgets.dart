@@ -5,35 +5,50 @@ import 'package:zapdart/colors.dart';
 
 import 'config.dart';
 
-class DottedBorderBox extends StatelessWidget {
+class RoundedEdgeBox extends StatelessWidget {
   final Widget? child;
   final Gradient? gradient;
   final Color? color;
   final double borderRadius;
+  final bool dottedBorder;
+  final double borderWidth;
   final Color? borderColor;
+  final EdgeInsets padding;
 
-  DottedBorderBox(
+  RoundedEdgeBox(
       {this.child,
       this.gradient,
       this.color,
       this.borderRadius = 10,
-      this.borderColor});
+      this.dottedBorder = false,
+      this.borderWidth = 2,
+      this.borderColor,
+      this.padding = const EdgeInsets.all(8)});
+
+  Widget _dbox({bool drawBorder: false}) {
+    return DecoratedBox(
+        decoration: BoxDecoration(
+            gradient: gradient,
+            color: color,
+            border: drawBorder
+                ? Border.all(
+                    color: borderColor ?? Colors.black, width: borderWidth)
+                : null,
+            borderRadius: BorderRadius.circular(borderRadius)),
+        child: Padding(padding: padding, child: child));
+  }
 
   @override
   Widget build(BuildContext context) {
-    return DottedBorder(
-        borderType: BorderType.RRect,
-        strokeWidth: 2,
-        radius: Radius.circular(borderRadius),
-        color: borderColor ?? Colors.black,
-        padding: EdgeInsets.zero,
-        child: DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: gradient,
-              color: color,
-              borderRadius: BorderRadius.circular(borderRadius),
-            ),
-            child: child ?? SizedBox()));
+    if (dottedBorder)
+      return DottedBorder(
+          padding: EdgeInsets.zero,
+          borderType: BorderType.RRect,
+          strokeWidth: borderWidth,
+          radius: Radius.circular(borderRadius),
+          color: borderColor ?? Colors.black,
+          child: _dbox(drawBorder: false));
+    return _dbox(drawBorder: true);
   }
 }
 

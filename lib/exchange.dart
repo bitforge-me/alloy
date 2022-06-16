@@ -312,14 +312,13 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   }
 
   Widget _buildWidget() {
+    const inputWidth = 320.0;
     var from = Column(children: [
       SizedBox(
-        width: 200,
-        child: DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: ZapPrimaryGradient,
-              borderRadius: BorderRadius.circular(10),
-            ),
+        width: inputWidth,
+        child: RoundedEdgeBox(
+            borderColor: ZapPrimary,
+            gradient: ZapPrimaryGradient,
             child: DropdownButton<String>(
                 isExpanded: true,
                 underline: Container(
@@ -338,14 +337,15 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       ),
       SizedBox(height: 15),
       SizedBox(
-          width: 200,
-          child: DottedBorderBox(
+          width: inputWidth,
+          child: RoundedEdgeBox(
               borderColor: Colors.white,
+              dottedBorder: true,
               color: ZapSurface,
               child: TextField(
                   controller: _amountController,
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+                      border: UnderlineInputBorder(),
                       suffixText: assetUnit(_fromAsset),
                       labelText: 'Amount'),
                   keyboardType: TextInputType.numberWithOptions(
@@ -355,20 +355,18 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         margin: EdgeInsets.all(20),
         child: _calculating
             ? CircularProgressIndicator()
-            : Icon(Icons.arrow_forward, color: ZapSecondary, size: 24));
+            : Icon(Icons.arrow_forward, color: ZapPrimary, size: 24));
     var arrowDown = Container(
         margin: EdgeInsets.all(20),
         child: _calculating
             ? CircularProgressIndicator()
-            : Icon(Icons.arrow_downward, color: ZapSecondary, size: 24));
+            : Icon(Icons.arrow_downward, color: ZapPrimary, size: 24));
     var to = Column(children: [
       SizedBox(
-        width: 200,
-        child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: ZapSurface,
-              borderRadius: BorderRadius.circular(10),
-            ),
+        width: inputWidth,
+        child: RoundedEdgeBox(
+            color: ZapSurface,
+            borderColor: ZapSurface,
             child: DropdownButton<String>(
                 isExpanded: true,
                 underline: Container(
@@ -387,21 +385,22 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       ),
       SizedBox(height: 15),
       SizedBox(
-          width: 200,
-          child: DottedBorderBox(
+          width: inputWidth,
+          child: RoundedEdgeBox(
               borderColor: Colors.white,
+              dottedBorder: true,
               color: ZapSurface,
               child: TextField(
                   controller: _receiveController,
                   readOnly: true,
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+                      border: UnderlineInputBorder(),
                       suffixText: assetUnit(_toAsset),
                       labelText: 'Receive'))))
     ]);
     return Column(children: [
       LayoutBuilder(builder: (context, constraints) {
-        if (constraints.maxWidth < 500)
+        if (constraints.maxWidth < inputWidth * 2 + 100)
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [from, arrowDown, to]);
@@ -411,24 +410,27 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
               children: [from, arrow, to]);
       }),
       _validAmount
-          ? RoundedButton(_exchange, ZapOnSecondary, ZapSecondary,
-              ZapSecondaryGradient, 'Create Order',
-              holePunch: true, width: 200)
+          ? Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: RoundedButton(_exchange, ZapOnPrimary, ZapPrimary,
+                  ZapPrimaryGradient, 'Create Order',
+                  holePunch: true, width: inputWidth))
           : SizedBox()
     ]);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      _failedMarkets
-          ? raisedButton(onPressed: _initMarkets, child: Text('Try Again'))
-          : SizedBox(),
-      _markets.length == 0 && !_failedMarkets
-          ? CircularProgressIndicator()
-          : SizedBox(),
-      _markets.length > 0 ? _buildWidget() : SizedBox(),
-      SizedBox(height: 50)
-    ]);
+    return Padding(
+        padding: EdgeInsets.symmetric(vertical: 30),
+        child: Column(children: [
+          _failedMarkets
+              ? raisedButton(onPressed: _initMarkets, child: Text('Try Again'))
+              : SizedBox(),
+          _markets.length == 0 && !_failedMarkets
+              ? CircularProgressIndicator()
+              : SizedBox(),
+          _markets.length > 0 ? _buildWidget() : SizedBox(),
+        ]));
   }
 }
