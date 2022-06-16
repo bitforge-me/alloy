@@ -349,66 +349,67 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: Image.asset(AppLogo),
-          leading: Builder(builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(Icons.menu),
-              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-              onPressed: () => Scaffold.of(context).openDrawer(),
-              color: _alerts.isNotEmpty ? ZapWarning : null,
-            );
-          })),
-      drawer: makeDrawer(context),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // exchange widget
-            _userInfo != null ? ExchangeWidget(_websocket) : SizedBox(),
-            // home screen buttons
-            Visibility(
-                visible: _userInfo != null,
-                child: Column(mainAxisSize: MainAxisSize.min, children: [
-                  Row(mainAxisSize: MainAxisSize.min, children: [
-                    SquareButton(_orders, Icons.shopping_cart_rounded,
-                        ZapSecondary, 'Orders',
-                        textColor: ZapOnSecondary,
-                        textOutside: false,
-                        borderSize: 0),
-                    SizedBox(width: 15),
-                    SquareButton(_balances, Icons.wallet_rounded, ZapSecondary,
-                        'Balances',
-                        textColor: ZapOnSecondary,
-                        textOutside: false,
-                        borderSize: 0)
-                  ]),
-                  SizedBox(height: 15),
-                  Row(mainAxisSize: MainAxisSize.min, children: [
-                    SquareButton(
-                        _deposit,
-                        Icons.keyboard_double_arrow_down_rounded,
-                        ZapSecondary,
-                        'Deposits',
-                        textColor: ZapOnSecondary,
-                        textOutside: false,
-                        borderSize: 0),
-                    SizedBox(width: 15),
-                    SquareButton(
-                        _withdrawal,
-                        Icons.keyboard_double_arrow_up_rounded,
-                        ZapSecondary,
-                        'Withdrawals',
-                        textColor: ZapOnSecondary,
-                        textOutside: false,
-                        borderSize: 0)
-                  ]),
-                  SizedBox(height: 15),
-                  DebugInfo()
-                ])),
-          ],
-        ),
-      ),
-    );
+        appBar: AppBar(
+            title: Image.asset(AppLogo),
+            leading: Builder(builder: (BuildContext context) {
+              return IconButton(
+                icon: const Icon(Icons.menu),
+                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+                onPressed: () => Scaffold.of(context).openDrawer(),
+                color: _alerts.isNotEmpty ? ZapWarning : null,
+              );
+            })),
+        drawer: makeDrawer(context),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // exchange widget
+                _userInfo != null ? ExchangeWidget(_websocket) : SizedBox(),
+                // home screen buttons
+                Visibility(
+                    visible: _userInfo != null,
+                    child: Column(mainAxisSize: MainAxisSize.min, children: [
+                      Row(mainAxisSize: MainAxisSize.min, children: [
+                        SquareButton(_orders, Icons.shopping_cart_rounded,
+                            ZapSecondary, 'Orders',
+                            textColor: ZapOnSecondary,
+                            textOutside: false,
+                            borderSize: 0),
+                        SizedBox(width: 15),
+                        SquareButton(_balances, Icons.wallet_rounded,
+                            ZapSecondary, 'Balances',
+                            textColor: ZapOnSecondary,
+                            textOutside: false,
+                            borderSize: 0)
+                      ]),
+                      SizedBox(height: 15),
+                      Row(mainAxisSize: MainAxisSize.min, children: [
+                        SquareButton(
+                            _deposit,
+                            Icons.keyboard_double_arrow_down_rounded,
+                            ZapSecondary,
+                            'Deposits',
+                            textColor: ZapOnSecondary,
+                            textOutside: false,
+                            borderSize: 0),
+                        SizedBox(width: 15),
+                        SquareButton(
+                            _withdrawal,
+                            Icons.keyboard_double_arrow_up_rounded,
+                            ZapSecondary,
+                            'Withdrawals',
+                            textColor: ZapOnSecondary,
+                            textOutside: false,
+                            borderSize: 0)
+                      ]),
+                      SizedBox(height: 15),
+                      DebugInfo()
+                    ])),
+              ],
+            ),
+          ),
+        ));
   }
 }
