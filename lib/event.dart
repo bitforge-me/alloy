@@ -5,6 +5,7 @@ import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
 
 import 'assets.dart';
+import 'widgets.dart';
 
 class DepositReceivedScreen extends StatefulWidget {
   final String asset;
@@ -141,11 +142,11 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                                   return null;
                                 })
                           ])))),
-              RoundedButton(_ok, ZapOnSecondary, ZapSecondary,
-                  ZapSecondaryGradient, 'Continue',
+              BronzeRoundedButton(_ok, ZapOnSecondary, ZapSecondary,
+                  ZapPrimaryGradient, 'Continue',
                   width: MediaQuery.of(context).size.width - 80),
-              RoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
-                  ZapSurface, null, 'Cancel',
+              BronzeRoundedButton(() => Navigator.of(context).pop(),
+                  ZapOnSurface, ZapSurface, null, 'Cancel',
                   width: MediaQuery.of(context).size.width - 80)
             ])));
   }
