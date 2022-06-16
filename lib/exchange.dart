@@ -315,9 +315,11 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     var from = Column(children: [
       SizedBox(
         width: 200,
-        child: DottedBorderBox(
-            borderColor: Colors.white,
-            gradient: ZapPrimaryGradient,
+        child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: ZapPrimaryGradient,
+              borderRadius: BorderRadius.circular(10),
+            ),
             child: DropdownButton<String>(
                 isExpanded: true,
                 underline: Container(
@@ -337,14 +339,17 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       SizedBox(height: 15),
       SizedBox(
           width: 200,
-          child: TextField(
-              controller: _amountController,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  suffixText: assetUnit(_fromAsset),
-                  labelText: 'Amount'),
-              keyboardType: TextInputType.numberWithOptions(
-                  signed: false, decimal: true))),
+          child: DottedBorderBox(
+              borderColor: Colors.white,
+              color: ZapSurface,
+              child: TextField(
+                  controller: _amountController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      suffixText: assetUnit(_fromAsset),
+                      labelText: 'Amount'),
+                  keyboardType: TextInputType.numberWithOptions(
+                      signed: false, decimal: true)))),
     ]);
     var arrow = Container(
         margin: EdgeInsets.all(20),
@@ -359,9 +364,11 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     var to = Column(children: [
       SizedBox(
         width: 200,
-        child: DottedBorderBox(
-            borderColor: Colors.white,
-            color: ZapSurface,
+        child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: ZapSurface,
+              borderRadius: BorderRadius.circular(10),
+            ),
             child: DropdownButton<String>(
                 isExpanded: true,
                 underline: Container(
@@ -381,13 +388,16 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       SizedBox(height: 15),
       SizedBox(
           width: 200,
-          child: TextField(
-              controller: _receiveController,
-              readOnly: true,
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  suffixText: assetUnit(_toAsset),
-                  labelText: 'Receive')))
+          child: DottedBorderBox(
+              borderColor: Colors.white,
+              color: ZapSurface,
+              child: TextField(
+                  controller: _receiveController,
+                  readOnly: true,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      suffixText: assetUnit(_toAsset),
+                      labelText: 'Receive'))))
     ]);
     return Column(children: [
       LayoutBuilder(builder: (context, constraints) {
