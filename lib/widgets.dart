@@ -169,9 +169,13 @@ class BronzeRoundedButton extends StatelessWidget {
       throw ArgumentError('Can only use "icon" parameter OR "holePunch"');
     if (icon != null) {
       var row = Row(
-          children: [Icon(icon, color: textColor, size: 14), text],
+          children: [
+            text,
+            SizedBox(width: 5),
+            Icon(icon, color: textColor, size: 14)
+          ],
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceAround);
+          mainAxisAlignment: MainAxisAlignment.center);
       btn = Container(
           width: width,
           height: height,

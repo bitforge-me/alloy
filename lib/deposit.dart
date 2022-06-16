@@ -392,7 +392,7 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
               SizedBox(height: 8),
               BronzeRoundedButton(_copyRecipient, ZapOnSurface, ZapSurface,
                   null, 'Copy to Clipboard',
-                  width: 320, height: 65),
+                  width: 320, height: 65, icon: Icons.copy),
               SizedBox(height: 8),
               BronzeRoundedButton(() => Navigator.of(context).pop(),
                   ZapOnSurface, ZapSurface, null, 'Cancel',
