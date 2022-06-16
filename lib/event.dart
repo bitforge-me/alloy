@@ -123,24 +123,32 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                       child: Container(
                           padding: EdgeInsets.all(10),
                           child: Column(children: [
-                            TextFormField(
-                                controller: _amountController,
-                                decoration: InputDecoration(
-                                    labelText:
-                                        'Amount (${assetUnit(widget.asset)})'),
-                                keyboardType: TextInputType.numberWithOptions(
-                                    signed: false, decimal: true),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty)
-                                    return 'Please enter a value';
-                                  var userAmount =
-                                      Decimal.tryParse(value.trim());
-                                  if (userAmount == null)
-                                    return 'Invalid value';
-                                  if (userAmount <= Decimal.zero)
-                                    'Please return a value greater then 0';
-                                  return null;
-                                })
+                            SizedBox(
+                                child: RoundedEdgeBox(
+                                    borderColor: Colors.white,
+                                    dottedBorder: true,
+                                    color: ZapSurface,
+                                    child: TextFormField(
+                                        controller: _amountController,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty)
+                                            return 'Please enter a value';
+                                          var userAmount =
+                                              Decimal.tryParse(value.trim());
+                                          if (userAmount == null)
+                                            return 'Invalid value';
+                                          if (userAmount <= Decimal.zero)
+                                            'Please return a value greater then 0';
+                                          return null;
+                                        },
+                                        decoration: InputDecoration(
+                                            border: UnderlineInputBorder(),
+                                            labelText:
+                                                'Amount (${assetUnit(widget.asset)})'),
+                                        keyboardType:
+                                            TextInputType.numberWithOptions(
+                                                signed: false,
+                                                decimal: true)))),
                           ])))),
               BronzeRoundedButton(_ok, ZapOnSecondary, ZapSecondary,
                   ZapPrimaryGradient, 'Continue',
