@@ -218,8 +218,11 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
           ],
         ),
         body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          RoundedButton(_make, ZapOnSecondary, ZapSecondary,
-              ZapSecondaryGradient, 'Make Deposit',
+          BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
+              ZapPrimaryGradient, 'Continue',
+              width: MediaQuery.of(context).size.width - 80),
+          BronzeRoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
+              ZapSurface, null, 'Cancel',
               width: MediaQuery.of(context).size.width - 80),
           _deposits.length == 0
               ? Container(
