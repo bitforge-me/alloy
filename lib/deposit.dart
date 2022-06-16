@@ -17,6 +17,7 @@ import 'assets.dart';
 import 'paginator.dart';
 import 'snack.dart';
 import 'config.dart';
+import 'widgets.dart';
 
 class DepositSelectScreen extends StatefulWidget {
   final List<BeAsset> assets;
@@ -613,6 +614,9 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
           ListTile(
               title: Text('Status'),
               subtitle: Text('${_deposit.status.toUpperCase()}')),
+          BronzeRoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
+              ZapSurface, null, 'Cancel',
+              width: MediaQuery.of(context).size.width - 80)
         ]));
   }
 }
