@@ -388,11 +388,15 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
                     size: 200.0,
                   )),
                   padding: EdgeInsets.all(10)),
-              ListTile(
-                  leading: SizedBox(),
-                  title: Center(child: Text(shortenStr(widget.recipient))),
-                  trailing: IconButton(
-                      onPressed: _copyRecipient, icon: Icon(Icons.copy)))
+              Center(child: Text(shortenStr(widget.recipient))),
+              SizedBox(height: 8),
+              BronzeRoundedButton(_copyRecipient, ZapOnSurface, ZapSurface,
+                  null, 'Copy to Clipboard',
+                  width: 320, height: 65),
+              SizedBox(height: 8),
+              BronzeRoundedButton(() => Navigator.of(context).pop(),
+                  ZapOnSurface, ZapSurface, null, 'Cancel',
+                  width: 320, height: 65)
             ])));
   }
 }
