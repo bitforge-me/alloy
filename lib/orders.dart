@@ -12,6 +12,7 @@ import 'assets.dart';
 //import 'markets.dart';
 import 'snack.dart';
 import 'paginator.dart';
+import 'widgets.dart';
 
 class OrderScreen extends StatefulWidget {
   final BeBrokerOrder order;
@@ -87,7 +88,8 @@ class _OrderScreenState extends State<OrderScreen> {
           title: Text('Order ${_order.token}'),
           actions: [assetLogo(_order.baseAsset, margin: EdgeInsets.all(10))],
         ),
-        body: ListView(children: [
+        body: ColumnView(
+            child: ListView(children: [
           ListTile(
               title: Text('Market'),
               subtitle: Text(
@@ -116,7 +118,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   title:
                       raisedButton(onPressed: _update, child: Text('Update')))
               : SizedBox(),
-        ]));
+        ])));
   }
 }
 

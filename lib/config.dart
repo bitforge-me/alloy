@@ -11,6 +11,9 @@ const BuildDate = 'BUILD_DATE_REPLACE';
 const AppVersion = 8;
 const AppTitle = 'Bitforge';
 const AppLogo = 'assets/logo.png';
+const MaxColumnWidth = 700.0;
+const ButtonWidth = 320.0;
+const ButtonHeight = 65.0;
 const SupportUrl = 'https://bronze-support.zap.me/';
 
 // the default testnet value

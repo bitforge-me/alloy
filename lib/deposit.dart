@@ -17,6 +17,7 @@ import 'paginator.dart';
 import 'snack.dart';
 import 'config.dart';
 import 'event.dart';
+import 'widgets.dart';
 
 class DepositSelectScreen extends StatefulWidget {
   final List<BeAsset> assets;
@@ -90,7 +91,9 @@ class _DepositSelectScreenState extends State<DepositSelectScreen> {
       appBar: AppBar(
         title: Text('Deposits'),
       ),
-      body: ListView.builder(itemBuilder: _listItem, itemCount: _listCount()),
+      body: ColumnView(
+          child: ListView.builder(
+              itemBuilder: _listItem, itemCount: _listCount())),
     );
   }
 }
@@ -216,19 +219,22 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          RoundedButton(_make, ZapOnSecondary, ZapSecondary,
-              ZapSecondaryGradient, 'Make Deposit',
-              width: MediaQuery.of(context).size.width - 80),
-          _deposits.length == 0
-              ? Container(
-                  margin: EdgeInsets.all(20),
-                  child: Center(child: Text('No deposits')))
-              : ListView.builder(
-                  shrinkWrap: true,
-                  itemBuilder: _listItem,
-                  itemCount: _deposits.length)
-        ]),
+        body: ColumnView(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+              BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
+                  ZapSecondaryGradient, 'Make Deposit',
+                  width: ButtonWidth, height: ButtonHeight),
+              _deposits.length == 0
+                  ? Container(
+                      margin: EdgeInsets.all(20),
+                      child: Center(child: Text('No deposits')))
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      itemBuilder: _listItem,
+                      itemCount: _deposits.length)
+            ])),
         bottomNavigationBar: _pageCount > 0
             ? Paginator(_pageCount, _pageNumber, (n) => _initDeposits(n))
             : null);
@@ -302,7 +308,8 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: ListView(children: [
+        body: ColumnView(
+            child: ListView(children: [
           ListTile(
               title: Text('Amount'),
               subtitle: Text(
@@ -327,7 +334,7 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
               title: Text('Status'),
               subtitle:
                   Text('${_deposit.confirmed ? 'CONFIRMED' : 'PENDING'}')),
-        ]));
+        ])));
   }
 }
 
@@ -368,28 +375,31 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: Container(
-            padding: EdgeInsets.all(20),
-            child: Column(children: [
-              Visibility(
-                  visible: widget.asset.depositInstr != null,
-                  child: AlertDrawer(() {}, ['${widget.asset.depositInstr}'])),
-              Container(
-                  child: Center(
-                      child: QrImage(
-                    backgroundColor: ZapSurface,
-                    foregroundColor: ZapOnSurface,
-                    data: '${widget.recipient}',
-                    version: QrVersions.auto,
-                    size: 200.0,
-                  )),
-                  padding: EdgeInsets.all(10)),
-              ListTile(
-                  leading: SizedBox(),
-                  title: Center(child: Text(shortenStr(widget.recipient))),
-                  trailing: IconButton(
-                      onPressed: _copyRecipient, icon: Icon(Icons.copy)))
-            ])));
+        body: ColumnView(
+            scrollChild: true,
+            child: Container(
+                padding: EdgeInsets.all(20),
+                child: Column(children: [
+                  Visibility(
+                      visible: widget.asset.depositInstr != null,
+                      child:
+                          AlertDrawer(() {}, ['${widget.asset.depositInstr}'])),
+                  Container(
+                      child: Center(
+                          child: QrImage(
+                        backgroundColor: ZapSurface,
+                        foregroundColor: ZapOnSurface,
+                        data: '${widget.recipient}',
+                        version: QrVersions.auto,
+                        size: 200.0,
+                      )),
+                      padding: EdgeInsets.all(10)),
+                  ListTile(
+                      leading: SizedBox(),
+                      title: Center(child: Text(shortenStr(widget.recipient))),
+                      trailing: IconButton(
+                          onPressed: _copyRecipient, icon: Icon(Icons.copy)))
+                ]))));
   }
 }
 
@@ -522,10 +532,12 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
         title: Text('${widget.asset.symbol} Deposits'),
         actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
       ),
-      body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        RoundedButton(_make, ZapOnSecondary, ZapSecondary, ZapSecondaryGradient,
-            'Make Deposit',
-            width: MediaQuery.of(context).size.width - 80),
+      body: ColumnView(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
+            ZapSecondaryGradient, 'Make Deposit',
+            width: ButtonWidth, height: ButtonHeight),
         _deposits.length == 0
             ? Container(
                 margin: EdgeInsets.all(20),
@@ -534,7 +546,7 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
                 shrinkWrap: true,
                 itemBuilder: _listItem,
                 itemCount: _deposits.length)
-      ]),
+      ])),
       bottomNavigationBar: _pageCount > 0
           ? Paginator(_pageCount, _pageNumber, (n) => _initDeposits(n))
           : null,
@@ -589,7 +601,8 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
           title: Text('Deposit ${_deposit.asset}'),
           actions: [assetLogo(_deposit.asset, margin: EdgeInsets.all(10))],
         ),
-        body: ListView(children: [
+        body: ColumnView(
+            child: ListView(children: [
           ListTile(
               title: Text('Amount'),
               subtitle: Text(
@@ -613,7 +626,7 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
           ListTile(
               title: Text('Status'),
               subtitle: Text('${_deposit.status.toUpperCase()}')),
-        ]));
+        ])));
   }
 }
 
@@ -658,7 +671,8 @@ class _FiatAccountNumberScreenState extends State<FiatAccountNumberScreen> {
           title: Text('Deposit ${widget.asset.symbol}'),
           actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
         ),
-        body: ListView(children: [
+        body: ColumnView(
+            child: ListView(children: [
           ListTile(
               title: Text('Account Number'),
               subtitle: Text(widget.account.accountNumber),
@@ -678,6 +692,6 @@ class _FiatAccountNumberScreenState extends State<FiatAccountNumberScreen> {
               trailing: IconButton(
                   onPressed: () => _copy('code', widget.account.code),
                   icon: Icon(Icons.copy)))
-        ]));
+        ])));
   }
 }

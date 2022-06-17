@@ -9,6 +9,7 @@ import 'package:zapdart/form_ui.dart';
 import 'beryllium.dart';
 import 'websocket.dart';
 import 'config.dart';
+import 'widgets.dart';
 
 class VerifyUserScreen extends StatefulWidget {
   final UserInfo userInfo;
@@ -104,32 +105,34 @@ class _VerifyUserScreenState extends State<VerifyUserScreen> {
         appBar: AppBar(
           title: Text('Verify User'),
         ),
-        body: Form(
-            key: _formKey,
-            child: Container(
-                padding: EdgeInsets.all(10),
-                child: Column(children: [
-                  _userInfo.kycUrl == null
-                      ? Text(
-                          'Enter your mobile phone number to start the verification process')
-                      : Text(
-                          'Continue the verification process on your mobile phone or re-enter your mobile phone number to start over'),
-                  Container(
-                      padding: EdgeInsets.all(10),
-                      child: Image.asset('assets/aplyid-logo.webp')),
-                  phoneNumberInput(
-                      _mobileNumberController,
-                      (pn) => _phoneNumber = pn,
-                      (validated) => print(validated), validator: (value) {
-                    if (value == null || value.isEmpty)
-                      return 'Please enter a value';
-                    return null;
-                  },
-                      initialNumber: _initialNumber,
-                      countryCode: InitialMobileCountry,
-                      preferredCountries: PreferredMobileCountries),
-                  SizedBox(height: 15),
-                  raisedButton(onPressed: _submit, child: Text('Submit')),
-                ]))));
+        body: ColumnView(
+            scrollChild: true,
+            child: Form(
+                key: _formKey,
+                child: Container(
+                    padding: EdgeInsets.all(10),
+                    child: Column(children: [
+                      _userInfo.kycUrl == null
+                          ? Text(
+                              'Enter your mobile phone number to start the verification process')
+                          : Text(
+                              'Continue the verification process on your mobile phone or re-enter your mobile phone number to start over'),
+                      Container(
+                          padding: EdgeInsets.all(10),
+                          child: Image.asset('assets/aplyid-logo.webp')),
+                      phoneNumberInput(
+                          _mobileNumberController,
+                          (pn) => _phoneNumber = pn,
+                          (validated) => print(validated), validator: (value) {
+                        if (value == null || value.isEmpty)
+                          return 'Please enter a value';
+                        return null;
+                      },
+                          initialNumber: _initialNumber,
+                          countryCode: InitialMobileCountry,
+                          preferredCountries: PreferredMobileCountries),
+                      SizedBox(height: 15),
+                      raisedButton(onPressed: _submit, child: Text('Submit')),
+                    ])))));
   }
 }

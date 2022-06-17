@@ -5,6 +5,8 @@ import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
 
 import 'assets.dart';
+import 'widgets.dart';
+import 'config.dart';
 
 class DepositReceivedScreen extends StatefulWidget {
   final String asset;
@@ -38,35 +40,37 @@ class _DepositReceivedScreenState extends State<DepositReceivedScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: Container(
-            padding: EdgeInsets.all(20),
-            child: Column(children: [
-              Container(
-                  padding: EdgeInsets.only(top: 20, bottom: 20),
-                  child: Center(
-                      child: Icon(Icons.check_circle_rounded,
-                          size: 150, color: Color(0xff38ee55)))),
-              Text(assetFormatWithUnitToUser(widget.asset, widget.amount),
-                  style: TextStyle(fontSize: 18)),
-              Card(
-                margin: EdgeInsets.all(20),
-                child: Container(
+        body: ColumnView(
+            scrollChild: true,
+            child: Container(
+                padding: EdgeInsets.all(20),
+                child: Column(children: [
+                  Container(
+                      padding: EdgeInsets.only(top: 20, bottom: 20),
+                      child: Center(
+                          child: Icon(Icons.check_circle_rounded,
+                              size: 150, color: Color(0xff38ee55)))),
+                  Text(assetFormatWithUnitToUser(widget.asset, widget.amount),
+                      style: TextStyle(fontSize: 18)),
+                  Card(
                     margin: EdgeInsets.all(20),
-                    child: ListView(shrinkWrap: true, children: [
-                      ListTile(
-                          title: Text('Recipient'),
-                          subtitle: Text(shortenStr(widget.recipient))),
-                      widget.description != null
-                          ? ListTile(
-                              title: Text('Description'),
-                              subtitle: Text('${widget.description}'))
-                          : SizedBox()
-                    ])),
-              ),
-              RoundedButton(() => Navigator.of(context).pop(), ZapOnSecondary,
-                  ZapSecondary, ZapSecondaryGradient, 'OK',
-                  width: MediaQuery.of(context).size.width - 80)
-            ])));
+                    child: Container(
+                        margin: EdgeInsets.all(20),
+                        child: ListView(shrinkWrap: true, children: [
+                          ListTile(
+                              title: Text('Recipient'),
+                              subtitle: Text(shortenStr(widget.recipient))),
+                          widget.description != null
+                              ? ListTile(
+                                  title: Text('Description'),
+                                  subtitle: Text('${widget.description}'))
+                              : SizedBox()
+                        ])),
+                  ),
+                  BronzeRoundedButton(() => Navigator.of(context).pop(),
+                      ZapOnSecondary, ZapSecondary, ZapSecondaryGradient, 'OK',
+                      width: ButtonWidth, height: ButtonHeight)
+                ]))));
   }
 }
 
@@ -107,47 +111,49 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: Container(
-            padding: EdgeInsets.all(20),
-            child: Column(children: [
-              Container(
-                  padding: EdgeInsets.only(top: 20, bottom: 20),
-                  child: Center(
-                      child: Icon(Icons.keyboard_double_arrow_down_rounded,
-                          size: 150, color: ZapOnSecondary))),
-              Container(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: Form(
-                      key: _formKey,
-                      child: Container(
-                          padding: EdgeInsets.all(10),
-                          child: Column(children: [
-                            TextFormField(
-                                controller: _amountController,
-                                decoration: InputDecoration(
-                                    labelText:
-                                        'Amount (${assetUnit(widget.asset)})'),
-                                keyboardType: TextInputType.numberWithOptions(
-                                    signed: false, decimal: true),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty)
-                                    return 'Please enter a value';
-                                  var userAmount =
-                                      Decimal.tryParse(value.trim());
-                                  if (userAmount == null)
-                                    return 'Invalid value';
-                                  if (userAmount <= Decimal.zero)
-                                    'Please return a value greater then 0';
-                                  return null;
-                                })
-                          ])))),
-              RoundedButton(_ok, ZapOnSecondary, ZapSecondary,
-                  ZapSecondaryGradient, 'Continue',
-                  width: MediaQuery.of(context).size.width - 80),
-              RoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
-                  ZapSurface, null, 'Cancel',
-                  width: MediaQuery.of(context).size.width - 80)
-            ])));
+        body: ColumnView(
+            child: Container(
+                padding: EdgeInsets.all(20),
+                child: Column(children: [
+                  Container(
+                      padding: EdgeInsets.only(top: 20, bottom: 20),
+                      child: Center(
+                          child: Icon(Icons.keyboard_double_arrow_down_rounded,
+                              size: 150, color: ZapOnSecondary))),
+                  Container(
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      child: Form(
+                          key: _formKey,
+                          child: Container(
+                              padding: EdgeInsets.all(10),
+                              child: Column(children: [
+                                TextFormField(
+                                    controller: _amountController,
+                                    decoration: InputDecoration(
+                                        labelText:
+                                            'Amount (${assetUnit(widget.asset)})'),
+                                    keyboardType:
+                                        TextInputType.numberWithOptions(
+                                            signed: false, decimal: true),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty)
+                                        return 'Please enter a value';
+                                      var userAmount =
+                                          Decimal.tryParse(value.trim());
+                                      if (userAmount == null)
+                                        return 'Invalid value';
+                                      if (userAmount <= Decimal.zero)
+                                        'Please return a value greater then 0';
+                                      return null;
+                                    })
+                              ])))),
+                  BronzeRoundedButton(_ok, ZapOnSecondary, ZapSecondary,
+                      ZapSecondaryGradient, 'Continue',
+                      width: ButtonWidth, height: ButtonHeight),
+                  BronzeRoundedButton(() => Navigator.of(context).pop(),
+                      ZapOnSurface, ZapSurface, null, 'Cancel',
+                      width: ButtonWidth, height: ButtonHeight)
+                ]))));
   }
 }
 
@@ -242,20 +248,21 @@ class _DepositMethodScreenState extends State<DepositMethodScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: Container(
-            padding: EdgeInsets.all(20),
-            child: Column(children: [
-              Container(
-                  padding: EdgeInsets.only(top: 20, bottom: 20),
-                  child: Center(
-                      child: Icon(Icons.keyboard_double_arrow_down_rounded,
-                          size: 150, color: ZapOnSecondary))),
-              Container(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: widget.methods.length,
-                      itemBuilder: _buildMethod)),
-            ])));
+        body: ColumnView(
+            child: Container(
+                padding: EdgeInsets.all(20),
+                child: Column(children: [
+                  Container(
+                      padding: EdgeInsets.only(top: 20, bottom: 20),
+                      child: Center(
+                          child: Icon(Icons.keyboard_double_arrow_down_rounded,
+                              size: 150, color: ZapOnSecondary))),
+                  Container(
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: widget.methods.length,
+                          itemBuilder: _buildMethod)),
+                ]))));
   }
 }

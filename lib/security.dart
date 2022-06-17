@@ -7,6 +7,7 @@ import 'package:zapdart/widgets.dart';
 import 'beryllium.dart';
 import 'websocket.dart';
 import 'snack.dart';
+import 'widgets.dart';
 
 Future<String?> twoFactorQr(BuildContext context, BeTwoFactorSetup setup) {
   final formKey = GlobalKey<FormState>();
@@ -153,7 +154,8 @@ class _SecurityScreenState extends State<SecurityScreen> {
         appBar: AppBar(
           title: Text('Security'),
         ),
-        body: ListView(children: [
+        body: ColumnView(
+            child: ListView(children: [
           _userInfo.tfEnabled
               ? ListTile(
                   leading: Icon(Icons.lock_open),
@@ -163,6 +165,6 @@ class _SecurityScreenState extends State<SecurityScreen> {
                   leading: Icon(Icons.lock),
                   onTap: _tfEnable,
                   title: Text('Enable Two Factor Authentication'))
-        ]));
+        ])));
   }
 }

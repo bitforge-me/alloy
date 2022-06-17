@@ -3,12 +3,14 @@ import 'dart:convert';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
-import 'package:zapdart/account_forms.dart';
+import 'package:zapdart/account_forms.dart' as ac;
 
 import 'beryllium.dart';
 import 'utils.dart';
 import 'websocket.dart';
 import 'snack.dart';
+import 'widgets.dart';
+import 'config.dart' as cfg;
 
 class ProfileScreen extends StatefulWidget {
   final Websocket websocket;
@@ -46,8 +48,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  AccountRegistration accountRegistration() {
-    return AccountRegistration(
+  ac.AccountRegistration accountRegistration() {
+    return ac.AccountRegistration(
         vs(_userInfo.firstName),
         vs(_userInfo.lastName),
         _userInfo.email,
@@ -59,24 +61,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _userInfo.photoType);
   }
 
-  UserInfo userInfo(AccountRegistration reg) {
+  UserInfo userInfo(ac.AccountRegistration reg) {
     return UserInfo(reg.firstName, reg.lastName, reg.mobileNumber, reg.address,
         reg.email, reg.photo, reg.photoType, [], [], false, null, false, false);
   }
 
   void _updateProfileImage() async {
     var reg = accountRegistration();
-    var newReg = await Navigator.push<AccountRegistration>(
+    var newReg = await Navigator.push<ac.AccountRegistration>(
         context,
         MaterialPageRoute(
-            builder: (context) => AccountRegisterForm(reg,
+            builder: (context) => ac.AccountRegisterForm(reg,
                 instructions: 'Update Profile Image',
                 showName: false,
                 showEmail: false,
                 showMobileNumber: false,
                 showAddress: false,
                 showCurrentPassword: false,
-                showNewPassword: false)));
+                showNewPassword: false,
+                maxColumnWidth: cfg.MaxColumnWidth)));
     if (newReg != null) {
       if (newReg.photo != reg.photo) {
         showAlertDialog(context, 'updating photo..');
@@ -94,8 +97,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _updateEmail() async {
     var reg = accountRegistration();
-    var newEmail = await Navigator.push<String?>(context,
-        MaterialPageRoute(builder: (context) => AccountUpdateEmailForm()));
+    var newEmail = await Navigator.push<String?>(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ac.AccountUpdateEmailForm(maxColumnWidth: cfg.MaxColumnWidth)));
     if (newEmail != null) {
       if (newEmail != reg.email) {
         showAlertDialog(context, 'sending update email request..');
@@ -112,10 +118,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _updatePassword() async {
     var reg = accountRegistration();
-    var newReg = await Navigator.push<AccountRegistration>(
+    var newReg = await Navigator.push<ac.AccountRegistration>(
         context,
         MaterialPageRoute(
-            builder: (context) => AccountRegisterForm(reg,
+            builder: (context) => ac.AccountRegisterForm(reg,
                 instructions: 'Update Password',
                 showName: false,
                 showImage: false,
@@ -123,7 +129,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 showMobileNumber: false,
                 showAddress: false,
                 showCurrentPassword: true,
-                showNewPassword: true)));
+                showNewPassword: true,
+                maxColumnWidth: cfg.MaxColumnWidth)));
     if (newReg != null) {
       if (newReg.currentPassword.isNotEmpty && newReg.newPassword.isNotEmpty) {
         showAlertDialog(context, 'updating password..');
@@ -156,10 +163,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         appBar: AppBar(
           title: Text('Profile'),
         ),
-        body: ListView(children: [
+        body: ColumnView(
+            child: ListView(children: [
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             SizedBox(height: 5),
-            accountImage(_userInfo.photo, _userInfo.photoType),
+            ac.accountImage(_userInfo.photo, _userInfo.photoType),
             SizedBox(height: 5),
             Text('${_userInfo.email}'),
             SizedBox(height: 5)
@@ -180,6 +188,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               leading: Icon(Icons.restart_alt),
               onTap: _resetPassword,
               title: Text('Reset Password'))
-        ]));
+        ])));
   }
 }
