@@ -6,6 +6,7 @@ import 'package:zapdart/widgets.dart';
 
 import 'assets.dart';
 import 'widgets.dart';
+import 'config.dart';
 
 class DepositReceivedScreen extends StatefulWidget {
   final String asset;
@@ -98,6 +99,9 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double formWidgetsWidth = (MediaQuery.of(context).size.width >= 1440.0)
+        ? buttonDesktopWidth
+        : MediaQuery.of(context).size.width - 80;
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -148,14 +152,14 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                                         keyboardType:
                                             TextInputType.numberWithOptions(
                                                 signed: false,
-                                                decimal: true)))),
+                                                decimal: true))), width: formWidgetsWidth),
                           ])))),
               BronzeRoundedButton(_ok, ZapOnSecondary, ZapSecondary,
                   ZapPrimaryGradient, 'Continue',
-                  width: MediaQuery.of(context).size.width - 80),
+                  width: formWidgetsWidth),
               BronzeRoundedButton(() => Navigator.of(context).pop(),
-                  ZapOnSurface, ZapSurface, null, 'Cancel',
-                  width: MediaQuery.of(context).size.width - 80)
+                  ZapOnSurface, ZapSurface, null, 'Close',
+                  width: formWidgetsWidth)
             ])));
   }
 }
@@ -231,17 +235,28 @@ class _DepositMethodScreenState extends State<DepositMethodScreen> {
   }
 
   Widget _buildMethod(BuildContext context, int index) {
+    double formWidgetsWidth = (MediaQuery.of(context).size.width >= 1440.0)
+        ? buttonDesktopWidth
+        : MediaQuery.of(context).size.width - 80;
     var method = DepositMethodDetails.fromMethod(widget.methods[index]);
-    return ListTile(
+    return 
+			SizedBox(
+				width: formWidgetsWidth,
+				child: ListTile(
       onTap: () => Navigator.of(context).pop(method),
       leading: method.logo(),
       title: Text(method.name),
       subtitle: Text(method.description),
-    );
+    )
+			);
+			;
   }
 
   @override
   Widget build(BuildContext context) {
+    double formWidgetsWidth = (MediaQuery.of(context).size.width >= 1440.0)
+        ? buttonDesktopWidth
+        : MediaQuery.of(context).size.width - 80;
     return Scaffold(
         appBar: AppBar(
           title: Text('Deposit Method'),
@@ -266,8 +281,8 @@ class _DepositMethodScreenState extends State<DepositMethodScreen> {
                       itemCount: widget.methods.length,
                       itemBuilder: _buildMethod)),
               RoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
-                  ZapSurface, null, 'Cancel',
-                  width: MediaQuery.of(context).size.width - 80)
+                  ZapSurface, null, 'Close',
+                  width: formWidgetsWidth)
             ])));
   }
 }

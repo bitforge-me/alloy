@@ -470,12 +470,17 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
   }
 
   Widget _listItem(BuildContext context, int n) {
+    double formWidgetsWidth = (MediaQuery.of(context).size.width >= 1440.0)
+        ? buttonDesktopWidth
+        : MediaQuery.of(context).size.width - 80;
     var deposit = _deposits[n];
-    return ListTile(
+    return SizedBox(
+			width: formWidgetsWidth,
+			child: ListTile(
       title: Text(
           '${assetFormatWithUnitToUser(deposit.asset, deposit.amount)} - ${deposit.status.toUpperCase()}'),
       onTap: () => _depositTap(deposit),
-    );
+    ));
   }
 
   Future<void> _make() async {
