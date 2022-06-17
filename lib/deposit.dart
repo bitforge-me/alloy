@@ -87,9 +87,6 @@ class _DepositSelectScreenState extends State<DepositSelectScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double formWidgetsWidth = (MediaQuery.of(context).size.width >= 1440.0)
-        ? buttonDesktopWidth
-        : MediaQuery.of(context).size.width - 80;
     return Scaffold(
       appBar: AppBar(
         title: Text('Deposits'),
@@ -300,9 +297,6 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double formWidgetsWidth = (MediaQuery.of(context).size.width >= 1440.0)
-        ? buttonDesktopWidth
-        : MediaQuery.of(context).size.width - 80;
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -370,9 +364,6 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double formWidgetsWidth = (MediaQuery.of(context).size.width >= 1440.0)
-        ? buttonDesktopWidth
-        : MediaQuery.of(context).size.width - 80;
     return Scaffold(
         appBar: AppBar(
           title: Text('Deposit'),
@@ -685,9 +676,6 @@ class _FiatAccountNumberScreenState extends State<FiatAccountNumberScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double formWidgetsWidth = (MediaQuery.of(context).size.width >= 1440.0)
-        ? buttonDesktopWidth
-        : MediaQuery.of(context).size.width - 80;
     return Scaffold(
         appBar: AppBar(
           title: Text('Deposit ${widget.asset.symbol}'),
