@@ -12,6 +12,7 @@ const AppVersion = 8;
 const AppTitle = 'Alloy';
 const AppLogo = 'assets/logo.png';
 const SupportUrl = 'https://bronze-support.zap.me/';
+const double buttonDesktopWidth = 300.0;
 
 // the default testnet value
 const _DefaultTestnet = true;

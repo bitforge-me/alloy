@@ -87,6 +87,9 @@ class _DepositSelectScreenState extends State<DepositSelectScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double formWidgetsWidth = (MediaQuery.of(context).size.width >= 1440.0)
+        ? buttonDesktopWidth
+        : MediaQuery.of(context).size.width - 80;
     return Scaffold(
       appBar: AppBar(
         title: Text('Deposits'),
@@ -205,6 +208,9 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double formWidgetsWidth = (MediaQuery.of(context).size.width >= 1440.0)
+        ? buttonDesktopWidth
+        : MediaQuery.of(context).size.width - 80;
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -220,10 +226,10 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
         body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
               ZapPrimaryGradient, 'Continue',
-              width: MediaQuery.of(context).size.width - 80),
+              width: formWidgetsWidth),
           BronzeRoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
               ZapSurface, null, 'Cancel',
-              width: MediaQuery.of(context).size.width - 80),
+              width: formWidgetsWidth),
           _deposits.length == 0
               ? Container(
                   margin: EdgeInsets.all(20),
@@ -294,6 +300,9 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double formWidgetsWidth = (MediaQuery.of(context).size.width >= 1440.0)
+        ? buttonDesktopWidth
+        : MediaQuery.of(context).size.width - 80;
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -315,7 +324,7 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
           ListTile(
               title: Center(
                   child: QrImage(
-            backgroundColor: ZapSurface,
+            backgroundColor: Colors.transparent,
             foregroundColor: ZapOnSurface,
             data: '${_deposit.recipient}',
             version: QrVersions.auto,
@@ -361,6 +370,9 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double formWidgetsWidth = (MediaQuery.of(context).size.width >= 1440.0)
+        ? buttonDesktopWidth
+        : MediaQuery.of(context).size.width - 80;
     return Scaffold(
         appBar: AppBar(
           title: Text('Deposit'),
@@ -525,6 +537,9 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double formWidgetsWidth = (MediaQuery.of(context).size.width >= 1440.0)
+        ? buttonDesktopWidth
+        : MediaQuery.of(context).size.width - 80;
     return Scaffold(
       appBar: AppBar(
         title: Text('${widget.asset.symbol} Deposits'),
@@ -533,10 +548,10 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
       body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         BronzeRoundedButton(
             _make, ZapOnSecondary, ZapSecondary, ZapPrimaryGradient, 'Continue',
-            width: MediaQuery.of(context).size.width - 80),
+            width: formWidgetsWidth),
         BronzeRoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
             ZapSurface, null, 'Cancel',
-            width: MediaQuery.of(context).size.width - 80),
+            width: formWidgetsWidth),
         _deposits.length == 0
             ? Container(
                 margin: EdgeInsets.all(20),
@@ -595,6 +610,9 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double formWidgetsWidth = (MediaQuery.of(context).size.width >= 1440.0)
+        ? buttonDesktopWidth
+        : MediaQuery.of(context).size.width - 80;
     return Scaffold(
         appBar: AppBar(
           title: Text('Deposit ${_deposit.asset}'),
@@ -611,7 +629,7 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
                   title: Text('Payment URL'),
                   subtitle: Column(children: [
                     QrImage(
-                      backgroundColor: ZapSurface,
+                      backgroundColor: Colors.transparent,
                       foregroundColor: ZapOnSurface,
                       data: '${_deposit.paymentUrl}',
                       version: QrVersions.auto,
@@ -626,7 +644,7 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
               subtitle: Text('${_deposit.status.toUpperCase()}')),
           BronzeRoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
               ZapSurface, null, 'Cancel',
-              width: MediaQuery.of(context).size.width - 80)
+              width: formWidgetsWidth)
         ]));
   }
 }
@@ -667,6 +685,9 @@ class _FiatAccountNumberScreenState extends State<FiatAccountNumberScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double formWidgetsWidth = (MediaQuery.of(context).size.width >= 1440.0)
+        ? buttonDesktopWidth
+        : MediaQuery.of(context).size.width - 80;
     return Scaffold(
         appBar: AppBar(
           title: Text('Deposit ${widget.asset.symbol}'),
