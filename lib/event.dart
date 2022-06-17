@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
 
 import 'package:zapdart/colors.dart';
-import 'package:zapdart/widgets.dart';
 
 import 'assets.dart';
 import 'widgets.dart';

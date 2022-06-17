@@ -20,12 +20,14 @@ const String Waves = 'WAVES';
 var assetUnits = {
   Nzd: Nzd,
   Btc: Sats,
+  /*
   Usdt: Usdt,
   Usdc: Usdc,
   Eth: Gwei,
   Doge: Doge,
   Ltc: Ltc,
   Waves: Waves
+  */
 };
 
 String shortenStr(String? s) {
