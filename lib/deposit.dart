@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:alloy/event.dart';
 import 'package:flutter/material.dart';
 import 'package:zapdart/colors.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +16,7 @@ import 'assets.dart';
 import 'paginator.dart';
 import 'snack.dart';
 import 'config.dart';
+import 'event.dart';
 
 class DepositSelectScreen extends StatefulWidget {
   final List<BeAsset> assets;

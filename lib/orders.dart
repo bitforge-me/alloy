@@ -1,4 +1,3 @@
-import 'package:alloy/paginator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
@@ -12,6 +11,7 @@ import 'websocket.dart';
 import 'assets.dart';
 //import 'markets.dart';
 import 'snack.dart';
+import 'paginator.dart';
 
 class OrderScreen extends StatefulWidget {
   final BeBrokerOrder order;
