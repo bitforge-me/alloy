@@ -4,9 +4,9 @@ name: flutter
 
 on:
   push:
-    branches: [ master ]
+    branches: [ depositsUI ]
   pull_request:
-    branches: [ master ]
+    branches: [ depositsUI ]
 
   workflow_dispatch:
 
