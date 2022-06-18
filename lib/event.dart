@@ -151,8 +151,8 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                                                 'Amount (${assetUnit(widget.asset)})'),
                                         keyboardType:
                                             TextInputType.numberWithOptions(
-                                                signed: false,
-                                                decimal: true))), width: formWidgetsWidth),
+                                                signed: false, decimal: true))),
+                                width: formWidgetsWidth),
                           ])))),
               BronzeRoundedButton(_ok, ZapOnSecondary, ZapSecondary,
                   ZapPrimaryGradient, 'Continue',
@@ -239,17 +239,15 @@ class _DepositMethodScreenState extends State<DepositMethodScreen> {
         ? buttonDesktopWidth
         : MediaQuery.of(context).size.width - 80;
     var method = DepositMethodDetails.fromMethod(widget.methods[index]);
-    return 
-			SizedBox(
-				width: formWidgetsWidth,
-				child: ListTile(
-      onTap: () => Navigator.of(context).pop(method),
-      leading: method.logo(),
-      title: Text(method.name),
-      subtitle: Text(method.description),
-    )
-			);
-			;
+    return SizedBox(
+        width: formWidgetsWidth,
+        child: ListTile(
+          onTap: () => Navigator.of(context).pop(method),
+          leading: method.logo(),
+          title: Text(method.name),
+          subtitle: Text(method.description),
+        ));
+    ;
   }
 
   @override

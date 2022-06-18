@@ -475,12 +475,12 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
         : MediaQuery.of(context).size.width - 80;
     var deposit = _deposits[n];
     return SizedBox(
-			width: formWidgetsWidth,
-			child: ListTile(
-      title: Text(
-          '${assetFormatWithUnitToUser(deposit.asset, deposit.amount)} - ${deposit.status.toUpperCase()}'),
-      onTap: () => _depositTap(deposit),
-    ));
+        width: formWidgetsWidth,
+        child: ListTile(
+          title: Text(
+              '${assetFormatWithUnitToUser(deposit.asset, deposit.amount)} - ${deposit.status.toUpperCase()}'),
+          onTap: () => _depositTap(deposit),
+        ));
   }
 
   Future<void> _make() async {
