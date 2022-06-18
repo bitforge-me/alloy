@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
 
 import 'package:zapdart/colors.dart';
-import 'package:zapdart/widgets.dart';
 
 import 'assets.dart';
 import 'widgets.dart';
@@ -40,35 +39,37 @@ class _DepositReceivedScreenState extends State<DepositReceivedScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: Container(
-            padding: EdgeInsets.all(20),
-            child: Column(children: [
-              Container(
-                  padding: EdgeInsets.only(top: 20, bottom: 20),
-                  child: Center(
-                      child: Icon(Icons.check_circle_rounded,
-                          size: 150, color: Color(0xff38ee55)))),
-              Text(assetFormatWithUnitToUser(widget.asset, widget.amount),
-                  style: TextStyle(fontSize: 18)),
-              Card(
-                margin: EdgeInsets.all(20),
-                child: Container(
+        body: ColumnView(
+            scrollChild: true,
+            child: Container(
+                padding: EdgeInsets.all(20),
+                child: Column(children: [
+                  Container(
+                      padding: EdgeInsets.only(top: 20, bottom: 20),
+                      child: Center(
+                          child: Icon(Icons.check_circle_rounded,
+                              size: 150, color: Color(0xff38ee55)))),
+                  Text(assetFormatWithUnitToUser(widget.asset, widget.amount),
+                      style: TextStyle(fontSize: 18)),
+                  Card(
                     margin: EdgeInsets.all(20),
-                    child: ListView(shrinkWrap: true, children: [
-                      ListTile(
-                          title: Text('Recipient'),
-                          subtitle: Text(shortenStr(widget.recipient))),
-                      widget.description != null
-                          ? ListTile(
-                              title: Text('Description'),
-                              subtitle: Text('${widget.description}'))
-                          : SizedBox()
-                    ])),
-              ),
-              RoundedButton(() => Navigator.of(context).pop(), ZapOnSecondary,
-                  ZapSecondary, ZapSecondaryGradient, 'OK',
-                  width: MediaQuery.of(context).size.width - 80)
-            ])));
+                    child: Container(
+                        margin: EdgeInsets.all(20),
+                        child: ListView(shrinkWrap: true, children: [
+                          ListTile(
+                              title: Text('Recipient'),
+                              subtitle: Text(shortenStr(widget.recipient))),
+                          widget.description != null
+                              ? ListTile(
+                                  title: Text('Description'),
+                                  subtitle: Text('${widget.description}'))
+                              : SizedBox()
+                        ])),
+                  ),
+                  BronzeRoundedButton(() => Navigator.of(context).pop(),
+                      ZapOnSecondary, ZapSecondary, ZapSecondaryGradient, 'OK',
+                      width: ButtonWidth, height: ButtonHeight)
+                ]))));
   }
 }
 
