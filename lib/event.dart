@@ -247,7 +247,6 @@ class _DepositMethodScreenState extends State<DepositMethodScreen> {
           title: Text(method.name),
           subtitle: Text(method.description),
         ));
-    ;
   }
 
   @override
