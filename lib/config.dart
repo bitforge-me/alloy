@@ -21,7 +21,7 @@ const double buttonDesktopWidth = 300.0;
 const _DefaultTestnet = true;
 
 // beryllium settings
-const String _BeServerUrl = 'https://beryllium-test.zap.me/';
+const String _BeServerUrl = 'https://beryllium.zap.me/';
 
 class BeLocationOverride {
   final String? altLocation;
