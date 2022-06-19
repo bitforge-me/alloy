@@ -275,8 +275,8 @@ class _DepositMethodScreenState extends State<DepositMethodScreen> {
                           shrinkWrap: true,
                           itemCount: widget.methods.length,
                           itemBuilder: _buildMethod)),
-                  RoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
-                      ZapSurface, null, 'Close',
+                  BronzeRoundedButton(() => Navigator.of(context).pop(),
+                      ZapOnSurface, ZapSurface, null, 'Close',
                       width: formWidgetsWidth)
                 ]))));
   }
