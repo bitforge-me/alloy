@@ -3,7 +3,23 @@ import 'package:dotted_border/dotted_border.dart';
 
 import 'package:zapdart/colors.dart';
 
-import 'config.dart';
+import 'config.dart' as cfg;
+
+class ColumnView extends StatelessWidget {
+  final Widget? child;
+  final bool scrollChild;
+  ColumnView({this.child, this.scrollChild = false});
+
+  @override
+  Widget build(BuildContext context) {
+    var center = Center(
+        child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: cfg.MaxColumnWidth),
+            child: child));
+    if (scrollChild) return SingleChildScrollView(child: center);
+    return center;
+  }
+}
 
 class RoundedEdgeBox extends StatelessWidget {
   final Widget? child;
@@ -77,15 +93,15 @@ class DebugInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: [
       Visibility(
-        visible: testnet(),
+        visible: cfg.testnet(),
         child:
             Text('TESTNET', style: TextStyle(color: ZapWarning, fontSize: 8)),
       ),
-      Text('Server: ${server()}',
+      Text('Server: ${cfg.server()}',
           style: TextStyle(color: ZapOnBackgroundLight, fontSize: 8)),
       Visibility(
-          visible: GitSha != 'GIT_SHA_REPLACE',
-          child: Text('Build: ${GitSha.substring(0, 5)} - $BuildDate',
+          visible: cfg.GitSha != 'GIT_SHA_REPLACE',
+          child: Text('Build: ${cfg.GitSha.substring(0, 5)} - ${cfg.BuildDate}',
               style: TextStyle(color: ZapOnBackgroundLight, fontSize: 8)))
     ]);
   }

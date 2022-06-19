@@ -1,7 +1,7 @@
-import 'package:alloy/assets.dart';
 import 'package:decimal/decimal.dart';
 
 import 'beryllium.dart';
+import 'assets.dart';
 
 class QuoteTotalPrice {
   final Decimal amountBaseAsset;

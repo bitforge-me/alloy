@@ -15,6 +15,7 @@ import 'quote.dart';
 import 'orders.dart';
 import 'utils.dart';
 import 'widgets.dart';
+import 'config.dart';
 
 final log = Logger('Exchange');
 
@@ -312,7 +313,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   }
 
   Widget _buildWidget() {
-    const inputWidth = 320.0;
+    const inputWidth = ButtonWidth;
     var from = Column(children: [
       SizedBox(
         width: inputWidth,

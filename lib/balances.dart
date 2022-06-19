@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'beryllium.dart';
 import 'websocket.dart';
 import 'assets.dart';
+import 'widgets.dart';
 
 class BalanceScreen extends StatefulWidget {
   final List<BeBalance> balances;
@@ -27,11 +28,12 @@ class _BalanceScreenState extends State<BalanceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Balances'),
-      ),
-      body: ListView.builder(
-          itemBuilder: _listItem, itemCount: widget.balances.length),
-    );
+        appBar: AppBar(
+          title: Text('Balances'),
+        ),
+        body: ColumnView(
+          child: ListView.builder(
+              itemBuilder: _listItem, itemCount: widget.balances.length),
+        ));
   }
 }

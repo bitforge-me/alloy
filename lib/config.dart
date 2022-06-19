@@ -9,20 +9,31 @@ import 'package:zapdart/colors.dart';
 const GitSha = 'GIT_SHA_REPLACE';
 const BuildDate = 'BUILD_DATE_REPLACE';
 const AppVersion = 8;
-const AppTitle = 'Alloy';
+const AppTitle = 'Bitforge';
 const AppLogo = 'assets/logo.png';
+const MaxColumnWidth = 700.0;
+const ButtonWidth = 320.0;
+const ButtonHeight = 65.0;
 const SupportUrl = 'https://bronze-support.zap.me/';
 const double buttonDesktopWidth = 300.0;
 
 // the default testnet value
 const _DefaultTestnet = true;
 
-// Zap Crypto settings
+// beryllium settings
 const String _BeServerUrl = 'https://beryllium-test.zap.me/';
-// key is server hostname, and value is 'testnet'
-const Map<String, bool> BeServerLocationOverrides = {
-  'beryllium.zap.me': false,
-  'beryllium-test.zap.me': true
+
+class BeLocationOverride {
+  final String? altLocation;
+  final bool testnet;
+  const BeLocationOverride(this.altLocation, this.testnet);
+}
+
+// key is server hostname
+const Map<String, BeLocationOverride> BeServerLocationOverrides = {
+  'app.bitforge.me': BeLocationOverride('https://beryllium.zap.me/', false),
+  'beryllium.zap.me': BeLocationOverride(null, false),
+  'beryllium-test.zap.me': BeLocationOverride(null, true)
 };
 // registration
 const bool RequireMobileNumber = true;
@@ -56,8 +67,12 @@ String server() {
   var serverUrl = _BeServerUrl;
   if (UniversalPlatform.isWeb) {
     var location = html.window.location;
-    if (BeServerLocationOverrides.keys.contains(location.hostname))
+    if (BeServerLocationOverrides.keys.contains(location.hostname)) {
+      var altLocation =
+          BeServerLocationOverrides[location.hostname]!.altLocation;
+      if (altLocation != null) return altLocation;
       serverUrl = location.origin + '/';
+    }
   }
   return serverUrl;
 }
@@ -66,7 +81,7 @@ bool testnet() {
   if (UniversalPlatform.isWeb) {
     var location = html.window.location;
     if (BeServerLocationOverrides.keys.contains(location.hostname))
-      return BeServerLocationOverrides[location.hostname]!;
+      return BeServerLocationOverrides[location.hostname]!.testnet;
   }
   return _DefaultTestnet;
 }
