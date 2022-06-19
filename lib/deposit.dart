@@ -227,22 +227,27 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
-              ZapPrimaryGradient, 'Continue',
-              width: formWidgetsWidth),
-          BronzeRoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
-              ZapSurface, null, 'Close',
-              width: formWidgetsWidth),
-          _deposits.length == 0
-              ? Container(
-                  margin: EdgeInsets.all(20),
-                  child: Center(child: Text('No deposits')))
-              : ListView.builder(
-                  shrinkWrap: true,
-                  itemBuilder: _listItem,
-                  itemCount: _deposits.length)
-        ]),
+        body: Center(
+            child: SizedBox(
+                width: formWidgetsWidth,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
+                          ZapPrimaryGradient, 'Continue',
+                          width: formWidgetsWidth),
+                      BronzeRoundedButton(() => Navigator.of(context).pop(),
+                          ZapOnSurface, ZapSurface, null, 'Close',
+                          width: formWidgetsWidth),
+                      _deposits.length == 0
+                          ? Container(
+                              margin: EdgeInsets.all(20),
+                              child: Center(child: Text('No deposits')))
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              itemBuilder: _listItem,
+                              itemCount: _deposits.length)
+                    ]))),
         bottomNavigationBar: _pageCount > 0
             ? Paginator(_pageCount, _pageNumber, (n) => _initDeposits(n))
             : null);
@@ -348,6 +353,9 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
                       title: Text('Status'),
                       subtitle: Text(
                           '${_deposit.confirmed ? 'CONFIRMED' : 'PENDING'}')),
+                  BronzeRoundedButton(() => Navigator.of(context).pop(),
+                      ZapOnSurface, ZapSurface, null, 'Close',
+                      width: formWidgetsWidth),
                 ]))));
   }
 }

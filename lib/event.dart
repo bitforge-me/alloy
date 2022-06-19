@@ -151,8 +151,8 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                                                 'Amount (${assetUnit(widget.asset)})'),
                                         keyboardType:
                                             TextInputType.numberWithOptions(
-                                                signed: false,
-                                                decimal: true))), width: formWidgetsWidth),
+                                                signed: false, decimal: true))),
+                                width: formWidgetsWidth),
                           ])))),
               BronzeRoundedButton(_ok, ZapOnSecondary, ZapSecondary,
                   ZapPrimaryGradient, 'Continue',
@@ -235,21 +235,13 @@ class _DepositMethodScreenState extends State<DepositMethodScreen> {
   }
 
   Widget _buildMethod(BuildContext context, int index) {
-    double formWidgetsWidth = (MediaQuery.of(context).size.width >= 1440.0)
-        ? buttonDesktopWidth
-        : MediaQuery.of(context).size.width - 80;
     var method = DepositMethodDetails.fromMethod(widget.methods[index]);
-    return 
-			SizedBox(
-				width: formWidgetsWidth,
-				child: ListTile(
+    return ListTile(
       onTap: () => Navigator.of(context).pop(method),
       leading: method.logo(),
       title: Text(method.name),
       subtitle: Text(method.description),
-    )
-			);
-			;
+    );
   }
 
   @override
@@ -266,23 +258,25 @@ class _DepositMethodScreenState extends State<DepositMethodScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: Container(
-            padding: EdgeInsets.all(20),
-            child: Column(children: [
-              Container(
-                  padding: EdgeInsets.only(top: 20, bottom: 20),
-                  child: Center(
-                      child: Icon(Icons.keyboard_double_arrow_down_rounded,
-                          size: 150, color: ZapOnSecondary))),
-              Container(
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: widget.methods.length,
-                      itemBuilder: _buildMethod)),
-              RoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
-                  ZapSurface, null, 'Close',
-                  width: formWidgetsWidth)
-            ])));
+        body: Center(
+            child: Container(
+                width: formWidgetsWidth,
+                padding: EdgeInsets.all(20),
+                child: Column(children: [
+                  Container(
+                      padding: EdgeInsets.only(top: 20, bottom: 20),
+                      child: Center(
+                          child: Icon(Icons.keyboard_double_arrow_down_rounded,
+                              size: 150, color: ZapOnSecondary))),
+                  Container(
+                      padding: EdgeInsets.only(left: 20, right: 20),
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: widget.methods.length,
+                          itemBuilder: _buildMethod)),
+                  RoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
+                      ZapSurface, null, 'Close',
+                      width: formWidgetsWidth)
+                ]))));
   }
 }
