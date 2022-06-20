@@ -169,7 +169,8 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
     var deposit = _deposits[n];
     return ListTile(
       title: Text(
-          '${assetFormatWithUnitToUser(deposit.asset, deposit.amount)} - ${deposit.confirmed ? 'CONFIRMED' : 'PENDING'}'),
+          '${assetFormatWithUnitToUser(deposit.asset, deposit.amount)} - ${deposit.confirmed ? 'CONFIRMED' : 'PENDING'}',
+          textAlign: TextAlign.center),
       onTap: () => _depositTap(deposit),
     );
   }
@@ -223,9 +224,11 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+              SizedBox(height: 15),
               BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
-                  ZapSecondaryGradient, 'Make Deposit',
-                  width: ButtonWidth, height: ButtonHeight),
+                  ZapPrimaryGradient, 'Make Deposit',
+                  width: ButtonWidth, height: ButtonHeight, holePunch: true),
+              SizedBox(height: 15),
               _deposits.length == 0
                   ? Container(
                       margin: EdgeInsets.all(20),
@@ -318,7 +321,7 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
           ListTile(
               title: Center(
                   child: QrImage(
-            backgroundColor: ZapSurface,
+            backgroundColor: Colors.transparent,
             foregroundColor: ZapOnSurface,
             data: '${_deposit.recipient}',
             version: QrVersions.auto,
@@ -334,6 +337,9 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
               title: Text('Status'),
               subtitle:
                   Text('${_deposit.confirmed ? 'CONFIRMED' : 'PENDING'}')),
+          BronzeRoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
+              ZapSurface, null, 'Close',
+              width: ButtonWidth, height: ButtonHeight)
         ])));
   }
 }
@@ -364,6 +370,7 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String closeBtnText = widget.l2Network != null ? 'Close' : 'Cancel';
     return Scaffold(
         appBar: AppBar(
           title: Text('Deposit'),
@@ -387,18 +394,19 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
                   Container(
                       child: Center(
                           child: QrImage(
-                        backgroundColor: ZapSurface,
+                        backgroundColor: Colors.transparent,
                         foregroundColor: ZapOnSurface,
                         data: '${widget.recipient}',
                         version: QrVersions.auto,
                         size: 200.0,
                       )),
                       padding: EdgeInsets.all(10)),
-                  ListTile(
-                      leading: SizedBox(),
-                      title: Center(child: Text(shortenStr(widget.recipient))),
-                      trailing: IconButton(
-                          onPressed: _copyRecipient, icon: Icon(Icons.copy)))
+                  BronzeRoundedButton(_copyRecipient, ZapOnSurface,
+                      Color(0xff32333b), null, 'Copy to Clipboard',
+                      width: 320, height: 65, icon: Icons.copy),
+                  BronzeRoundedButton(() => Navigator.of(context).pop(),
+                      ZapOnSurface, ZapSurface, null, closeBtnText,
+                      width: ButtonWidth, height: ButtonHeight)
                 ]))));
   }
 }
@@ -472,7 +480,8 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
     var deposit = _deposits[n];
     return ListTile(
       title: Text(
-          '${assetFormatWithUnitToUser(deposit.asset, deposit.amount)} - ${deposit.status.toUpperCase()}'),
+          '${assetFormatWithUnitToUser(deposit.asset, deposit.amount)} - ${deposit.status.toUpperCase()}',
+          textAlign: TextAlign.center),
       onTap: () => _depositTap(deposit),
     );
   }
@@ -535,9 +544,11 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
       body: ColumnView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        SizedBox(height: 15),
         BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
-            ZapSecondaryGradient, 'Make Deposit',
-            width: ButtonWidth, height: ButtonHeight),
+            ZapPrimaryGradient, 'Make Deposit',
+            width: ButtonWidth, height: ButtonHeight, holePunch: true),
+        SizedBox(height: 15),
         _deposits.length == 0
             ? Container(
                 margin: EdgeInsets.all(20),
@@ -613,7 +624,7 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
                   title: Text('Payment URL'),
                   subtitle: Column(children: [
                     QrImage(
-                      backgroundColor: ZapSurface,
+                      backgroundColor: Colors.transparent,
                       foregroundColor: ZapOnSurface,
                       data: '${_deposit.paymentUrl}',
                       version: QrVersions.auto,
@@ -626,6 +637,9 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
           ListTile(
               title: Text('Status'),
               subtitle: Text('${_deposit.status.toUpperCase()}')),
+          BronzeRoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
+              ZapSurface, null, 'Close',
+              width: ButtonWidth, height: ButtonHeight)
         ])));
   }
 }
