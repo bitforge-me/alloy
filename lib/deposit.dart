@@ -225,7 +225,7 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
               SizedBox(height: 15),
-              BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
+              BronzeRoundedButton(_make, ZapOnPrimary, ZapPrimary,
                   ZapPrimaryGradient, 'Make Deposit',
                   width: ButtonWidth, height: ButtonHeight, holePunch: true),
               SizedBox(height: 15),
@@ -545,8 +545,8 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         SizedBox(height: 15),
-        BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
-            ZapPrimaryGradient, 'Make Deposit',
+        BronzeRoundedButton(
+            _make, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Make Deposit',
             width: ButtonWidth, height: ButtonHeight, holePunch: true),
         SizedBox(height: 15),
         _deposits.length == 0

@@ -67,7 +67,7 @@ class _DepositReceivedScreenState extends State<DepositReceivedScreen> {
                         ])),
                   ),
                   BronzeRoundedButton(() => Navigator.of(context).pop(),
-                      ZapOnSecondary, ZapSecondary, ZapPrimaryGradient, 'OK',
+                      ZapOnSurface, ZapSurface, null, 'Close',
                       width: ButtonWidth, height: ButtonHeight)
                 ]))));
   }
