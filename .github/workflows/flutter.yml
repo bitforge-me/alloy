@@ -30,5 +30,9 @@ jobs:
       #- run: flutter test
       - run: flutter dartfmt -n --set-exit-if-changed lib
       - run: flutter analyze
-      - if: github.event_name == 'push'
+      - if: ${{ github.event_name == 'push' && github.ref_name == 'master' }}
         uses: bluefireteam/flutter-gh-pages@v7
+      - if: ${{ github.event_name == 'push' && github.ref_name == 'prod' }}
+        uses: bluefireteam/flutter-gh-pages@v7
+        with:
+          targetBranch: prod-gh-pages
