@@ -31,4 +31,4 @@ jobs:
       - run: flutter dartfmt -n --set-exit-if-changed lib
       - run: flutter analyze
       - if: github.event_name == 'push'
-        uses: erickzanardo/flutter-gh-pages@v6
+        uses: bluefireteam/flutter-gh-pages@v7
