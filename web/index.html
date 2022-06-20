@@ -55,6 +55,19 @@
       display: none !important;
     }
 
+    .background {
+      background-image: url(/sky.jpg);
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-blend-mode: overlay;
+      height: 100vh;
+    }
+
+    .glass {
+      background: rgba(27, 28, 37, 0.7);
+      height: 100vh;
+    }
+
     .splash {
       display: flex;
       flex-flow: column;
@@ -89,9 +102,13 @@
     });
   </script>
 
-  <!-- Splash screen -->
-  <div class="splash">
-    <img src="splash.svg">
+  <div class="background">
+    <div class="glass">
+      <!-- Splash screen -->
+      <div class="splash">
+        <img src="splash.svg">
+      </div>
+  </div>
   </div>
 </body>
 </html>
