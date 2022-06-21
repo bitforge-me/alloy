@@ -155,7 +155,7 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                                           return null;
                                         }))
                               ])))),
-                  BronzeRoundedButton(_ok, ZapOnSecondary, ZapSecondary,
+                  BronzeRoundedButton(_ok, ZapOnPrimary, ZapPrimary,
                       ZapPrimaryGradient, 'Continue',
                       width: ButtonWidth, height: ButtonHeight),
                   BronzeRoundedButton(() => Navigator.of(context).pop(),
