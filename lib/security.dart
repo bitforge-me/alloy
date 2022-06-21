@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
@@ -20,15 +21,25 @@ Future<String?> twoFactorQr(BuildContext context, BeTwoFactorSetup setup) {
     }
   }
 
+  void copyKey() {
+    Clipboard.setData(ClipboardData(text: setup.key));
+    snackMsg(context, 'copied key');
+  }
+
   Widget buildForm(BuildContext context) {
     return Form(
       key: formKey,
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Image.network(setup.image),
+        children: [
+          Container(color: Colors.white, child: Image.network(setup.image)),
+          ListTile(
+              title: Text('Key'),
+              subtitle: Text(setup.key),
+              trailing: IconButton(icon: Icon(Icons.copy), onPressed: copyKey)),
           TextFormField(
             controller: txtController,
+            decoration: InputDecoration(labelText: 'Two factor code'),
             keyboardType: TextInputType.text,
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -37,6 +48,7 @@ Future<String?> twoFactorQr(BuildContext context, BeTwoFactorSetup setup) {
               return null;
             },
           ),
+          SizedBox(height: 15),
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -58,7 +70,7 @@ Future<String?> twoFactorQr(BuildContext context, BeTwoFactorSetup setup) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Authenticator Application Setup'),
+        title: Text('Authenticator app two factor setup'),
         content: buildForm(context),
       );
     },
