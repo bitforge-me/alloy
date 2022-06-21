@@ -5,6 +5,38 @@ import 'package:zapdart/colors.dart';
 
 import 'config.dart' as cfg;
 
+class BronzeValueInputForm extends StatelessWidget {
+  final TextEditingController? controller;
+  final TextInputType? keyboardType;
+  final FormFieldValidator<dynamic>? validator;
+  final String? labelText;
+
+  BronzeValueInputForm({
+    this.controller,
+    this.labelText,
+    this.keyboardType,
+    this.validator,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return RoundedEdgeBox(
+        borderColor: Colors.white,
+        dottedBorder: true,
+        color: ZapSurface,
+        child: TextFormField(
+          textAlign: TextAlign.center,
+          controller: this.controller == null ? null : this.controller,
+          decoration: InputDecoration(
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              labelText: this.labelText == null ? null : this.labelText),
+          keyboardType: this.keyboardType == null ? null : this.keyboardType,
+          validator: this.validator == null ? null : this.validator,
+        ));
+  }
+}
+
 class ColumnView extends StatelessWidget {
   final Widget? child;
   final bool scrollChild;

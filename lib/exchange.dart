@@ -386,18 +386,12 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       ),
       SizedBox(height: 15),
       SizedBox(
-          width: inputWidth,
-          child: RoundedEdgeBox(
-              borderColor: Colors.white,
-              dottedBorder: true,
-              color: ZapSurface,
-              child: TextField(
-                  controller: _receiveController,
-                  readOnly: true,
-                  decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
-                      suffixText: assetUnit(_toAsset),
-                      labelText: 'Receive'))))
+        width: inputWidth,
+        child: BronzeValueInputForm(
+          controller: _receiveController,
+          labelText: 'Receive',
+        ),
+      )
     ]);
     return Column(children: [
       LayoutBuilder(builder: (context, constraints) {
