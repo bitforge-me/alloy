@@ -148,7 +148,7 @@ class BronzeRoundedButton extends StatelessWidget {
       this.borderColor,
       this.width = 88,
       this.height = 35,
-      this.holePunch = false})
+      this.fwdArrow = false})
       : super();
 
   final VoidCallback onPressed;
@@ -160,7 +160,7 @@ class BronzeRoundedButton extends StatelessWidget {
   final Color? borderColor;
   final double width;
   final double height;
-  final bool holePunch;
+  final bool fwdArrow;
 
   @override
   Widget build(BuildContext context) {
@@ -181,8 +181,8 @@ class BronzeRoundedButton extends StatelessWidget {
     );
     var text = Text(title, style: TextStyle(color: textColor, fontSize: 14));
     Widget btn;
-    if (icon != null && holePunch)
-      throw ArgumentError('Can only use "icon" parameter OR "holePunch"');
+    if (icon != null && fwdArrow)
+      throw ArgumentError('Can only use "icon" parameter OR "fwdArrow"');
     if (icon != null) {
       var row = Row(
           children: [
@@ -213,7 +213,7 @@ class BronzeRoundedButton extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: holePunch
+                  children: fwdArrow
                       ? <Widget>[
                           text,
                           Icon(Icons.arrow_forward_ios, size: 15.0),

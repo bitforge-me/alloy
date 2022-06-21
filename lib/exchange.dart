@@ -413,9 +413,9 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       _validAmount
           ? Padding(
               padding: EdgeInsets.only(top: 20),
-              child: RoundedButton(_exchange, ZapOnPrimary, ZapPrimary,
+              child: BronzeRoundedButton(_exchange, ZapOnPrimary, ZapPrimary,
                   ZapPrimaryGradient, 'Create Order',
-                  holePunch: true, width: inputWidth))
+                  fwdArrow: true, width: inputWidth))
           : SizedBox()
     ]);
   }

@@ -227,7 +227,7 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
               SizedBox(height: 15),
               BronzeRoundedButton(_make, ZapOnPrimary, ZapPrimary,
                   ZapPrimaryGradient, 'Make Deposit',
-                  width: ButtonWidth, height: ButtonHeight, holePunch: true),
+                  width: ButtonWidth, height: ButtonHeight, fwdArrow: true),
               SizedBox(height: 15),
               _deposits.length == 0
                   ? Container(
@@ -547,7 +547,7 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
         SizedBox(height: 15),
         BronzeRoundedButton(
             _make, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Make Deposit',
-            width: ButtonWidth, height: ButtonHeight, holePunch: true),
+            width: ButtonWidth, height: ButtonHeight, fwdArrow: true),
         SizedBox(height: 15),
         _deposits.length == 0
             ? Container(

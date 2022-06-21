@@ -225,7 +225,7 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                         Navigator.of(context).pop(loginChoice);
                       }
                     }, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Continue',
-                        holePunch: true,
+                        fwdArrow: true,
                         width: ButtonWidth,
                         height: ButtonHeight),
                     SizedBox(height: 8),
@@ -234,7 +234,7 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                     BronzeRoundedButton(() {
                       Navigator.of(context).pop(LoginChoice.doLogin());
                     }, ZapOnSurface, ZapSurface, null, 'Login',
-                        holePunch: true,
+                        fwdArrow: true,
                         width: ButtonWidth,
                         height: ButtonHeight),
                     SizedBox(height: 15),
@@ -333,14 +333,14 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                         Navigator.of(context).pop(loginChoice);
                       }
                     }, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Continue',
-                        holePunch: true,
+                        fwdArrow: true,
                         width: ButtonWidth,
                         height: ButtonHeight),
                     SizedBox(height: 5),
                     BronzeRoundedButton(() {
                       Navigator.of(context).pop(LoginChoice.doApiKeyRequest());
                     }, ZapOnSurface, ZapSurface, null, 'Lost Password',
-                        holePunch: true,
+                        fwdArrow: true,
                         width: ButtonWidth,
                         height: ButtonHeight),
                     SizedBox(height: 8),
@@ -349,7 +349,7 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                     BronzeRoundedButton(() {
                       Navigator.of(context).pop(LoginChoice.doRegistration());
                     }, ZapOnSurface, ZapSurface, null, 'Create an Account',
-                        holePunch: true,
+                        fwdArrow: true,
                         width: ButtonWidth,
                         height: ButtonHeight),
                     SizedBox(height: 15),
@@ -468,18 +468,14 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                       Navigator.of(context).pop(loginChoice);
                     }
                   }, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Continue',
-                      holePunch: true,
-                      width: ButtonWidth,
-                      height: ButtonHeight),
+                      fwdArrow: true, width: ButtonWidth, height: ButtonHeight),
                   SizedBox(height: 8),
                   WordDivider(),
                   SizedBox(height: 8),
                   BronzeRoundedButton(() {
                     Navigator.of(context).pop(LoginChoice.doLogin());
                   }, ZapOnSurface, ZapSurface, null, 'Login',
-                      holePunch: true,
-                      width: ButtonWidth,
-                      height: ButtonHeight),
+                      fwdArrow: true, width: ButtonWidth, height: ButtonHeight),
                   SizedBox(height: 15),
                   DebugInfo()
                 ]))));
@@ -712,7 +708,7 @@ class StagingFormState extends State<StagingForm> {
                   ZapPrimary,
                   ZapPrimaryGradient,
                   'Login',
-                  holePunch: true,
+                  fwdArrow: true,
                   width: ButtonWidth,
                   height: ButtonHeight),
               BronzeRoundedButton(
@@ -721,7 +717,7 @@ class StagingFormState extends State<StagingForm> {
                   ZapSurface,
                   null,
                   'Create an Account',
-                  holePunch: true,
+                  fwdArrow: true,
                   width: ButtonWidth,
                   height: ButtonHeight),
               widget.invalidAuth
@@ -731,7 +727,7 @@ class StagingFormState extends State<StagingForm> {
                       ZapSurface,
                       null,
                       'Reset',
-                      holePunch: true,
+                      fwdArrow: true,
                       width: ButtonWidth,
                       height: ButtonHeight)
                   : SizedBox(),
@@ -742,7 +738,7 @@ class StagingFormState extends State<StagingForm> {
                       ZapSurface,
                       null,
                       'Retry',
-                      holePunch: true,
+                      fwdArrow: true,
                       width: ButtonWidth,
                       height: ButtonHeight)
                   : SizedBox(),
