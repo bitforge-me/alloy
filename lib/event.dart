@@ -67,7 +67,7 @@ class _DepositReceivedScreenState extends State<DepositReceivedScreen> {
                         ])),
                   ),
                   BronzeRoundedButton(() => Navigator.of(context).pop(),
-                      ZapOnSurface, ZapSurface, null, 'Close',
+                      Colors.white, Colors.white30, null, 'Close',
                       width: ButtonWidth, height: ButtonHeight)
                 ]))));
   }
@@ -159,7 +159,7 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                       ZapPrimaryGradient, 'Continue',
                       width: ButtonWidth, height: ButtonHeight),
                   BronzeRoundedButton(() => Navigator.of(context).pop(),
-                      ZapOnSurface, ZapSurface, null, 'Cancel',
+                      Colors.white, Colors.white30, null, 'Cancel',
                       width: ButtonWidth, height: ButtonHeight)
                 ]))));
   }

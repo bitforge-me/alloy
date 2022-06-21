@@ -337,8 +337,8 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
               title: Text('Status'),
               subtitle:
                   Text('${_deposit.confirmed ? 'CONFIRMED' : 'PENDING'}')),
-          BronzeRoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
-              ZapSurface, null, 'Close',
+          BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,
+              Colors.white30, null, 'Close',
               width: ButtonWidth, height: ButtonHeight)
         ])));
   }
@@ -401,11 +401,11 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
                         size: 200.0,
                       )),
                       padding: EdgeInsets.all(10)),
-                  BronzeRoundedButton(_copyRecipient, ZapOnSurface,
+                  BronzeRoundedButton(_copyRecipient, Colors.white,
                       Color(0xff32333b), null, 'Copy to Clipboard',
                       width: 320, height: 65, icon: Icons.copy),
                   BronzeRoundedButton(() => Navigator.of(context).pop(),
-                      ZapOnSurface, ZapSurface, null, closeBtnText,
+                      Colors.white, Colors.white30, null, closeBtnText,
                       width: ButtonWidth, height: ButtonHeight)
                 ]))));
   }
@@ -637,8 +637,8 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
           ListTile(
               title: Text('Status'),
               subtitle: Text('${_deposit.status.toUpperCase()}')),
-          BronzeRoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
-              ZapSurface, null, 'Close',
+          BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,
+              Colors.white30, null, 'Close',
               width: ButtonWidth, height: ButtonHeight)
         ])));
   }
