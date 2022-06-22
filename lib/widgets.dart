@@ -5,18 +5,19 @@ import 'package:zapdart/colors.dart';
 
 import 'config.dart' as cfg;
 
-class BronzeValueInputForm extends StatelessWidget {
+class BronzeValueInput extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputType? keyboardType;
   final FormFieldValidator<dynamic>? validator;
   final String? labelText;
+  final String? suffixText;
 
-  BronzeValueInputForm({
-    this.controller,
-    this.labelText,
-    this.keyboardType,
-    this.validator,
-  });
+  BronzeValueInput(
+      {this.controller,
+      this.labelText,
+      this.keyboardType,
+      this.validator,
+      this.suffixText});
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +26,9 @@ class BronzeValueInputForm extends StatelessWidget {
         dottedBorder: true,
         color: ZapSurface,
         child: TextFormField(
-          textAlign: TextAlign.center,
           controller: this.controller == null ? null : this.controller,
           decoration: InputDecoration(
+              suffixText: this.suffixText == null ? null : this.suffixText,
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
               labelText: this.labelText == null ? null : this.labelText),

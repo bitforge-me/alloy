@@ -338,19 +338,13 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       ),
       SizedBox(height: 15),
       SizedBox(
-          width: inputWidth,
-          child: RoundedEdgeBox(
-              borderColor: Colors.white,
-              dottedBorder: true,
-              color: ZapSurface,
-              child: TextField(
-                  controller: _amountController,
-                  decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
-                      suffixText: assetUnit(_fromAsset),
-                      labelText: 'Amount'),
-                  keyboardType: TextInputType.numberWithOptions(
-                      signed: false, decimal: true)))),
+        width: inputWidth,
+        child: BronzeValueInput(
+          controller: _amountController,
+          suffixText: assetUnit(_fromAsset),
+          labelText: 'Amount',
+        ),
+      ),
     ]);
     var arrow = Container(
         margin: EdgeInsets.all(20),
@@ -387,8 +381,9 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       SizedBox(height: 15),
       SizedBox(
         width: inputWidth,
-        child: BronzeValueInputForm(
+        child: BronzeValueInput(
           controller: _receiveController,
+          suffixText: assetUnit(_toAsset),
           labelText: 'Receive',
         ),
       )

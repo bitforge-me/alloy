@@ -127,8 +127,9 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                               width: ButtonWidth,
                               padding: EdgeInsets.all(10),
                               child: Column(children: [
-                                BronzeValueInputForm(
+                                BronzeValueInput(
                                   controller: _amountController,
+                                  suffixText: '${assetUnit(widget.asset)}',
                                   labelText:
                                       'Amount (${assetUnit(widget.asset)})',
                                   validator: (value) {
