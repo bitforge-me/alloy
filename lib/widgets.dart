@@ -33,7 +33,7 @@ class BronzeValueInput extends StatelessWidget {
               focusedBorder: InputBorder.none,
               labelText: this.labelText == null ? null : this.labelText),
           keyboardType: this.keyboardType == null ? null : this.keyboardType,
-          validator: this.validator == null ? null : this.validator,
+          validator: this.validator,
         ));
   }
 }
