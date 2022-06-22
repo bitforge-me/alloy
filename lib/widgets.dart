@@ -26,7 +26,7 @@ class BronzeValueInput extends StatelessWidget {
         dottedBorder: true,
         color: ZapSurface,
         child: TextFormField(
-          controller: this.controller == null ? null : this.controller,
+          controller: this.controller,
           decoration: InputDecoration(
               suffixText: this.suffixText,
               enabledBorder: InputBorder.none,
