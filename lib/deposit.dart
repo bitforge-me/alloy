@@ -322,7 +322,7 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
               title: Center(
                   child: QrImage(
             backgroundColor: Colors.transparent,
-            foregroundColor: ZapOnSurface,
+            foregroundColor: Colors.white,
             data: '${_deposit.recipient}',
             version: QrVersions.auto,
             size: 200.0,
