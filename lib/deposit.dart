@@ -403,7 +403,9 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
                       padding: EdgeInsets.all(10)),
                   BronzeRoundedButton(_copyRecipient, Colors.white,
                       Color(0xff32333b), null, 'Copy to Clipboard',
-                      width: 320, height: 65, icon: Icons.copy),
+                      width: ButtonWidth,
+                      height: ButtonHeight,
+                      icon: Icons.copy),
                   BronzeRoundedButton(() => Navigator.of(context).pop(),
                       Colors.white, Colors.white30, null, closeBtnText,
                       width: ButtonWidth, height: ButtonHeight)
