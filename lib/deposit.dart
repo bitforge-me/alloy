@@ -395,7 +395,7 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
                       child: Center(
                           child: QrImage(
                         backgroundColor: Colors.transparent,
-                        foregroundColor: ZapOnSurface,
+                        foregroundColor: Colors.white,
                         data: '${widget.recipient}',
                         version: QrVersions.auto,
                         size: 200.0,
