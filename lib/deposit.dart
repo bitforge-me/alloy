@@ -625,7 +625,7 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
                   subtitle: Column(children: [
                     QrImage(
                       backgroundColor: Colors.transparent,
-                      foregroundColor: ZapOnSurface,
+                      foregroundColor: Colors.white,
                       data: '${_deposit.paymentUrl}',
                       version: QrVersions.auto,
                       size: 200.0,
