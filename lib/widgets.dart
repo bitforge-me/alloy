@@ -28,7 +28,7 @@ class BronzeValueInput extends StatelessWidget {
         child: TextFormField(
           controller: this.controller == null ? null : this.controller,
           decoration: InputDecoration(
-              suffixText: this.suffixText == null ? null : this.suffixText,
+              suffixText: this.suffixText,
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
               labelText: this.labelText),
