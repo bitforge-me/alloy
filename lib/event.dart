@@ -124,7 +124,7 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                       child: Form(
                           key: _formKey,
                           child: Container(
-                              width: ButtonWidth + 12.0,
+                              width: ButtonWidth + 14.0,
                               padding: EdgeInsets.all(10),
                               child: Column(children: [
                                 BronzeValueInput(
