@@ -363,8 +363,8 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                               validator: (value) {
                                 if (value == null || value.isEmpty)
                                   return 'Please enter a value';
-																value = value.trim();
-																Clipboard.setData(ClipboardData(text: value));
+                                value = value.trim();
+                                Clipboard.setData(ClipboardData(text: value));
                                 var res = l2RecipientValidate(
                                     widget.l2Network!.symbol, _testnet, value);
                                 if (!res.result) return res.reason;
@@ -668,8 +668,8 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         SizedBox(height: 15),
-        BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
-            ZapSecondaryGradient, 'Make Withdrawal',
+        BronzeRoundedButton(_make, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient,
+            'Make Withdrawal',
             width: ButtonWidth, height: ButtonHeight),
         _withdrawals.length == 0
             ? Container(
@@ -882,8 +882,8 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         SizedBox(height: 15),
-        BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
-            ZapSecondaryGradient, 'Make Withdrawal',
+        BronzeRoundedButton(_make, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient,
+            'Make Withdrawal',
             width: ButtonWidth, height: ButtonHeight),
         _withdrawals.length == 0
             ? Container(
