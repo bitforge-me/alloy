@@ -11,12 +11,14 @@ class BronzeValueInput extends StatelessWidget {
   final FormFieldValidator<dynamic>? validator;
   final String? labelText;
   final String? suffixText;
+  final bool? readOnly;
 
   BronzeValueInput(
       {this.controller,
       this.labelText,
       this.keyboardType,
       this.validator,
+      this.readOnly,
       this.suffixText});
 
   @override
@@ -27,6 +29,8 @@ class BronzeValueInput extends StatelessWidget {
         color: ZapSurface,
         child: TextFormField(
           controller: this.controller,
+          readOnly:
+              (this.readOnly == true && this.readOnly != null) ? true : false,
           decoration: InputDecoration(
               suffixText: this.suffixText,
               enabledBorder: InputBorder.none,

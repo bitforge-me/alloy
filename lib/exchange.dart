@@ -385,6 +385,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
           controller: _receiveController,
           suffixText: assetUnit(_toAsset),
           labelText: 'Receive',
+          readOnly: true,
         ),
       )
     ]);
