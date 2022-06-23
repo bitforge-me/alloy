@@ -188,7 +188,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                   widget.asset,
                   widget.l2Network,
                   amount,
-                  _recipientController.text)));
+                  _recipientController.text.trim())));
       if (userOk == null || !userOk) return;
       // ask two factor code
       String? tfCode = null;
@@ -212,7 +212,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                 ? assetAmountFromUser(
                     widget.asset.symbol, Decimal.parse(_amountController.text))
                 : Decimal.zero,
-            _recipientController.text,
+            _recipientController.text.trim(),
             _saveRecipient,
             _recipientDescriptionController.text,
             tfCode);
@@ -363,6 +363,8 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                               validator: (value) {
                                 if (value == null || value.isEmpty)
                                   return 'Please enter a value';
+																value = value.trim();
+																Clipboard.setData(ClipboardData(text: value));
                                 var res = l2RecipientValidate(
                                     widget.l2Network!.symbol, _testnet, value);
                                 if (!res.result) return res.reason;
