@@ -85,11 +85,15 @@ class _WithdrawalCheckScreenState extends State<WithdrawalCheckScreen> {
                         title: Text('Recipient'),
                         subtitle: Text(shortenStr(widget.recipient)))
                   ]),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        raisedButton(onPressed: _cancel, child: Text('Cancel')),
-                        raisedButton(onPressed: _ok, child: Text('Ok')),
+                        BronzeRoundedButton(_ok, ZapOnPrimary, ZapPrimary,
+                            ZapPrimaryGradient, 'Continue',
+                            width: ButtonWidth, height: ButtonHeight),
+                        BronzeRoundedButton(
+                            _cancel, ZapOnSurface, ZapSurface, null, 'Cancel',
+                            width: ButtonWidth, height: ButtonHeight),
                       ])
                 ]))));
   }
@@ -444,15 +448,11 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                                           return null;
                                         }),
                                     TextFormField(
-                                        controller: _accountAddr02Controller,
-                                        decoration: InputDecoration(
-                                            labelText: 'Address Line 2'),
-                                        keyboardType: TextInputType.text,
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty)
-                                            return 'Please enter a value';
-                                          return null;
-                                        }),
+                                      controller: _accountAddr02Controller,
+                                      decoration: InputDecoration(
+                                          labelText: 'Address Line 2'),
+                                      keyboardType: TextInputType.text,
+                                    ),
                                     TextFormField(
                                         controller:
                                             _accountAddrCountryController,
@@ -466,9 +466,9 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                                         }),
                                   ])))),
                       SizedBox(height: 15),
-                      raisedButton(
-                          onPressed: _withdrawalCreate,
-                          child: Text('Create Withdrawal'))
+                      BronzeRoundedButton(_withdrawalCreate, ZapOnPrimary,
+                          ZapPrimary, ZapPrimaryGradient, 'Create Withdrawal',
+                          width: ButtonWidth, height: ButtonHeight)
                     ])))));
   }
 }
@@ -775,6 +775,9 @@ class _CryptoWithdrawalDetailScreenState
           ListTile(
               title: Text('Status'),
               subtitle: Text('${_withdrawal.status.toUpperCase()}')),
+          BronzeRoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
+              ZapSurface, null, 'Close',
+              width: ButtonWidth, height: ButtonHeight)
         ])));
   }
 }
@@ -962,6 +965,9 @@ class _FiatWithdrawalDetailScreenState
           ListTile(
               title: Text('Status'),
               subtitle: Text('${_withdrawal.status.toUpperCase()}')),
+          BronzeRoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
+              ZapSurface, null, 'Close',
+              width: ButtonWidth, height: ButtonHeight)
         ])));
   }
 }
