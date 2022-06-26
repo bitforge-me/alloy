@@ -30,7 +30,7 @@ class BronzeValueInput extends StatelessWidget {
         child: TextFormField(
           controller: this.controller,
           readOnly:
-              (this.readOnly == true && this.readOnly != null) ? true : false,
+              this.readOnly ?? false,
           decoration: InputDecoration(
               suffixText: this.suffixText,
               enabledBorder: InputBorder.none,
