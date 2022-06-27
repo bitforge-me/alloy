@@ -17,10 +17,10 @@ const ButtonHeight = 65.0;
 const SupportUrl = 'https://bronze-support.zap.me/';
 
 // the default testnet value
-const _DefaultTestnet = true;
+const _DefaultTestnet = false;
 
 // beryllium settings
-const String _BeServerUrl = 'https://beryllium-test.zap.me/';
+const String _BeServerUrl = 'https://beryllium.zap.me/';
 
 class BeLocationOverride {
   final String? altLocation;
