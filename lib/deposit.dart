@@ -691,26 +691,32 @@ class _FiatAccountNumberScreenState extends State<FiatAccountNumberScreen> {
           actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
         ),
         body: ColumnView(
-            child: ListView(children: [
-          ListTile(
-              title: Text('Account Number'),
-              subtitle: Text(widget.account.accountNumber),
-              trailing: IconButton(
-                  onPressed: () =>
-                      _copy('account number', widget.account.accountNumber),
-                  icon: Icon(Icons.copy))),
-          ListTile(
-              title: Text('Reference'),
-              subtitle: Text(widget.account.reference),
-              trailing: IconButton(
-                  onPressed: () => _copy('reference', widget.account.reference),
-                  icon: Icon(Icons.copy))),
-          ListTile(
-              title: Text('Code'),
-              subtitle: Text(widget.account.code),
-              trailing: IconButton(
-                  onPressed: () => _copy('code', widget.account.code),
-                  icon: Icon(Icons.copy)))
-        ])));
+            child: SizedBox(
+                width: ButtonWidth,
+                child: ListView(children: [
+                  ListTile(
+                      title: Text('Account Number'),
+                      subtitle: Text(widget.account.accountNumber),
+                      trailing: IconButton(
+                          onPressed: () => _copy(
+                              'account number', widget.account.accountNumber),
+                          icon: Icon(Icons.copy))),
+                  ListTile(
+                      title: Text('Reference'),
+                      subtitle: Text(widget.account.reference),
+                      trailing: IconButton(
+                          onPressed: () =>
+                              _copy('reference', widget.account.reference),
+                          icon: Icon(Icons.copy))),
+                  ListTile(
+                      title: Text('Code'),
+                      subtitle: Text(widget.account.code),
+                      trailing: IconButton(
+                          onPressed: () => _copy('code', widget.account.code),
+                          icon: Icon(Icons.copy))),
+                  BronzeRoundedButton(() => Navigator.of(context).pop(),
+                      Colors.white, Colors.white30, null, 'Cancel',
+                      width: ButtonWidth, height: ButtonHeight)
+                ]))));
   }
 }
