@@ -368,7 +368,6 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                                 if (value == null || value.isEmpty)
                                   return 'Please enter a value';
                                 value = value.trim();
-                                Clipboard.setData(ClipboardData(text: value));
                                 var res = l2RecipientValidate(
                                     widget.l2Network!.symbol, _testnet, value);
                                 if (!res.result) return res.reason;
