@@ -205,17 +205,17 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                           color: Color(0xFFFFFFFF).withOpacity(0.75),
                           fontSize: 20),
                     ),
-                    SizedBox(height: 10),
+                    VerticalSpacer(height: 10),
                     Text(widget.instructions == null
                         ? "Enter your email to login via email link"
                         : widget.instructions!),
-                    SizedBox(height: 15),
+                    VerticalSpacer(),
                     BronzeFormInput(_emailController,
                         icon: Icon(Icons.email_outlined),
                         labelText: 'Email',
                         keyboardType: TextInputType.emailAddress,
                         validator: emailValidate),
-                    SizedBox(height: 15),
+                    VerticalSpacer(),
                     BronzeRoundedButton(() {
                       if (_formKey.currentState == null) return;
                       if (_formKey.currentState!.validate()) {
@@ -225,19 +225,19 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                         Navigator.of(context).pop(loginChoice);
                       }
                     }, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Continue',
-                        holePunch: true,
+                        fwdArrow: true,
                         width: ButtonWidth,
                         height: ButtonHeight),
-                    SizedBox(height: 8),
+                    VerticalSpacer(height: 8),
                     WordDivider(),
-                    SizedBox(height: 8),
+                    VerticalSpacer(height: 8),
                     BronzeRoundedButton(() {
                       Navigator.of(context).pop(LoginChoice.doLogin());
                     }, ZapOnSurface, ZapSurface, null, 'Login',
-                        holePunch: true,
+                        fwdArrow: true,
                         width: ButtonWidth,
                         height: ButtonHeight),
-                    SizedBox(height: 15),
+                    VerticalSpacer(),
                     DebugInfo()
                   ],
                 ))));
@@ -295,12 +295,12 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                           color: Color(0xFFFFFFFF).withOpacity(0.75),
                           fontSize: 20),
                     ),
-                    SizedBox(height: 10),
+                    VerticalSpacer(height: 10),
                     Text(
                       "Please log in",
                       style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 34),
                     ),
-                    SizedBox(height: 15),
+                    VerticalSpacer(),
                     BronzeFormInput(
                       _emailController,
                       validator: emailValidate,
@@ -308,20 +308,20 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                       keyboardType: TextInputType.emailAddress,
                       labelText: 'Email',
                     ),
-                    SizedBox(height: 15),
+                    VerticalSpacer(),
                     BronzeFormInput(_passwordController,
                         icon: Icon(Icons.key_outlined),
                         validator: passwordValidate,
                         labelText: 'Password',
                         obscureText: true),
-                    SizedBox(height: 15),
+                    VerticalSpacer(),
                     Visibility(
                       visible: widget.showTwoFactorCode,
                       child: BronzeFormInput(_tfCodeController,
                           icon: Icon(Icons.lock_outline),
                           labelText: 'Two factor login code'),
                     ),
-                    SizedBox(height: widget.showTwoFactorCode ? 15 : 0),
+                    VerticalSpacer(height: widget.showTwoFactorCode ? 15 : 0),
                     BronzeRoundedButton(() {
                       if (_formKey.currentState == null) return;
                       if (_formKey.currentState!.validate()) {
@@ -333,26 +333,26 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                         Navigator.of(context).pop(loginChoice);
                       }
                     }, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Continue',
-                        holePunch: true,
+                        fwdArrow: true,
                         width: ButtonWidth,
                         height: ButtonHeight),
-                    SizedBox(height: 5),
+                    VerticalSpacer(height: 5),
                     BronzeRoundedButton(() {
                       Navigator.of(context).pop(LoginChoice.doApiKeyRequest());
                     }, ZapOnSurface, ZapSurface, null, 'Lost Password',
-                        holePunch: true,
+                        fwdArrow: true,
                         width: ButtonWidth,
                         height: ButtonHeight),
-                    SizedBox(height: 8),
+                    VerticalSpacer(height: 8),
                     WordDivider(),
-                    SizedBox(height: 8),
+                    VerticalSpacer(height: 8),
                     BronzeRoundedButton(() {
                       Navigator.of(context).pop(LoginChoice.doRegistration());
                     }, ZapOnSurface, ZapSurface, null, 'Create an Account',
-                        holePunch: true,
+                        fwdArrow: true,
                         width: ButtonWidth,
                         height: ButtonHeight),
-                    SizedBox(height: 15),
+                    VerticalSpacer(),
                     DebugInfo()
                   ],
                 ))));
@@ -399,18 +399,18 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                         color: Color(0xFFFFFFFF).withOpacity(0.75),
                         fontSize: 20),
                   ),
-                  SizedBox(height: 10),
+                  VerticalSpacer(height: 10),
                   Text(
                     "Let's get started",
                     style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 34),
                   ),
-                  SizedBox(height: 15),
+                  VerticalSpacer(),
                   BronzeFormInput(_emailController,
                       icon: Icon(Icons.email_outlined),
                       labelText: 'Email',
                       keyboardType: TextInputType.emailAddress,
                       validator: emailValidate),
-                  SizedBox(height: 15),
+                  VerticalSpacer(),
                   BronzeFormInput(
                     _newPasswordController,
                     icon: Icon(Icons.key_outlined),
@@ -418,7 +418,7 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                     labelText: 'New Password',
                     validator: newPasswordValidate,
                   ),
-                  SizedBox(height: 15),
+                  VerticalSpacer(),
                   TextFormField(
                       textAlign: TextAlign.center,
                       controller: _passwordConfirmController,
@@ -450,7 +450,7 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                           return 'Password does not match';
                         return null;
                       }),
-                  SizedBox(height: 15),
+                  VerticalSpacer(),
                   BronzeRoundedButton(() async {
                     if (_formKey.currentState == null) return;
                     if (_formKey.currentState!.validate()) {
@@ -468,19 +468,15 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                       Navigator.of(context).pop(loginChoice);
                     }
                   }, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Continue',
-                      holePunch: true,
-                      width: ButtonWidth,
-                      height: ButtonHeight),
-                  SizedBox(height: 8),
+                      fwdArrow: true, width: ButtonWidth, height: ButtonHeight),
+                  VerticalSpacer(height: 8),
                   WordDivider(),
-                  SizedBox(height: 8),
+                  VerticalSpacer(height: 8),
                   BronzeRoundedButton(() {
                     Navigator.of(context).pop(LoginChoice.doLogin());
                   }, ZapOnSurface, ZapSurface, null, 'Login',
-                      holePunch: true,
-                      width: ButtonWidth,
-                      height: ButtonHeight),
-                  SizedBox(height: 15),
+                      fwdArrow: true, width: ButtonWidth, height: ButtonHeight),
+                  VerticalSpacer(),
                   DebugInfo()
                 ]))));
   }
@@ -712,7 +708,7 @@ class StagingFormState extends State<StagingForm> {
                   ZapPrimary,
                   ZapPrimaryGradient,
                   'Login',
-                  holePunch: true,
+                  fwdArrow: true,
                   width: ButtonWidth,
                   height: ButtonHeight),
               BronzeRoundedButton(
@@ -721,7 +717,7 @@ class StagingFormState extends State<StagingForm> {
                   ZapSurface,
                   null,
                   'Create an Account',
-                  holePunch: true,
+                  fwdArrow: true,
                   width: ButtonWidth,
                   height: ButtonHeight),
               widget.invalidAuth
@@ -731,7 +727,7 @@ class StagingFormState extends State<StagingForm> {
                       ZapSurface,
                       null,
                       'Reset',
-                      holePunch: true,
+                      fwdArrow: true,
                       width: ButtonWidth,
                       height: ButtonHeight)
                   : SizedBox(),
@@ -742,11 +738,11 @@ class StagingFormState extends State<StagingForm> {
                       ZapSurface,
                       null,
                       'Retry',
-                      holePunch: true,
+                      fwdArrow: true,
                       width: ButtonWidth,
                       height: ButtonHeight)
                   : SizedBox(),
-              SizedBox(height: 15),
+              VerticalSpacer(),
               DebugInfo()
             ])));
   }

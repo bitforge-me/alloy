@@ -67,7 +67,7 @@ class _DepositReceivedScreenState extends State<DepositReceivedScreen> {
                         ])),
                   ),
                   BronzeRoundedButton(() => Navigator.of(context).pop(),
-                      ZapOnSecondary, ZapSecondary, ZapSecondaryGradient, 'OK',
+                      Colors.white, Colors.white30, null, 'Close',
                       width: ButtonWidth, height: ButtonHeight)
                 ]))));
   }
@@ -124,33 +124,35 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                       child: Form(
                           key: _formKey,
                           child: Container(
+                              // Fudge factor of 14.0 to match border radius of button
+                              width: ButtonWidth + 14.0,
                               padding: EdgeInsets.all(10),
                               child: Column(children: [
-                                TextFormField(
-                                    controller: _amountController,
-                                    decoration: InputDecoration(
-                                        labelText:
-                                            'Amount (${assetUnit(widget.asset)})'),
-                                    keyboardType:
-                                        TextInputType.numberWithOptions(
-                                            signed: false, decimal: true),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty)
-                                        return 'Please enter a value';
-                                      var userAmount =
-                                          Decimal.tryParse(value.trim());
-                                      if (userAmount == null)
-                                        return 'Invalid value';
-                                      if (userAmount <= Decimal.zero)
-                                        'Please return a value greater then 0';
-                                      return null;
-                                    })
+                                BronzeValueInput(
+                                  controller: _amountController,
+                                  suffixText: '${assetUnit(widget.asset)}',
+                                  labelText:
+                                      'Amount (${assetUnit(widget.asset)})',
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty)
+                                      return 'Please enter a value';
+                                    var userAmount =
+                                        Decimal.tryParse(value.trim());
+                                    if (userAmount == null)
+                                      return 'Invalid value';
+                                    if (userAmount <= Decimal.zero)
+                                      'Please return a value greater then 0';
+                                    return null;
+                                  },
+                                  keyboardType: TextInputType.numberWithOptions(
+                                      signed: false, decimal: true),
+                                ),
                               ])))),
-                  BronzeRoundedButton(_ok, ZapOnSecondary, ZapSecondary,
-                      ZapSecondaryGradient, 'Continue',
+                  BronzeRoundedButton(_ok, ZapOnPrimary, ZapPrimary,
+                      ZapPrimaryGradient, 'Continue',
                       width: ButtonWidth, height: ButtonHeight),
                   BronzeRoundedButton(() => Navigator.of(context).pop(),
-                      ZapOnSurface, ZapSurface, null, 'Cancel',
+                      Colors.white, Colors.white30, null, 'Cancel',
                       width: ButtonWidth, height: ButtonHeight)
                 ]))));
   }

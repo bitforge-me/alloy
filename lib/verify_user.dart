@@ -131,7 +131,7 @@ class _VerifyUserScreenState extends State<VerifyUserScreen> {
                           initialNumber: _initialNumber,
                           countryCode: InitialMobileCountry,
                           preferredCountries: PreferredMobileCountries),
-                      SizedBox(height: 15),
+                      VerticalSpacer(),
                       raisedButton(onPressed: _submit, child: Text('Submit')),
                     ])))));
   }

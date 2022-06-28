@@ -464,7 +464,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                                           return null;
                                         }),
                                   ])))),
-                      SizedBox(height: 15),
+                      VerticalSpacer(),
                       BronzeRoundedButton(_withdrawalCreate, ZapOnPrimary,
                           ZapPrimary, ZapPrimaryGradient, 'Create Withdrawal',
                           width: ButtonWidth, height: ButtonHeight)
@@ -666,9 +666,9 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
       body: ColumnView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        SizedBox(height: 15),
-        BronzeRoundedButton(_make, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient,
-            'Make Withdrawal',
+        VerticalSpacer(),
+        BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
+            ZapSecondaryGradient, 'Make Withdrawal',
             width: ButtonWidth, height: ButtonHeight),
         _withdrawals.length == 0
             ? Container(
@@ -883,9 +883,9 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
       body: ColumnView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        SizedBox(height: 15),
-        BronzeRoundedButton(_make, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient,
-            'Make Withdrawal',
+        VerticalSpacer(),
+        BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
+            ZapSecondaryGradient, 'Make Withdrawal',
             width: ButtonWidth, height: ButtonHeight),
         _withdrawals.length == 0
             ? Container(
