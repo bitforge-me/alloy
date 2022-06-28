@@ -22,11 +22,13 @@ class BronzeFormInput extends StatelessWidget {
   final String? labelText;
   final bool? obscureText;
   final Icon? icon;
+  final Widget? suffixIcon;
   BronzeFormInput(this.controller,
       {this.validator,
       this.keyboardType,
       this.obscureText,
       this.labelText,
+      this.suffixIcon,
       this.icon})
       : super();
 
@@ -42,6 +44,7 @@ class BronzeFormInput extends StatelessWidget {
                   padding: EdgeInsets.only(top: 5),
                   child: this.icon,
                 ),
+          suffixIcon: this.suffixIcon,
           contentPadding: const EdgeInsets.symmetric(vertical: 25.0),
           fillColor: Color(0xFFFFFFFF).withOpacity(0.1),
           filled: true,
