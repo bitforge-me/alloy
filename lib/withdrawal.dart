@@ -467,7 +467,9 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                       VerticalSpacer(),
                       BronzeRoundedButton(_withdrawalCreate, ZapOnPrimary,
                           ZapPrimary, ZapPrimaryGradient, 'Create Withdrawal',
-                          width: ButtonWidth, height: ButtonHeight)
+                          width: ButtonWidth,
+                          height: ButtonHeight,
+                          fwdArrow: true)
                     ])))));
   }
 }
@@ -667,9 +669,9 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         VerticalSpacer(),
-        BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
-            ZapSecondaryGradient, 'Make Withdrawal',
-            width: ButtonWidth, height: ButtonHeight),
+        BronzeRoundedButton(_make, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient,
+            'Make Withdrawal',
+            width: ButtonWidth, height: ButtonHeight, fwdArrow: true),
         _withdrawals.length == 0
             ? Container(
                 margin: EdgeInsets.all(20),
@@ -761,9 +763,11 @@ class _CryptoWithdrawalDetailScreenState
                   '${assetFormatWithUnitToUser(_withdrawal.asset, _withdrawal.amount)}')),
           ListTile(title: Text('Date'), subtitle: Text('${_withdrawal.date}')),
           ListTile(
-              title: Text('Recipient'),
+              title: Text(
+                  "${_withdrawal.l2Network == null ? 'Recipient' : 'Invoice'}"),
               subtitle: Text(shortenStr(_withdrawal.recipient)),
-              onTap: _addrLaunch,
+              onTap:
+                  _withdrawal.l2Network == null ? _addrLaunch : _copyRecipient,
               trailing: IconButton(
                   onPressed: _copyRecipient, icon: Icon(Icons.copy))),
           Visibility(
@@ -774,9 +778,12 @@ class _CryptoWithdrawalDetailScreenState
           ListTile(
               title: Text('Status'),
               subtitle: Text('${_withdrawal.status.toUpperCase()}')),
-          BronzeRoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
-              ZapSurface, null, 'Close',
-              width: ButtonWidth, height: ButtonHeight)
+          VerticalSpacer(),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,
+                Colors.white30, null, 'Close',
+                width: ButtonWidth, height: ButtonHeight)
+          ])
         ])));
   }
 }
@@ -884,9 +891,9 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         VerticalSpacer(),
-        BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
-            ZapSecondaryGradient, 'Make Withdrawal',
-            width: ButtonWidth, height: ButtonHeight),
+        BronzeRoundedButton(_make, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient,
+            'Make Withdrawal',
+            width: ButtonWidth, height: ButtonHeight, fwdArrow: true),
         _withdrawals.length == 0
             ? Container(
                 margin: EdgeInsets.all(20),
@@ -964,9 +971,12 @@ class _FiatWithdrawalDetailScreenState
           ListTile(
               title: Text('Status'),
               subtitle: Text('${_withdrawal.status.toUpperCase()}')),
-          BronzeRoundedButton(() => Navigator.of(context).pop(), ZapOnSurface,
-              ZapSurface, null, 'Close',
-              width: ButtonWidth, height: ButtonHeight)
+          VerticalSpacer(),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,
+                Colors.white30, null, 'Close',
+                width: ButtonWidth, height: ButtonHeight)
+          ])
         ])));
   }
 }
