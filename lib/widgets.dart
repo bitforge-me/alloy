@@ -54,7 +54,6 @@ class BronzeFormInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-        textAlign: TextAlign.center,
         controller: this.controller,
         decoration: InputDecoration(
           prefixIcon: this.icon == null
