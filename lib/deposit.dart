@@ -328,9 +328,10 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
             size: 200.0,
           ))),
           ListTile(
-              title: Text('Recipient'),
+              title: Text(
+                  "${_deposit.l2Network == null ? 'Recipient' : 'Invoice'}"),
               subtitle: Text(shortenStr(_deposit.recipient)),
-              onTap: _addrLaunch,
+              onTap: _deposit.l2Network == null ? _addrLaunch : _copyRecipient,
               trailing: IconButton(
                   onPressed: _copyRecipient, icon: Icon(Icons.copy))),
           ListTile(
@@ -645,9 +646,12 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
           ListTile(
               title: Text('Status'),
               subtitle: Text('${_deposit.status.toUpperCase()}')),
-          BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,
-              Colors.white30, null, 'Close',
-              width: ButtonWidth, height: ButtonHeight)
+          SizedBox(height: 15),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,
+                Colors.white30, null, 'Close',
+                width: ButtonWidth, height: ButtonHeight)
+          ])
         ])));
   }
 }
