@@ -463,7 +463,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                                           return null;
                                         }),
                                   ])))),
-                      SizedBox(height: 15),
+                      VerticalSpacer(),
                       raisedButton(
                           onPressed: _withdrawalCreate,
                           child: Text('Create Withdrawal'))
@@ -665,7 +665,7 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
       body: ColumnView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        SizedBox(height: 15),
+        VerticalSpacer(),
         BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
             ZapSecondaryGradient, 'Make Withdrawal',
             width: ButtonWidth, height: ButtonHeight),
@@ -879,7 +879,7 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
       body: ColumnView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        SizedBox(height: 15),
+        VerticalSpacer(),
         BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
             ZapSecondaryGradient, 'Make Withdrawal',
             width: ButtonWidth, height: ButtonHeight),

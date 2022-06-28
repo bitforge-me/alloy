@@ -166,11 +166,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         body: ColumnView(
             child: ListView(children: [
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            SizedBox(height: 5),
+            VerticalSpacer(height: 5),
             ac.accountImage(_userInfo.photo, _userInfo.photoType),
-            SizedBox(height: 5),
+            VerticalSpacer(height: 5),
             Text('${_userInfo.email}'),
-            SizedBox(height: 5)
+            VerticalSpacer(height: 5)
           ]),
           ListTile(
               leading: Icon(Icons.account_box),

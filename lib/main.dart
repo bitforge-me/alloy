@@ -291,10 +291,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         child: _userInfo != null
             ? Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                 accountImage(_userInfo?.photo, _userInfo?.photoType),
-                SizedBox(height: 5),
+                VerticalSpacer(height: 5),
                 Text('${_userInfo?.email}',
                     style: TextStyle(color: ZapOnSecondary)),
-                //SizedBox(height: 5),
+                //VerticalSpacer(height: 5),
                 //Text('Validated: ${_userInfo?.kycValidated}'),
               ])
             : SizedBox());
@@ -384,7 +384,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                             textOutside: false,
                             borderSize: 0)
                       ]),
-                      SizedBox(height: 15),
+                      VerticalSpacer(),
                       Row(mainAxisSize: MainAxisSize.min, children: [
                         SquareButton(
                             _deposit,
@@ -404,7 +404,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                             textOutside: false,
                             borderSize: 0)
                       ]),
-                      SizedBox(height: 15),
+                      VerticalSpacer(),
                       DebugInfo()
                     ])),
               ],

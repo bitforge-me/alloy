@@ -5,6 +5,52 @@ import 'package:zapdart/colors.dart';
 
 import 'config.dart' as cfg;
 
+class VerticalSpacer extends StatelessWidget {
+  final double height;
+  VerticalSpacer({this.height = 15});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(height: height);
+  }
+}
+
+class BronzeValueInput extends StatelessWidget {
+  final TextEditingController? controller;
+  final TextInputType? keyboardType;
+  final FormFieldValidator<dynamic>? validator;
+  final String? labelText;
+  final String? suffixText;
+  final bool? readOnly;
+
+  BronzeValueInput(
+      {this.controller,
+      this.labelText,
+      this.keyboardType,
+      this.validator,
+      this.readOnly,
+      this.suffixText});
+
+  @override
+  Widget build(BuildContext context) {
+    return RoundedEdgeBox(
+        borderColor: Colors.white,
+        dottedBorder: true,
+        color: ZapSurface,
+        child: TextFormField(
+          controller: this.controller,
+          readOnly: this.readOnly ?? false,
+          decoration: InputDecoration(
+              suffixText: this.suffixText,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              labelText: this.labelText),
+          keyboardType: this.keyboardType,
+          validator: this.validator,
+        ));
+  }
+}
+
 class ColumnView extends StatelessWidget {
   final Widget? child;
   final bool scrollChild;
@@ -148,7 +194,7 @@ class BronzeRoundedButton extends StatelessWidget {
       this.borderColor,
       this.width = 88,
       this.height = 35,
-      this.holePunch = false})
+      this.fwdArrow = false})
       : super();
 
   final VoidCallback onPressed;
@@ -160,7 +206,7 @@ class BronzeRoundedButton extends StatelessWidget {
   final Color? borderColor;
   final double width;
   final double height;
-  final bool holePunch;
+  final bool fwdArrow;
 
   @override
   Widget build(BuildContext context) {
@@ -181,13 +227,17 @@ class BronzeRoundedButton extends StatelessWidget {
     );
     var text = Text(title, style: TextStyle(color: textColor, fontSize: 14));
     Widget btn;
-    if (icon != null && holePunch)
-      throw ArgumentError('Can only use "icon" parameter OR "holePunch"');
+    if (icon != null && fwdArrow)
+      throw ArgumentError('Can only use "icon" parameter OR "fwdArrow"');
     if (icon != null) {
       var row = Row(
-          children: [Icon(icon, color: textColor, size: 14), text],
+          children: [
+            Icon(icon, color: textColor, size: 12),
+            SizedBox(width: 8),
+            text
+          ],
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceAround);
+          mainAxisAlignment: MainAxisAlignment.center);
       btn = Container(
           width: width,
           height: height,
@@ -209,7 +259,7 @@ class BronzeRoundedButton extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: holePunch
+                  children: fwdArrow
                       ? <Widget>[
                           text,
                           Icon(Icons.arrow_forward_ios, size: 15.0),

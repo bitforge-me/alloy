@@ -169,7 +169,8 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
     var deposit = _deposits[n];
     return ListTile(
       title: Text(
-          '${assetFormatWithUnitToUser(deposit.asset, deposit.amount)} - ${deposit.confirmed ? 'CONFIRMED' : 'PENDING'}'),
+          '${assetFormatWithUnitToUser(deposit.asset, deposit.amount)} - ${deposit.confirmed ? 'CONFIRMED' : 'PENDING'}',
+          textAlign: TextAlign.center),
       onTap: () => _depositTap(deposit),
     );
   }
@@ -223,9 +224,11 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-              BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
-                  ZapSecondaryGradient, 'Make Deposit',
-                  width: ButtonWidth, height: ButtonHeight),
+              VerticalSpacer(),
+              BronzeRoundedButton(_make, ZapOnPrimary, ZapPrimary,
+                  ZapPrimaryGradient, 'Make Deposit',
+                  width: ButtonWidth, height: ButtonHeight, fwdArrow: true),
+              VerticalSpacer(),
               _deposits.length == 0
                   ? Container(
                       margin: EdgeInsets.all(20),
@@ -318,22 +321,29 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
           ListTile(
               title: Center(
                   child: QrImage(
-            backgroundColor: ZapSurface,
-            foregroundColor: ZapOnSurface,
+            backgroundColor: Colors.transparent,
+            foregroundColor: Colors.white,
             data: '${_deposit.recipient}',
             version: QrVersions.auto,
             size: 200.0,
           ))),
           ListTile(
-              title: Text('Recipient'),
+              title: Text(
+                  "${_deposit.l2Network == null ? 'Recipient' : 'Invoice'}"),
               subtitle: Text(shortenStr(_deposit.recipient)),
-              onTap: _addrLaunch,
+              onTap: _deposit.l2Network == null ? _addrLaunch : _copyRecipient,
               trailing: IconButton(
                   onPressed: _copyRecipient, icon: Icon(Icons.copy))),
           ListTile(
               title: Text('Status'),
               subtitle:
                   Text('${_deposit.confirmed ? 'CONFIRMED' : 'PENDING'}')),
+          VerticalSpacer(),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,
+                Colors.white30, null, 'Close',
+                width: ButtonWidth, height: ButtonHeight)
+          ]),
         ])));
   }
 }
@@ -364,6 +374,7 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String closeBtnText = widget.l2Network != null ? 'Close' : 'Cancel';
     return Scaffold(
         appBar: AppBar(
           title: Text('Deposit'),
@@ -387,18 +398,24 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
                   Container(
                       child: Center(
                           child: QrImage(
-                        backgroundColor: ZapSurface,
-                        foregroundColor: ZapOnSurface,
+                        backgroundColor: Colors.transparent,
+                        foregroundColor: Colors.white,
                         data: '${widget.recipient}',
                         version: QrVersions.auto,
                         size: 200.0,
                       )),
                       padding: EdgeInsets.all(10)),
-                  ListTile(
-                      leading: SizedBox(),
-                      title: Center(child: Text(shortenStr(widget.recipient))),
-                      trailing: IconButton(
-                          onPressed: _copyRecipient, icon: Icon(Icons.copy)))
+                  VerticalSpacer(),
+                  Text(shortenStr(widget.recipient)),
+                  VerticalSpacer(),
+                  BronzeRoundedButton(_copyRecipient, Colors.white,
+                      Color(0xff32333b), null, 'Copy to Clipboard',
+                      width: ButtonWidth,
+                      height: ButtonHeight,
+                      icon: Icons.copy),
+                  BronzeRoundedButton(() => Navigator.of(context).pop(),
+                      Colors.white, Colors.white30, null, closeBtnText,
+                      width: ButtonWidth, height: ButtonHeight)
                 ]))));
   }
 }
@@ -472,7 +489,8 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
     var deposit = _deposits[n];
     return ListTile(
       title: Text(
-          '${assetFormatWithUnitToUser(deposit.asset, deposit.amount)} - ${deposit.status.toUpperCase()}'),
+          '${assetFormatWithUnitToUser(deposit.asset, deposit.amount)} - ${deposit.status.toUpperCase()}',
+          textAlign: TextAlign.center),
       onTap: () => _depositTap(deposit),
     );
   }
@@ -535,9 +553,11 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
       body: ColumnView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
-            ZapSecondaryGradient, 'Make Deposit',
-            width: ButtonWidth, height: ButtonHeight),
+        VerticalSpacer(),
+        BronzeRoundedButton(
+            _make, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Make Deposit',
+            width: ButtonWidth, height: ButtonHeight, fwdArrow: true),
+        VerticalSpacer(),
         _deposits.length == 0
             ? Container(
                 margin: EdgeInsets.all(20),
@@ -613,8 +633,8 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
                   title: Text('Payment URL'),
                   subtitle: Column(children: [
                     QrImage(
-                      backgroundColor: ZapSurface,
-                      foregroundColor: ZapOnSurface,
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: Colors.white,
                       data: '${_deposit.paymentUrl}',
                       version: QrVersions.auto,
                       size: 200.0,
@@ -626,6 +646,12 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
           ListTile(
               title: Text('Status'),
               subtitle: Text('${_deposit.status.toUpperCase()}')),
+          VerticalSpacer(),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,
+                Colors.white30, null, 'Close',
+                width: ButtonWidth, height: ButtonHeight)
+          ])
         ])));
   }
 }
@@ -672,26 +698,38 @@ class _FiatAccountNumberScreenState extends State<FiatAccountNumberScreen> {
           actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
         ),
         body: ColumnView(
-            child: ListView(children: [
-          ListTile(
-              title: Text('Account Number'),
-              subtitle: Text(widget.account.accountNumber),
-              trailing: IconButton(
-                  onPressed: () =>
-                      _copy('account number', widget.account.accountNumber),
-                  icon: Icon(Icons.copy))),
-          ListTile(
-              title: Text('Reference'),
-              subtitle: Text(widget.account.reference),
-              trailing: IconButton(
-                  onPressed: () => _copy('reference', widget.account.reference),
-                  icon: Icon(Icons.copy))),
-          ListTile(
-              title: Text('Code'),
-              subtitle: Text(widget.account.code),
-              trailing: IconButton(
-                  onPressed: () => _copy('code', widget.account.code),
-                  icon: Icon(Icons.copy)))
-        ])));
+            child: SizedBox(
+                width: ButtonWidth,
+                child: ListView(children: [
+                  Container(
+                      padding: EdgeInsets.only(top: 20, bottom: 20),
+                      child: Center(
+                          child: Icon(Icons.keyboard_double_arrow_down_rounded,
+                              size: 150, color: ZapOnSecondary))),
+                  ListTile(
+                      title: Text('Account Number'),
+                      subtitle: Text(widget.account.accountNumber),
+                      trailing: IconButton(
+                          onPressed: () => _copy(
+                              'account number', widget.account.accountNumber),
+                          icon: Icon(Icons.copy))),
+                  ListTile(
+                      title: Text('Reference'),
+                      subtitle: Text(widget.account.reference),
+                      trailing: IconButton(
+                          onPressed: () =>
+                              _copy('reference', widget.account.reference),
+                          icon: Icon(Icons.copy))),
+                  ListTile(
+                      title: Text('Code'),
+                      subtitle: Text(widget.account.code),
+                      trailing: IconButton(
+                          onPressed: () => _copy('code', widget.account.code),
+                          icon: Icon(Icons.copy))),
+                  VerticalSpacer(),
+                  BronzeRoundedButton(() => Navigator.of(context).pop(),
+                      Colors.white, Colors.white30, null, 'Cancel',
+                      width: ButtonWidth, height: ButtonHeight)
+                ]))));
   }
 }
