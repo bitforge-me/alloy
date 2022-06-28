@@ -353,26 +353,25 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                                 return null;
                               })),
                       Visibility(
-                          visible:
-                              widget.asset.isCrypto && widget.l2Network != null,
-                          child: TextFormField(
-                              controller: _recipientController,
-                              maxLines: null,
-                              decoration: InputDecoration(
-                                  labelText: 'Recipient',
-                                  suffixIcon: IconButton(
-                                      onPressed: _scanRecipient,
-                                      icon: Icon(Icons.qr_code))),
-                              keyboardType: TextInputType.text,
-                              validator: (value) {
-                                if (value == null || value.isEmpty)
-                                  return 'Please enter a value';
-                                value = value.trim();
-                                var res = l2RecipientValidate(
-                                    widget.l2Network!.symbol, _testnet, value);
-                                if (!res.result) return res.reason;
-                                return null;
-                              })),
+                        visible:
+                            widget.asset.isCrypto && widget.l2Network != null,
+                        child: BronzeFormInput(_recipientController,
+                            icon: Icon(Icons.person_outlined),
+                            labelText: 'Recipient',
+                            suffixIcon: IconButton(
+                                onPressed: _scanRecipient,
+                                icon: Icon(Icons.qr_code)),
+                            keyboardType: TextInputType.text,
+                            validator: (value) {
+                          if (value == null || value.isEmpty)
+                            return 'Please enter a value';
+                          value = value.trim();
+                          var res = l2RecipientValidate(
+                              widget.l2Network!.symbol, _testnet, value);
+                          if (!res.result) return res.reason;
+                          return null;
+                        }),
+                      ),
                       Visibility(
                           visible: !widget.asset.isCrypto,
                           child: TextFormField(
