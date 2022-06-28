@@ -336,7 +336,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
                 value: _fromAsset,
                 onChanged: _fromChanged)),
       ),
-      SizedBox(height: 15),
+      VerticalSpacer(),
       SizedBox(
         width: inputWidth,
         child: BronzeValueInput(
@@ -378,7 +378,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
                 value: _toAsset,
                 onChanged: _toChanged)),
       ),
-      SizedBox(height: 15),
+      VerticalSpacer(),
       SizedBox(
         width: inputWidth,
         child: BronzeValueInput(

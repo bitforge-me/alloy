@@ -10,6 +10,7 @@ import 'assets.dart';
 import 'orders.dart';
 import 'snack.dart';
 import 'quote.dart';
+import 'widgets.dart';
 
 class AddressBookScreen extends StatefulWidget {
   final String asset;
@@ -192,7 +193,7 @@ class _QuoteScreenState extends State<QuoteScreen> {
                         if (totalPrice.errMsg != null) return totalPrice.errMsg;
                         return null;
                       }),
-                  SizedBox(height: 15),
+                  VerticalSpacer(),
                   raisedButton(
                       onPressed: _orderCreate, child: Text('Create Order'))
                 ]))));

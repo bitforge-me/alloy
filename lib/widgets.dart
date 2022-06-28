@@ -5,6 +5,16 @@ import 'package:zapdart/colors.dart';
 
 import 'config.dart' as cfg;
 
+class VerticalSpacer extends StatelessWidget {
+  final double height;
+  VerticalSpacer({this.height = 15});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(height: height);
+  }
+}
+
 class BronzeValueInput extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputType? keyboardType;

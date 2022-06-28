@@ -224,11 +224,11 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-              SizedBox(height: 15),
+              VerticalSpacer(),
               BronzeRoundedButton(_make, ZapOnPrimary, ZapPrimary,
                   ZapPrimaryGradient, 'Make Deposit',
                   width: ButtonWidth, height: ButtonHeight, fwdArrow: true),
-              SizedBox(height: 15),
+              VerticalSpacer(),
               _deposits.length == 0
                   ? Container(
                       margin: EdgeInsets.all(20),
@@ -338,7 +338,7 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
               title: Text('Status'),
               subtitle:
                   Text('${_deposit.confirmed ? 'CONFIRMED' : 'PENDING'}')),
-          SizedBox(height: 15),
+          VerticalSpacer(),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,
                 Colors.white30, null, 'Close',
@@ -405,9 +405,9 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
                         size: 200.0,
                       )),
                       padding: EdgeInsets.all(10)),
-                  SizedBox(height: 15),
+                  VerticalSpacer(),
                   Text(shortenStr(widget.recipient)),
-                  SizedBox(height: 15),
+                  VerticalSpacer(),
                   BronzeRoundedButton(_copyRecipient, Colors.white,
                       Color(0xff32333b), null, 'Copy to Clipboard',
                       width: ButtonWidth,
@@ -553,11 +553,11 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
       body: ColumnView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        SizedBox(height: 15),
+        VerticalSpacer(),
         BronzeRoundedButton(
             _make, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Make Deposit',
             width: ButtonWidth, height: ButtonHeight, fwdArrow: true),
-        SizedBox(height: 15),
+        VerticalSpacer(),
         _deposits.length == 0
             ? Container(
                 margin: EdgeInsets.all(20),
@@ -646,7 +646,7 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
           ListTile(
               title: Text('Status'),
               subtitle: Text('${_deposit.status.toUpperCase()}')),
-          SizedBox(height: 15),
+          VerticalSpacer(),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,
                 Colors.white30, null, 'Close',
@@ -726,7 +726,7 @@ class _FiatAccountNumberScreenState extends State<FiatAccountNumberScreen> {
                       trailing: IconButton(
                           onPressed: () => _copy('code', widget.account.code),
                           icon: Icon(Icons.copy))),
-                  SizedBox(height: 15),
+                  VerticalSpacer(),
                   BronzeRoundedButton(() => Navigator.of(context).pop(),
                       Colors.white, Colors.white30, null, 'Cancel',
                       width: ButtonWidth, height: ButtonHeight)
