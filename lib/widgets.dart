@@ -5,6 +5,25 @@ import 'package:zapdart/colors.dart';
 
 import 'config.dart' as cfg;
 
+class SpacedVisibility extends StatelessWidget {
+  // Visibility widget with VerticalSpacer placed above child Widget in Column
+  // Intention is to space out BronzeFormInput widgets on certain pages
+  final Widget child;
+  final bool visible;
+  SpacedVisibility(this.visible, this.child);
+
+  @override
+  Widget build(BuildContext context) {
+    return Visibility(
+      visible: this.visible,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[VerticalSpacer(), this.child],
+      ),
+    );
+  }
+}
+
 class VerticalSpacer extends StatelessWidget {
   final double height;
   VerticalSpacer({this.height = 15});
