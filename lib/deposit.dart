@@ -337,9 +337,12 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
               title: Text('Status'),
               subtitle:
                   Text('${_deposit.confirmed ? 'CONFIRMED' : 'PENDING'}')),
-          BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,
-              Colors.white30, null, 'Close',
-              width: ButtonWidth, height: ButtonHeight)
+          SizedBox(height: 15),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,
+                Colors.white30, null, 'Close',
+                width: ButtonWidth, height: ButtonHeight)
+          ]),
         ])));
   }
 }
