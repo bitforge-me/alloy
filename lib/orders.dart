@@ -239,7 +239,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Orders'),
+          title: Text('Order History'),
         ),
         body:
             ListView.builder(itemBuilder: _listItem, itemCount: _orders.length),
