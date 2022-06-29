@@ -306,7 +306,9 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                       SpacedVisibility(
                           !widget.asset.isCrypto || widget.l2Network == null,
                           BronzeFormInput(_amountController,
-                              icon: Icon(Icons.currency_bitcoin),
+                              icon: widget.asset.isCrypto
+                                  ? Icon(Icons.currency_bitcoin)
+                                  : Icon(Icons.attach_money),
                               labelText:
                                   'Amount (${assetUnit(widget.asset.symbol)})',
                               suffixIcon: TextButton(
