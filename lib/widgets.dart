@@ -5,6 +5,25 @@ import 'package:zapdart/colors.dart';
 
 import 'config.dart' as cfg;
 
+class SpacedVisibility extends StatelessWidget {
+  // Visibility widget with VerticalSpacer placed above child Widget in Column
+  // Intention is to space out BronzeFormInput widgets on certain pages
+  final Widget child;
+  final bool visible;
+  SpacedVisibility(this.visible, this.child);
+
+  @override
+  Widget build(BuildContext context) {
+    return Visibility(
+      visible: this.visible,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[VerticalSpacer(), this.child],
+      ),
+    );
+  }
+}
+
 class VerticalSpacer extends StatelessWidget {
   final double height;
   VerticalSpacer({this.height = 15});
@@ -12,6 +31,56 @@ class VerticalSpacer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(height: height);
+  }
+}
+
+class BronzeFormInput extends StatelessWidget {
+  final TextEditingController? controller;
+  final TextInputType? keyboardType;
+  final FormFieldValidator<dynamic>? validator;
+  final String? labelText;
+  final bool? obscureText;
+  final Icon? icon;
+  final Widget? suffixIcon;
+  BronzeFormInput(this.controller,
+      {this.validator,
+      this.keyboardType,
+      this.obscureText,
+      this.labelText,
+      this.suffixIcon,
+      this.icon})
+      : super();
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+        controller: this.controller,
+        decoration: InputDecoration(
+          prefixIcon: this.icon == null
+              ? null
+              : Padding(
+                  padding: EdgeInsets.only(top: 5),
+                  child: this.icon,
+                ),
+          suffixIcon: this.suffixIcon,
+          contentPadding: const EdgeInsets.symmetric(vertical: 25.0),
+          fillColor: Color(0xFFFFFFFF).withOpacity(0.1),
+          filled: true,
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          labelText: this.labelText ?? null,
+          constraints: BoxConstraints(
+              minWidth: cfg.ButtonWidth, maxWidth: cfg.ButtonWidth),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(40),
+            borderSide: BorderSide(
+              width: 0,
+              style: BorderStyle.none,
+            ),
+          ),
+        ),
+        keyboardType: this.keyboardType ?? null,
+        obscureText: this.obscureText ?? false,
+        validator: this.validator ?? null);
   }
 }
 

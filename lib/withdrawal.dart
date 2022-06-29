@@ -85,11 +85,15 @@ class _WithdrawalCheckScreenState extends State<WithdrawalCheckScreen> {
                         title: Text('Recipient'),
                         subtitle: Text(shortenStr(widget.recipient)))
                   ]),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        raisedButton(onPressed: _cancel, child: Text('Cancel')),
-                        raisedButton(onPressed: _ok, child: Text('Ok')),
+                        BronzeRoundedButton(_ok, ZapOnPrimary, ZapPrimary,
+                            ZapPrimaryGradient, 'Continue',
+                            width: ButtonWidth, height: ButtonHeight),
+                        BronzeRoundedButton(
+                            _cancel, ZapOnSurface, ZapSurface, null, 'Cancel',
+                            width: ButtonWidth, height: ButtonHeight),
                       ])
                 ]))));
   }
@@ -188,7 +192,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                   widget.asset,
                   widget.l2Network,
                   amount,
-                  _recipientController.text)));
+                  _recipientController.text.trim())));
       if (userOk == null || !userOk) return;
       // ask two factor code
       String? tfCode = null;
@@ -212,7 +216,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                 ? assetAmountFromUser(
                     widget.asset.symbol, Decimal.parse(_amountController.text))
                 : Decimal.zero,
-            _recipientController.text,
+            _recipientController.text.trim(),
             _saveRecipient,
             _recipientDescriptionController.text,
             tfCode);
@@ -283,139 +287,145 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                     padding: EdgeInsets.all(10),
                     child: Column(children: [
                       Visibility(
-                          visible: widget.asset.withdrawInstr != null,
-                          child: AlertDrawer(
+                        visible: widget.asset.isCrypto,
+                        child: Container(
+                            padding: EdgeInsets.only(top: 20, bottom: 20),
+                            child: Center(
+                                child: Icon(
+                                    Icons.keyboard_double_arrow_up_rounded,
+                                    size: 150,
+                                    color: ZapOnSecondary))),
+                      ),
+                      SpacedVisibility(
+                          widget.asset.withdrawInstr != null,
+                          AlertDrawer(
                               () {}, ['${widget.asset.withdrawInstr}'])),
                       Container(
                           margin: EdgeInsets.all(5),
                           child: Text(_availableBalance)),
-                      Visibility(
-                          visible: !widget.asset.isCrypto ||
-                              widget.l2Network == null,
-                          child: TextFormField(
-                              controller: _amountController,
-                              decoration: InputDecoration(
-                                  labelText:
-                                      'Amount (${assetUnit(widget.asset.symbol)})',
-                                  suffix: TextButton(
-                                      child: Text('max',
-                                          style:
-                                              TextStyle(color: ZapOnPrimary)),
-                                      onPressed: _setMax)),
+                      SpacedVisibility(
+                          !widget.asset.isCrypto || widget.l2Network == null,
+                          BronzeFormInput(_amountController,
+                              icon: widget.asset.isCrypto
+                                  ? Icon(Icons.currency_bitcoin)
+                                  : Icon(Icons.attach_money),
+                              labelText:
+                                  'Amount (${assetUnit(widget.asset.symbol)})',
+                              suffixIcon: TextButton(
+                                  child: Text('max',
+                                      style: TextStyle(color: ZapOnPrimary)),
+                                  onPressed: _setMax),
                               keyboardType: TextInputType.numberWithOptions(
-                                  signed: false, decimal: true),
-                              validator: (value) {
-                                if (value == null || value.isEmpty)
-                                  return 'Please enter a value';
-                                var userAmount = Decimal.tryParse(value.trim());
-                                if (userAmount == null) return 'Invalid value';
-                                if (userAmount <= Decimal.zero)
-                                  'Please return a value greater then 0';
-                                var withdrawAsset =
-                                    widget.l2Network ?? widget.asset;
-                                var sysAmount = assetAmountFromUser(
-                                    widget.asset.symbol, userAmount);
-                                if (sysAmount < withdrawAsset.minWithdraw)
-                                  return 'Please enter a value greater then or equal to ${assetAmountToUser(widget.asset.symbol, withdrawAsset.minWithdraw)}';
-                                if (sysAmount > _max)
-                                  return 'Please enter a value less then or equal to ${assetAmountToUser(widget.asset.symbol, _max)}';
-                                return null;
-                              })),
-                      Visibility(
-                          visible:
-                              widget.asset.isCrypto && widget.l2Network == null,
-                          child: TextFormField(
-                              controller: _recipientController,
-                              decoration: InputDecoration(
-                                  labelText: 'Wallet Address',
-                                  suffix: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        IconButton(
-                                            icon: Icon(Icons.alternate_email),
-                                            tooltip: 'Address Book',
-                                            onPressed: _addressBook),
-                                        IconButton(
-                                            onPressed: _scanRecipient,
-                                            icon: Icon(Icons.qr_code))
-                                      ])),
+                                  signed: false,
+                                  decimal: true), validator: (value) {
+                            if (value == null || value.isEmpty)
+                              return 'Please enter a value';
+                            var userAmount = Decimal.tryParse(value.trim());
+                            if (userAmount == null) return 'Invalid value';
+                            if (userAmount <= Decimal.zero)
+                              'Please return a value greater then 0';
+                            var withdrawAsset =
+                                widget.l2Network ?? widget.asset;
+                            var sysAmount = assetAmountFromUser(
+                                widget.asset.symbol, userAmount);
+                            if (sysAmount < withdrawAsset.minWithdraw)
+                              return 'Please enter a value greater then or equal to ${assetAmountToUser(widget.asset.symbol, withdrawAsset.minWithdraw)}';
+                            if (sysAmount > _max)
+                              return 'Please enter a value less then or equal to ${assetAmountToUser(widget.asset.symbol, _max)}';
+                            return null;
+                          })),
+                      SpacedVisibility(
+                          widget.asset.isCrypto && widget.l2Network == null,
+                          BronzeFormInput(_recipientController,
+                              labelText: 'Wallet Address',
+                              icon: Icon(Icons.person_outlined),
+                              suffixIcon: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                        icon: Icon(Icons.alternate_email),
+                                        tooltip: 'Address Book',
+                                        onPressed: _addressBook),
+                                    IconButton(
+                                        onPressed: _scanRecipient,
+                                        icon: Icon(Icons.qr_code))
+                                  ]),
                               keyboardType: TextInputType.text,
                               validator: (value) {
-                                if (value == null || value.isEmpty)
-                                  return 'Please enter a value';
-                                var res = addressValidate(
-                                    widget.asset.symbol, _testnet, value);
-                                if (!res.result) return res.reason;
-                                return null;
-                              })),
-                      Visibility(
-                          visible:
-                              widget.asset.isCrypto && widget.l2Network != null,
-                          child: TextFormField(
-                              controller: _recipientController,
-                              maxLines: null,
-                              decoration: InputDecoration(
-                                  labelText: 'Recipient',
-                                  suffixIcon: IconButton(
-                                      onPressed: _scanRecipient,
-                                      icon: Icon(Icons.qr_code))),
-                              keyboardType: TextInputType.text,
-                              validator: (value) {
-                                if (value == null || value.isEmpty)
-                                  return 'Please enter a value';
-                                var res = l2RecipientValidate(
-                                    widget.l2Network!.symbol, _testnet, value);
-                                if (!res.result) return res.reason;
-                                return null;
-                              })),
-                      Visibility(
-                          visible: !widget.asset.isCrypto,
-                          child: TextFormField(
-                              controller: _recipientController,
-                              decoration: InputDecoration(
-                                  labelText: 'Bank Account',
-                                  suffix: IconButton(
-                                      icon: Icon(Icons.alternate_email),
-                                      tooltip: 'Address Book',
-                                      onPressed: _addressBook)),
+                            if (value == null || value.isEmpty)
+                              return 'Please enter a value';
+                            var res = addressValidate(
+                                widget.asset.symbol, _testnet, value);
+                            if (!res.result) return res.reason;
+                            return null;
+                          })),
+                      SpacedVisibility(
+                        widget.asset.isCrypto && widget.l2Network != null,
+                        BronzeFormInput(_recipientController,
+                            icon: Icon(Icons.person_outlined),
+                            labelText: 'Recipient',
+                            suffixIcon: IconButton(
+                                onPressed: _scanRecipient,
+                                icon: Icon(Icons.qr_code)),
+                            keyboardType: TextInputType.text,
+                            validator: (value) {
+                          if (value == null || value.isEmpty)
+                            return 'Please enter a value';
+                          value = value.trim();
+                          var res = l2RecipientValidate(
+                              widget.l2Network!.symbol, _testnet, value);
+                          if (!res.result) return res.reason;
+                          return null;
+                        }),
+                      ),
+                      SpacedVisibility(
+                          !widget.asset.isCrypto,
+                          BronzeFormInput(_recipientController,
+                              icon: Icon(Icons.person_outlined),
+                              labelText: 'Bank Account',
+                              suffixIcon: IconButton(
+                                  icon: Icon(Icons.alternate_email),
+                                  tooltip: 'Address Book',
+                                  onPressed: _addressBook),
                               keyboardType: TextInputType.number,
                               validator: (value) {
-                                if (value == null || value.isEmpty)
-                                  return 'Please enter a value';
-                                var res = bankValidate(value);
-                                if (!res.result) return res.reason;
-                                return null;
-                              })),
-                      Visibility(
-                          visible: !widget.asset.isCrypto ||
-                              widget.l2Network == null,
-                          child: CheckboxFormField(
-                              Text(widget.asset.isCrypto
-                                  ? 'Save Wallet Address'
-                                  : 'Save Bank Account'),
-                              _saveRecipient || !widget.asset.isCrypto,
-                              onChanged: widget.asset.isCrypto
-                                  ? _updateSaveRecipient
-                                  : null)),
-                      Visibility(
-                          visible: _saveRecipient || !widget.asset.isCrypto,
-                          child: TextFormField(
-                              controller: _recipientDescriptionController,
-                              decoration: InputDecoration(
-                                  labelText: widget.asset.isCrypto
-                                      ? 'Wallet Address Description'
-                                      : 'Bank Account Description'),
+                            if (value == null || value.isEmpty)
+                              return 'Please enter a value';
+                            var res = bankValidate(value);
+                            if (!res.result) return res.reason;
+                            return null;
+                          })),
+                      SpacedVisibility(
+                          !widget.asset.isCrypto || widget.l2Network == null,
+                          SizedBox(
+                              width: ButtonWidth,
+                              child: CheckboxFormField(
+                                  Text(widget.asset.isCrypto
+                                      ? 'Save Wallet Address'
+                                      : 'Save Bank Account'),
+                                  _saveRecipient || !widget.asset.isCrypto,
+                                  onChanged: widget.asset.isCrypto
+                                      ? _updateSaveRecipient
+                                      : null))),
+                      SpacedVisibility(
+                          _saveRecipient || !widget.asset.isCrypto,
+                          BronzeFormInput(_recipientDescriptionController,
+                              icon: Icon(Icons.note_alt),
+                              labelText: widget.asset.isCrypto
+                                  ? 'Wallet Address Description'
+                                  : 'Bank Account Description',
                               keyboardType: TextInputType.text,
                               validator: (value) {
-                                if (value == null || value.isEmpty)
-                                  return 'Please enter a value';
-                                return null;
-                              })),
-                      Visibility(
-                          visible: !widget.asset.isCrypto,
-                          child: Card(
+                            if (value == null || value.isEmpty)
+                              return 'Please enter a value';
+                            return null;
+                          })),
+                      SpacedVisibility(
+                          !widget.asset.isCrypto,
+                          Card(
                               margin: EdgeInsets.only(top: 10),
                               child: Container(
+                                  width: ButtonWidth,
                                   padding: EdgeInsets.all(10),
                                   margin: EdgeInsets.zero,
                                   child: Column(children: [
@@ -442,15 +452,11 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                                           return null;
                                         }),
                                     TextFormField(
-                                        controller: _accountAddr02Controller,
-                                        decoration: InputDecoration(
-                                            labelText: 'Address Line 2'),
-                                        keyboardType: TextInputType.text,
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty)
-                                            return 'Please enter a value';
-                                          return null;
-                                        }),
+                                      controller: _accountAddr02Controller,
+                                      decoration: InputDecoration(
+                                          labelText: 'Address Line 2'),
+                                      keyboardType: TextInputType.text,
+                                    ),
                                     TextFormField(
                                         controller:
                                             _accountAddrCountryController,
@@ -464,9 +470,14 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                                         }),
                                   ])))),
                       VerticalSpacer(),
-                      raisedButton(
-                          onPressed: _withdrawalCreate,
-                          child: Text('Create Withdrawal'))
+                      BronzeRoundedButton(_withdrawalCreate, ZapOnPrimary,
+                          ZapPrimary, ZapPrimaryGradient, 'Create Withdrawal',
+                          width: ButtonWidth,
+                          height: ButtonHeight,
+                          fwdArrow: true),
+                      BronzeRoundedButton(() => Navigator.of(context).pop(),
+                          ZapOnSurface, ZapSurface, null, 'Cancel',
+                          width: ButtonWidth, height: ButtonHeight),
                     ])))));
   }
 }
@@ -666,9 +677,9 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         VerticalSpacer(),
-        BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
-            ZapSecondaryGradient, 'Make Withdrawal',
-            width: ButtonWidth, height: ButtonHeight),
+        BronzeRoundedButton(_make, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient,
+            'Make Withdrawal',
+            width: ButtonWidth, height: ButtonHeight, fwdArrow: true),
         _withdrawals.length == 0
             ? Container(
                 margin: EdgeInsets.all(20),
@@ -760,9 +771,11 @@ class _CryptoWithdrawalDetailScreenState
                   '${assetFormatWithUnitToUser(_withdrawal.asset, _withdrawal.amount)}')),
           ListTile(title: Text('Date'), subtitle: Text('${_withdrawal.date}')),
           ListTile(
-              title: Text('Recipient'),
+              title: Text(
+                  "${_withdrawal.l2Network == null ? 'Recipient' : 'Invoice'}"),
               subtitle: Text(shortenStr(_withdrawal.recipient)),
-              onTap: _addrLaunch,
+              onTap:
+                  _withdrawal.l2Network == null ? _addrLaunch : _copyRecipient,
               trailing: IconButton(
                   onPressed: _copyRecipient, icon: Icon(Icons.copy))),
           Visibility(
@@ -773,6 +786,12 @@ class _CryptoWithdrawalDetailScreenState
           ListTile(
               title: Text('Status'),
               subtitle: Text('${_withdrawal.status.toUpperCase()}')),
+          VerticalSpacer(),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,
+                Colors.white30, null, 'Close',
+                width: ButtonWidth, height: ButtonHeight)
+          ])
         ])));
   }
 }
@@ -880,9 +899,9 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         VerticalSpacer(),
-        BronzeRoundedButton(_make, ZapOnSecondary, ZapSecondary,
-            ZapSecondaryGradient, 'Make Withdrawal',
-            width: ButtonWidth, height: ButtonHeight),
+        BronzeRoundedButton(_make, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient,
+            'Make Withdrawal',
+            width: ButtonWidth, height: ButtonHeight, fwdArrow: true),
         _withdrawals.length == 0
             ? Container(
                 margin: EdgeInsets.all(20),
@@ -960,6 +979,12 @@ class _FiatWithdrawalDetailScreenState
           ListTile(
               title: Text('Status'),
               subtitle: Text('${_withdrawal.status.toUpperCase()}')),
+          VerticalSpacer(),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,
+                Colors.white30, null, 'Close',
+                width: ButtonWidth, height: ButtonHeight)
+          ])
         ])));
   }
 }
