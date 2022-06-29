@@ -474,7 +474,10 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                           ZapPrimary, ZapPrimaryGradient, 'Create Withdrawal',
                           width: ButtonWidth,
                           height: ButtonHeight,
-                          fwdArrow: true)
+                          fwdArrow: true),
+                      BronzeRoundedButton(() => Navigator.of(context).pop(),
+                          ZapOnSurface, ZapSurface, null, 'Cancel',
+                          width: ButtonWidth, height: ButtonHeight),
                     ])))));
   }
 }
