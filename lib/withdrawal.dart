@@ -286,6 +286,16 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                 child: Container(
                     padding: EdgeInsets.all(10),
                     child: Column(children: [
+                      Visibility(
+                        visible: widget.asset.isCrypto,
+                        child: Container(
+                            padding: EdgeInsets.only(top: 20, bottom: 20),
+                            child: Center(
+                                child: Icon(
+                                    Icons.keyboard_double_arrow_up_rounded,
+                                    size: 150,
+                                    color: ZapOnSecondary))),
+                      ),
                       SpacedVisibility(
                           widget.asset.withdrawInstr != null,
                           AlertDrawer(
