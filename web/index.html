@@ -56,10 +56,11 @@
     }
 
     .background {
-      background-image: url(/sky.jpg);
+      background-image: url(backgrounds/sky.jpg);
       background-size: cover;
       background-repeat: no-repeat;
       background-blend-mode: overlay;
+      background-position: center center;
       height: 100vh;
     }
 
@@ -102,7 +103,7 @@
     });
   </script>
 
-  <div class="background">
+  <div id="background" class="background">
     <div class="glass">
       <!-- Splash screen -->
       <div class="splash">
@@ -110,5 +111,16 @@
       </div>
   </div>
   </div>
+
+  <script>
+    let urls = ["url('backgrounds/abudhabi.jpg')",
+                "url('backgrounds/dubai.jpg')",
+                "url('backgrounds/jerusalem.jpg')",
+                "url('backgrounds/nasa.jpg')",
+                "url('backgrounds/sky.jpg')",
+                "url('backgrounds/spacex.jpg')"];
+    let random = Math.floor(Math.random() * urls.length) + 0;
+    document.getElementById("background").style.backgroundImage = urls[random];
+  </script>
 </body>
 </html>
