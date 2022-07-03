@@ -600,7 +600,10 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.cryptoWithdrawalNew) {
-      if (_pageCount == 0) {
+      var withdrawal = BeCryptoWithdrawal.fromJson(jsonDecode(args.msg));
+      if (withdrawal.asset != widget.asset.symbol ||
+          withdrawal.l2Network != widget.l2Network?.symbol) return;
+      if (_pageNumber == 0) {
         _withdrawals.insert(
             0, BeCryptoWithdrawal.fromJson(jsonDecode(args.msg)));
         if (_withdrawals.length > _itemsPerPage) _withdrawals.removeLast();
@@ -831,8 +834,10 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.fiatWithdrawalNew) {
-      if (_pageCount == 0) {
-        _withdrawals.insert(0, BeFiatWithdrawal.fromJson(jsonDecode(args.msg)));
+      var withdrawal = BeFiatWithdrawal.fromJson(jsonDecode(args.msg));
+      if (withdrawal.asset != widget.asset.symbol) return;
+      if (_pageNumber == 0) {
+        _withdrawals.insert(0, withdrawal);
         if (_withdrawals.length > _itemsPerPage) _withdrawals.removeLast();
         setState(() => _withdrawals = _withdrawals);
       }
