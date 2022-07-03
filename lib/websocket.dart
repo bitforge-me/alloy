@@ -103,6 +103,38 @@ class Websocket {
       call(WebsocketEvent.lnInvoicePaid, data);
       log.info('ln_invoice_paid: $data');
     });
+    socket.on('crypto_deposit_new', (data) {
+      call(WebsocketEvent.cryptoDepositNew, data);
+      log.info('crypto_deposit_new: $data');
+    });
+    socket.on('crypto_deposit_update', (data) {
+      call(WebsocketEvent.cryptoDepositUpdate, data);
+      log.info('crypto_deposit_update: $data');
+    });
+    socket.on('fiat_deposit_new', (data) {
+      call(WebsocketEvent.fiatDepositNew, data);
+      log.info('fiat_deposit_new: $data');
+    });
+    socket.on('fiat_deposit_update', (data) {
+      call(WebsocketEvent.fiatDepositUpdate, data);
+      log.info('fiat_deposit_update: $data');
+    });
+    socket.on('crypto_withdrawal_new', (data) {
+      call(WebsocketEvent.cryptoWithdrawalNew, data);
+      log.info('crypto_withdrawal_new: $data');
+    });
+    socket.on('crypto_deposit_update', (data) {
+      call(WebsocketEvent.cryptoDepositUpdate, data);
+      log.info('crypto_deposit_update: $data');
+    });
+    socket.on('fiat_withdrawal_new', (data) {
+      call(WebsocketEvent.fiatWithdrawalNew, data);
+      log.info('fiat_withdrawal_new: $data');
+    });
+    socket.on('fiat_withdrawal_update', (data) {
+      call(WebsocketEvent.fiatWithdrawalUpdate, data);
+      log.info('fiat_withdrawal_update: $data');
+    });
     socket.on('disconnect', (_) {
       log.info('ws disconnect');
     });
