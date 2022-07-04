@@ -131,8 +131,7 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                                 BronzeValueInput(
                                   controller: _amountController,
                                   suffixText: '${assetUnit(widget.asset)}',
-                                  labelText:
-                                      'Amount (${assetUnit(widget.asset)})',
+                                  labelText: 'Amount',
                                   validator: (value) {
                                     if (value == null || value.isEmpty)
                                       return 'Please enter a value';
