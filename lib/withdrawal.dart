@@ -82,7 +82,7 @@ class _WithdrawalCheckScreenState extends State<WithdrawalCheckScreen> {
                         subtitle: Text(
                             '${assetFormatWithUnitToUser(widget.asset.symbol, widget.amount != null ? widget.amount! : _extractedAmount)}')),
                     ListTile(
-                        title: Text('Recipient'),
+                        title: widget.l2Network != null ? Text('Invoice') : Text('Recipient'),
                         subtitle: Text(shortenStr(widget.recipient)))
                   ]),
                   Column(
@@ -364,7 +364,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                         widget.asset.isCrypto && widget.l2Network != null,
                         BronzeFormInput(_recipientController,
                             icon: Icon(Icons.person_outlined),
-                            labelText: 'Recipient',
+                            labelText: 'Invoice',
                             suffixIcon: IconButton(
                                 onPressed: _scanRecipient,
                                 icon: Icon(Icons.qr_code)),
