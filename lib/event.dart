@@ -264,6 +264,9 @@ class _DepositMethodScreenState extends State<DepositMethodScreen> {
                           shrinkWrap: true,
                           itemCount: widget.methods.length,
                           itemBuilder: _buildMethod)),
+                  BronzeRoundedButton(() => Navigator.of(context).pop(),
+                      Colors.white, Colors.white30, null, 'Cancel',
+                      width: ButtonWidth, height: ButtonHeight)
                 ]))));
   }
 }
