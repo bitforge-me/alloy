@@ -82,7 +82,9 @@ class _WithdrawalCheckScreenState extends State<WithdrawalCheckScreen> {
                         subtitle: Text(
                             '${assetFormatWithUnitToUser(widget.asset.symbol, widget.amount != null ? widget.amount! : _extractedAmount)}')),
                     ListTile(
-                        title: widget.l2Network != null ? Text('Invoice') : Text('Recipient'),
+                        title: widget.l2Network != null
+                            ? Text('Invoice')
+                            : Text('Recipient'),
                         subtitle: Text(shortenStr(widget.recipient)))
                   ]),
                   Column(
