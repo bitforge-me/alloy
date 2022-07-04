@@ -102,7 +102,6 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
           title: Text('Deposit'),
           actions: [
             assetLogo(
