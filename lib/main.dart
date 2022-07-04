@@ -372,8 +372,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                     visible: _userInfo != null,
                     child: Column(mainAxisSize: MainAxisSize.min, children: [
                       Row(mainAxisSize: MainAxisSize.min, children: [
-                        SquareButton(_orders, Icons.shopping_cart_rounded,
-                            ZapSecondary, 'Orders',
+                        SquareButton(_orders, Icons.history, ZapSecondary,
+                            'Order History',
                             textColor: ZapOnSecondary,
                             textOutside: false,
                             borderSize: 0),

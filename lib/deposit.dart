@@ -133,8 +133,11 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.cryptoDepositNew) {
-      if (_pageCount == 0) {
-        _deposits.insert(0, BeCryptoDeposit.fromJson(jsonDecode(args.msg)));
+      var deposit = BeCryptoDeposit.fromJson(jsonDecode(args.msg));
+      if (deposit.asset != widget.asset.symbol ||
+          deposit.l2Network != widget.l2Network?.symbol) return;
+      if (_pageNumber == 0) {
+        _deposits.insert(0, deposit);
         if (_deposits.length > _itemsPerPage) _deposits.removeLast();
         setState(() => _deposits = _deposits);
       }
@@ -454,8 +457,10 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.fiatDepositNew) {
-      if (_pageCount == 0) {
-        _deposits.insert(0, BeFiatDeposit.fromJson(jsonDecode(args.msg)));
+      var deposit = BeFiatDeposit.fromJson(jsonDecode(args.msg));
+      if (deposit.asset != widget.asset.symbol) return;
+      if (_pageNumber == 0) {
+        _deposits.insert(0, deposit);
         if (_deposits.length > _itemsPerPage) _deposits.removeLast();
         setState(() => _deposits = _deposits);
       }

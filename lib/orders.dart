@@ -172,7 +172,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     if (args == null) return;
     if (args.event == WebsocketEvent.brokerOrderNew) {
       var newOrder = BeBrokerOrder.fromJson(jsonDecode(args.msg));
-      if (_pageCount == 0) {
+      if (_pageNumber == 0) {
         _orders.insert(0, newOrder);
         if (_orders.length > _itemsPerPage) _orders.removeLast();
         setState(() => _orders = _orders);
@@ -239,7 +239,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Orders'),
+          title: Text('Order History'),
         ),
         body:
             ListView.builder(itemBuilder: _listItem, itemCount: _orders.length),
