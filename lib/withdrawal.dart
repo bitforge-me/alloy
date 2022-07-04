@@ -221,6 +221,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
             _recipientDescriptionController.text,
             tfCode);
         Navigator.pop(context);
+        Navigator.pop(context);
         res.when(
             (withdrawal) => Navigator.push(
                 context,
