@@ -320,8 +320,8 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                               icon: widget.asset.isCrypto
                                   ? Icon(Icons.currency_bitcoin)
                                   : Icon(Icons.attach_money),
-                              labelText:
-                                  'Amount (${assetUnit(widget.asset.symbol)})',
+                              labelText: 'Amount',
+                              suffixText: assetUnit(widget.asset.symbol),
                               suffixIcon: TextButton(
                                   child: Text('max',
                                       style: TextStyle(color: ZapOnPrimary)),
