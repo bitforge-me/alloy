@@ -610,6 +610,17 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
         setState(() => _withdrawals = _withdrawals);
       }
     }
+    if (args.event == WebsocketEvent.cryptoWithdrawalUpdate) {
+      var newWithdrawal = BeCryptoWithdrawal.fromJson(jsonDecode(args.msg));
+      for (var i = 0; i < _withdrawals.length; i++) {
+        var withdrawal = _withdrawals[i];
+        if (withdrawal.token == newWithdrawal.token) {
+          _withdrawals[i] = newWithdrawal;
+          setState(() => _withdrawals = _withdrawals);
+          snackMsg(context, 'withdrawal updated ${newWithdrawal.token}');
+        }
+      }
+    }
   }
 
   Future<void> _initWithdrawals(int pageNumber) async {
@@ -840,6 +851,17 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
         _withdrawals.insert(0, withdrawal);
         if (_withdrawals.length > _itemsPerPage) _withdrawals.removeLast();
         setState(() => _withdrawals = _withdrawals);
+      }
+    }
+    if (args.event == WebsocketEvent.fiatWithdrawalUpdate) {
+      var newWithdrawal = BeFiatWithdrawal.fromJson(jsonDecode(args.msg));
+      for (var i = 0; i < _withdrawals.length; i++) {
+        var withdrawal = _withdrawals[i];
+        if (withdrawal.token == newWithdrawal.token) {
+          _withdrawals[i] = newWithdrawal;
+          setState(() => _withdrawals = _withdrawals);
+          snackMsg(context, 'withdrawal updated ${newWithdrawal.token}');
+        }
       }
     }
   }
