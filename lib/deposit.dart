@@ -199,7 +199,6 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
     var res = await beCryptoDepositRecipient(
         widget.asset.symbol, widget.l2Network?.symbol, amount);
     Navigator.pop(context);
-    Navigator.pop(context);
     res.when(
         (recipient, asset, l2Network) => Navigator.push(
             context,
