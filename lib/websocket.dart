@@ -123,9 +123,9 @@ class Websocket {
       call(WebsocketEvent.cryptoWithdrawalNew, data);
       log.info('crypto_withdrawal_new: $data');
     });
-    socket.on('crypto_deposit_update', (data) {
-      call(WebsocketEvent.cryptoDepositUpdate, data);
-      log.info('crypto_deposit_update: $data');
+    socket.on('crypto_withdrawal_update', (data) {
+      call(WebsocketEvent.cryptoWithdrawalUpdate, data);
+      log.info('crypto_withdrawal_update: $data');
     });
     socket.on('fiat_withdrawal_new', (data) {
       call(WebsocketEvent.fiatWithdrawalNew, data);
