@@ -180,6 +180,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
   }
 
   void _withdrawalCreate() async {
+    bool? didError;
     if (_formKey.currentState == null) return;
     if (_formKey.currentState!.validate()) {
       // ask user to confirm
@@ -223,15 +224,16 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
             _recipientDescriptionController.text,
             tfCode);
         Navigator.pop(context);
-        Navigator.pop(context);
         res.when(
             (withdrawal) => Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => CryptoWithdrawalDetailScreen(
-                        withdrawal, widget.websocket))),
-            error: (err) => alert(context, 'error',
-                'failed to create withdrawal (${BeError.msg(err)})'));
+                        withdrawal, widget.websocket))), error: (err) {
+          didError = true;
+          return alert(context, 'error',
+              'failed to create withdrawal (${BeError.msg(err)})');
+        });
       } else {
         showAlertDialog(context, 'creating withdrawal..');
         var res = await beFiatWithdrawalCreate(
@@ -250,9 +252,15 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => FiatWithdrawalDetailScreen(
-                        withdrawal, widget.websocket))),
-            error: (err) => alert(context, 'error',
-                'failed to create withdrawal (${BeError.msg(err)})'));
+                        withdrawal, widget.websocket))), error: (err) {
+          didError = true;
+          return alert(context, 'error',
+              'failed to create withdrawal (${BeError.msg(err)})');
+        });
+      }
+      if (didError == null) {
+        Navigator.pop(context);
+        Navigator.pop(context);
       }
     }
   }
