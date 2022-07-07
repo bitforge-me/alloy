@@ -137,8 +137,12 @@ class BackgroundWebImage extends StatelessWidget {
       if (backgroundDiv != null) {
         var backgroundImage = backgroundDiv.style.backgroundImage;
         var res = RegExp(r'url\(\"(.*)\"\)').firstMatch(backgroundImage);
-        if (res != null)
-          return '${html.window.location.origin}${html.window.location.pathname}/${res.group(1)}';
+        if (res != null) {
+          var path = html.window.location.pathname ?? '/';
+          if (path.endsWith('/')) // if only '/' or breaks the spec '/path/'
+            path = path.substring(0, path.length - 1); // remove last character
+          return '${html.window.location.origin}${path}/${res.group(1)}';
+        }
       }
     }
     return null;
