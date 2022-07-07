@@ -6,7 +6,6 @@ import 'package:zapdart/colors.dart';
 import 'assets.dart';
 import 'widgets.dart';
 import 'config.dart';
-import 'main.dart';
 
 class DepositReceivedScreen extends StatefulWidget {
   final String asset;
@@ -66,17 +65,9 @@ class _DepositReceivedScreenState extends State<DepositReceivedScreen> {
                               : SizedBox()
                         ])),
                   ),
-                  BronzeRoundedButton(
-                      () => Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (c) => MyHomePage(title: AppTitle)),
-                          (route) => false),
-                      Colors.white,
-                      Colors.white30,
-                      null,
-                      'Close',
-                      width: ButtonWidth,
-                      height: ButtonHeight)
+                  BronzeRoundedButton(() => Navigator.of(context).pop(),
+                      Colors.white, Colors.white30, null, 'Close',
+                      width: ButtonWidth, height: ButtonHeight)
                 ]))));
   }
 }
