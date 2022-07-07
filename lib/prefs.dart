@@ -4,8 +4,9 @@ import 'config.dart';
 
 class Prefs {
   static String getKeyNetworkSpecific(String key) {
-    if (!testnet()) key = '${key}_mainnet';
-    return key;
+    var network = 'mainnet';
+    if (testnet()) network = 'testnet';
+    return '${server()}_${network}_${key}';
   }
 
   static Future<String?> getStringNetworkSpecific(
