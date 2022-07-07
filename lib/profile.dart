@@ -163,7 +163,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         appBar: AppBar(
           title: Text('Profile'),
         ),
-        body: ColumnView(
+        body: BiforgePage(
             child: ListView(children: [
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             VerticalSpacer(height: 5),

@@ -15,7 +15,7 @@ import 'quote.dart';
 import 'orders.dart';
 import 'utils.dart';
 import 'widgets.dart';
-import 'config.dart';
+import 'config.dart' as cfg;
 
 final log = Logger('Exchange');
 
@@ -313,7 +313,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   }
 
   Widget _buildWidget() {
-    const inputWidth = ButtonWidth;
+    const inputWidth = cfg.ButtonWidth;
     var from = Column(children: [
       SizedBox(
         width: inputWidth,
@@ -347,7 +347,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       ),
     ]);
     var arrow = Container(
-        margin: EdgeInsets.all(20),
+        margin: EdgeInsets.all(10),
         child: _calculating
             ? CircularProgressIndicator()
             : Icon(Icons.arrow_forward, color: ZapPrimary, size: 24));
@@ -391,7 +391,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     ]);
     return Column(children: [
       LayoutBuilder(builder: (context, constraints) {
-        if (constraints.maxWidth < inputWidth * 2 + 100)
+        if (constraints.maxWidth < cfg.MaxColumnWidth)
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [from, arrowDown, to]);

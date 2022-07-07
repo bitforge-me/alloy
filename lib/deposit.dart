@@ -91,7 +91,7 @@ class _DepositSelectScreenState extends State<DepositSelectScreen> {
       appBar: AppBar(
         title: Text('Deposits'),
       ),
-      body: ColumnView(
+      body: BiforgePage(
           child: ListView.builder(
               itemBuilder: _listItem, itemCount: _listCount())),
     );
@@ -223,7 +223,7 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: ColumnView(
+        body: BiforgePage(
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -314,7 +314,7 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: ColumnView(
+        body: BiforgePage(
             child: ListView(children: [
           ListTile(
               title: Text('Amount'),
@@ -389,7 +389,7 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: ColumnView(
+        body: BiforgePage(
             scrollChild: true,
             child: Container(
                 padding: EdgeInsets.all(20),
@@ -555,7 +555,7 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
         title: Text('${widget.asset.symbol} Deposits'),
         actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
       ),
-      body: ColumnView(
+      body: BiforgePage(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         VerticalSpacer(),
@@ -626,7 +626,7 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
           title: Text('Deposit ${_deposit.asset}'),
           actions: [assetLogo(_deposit.asset, margin: EdgeInsets.all(10))],
         ),
-        body: ColumnView(
+        body: BiforgePage(
             child: ListView(children: [
           ListTile(
               title: Text('Amount'),
@@ -702,7 +702,7 @@ class _FiatAccountNumberScreenState extends State<FiatAccountNumberScreen> {
           title: Text('Deposit ${widget.asset.symbol}'),
           actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
         ),
-        body: ColumnView(
+        body: BiforgePage(
             child: SizedBox(
                 width: ButtonWidth,
                 child: ListView(children: [

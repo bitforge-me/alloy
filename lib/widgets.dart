@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:universal_platform/universal_platform.dart';
+import 'package:universal_html/html.dart' as html;
 
 import 'package:zapdart/colors.dart';
 
@@ -120,6 +122,43 @@ class BronzeValueInput extends StatelessWidget {
   }
 }
 
+class BackgroundWebImage extends StatelessWidget {
+  final Widget? child;
+  late final String? imageSrc;
+
+  BackgroundWebImage({this.child}) {
+    imageSrc = extractUrl();
+  }
+
+  String? extractUrl() {
+    // extract url from parent page. if we are an app we would need to do this differently
+    if (UniversalPlatform.isWeb) {
+      var backgroundDiv = html.document.getElementById('background');
+      if (backgroundDiv != null) {
+        var backgroundImage = backgroundDiv.style.backgroundImage;
+        var res = RegExp(r'url\(\"(.*)\"\)').firstMatch(backgroundImage);
+        if (res != null)
+          return '${html.window.location.origin}/${res.group(1)}';
+      }
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (imageSrc == null) return Container(child: child);
+    return Container(
+        constraints: BoxConstraints.expand(),
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: NetworkImage(imageSrc!), fit: BoxFit.cover)),
+        child: Container(
+            constraints: BoxConstraints.expand(),
+            decoration: BoxDecoration(color: ZapBackground.withAlpha(220)),
+            child: child));
+  }
+}
+
 class ColumnView extends StatelessWidget {
   final Widget? child;
   final bool scrollChild;
@@ -133,6 +172,18 @@ class ColumnView extends StatelessWidget {
             child: child));
     if (scrollChild) return SingleChildScrollView(child: center);
     return center;
+  }
+}
+
+class BiforgePage extends StatelessWidget {
+  final Widget? child;
+  final bool scrollChild;
+  BiforgePage({this.child, this.scrollChild = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return BackgroundWebImage(
+        child: ColumnView(child: child, scrollChild: scrollChild));
   }
 }
 

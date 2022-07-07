@@ -31,7 +31,7 @@ class _BalanceScreenState extends State<BalanceScreen> {
         appBar: AppBar(
           title: Text('Balances'),
         ),
-        body: ColumnView(
+        body: BiforgePage(
           child: ListView.builder(
               itemBuilder: _listItem, itemCount: widget.balances.length),
         ));

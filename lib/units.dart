@@ -17,7 +17,7 @@ class _UnitsScreenState extends State<UnitsScreen> {
         appBar: AppBar(
           title: Text('Units'),
         ),
-        body: ColumnView(
+        body: BiforgePage(
             child: ListView.builder(
                 itemCount: assetUnits.length,
                 itemBuilder: (context, index) {
