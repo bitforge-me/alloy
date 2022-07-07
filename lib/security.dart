@@ -166,7 +166,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
         appBar: AppBar(
           title: Text('Security'),
         ),
-        body: ColumnView(
+        body: BiforgePage(
             child: ListView(children: [
           _userInfo.tfEnabled
               ? ListTile(

@@ -39,7 +39,7 @@ class _DepositReceivedScreenState extends State<DepositReceivedScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: ColumnView(
+        body: BiforgePage(
             scrollChild: true,
             child: Container(
                 padding: EdgeInsets.all(20),
@@ -110,7 +110,7 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: ColumnView(
+        body: BiforgePage(
             child: Container(
                 padding: EdgeInsets.all(20),
                 child: Column(children: [
@@ -249,7 +249,7 @@ class _DepositMethodScreenState extends State<DepositMethodScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: ColumnView(
+        body: BiforgePage(
             child: Container(
                 padding: EdgeInsets.all(20),
                 child: Column(children: [

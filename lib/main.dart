@@ -360,7 +360,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               );
             })),
         drawer: makeDrawer(context),
-        body: SingleChildScrollView(
+        body: BiforgePage(
+          scrollChild: true,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

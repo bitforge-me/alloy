@@ -72,7 +72,7 @@ class _WithdrawalCheckScreenState extends State<WithdrawalCheckScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: ColumnView(
+        body: BiforgePage(
             child: Container(
                 padding: EdgeInsets.all(10),
                 child: Column(children: [
@@ -279,7 +279,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: ColumnView(
+        body: BiforgePage(
             scrollChild: true,
             child: Form(
                 key: _formKey,
@@ -555,7 +555,7 @@ class _WithdrawalSelectScreenState extends State<WithdrawalSelectScreen> {
       appBar: AppBar(
         title: Text('Withdrawals'),
       ),
-      body: ColumnView(
+      body: BiforgePage(
           child: ListView.builder(
               itemBuilder: _listItem, itemCount: _listCount())),
     );
@@ -687,7 +687,7 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
         title: Text('$symbol Withdrawals'),
         actions: [assetLogo('$symbol', margin: EdgeInsets.all(10))],
       ),
-      body: ColumnView(
+      body: BiforgePage(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         VerticalSpacer(),
@@ -777,7 +777,7 @@ class _CryptoWithdrawalDetailScreenState
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: ColumnView(
+        body: BiforgePage(
             child: ListView(children: [
           ListTile(
               title: Text('Amount'),
@@ -922,7 +922,7 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
         title: Text('${widget.asset.symbol} Withdrawals'),
         actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
       ),
-      body: ColumnView(
+      body: BiforgePage(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         VerticalSpacer(),
@@ -993,7 +993,7 @@ class _FiatWithdrawalDetailScreenState
           title: Text('Withdrawal ${_withdrawal.asset}'),
           actions: [assetLogo(_withdrawal.asset, margin: EdgeInsets.all(10))],
         ),
-        body: ColumnView(
+        body: BiforgePage(
             child: ListView(children: [
           ListTile(
               title: Text('Amount'),

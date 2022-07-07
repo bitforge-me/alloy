@@ -88,7 +88,7 @@ class _OrderScreenState extends State<OrderScreen> {
           title: Text('Order ${_order.token}'),
           actions: [assetLogo(_order.baseAsset, margin: EdgeInsets.all(10))],
         ),
-        body: ColumnView(
+        body: BiforgePage(
             child: ListView(children: [
           ListTile(
               title: Text('Market'),
@@ -241,8 +241,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
         appBar: AppBar(
           title: Text('Order History'),
         ),
-        body:
-            ListView.builder(itemBuilder: _listItem, itemCount: _orders.length),
+        body: BiforgePage(
+            child: ListView.builder(
+                itemBuilder: _listItem, itemCount: _orders.length)),
         /*
         floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.add), onPressed: _actionButtonTap),

@@ -145,7 +145,7 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
           child: Container(),
           preferredSize: Size(0, 0),
         ),
-        body: ColumnView(
+        body: BiforgePage(
             scrollChild: true,
             child: Form(
                 key: _formKey,
@@ -235,7 +235,7 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
           child: Container(),
           preferredSize: Size(0, 0),
         ),
-        body: ColumnView(
+        body: BiforgePage(
             scrollChild: true,
             child: Form(
                 key: _formKey,
@@ -340,7 +340,7 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
           child: Container(),
           preferredSize: Size(0, 0),
         ),
-        body: ColumnView(
+        body: BiforgePage(
             scrollChild: true,
             child: Form(
                 key: _formKey,
@@ -651,7 +651,7 @@ class StagingFormState extends State<StagingForm> {
           child: Container(),
           preferredSize: Size(0, 0),
         ),
-        body: ColumnView(
+        body: BiforgePage(
             scrollChild: true,
             child: BigLogoContainer(children: [
               BronzeRoundedButton(
