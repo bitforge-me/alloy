@@ -138,7 +138,7 @@ class BackgroundWebImage extends StatelessWidget {
         var backgroundImage = backgroundDiv.style.backgroundImage;
         var res = RegExp(r'url\(\"(.*)\"\)').firstMatch(backgroundImage);
         if (res != null)
-          return '${html.window.location.origin}/${res.group(1)}';
+          return '${html.window.location.origin}${html.window.location.pathname}/${res.group(1)}';
       }
     }
     return null;
