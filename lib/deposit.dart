@@ -552,9 +552,11 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
                     builder: (context) =>
                         FiatDepositDetailScreen(deposit, widget.websocket)));
             success = true;
-          },
-              error: (err) => alert(context, 'error',
-                  'failed to create deposit (${BeError.msg(err)})'));
+          }, error: (err) async {
+            var msg = BeError.msg(err);
+            snackMsg(context, 'failed to create deposit: ${msg}',
+                category: MessageCategory.Warning);
+          });
         }
         ;
         break;
