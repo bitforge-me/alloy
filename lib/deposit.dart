@@ -527,30 +527,36 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
     if (method == null) return;
     switch (method.method) {
       case DepositMethod.account2account:
-        var amountStr = await Navigator.push<String>(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    DepositAmountScreen(widget.asset.symbol, null)));
-        if (amountStr == null) return;
-        var amount = Decimal.tryParse(amountStr);
-        if (amount == null) {
-          snackMsg(context, 'invalid amount',
-              category: MessageCategory.Warning);
-          return;
-        }
-        amount = assetAmountFromUser(widget.asset.symbol, amount);
-        showAlertDialog(context, 'querying..');
-        var res = await beFiatDepositWindcave(widget.asset.symbol, amount);
-        Navigator.pop(context);
-        res.when(
-            (deposit) => Navigator.push(
+        var success = false;
+        while (!success) {
+          var amountStr = await Navigator.push<String>(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      DepositAmountScreen(widget.asset.symbol, null)));
+          if (amountStr == null) return;
+          var amount = Decimal.tryParse(amountStr);
+          if (amount == null) {
+            snackMsg(context, 'invalid amount',
+                category: MessageCategory.Warning);
+            return;
+          }
+          amount = assetAmountFromUser(widget.asset.symbol, amount);
+          showAlertDialog(context, 'querying..');
+          var res = await beFiatDepositWindcave(widget.asset.symbol, amount);
+          Navigator.pop(context);
+          res.when((deposit) {
+            Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        FiatDepositDetailScreen(deposit, widget.websocket))),
-            error: (err) => alert(context, 'error',
-                'failed to create deposit (${BeError.msg(err)})'));
+                        FiatDepositDetailScreen(deposit, widget.websocket)));
+            success = true;
+          },
+              error: (err) => alert(context, 'error',
+                  'failed to create deposit (${BeError.msg(err)})'));
+        }
+        ;
         break;
       case DepositMethod.bankDeposit:
         var res = await beFiatDepositDirect(widget.asset.symbol);
