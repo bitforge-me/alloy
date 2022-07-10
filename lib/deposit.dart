@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:alloy/units.dart';
 import 'package:flutter/material.dart';
 import 'package:zapdart/colors.dart';
 import 'package:flutter/services.dart';
@@ -171,8 +172,8 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
   Widget _listItem(BuildContext context, int n) {
     var deposit = _deposits[n];
     return ListTile(
-      title: Text(
-          '${assetFormatWithUnitToUser(deposit.asset, deposit.amount)} - ${deposit.confirmed ? 'CONFIRMED' : 'PENDING'}',
+      title: PriceEquivalent(deposit.asset, deposit.amount,
+          extra: ' - ${deposit.confirmed ? 'CONFIRMED' : 'PENDING'}',
           textAlign: TextAlign.center),
       onTap: () => _depositTap(deposit),
     );
@@ -336,8 +337,7 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
             child: ListView(children: [
           ListTile(
               title: Text('Amount'),
-              subtitle: Text(
-                  '${assetFormatWithUnitToUser(_deposit.asset, _deposit.amount)}')),
+              subtitle: PriceEquivalent(_deposit.asset, _deposit.amount)),
           ListTile(title: Text('Date'), subtitle: Text('${_deposit.date}')),
           ListTile(
               title: Center(
@@ -511,8 +511,8 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
   Widget _listItem(BuildContext context, int n) {
     var deposit = _deposits[n];
     return ListTile(
-      title: Text(
-          '${assetFormatWithUnitToUser(deposit.asset, deposit.amount)} - ${deposit.status.toUpperCase()}',
+      title: PriceEquivalent(deposit.asset, deposit.amount,
+          extra: ' - ${deposit.status.toUpperCase()}',
           textAlign: TextAlign.center),
       onTap: () => _depositTap(deposit),
     );
@@ -656,8 +656,7 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
             child: ListView(children: [
           ListTile(
               title: Text('Amount'),
-              subtitle: Text(
-                  '${assetFormatWithUnitToUser(_deposit.asset, _deposit.amount)}')),
+              subtitle: PriceEquivalent(_deposit.asset, _deposit.amount)),
           ListTile(title: Text('Date'), subtitle: Text('${_deposit.date}')),
           _deposit.paymentUrl != null
               ? ListTile(

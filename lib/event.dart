@@ -6,6 +6,7 @@ import 'package:zapdart/colors.dart';
 import 'assets.dart';
 import 'widgets.dart';
 import 'config.dart';
+import 'units.dart';
 
 class DepositReceivedScreen extends StatefulWidget {
   final String asset;
@@ -85,10 +86,24 @@ class DepositAmountScreen extends StatefulWidget {
 class _DepositAmountScreenState extends State<DepositAmountScreen> {
   final _formKey = GlobalKey<FormState>();
   final _amountController = TextEditingController();
+  bool _showPrice = false;
+  Decimal _amount = Decimal.zero;
 
   @override
   void initState() {
     super.initState();
+    _showPrice = PriceManager.showPriceFor(widget.asset);
+  }
+
+  void _inputChanged(String input) {
+    var amount = Decimal.zero;
+    var inputAmount = Decimal.tryParse(input);
+    if (inputAmount != null)
+      amount = assetAmountFromUser(widget.asset, inputAmount);
+    if (amount != _amount)
+      setState(() {
+        _amount = amount;
+      });
   }
 
   void _ok() {
@@ -113,7 +128,7 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                 padding: EdgeInsets.all(20),
                 child: Column(children: [
                   Container(
-                      padding: EdgeInsets.only(top: 20, bottom: 20),
+                      padding: EdgeInsets.all(10),
                       child: Center(
                           child: Icon(Icons.keyboard_double_arrow_down_rounded,
                               size: 150, color: ZapOnSecondary))),
@@ -122,9 +137,10 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                       child: Form(
                           key: _formKey,
                           child: Container(
+                              padding: EdgeInsets.only(
+                                  left: 30, right: 30, top: 10, bottom: 10),
                               // Fudge factor of 14.0 to match border radius of button
                               width: ButtonWidth + 14.0,
-                              padding: EdgeInsets.all(10),
                               child: Column(children: [
                                 BronzeValueInput(
                                   controller: _amountController,
@@ -143,7 +159,17 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                                   },
                                   keyboardType: TextInputType.numberWithOptions(
                                       signed: false, decimal: true),
+                                  onChanged: _inputChanged,
                                 ),
+                                assetPricesEnabled &&
+                                        _amount > Decimal.zero &&
+                                        _showPrice
+                                    ? Container(
+                                        padding: EdgeInsets.only(top: 10),
+                                        child: PriceEquivalent(
+                                            widget.asset, _amount,
+                                            showAssetAmount: false))
+                                    : SizedBox(),
                               ])))),
                   BronzeRoundedButton(_ok, ZapOnPrimary, ZapPrimary,
                       ZapPrimaryGradient, 'Continue',

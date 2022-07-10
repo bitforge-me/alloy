@@ -38,21 +38,23 @@ class VerticalSpacer extends StatelessWidget {
 
 class BronzeFormInput extends StatelessWidget {
   final TextEditingController? controller;
-  final TextInputType? keyboardType;
   final FormFieldValidator<dynamic>? validator;
   final String? labelText;
   final bool? obscureText;
   final Icon? icon;
+  final TextInputType? keyboardType;
   final Widget? suffixIcon;
   final String? suffixText;
+  final void Function(String?)? onChanged;
   BronzeFormInput(this.controller,
       {this.validator,
-      this.keyboardType,
-      this.obscureText,
       this.labelText,
+      this.obscureText,
+      this.icon,
+      this.keyboardType,
       this.suffixIcon,
       this.suffixText,
-      this.icon})
+      this.onChanged})
       : super();
 
   @override
@@ -85,7 +87,8 @@ class BronzeFormInput extends StatelessWidget {
         ),
         keyboardType: this.keyboardType ?? null,
         obscureText: this.obscureText ?? false,
-        validator: this.validator ?? null);
+        validator: this.validator ?? null,
+        onChanged: this.onChanged);
   }
 }
 
@@ -96,6 +99,7 @@ class BronzeValueInput extends StatelessWidget {
   final String? labelText;
   final String? suffixText;
   final bool? readOnly;
+  final Function(String)? onChanged;
 
   BronzeValueInput(
       {this.controller,
@@ -103,7 +107,8 @@ class BronzeValueInput extends StatelessWidget {
       this.keyboardType,
       this.validator,
       this.readOnly,
-      this.suffixText});
+      this.suffixText,
+      this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -121,6 +126,7 @@ class BronzeValueInput extends StatelessWidget {
               labelText: this.labelText),
           keyboardType: this.keyboardType,
           validator: this.validator,
+          onChanged: onChanged,
         ));
   }
 }

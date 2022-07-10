@@ -6,6 +6,7 @@ import 'beryllium.dart';
 import 'prefs.dart';
 
 const String Nzd = 'NZD';
+const String Cents = 'cents';
 const String Btc = 'BTC';
 const String BtcLn = 'BTC-LN';
 const String Sats = 'sats';
@@ -17,6 +18,8 @@ const String Doge = 'DOGE';
 const String Ltc = 'LTC';
 const String Waves = 'WAVES';
 
+var assetPricesEnabled = true;
+var assetPricesUnit = Nzd;
 var assetUnits = {
   Nzd: Nzd,
   Btc: Sats,
@@ -83,6 +86,8 @@ int assetDecimals(String symbol) {
   switch (symbol) {
     case Nzd:
       return 2;
+    case Cents:
+      return 0;
     case BtcLn:
     case Btc:
       return 8;
@@ -121,6 +126,13 @@ bool assetIsCrypto(String asset) {
   return false;
 }
 
+String assetFormatUnit(String asset, String unit, Decimal amount) {
+  amount = assetAmountToUnit(asset, unit, amount);
+  var decimals = assetDecimals(unit);
+  if (decimals <= 0) return amount.round().toString();
+  return amount.toStringAsFixed(decimals);
+}
+
 String assetFormat(String symbol, Decimal amount) {
   var decimals = assetDecimals(assetUnit(symbol));
   if (decimals <= 0) return amount.round().toString();
@@ -143,7 +155,7 @@ String assetUnit(String symbol) {
 List<String> assetUnitOptions(String symbol) {
   switch (symbol) {
     case Nzd:
-      return [symbol];
+      return [Nzd, Cents];
     case Btc:
       return [Btc, Sats];
     case Eth:
@@ -158,28 +170,75 @@ List<String> assetUnitOptions(String symbol) {
   return [];
 }
 
-void assetUnitSet(String symbol, String unit) {
+String assetUnitToAsset(String unit) {
+  switch (unit) {
+    case Nzd:
+    case Cents:
+      return Nzd;
+    case Btc:
+    case Sats:
+      return Btc;
+    case Eth:
+    case Gwei:
+      return Eth;
+    case Usdt:
+      return Usdt;
+    case Usdc:
+      return Usdc;
+    case Doge:
+      return Doge;
+    case Ltc:
+      return Ltc;
+    case Waves:
+      return Waves;
+  }
+  throw Exception('invalid asset unit');
+}
+
+Future<void> assetPricesEnabledSet(bool value) async {
+  assetPricesEnabled = value;
+  await Prefs.assetPriceUnitEnabledSet(value);
+}
+
+Future<bool> assetPricesEnabledGet(bool defaultVal) async {
+  return await Prefs.assetPriceUnitEnabledGet(defaultVal);
+}
+
+Future<String> assetPricesGet(String defaultVal) async {
+  var res = await Prefs.assetPriceUnitGet();
+  if (res == null) return defaultVal;
+  return res;
+}
+
+Future<void> assetPricesSet(String priceUnit) async {
+  assetPricesUnit = priceUnit;
+  await Prefs.assetPriceUnitSet(priceUnit);
+}
+
+Future<void> assetUnitSet(String symbol, String unit) async {
   if (assetUnitOptions(symbol).contains(unit)) {
     assetUnits[symbol] = unit;
-    Prefs.assetUnitSet(symbol, unit);
+    await Prefs.assetUnitSet(symbol, unit);
   }
 }
 
 Future<void> assetUnitsInit() async {
+  assetPricesEnabled = await assetPricesEnabledGet(assetPricesEnabled);
+  assetPricesUnit = await assetPricesGet(assetPricesUnit);
   for (var asset in assetUnits.keys)
     assetUnitSet(asset, await Prefs.assetUnitGet(asset, assetUnit(asset)));
 }
 
-Decimal assetAmountToUser(String symbol, Decimal amount) {
+Decimal assetAmountToUnit(String symbol, String unit, Decimal amount) {
   switch (symbol) {
     case Nzd:
+      if (unit == Cents) return amount * Decimal.fromInt(100);
       return amount;
     case Btc:
-      if (assetUnit(symbol) == Sats) return amount * Decimal.fromInt(100000000);
+      if (unit == Sats) return amount * Decimal.fromInt(100000000);
       return amount;
     case Eth:
-      if (assetUnit(symbol) == Gwei)
-        return amount * Decimal.fromInt(1000000000);
+      if (unit == Gwei) return amount * Decimal.fromInt(1000000000);
       return amount;
     case Usdt:
     case Usdc:
@@ -191,9 +250,14 @@ Decimal assetAmountToUser(String symbol, Decimal amount) {
   return -Decimal.one;
 }
 
+Decimal assetAmountToUser(String symbol, Decimal amount) {
+  return assetAmountToUnit(symbol, assetUnit(symbol), amount);
+}
+
 Decimal assetAmountFromUser(String symbol, Decimal amount) {
   switch (symbol) {
     case Nzd:
+      if (assetUnit(symbol) == Cents) return amount / Decimal.fromInt(100);
       return amount;
     case Btc:
       if (assetUnit(symbol) == Sats) return amount / Decimal.fromInt(100000000);

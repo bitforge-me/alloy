@@ -22,6 +22,25 @@ class Prefs {
     return true;
   }
 
+  static Future<bool> getBoolNetworkSpecific(
+      String key, bool? defaultValue) async {
+    final prefs = PrefHelper();
+    var val = await prefs.getString(getKeyNetworkSpecific(key), null);
+    if (val == null) {
+      if (defaultValue != null) return defaultValue;
+      return false;
+    }
+    return ['1', 'true', 'yes', 't', 'y'].contains(val.toLowerCase());
+  }
+
+  static Future<bool> setBoolNetworkSpecific(String key, bool value) async {
+    final prefs = PrefHelper();
+    var stringVal = 'false';
+    if (value) stringVal = 'true';
+    prefs.setString(getKeyNetworkSpecific(key), stringVal);
+    return true;
+  }
+
   static Future<String?> beApiKeyGet() async {
     return await getStringNetworkSpecific("be_apikey", null);
   }
@@ -45,6 +64,24 @@ class Prefs {
     if (apikey == null || apikey.isEmpty) return false;
     var apisecret = await Prefs.beApiSecretGet();
     if (apisecret == null || apisecret.isEmpty) return false;
+    return true;
+  }
+
+  static Future<bool> assetPriceUnitEnabledGet(bool? defaultVal) async {
+    return await getBoolNetworkSpecific("price_unit_enabled", defaultVal);
+  }
+
+  static Future<bool> assetPriceUnitEnabledSet(bool value) async {
+    await setBoolNetworkSpecific("price_unit_enabled", value);
+    return true;
+  }
+
+  static Future<String?> assetPriceUnitGet() async {
+    return await getStringNetworkSpecific("price_unit", null);
+  }
+
+  static Future<bool> assetPriceUnitSet(String? value) async {
+    await setStringNetworkSpecific("price_unit", value);
     return true;
   }
 
