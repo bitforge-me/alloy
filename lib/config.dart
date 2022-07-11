@@ -30,8 +30,8 @@ class BeLocationOverride {
 
 // key is server hostname
 const Map<String, BeLocationOverride> BeServerLocationOverrides = {
-  'app.bitforge.me': BeLocationOverride('https://beryllium.zap.me/', false),
-  'beryllium.zap.me': BeLocationOverride(null, false),
+  'app.bitforge.me': BeLocationOverride('https://be.bitforge.me/', false),
+  'be.bitforge.me': BeLocationOverride(null, false),
   'beryllium-test.zap.me': BeLocationOverride(null, true)
 };
 // registration
