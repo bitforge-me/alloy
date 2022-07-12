@@ -206,24 +206,26 @@ class _UnitsScreenState extends State<UnitsScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
               VerticalSpacer(),
-              Text('Asset prices'),
+              Text('Estimated Market Value'),
               VerticalSpacer(),
               Row(
                   mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Show asset prices'),
+                    Text('Show estimated market value:'),
                     Checkbox(
                         value: assetPricesEnabled,
                         onChanged: onAssetPricesChecked),
-                    SizedBox(width: 10),
+                    SizedBox(width: 20),
+                    Text('Market value currency:'),
+                    SizedBox(width: 5),
                     DropdownButton<String>(
                         items: assetsDropdownItems,
                         onChanged: onAssetPriceChanged,
                         value: assetPricesUnit)
                   ]),
               VerticalSpacer(),
-              Text('Asset Units'),
+              Text('Currency Units'),
               VerticalSpacer(),
               ListView.builder(
                   shrinkWrap: true,
@@ -233,7 +235,7 @@ class _UnitsScreenState extends State<UnitsScreen> {
                     var unit = assetUnits[asset]!;
                     return Row(
                         mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           assetLogo(asset),
                           SizedBox(width: 10),
