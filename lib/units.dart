@@ -44,7 +44,7 @@ class PriceRequest {
       var res = await beMarkets();
       res.when((markets) => _markets = markets, error: (err) => null);
     }
-    if (_markets.isEmpty){
+    if (_markets.isEmpty) {
       _streamController.add(null);
       return;
     }
@@ -58,18 +58,17 @@ class PriceRequest {
     }
     // if we have a market get the orderbook
     var res = await beOrderbook(market);
-    _streamController.add(
-      res.when((orderbook) {
-        if (orderbook.asks.length > 0 && orderbook.bids.length > 0) {
-          var price = CachedPrice(
-              DateTime.now(),
-              (orderbook.asks[0].rate + orderbook.bids[0].rate) /
-                  Decimal.fromInt(2),
-              inverted);
-          return price;
-        }
-        return null;
-      }, error: (err) => null));
+    _streamController.add(res.when((orderbook) {
+      if (orderbook.asks.length > 0 && orderbook.bids.length > 0) {
+        var price = CachedPrice(
+            DateTime.now(),
+            (orderbook.asks[0].rate + orderbook.bids[0].rate) /
+                Decimal.fromInt(2),
+            inverted);
+        return price;
+      }
+      return null;
+    }, error: (err) => null));
   }
 }
 
@@ -77,7 +76,8 @@ class PriceManager {
   static Map<String, CachedPrice> _prices = {};
   static Map<String, PriceRequest> _priceRequests = {};
 
-  static Future<CachedPrice?> _waitPrice(String assetBase, String assetQuote) async {
+  static Future<CachedPrice?> _waitPrice(
+      String assetBase, String assetQuote) async {
     var market = CachedPrice.market(assetBase, assetQuote);
     PriceRequest req;
     // get exisiting price request
@@ -89,16 +89,14 @@ class PriceManager {
         _priceRequests.remove(market);
         req = PriceRequest(assetBase, assetQuote);
       }
-    }
-    else
+    } else
       // make new request if none exists
       req = PriceRequest(assetBase, assetQuote);
     // store request for future caller
     _priceRequests[market] = req;
     // await the result of the price request
     var price = await req.result();
-    if (price != null)
-      _prices[market] = price;
+    if (price != null) _prices[market] = price;
     return price;
   }
 
@@ -145,8 +143,7 @@ class _PriceEquivalentState extends State<PriceEquivalent> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _priceAsset = assetUnitToAsset(assetPricesUnit);
       _price = await PriceManager.price(widget.asset, _priceAsset!);
-      if (_price == null)
-        _failedToGetPrice = true;
+      if (_price == null) _failedToGetPrice = true;
       setState(() {}); // rerender
     });
   }
@@ -165,8 +162,7 @@ class _PriceEquivalentState extends State<PriceEquivalent> {
   Widget build(BuildContext context) {
     String text;
     if (!widget.showAssetAmount) {
-      if (_failedToGetPrice)
-        return SizedBox();
+      if (_failedToGetPrice) return SizedBox();
       if (_price == null || _priceAsset == null)
         return CircularProgressIndicator();
       text = _formattedPrice();
@@ -176,7 +172,8 @@ class _PriceEquivalentState extends State<PriceEquivalent> {
           : '';
       var startText = widget.pre != null ? '${widget.pre} ' : '';
       var endText = widget.post != null ? ' ${widget.post}' : '';
-      if (assetPricesEnabled && !_failedToGetPrice &&
+      if (assetPricesEnabled &&
+          !_failedToGetPrice &&
           widget.asset != assetUnitToAsset(assetPricesUnit))
         text = '$startText$assetAmount (${_formattedPrice()})$endText';
       else

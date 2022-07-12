@@ -22,8 +22,13 @@ class _BalanceScreenState extends State<BalanceScreen> {
     return ListTile(
         title: Text('${balance.asset}'),
         leading: assetLogo(balance.asset),
-        subtitle: Row(mainAxisAlignment: MainAxisAlignment.start,
-          children: [SizedBox(width: 300, child: PriceEquivalent(balance.asset, balance.total, pre: 'Total:')), PriceEquivalent(balance.asset, balance.available, pre: 'Available:')]));
+        subtitle: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          SizedBox(
+              width: 300,
+              child:
+                  PriceEquivalent(balance.asset, balance.total, pre: 'Total:')),
+          PriceEquivalent(balance.asset, balance.available, pre: 'Available:')
+        ]));
   }
 
   @override
