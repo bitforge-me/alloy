@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'assets.dart';
 import 'widgets.dart';
@@ -11,56 +12,106 @@ class CachedPrice {
   final bool invertedMarket;
 
   CachedPrice(this.updated, this.rate, this.invertedMarket);
-}
 
-class PriceManager {
-  static Map<String, CachedPrice> _prices = {};
-  static List<BeMarket> _markets = [];
-
-  static String _market(String assetBase, String assetQuote) {
+  static String market(String assetBase, String assetQuote) {
     return '${assetBase}-${assetQuote}';
   }
+}
 
-  static Future<CachedPrice?> _queryPrice(
-      String assetBase, String assetQuote) async {
+class PriceRequest {
+  final String assetBase;
+  final String assetQuote;
+  late final BehaviorSubject<CachedPrice?> _streamController;
+  late final DateTime created;
+
+  static List<BeMarket> _markets = [];
+
+  PriceRequest(this.assetBase, this.assetQuote) {
+    created = DateTime.now();
+    _streamController = BehaviorSubject(onListen: _queryPrice);
+  }
+
+  void close() {
+    _streamController.close();
+  }
+
+  Future<CachedPrice?> result() async {
+    return await _streamController.stream.first;
+  }
+
+  void _queryPrice() async {
     if (_markets.isEmpty) {
       var res = await beMarkets();
       res.when((markets) => _markets = markets, error: (err) => null);
     }
-    if (_markets.isEmpty) return null;
+    if (_markets.isEmpty){
+      _streamController.add(null);
+      return;
+    }
     // look for market
     var inverted = false;
-    var market = _market(assetBase, assetQuote);
+    var market = CachedPrice.market(assetBase, assetQuote);
     if (!_markets.any((element) => element.symbol == market)) {
       inverted = true;
-      market = _market(assetQuote, assetBase);
+      market = CachedPrice.market(assetQuote, assetBase);
       if (!_markets.any((element) => element.symbol == market)) return null;
     }
     // if we have a market get the orderbook
     var res = await beOrderbook(market);
-    return res.when((orderbook) {
-      if (orderbook.asks.length > 0 && orderbook.bids.length > 0) {
-        var price = CachedPrice(
-            DateTime.now(),
-            (orderbook.asks[0].rate + orderbook.bids[0].rate) /
-                Decimal.fromInt(2),
-            inverted);
-        _prices[market] = price; // update cache
-        return price;
+    _streamController.add(
+      res.when((orderbook) {
+        if (orderbook.asks.length > 0 && orderbook.bids.length > 0) {
+          var price = CachedPrice(
+              DateTime.now(),
+              (orderbook.asks[0].rate + orderbook.bids[0].rate) /
+                  Decimal.fromInt(2),
+              inverted);
+          return price;
+        }
+        return null;
+      }, error: (err) => null));
+  }
+}
+
+class PriceManager {
+  static Map<String, CachedPrice> _prices = {};
+  static Map<String, PriceRequest> _priceRequests = {};
+
+  static Future<CachedPrice?> _waitPrice(String assetBase, String assetQuote) async {
+    var market = CachedPrice.market(assetBase, assetQuote);
+    PriceRequest req;
+    // get exisiting price request
+    if (_priceRequests.containsKey(market)) {
+      req = _priceRequests[market]!;
+      // close and recreate if the request is old/stale
+      if (req.created.add(Duration(seconds: 10)).isBefore(DateTime.now())) {
+        req.close();
+        _priceRequests.remove(market);
+        req = PriceRequest(assetBase, assetQuote);
       }
-      return null;
-    }, error: (err) => null);
+    }
+    else
+      // make new request if none exists
+      req = PriceRequest(assetBase, assetQuote);
+    // store request for future caller
+    _priceRequests[market] = req;
+    // await the result of the price request
+    var price = await req.result();
+    if (price != null)
+      _prices[market] = price;
+    return price;
   }
 
   static Future<CachedPrice?> price(String assetBase, String assetQuote) async {
-    var market = _market(assetBase, assetQuote);
+    var market = CachedPrice.market(assetBase, assetQuote);
+    // get a cached price
     if (_prices.containsKey(market)) {
       var price = _prices[market]!;
       if (price.updated.add(Duration(minutes: 5)).isAfter(DateTime.now()))
         return price;
     }
-    var price = await _queryPrice(assetBase, assetQuote);
-    return price;
+    // if none exists (or has expired) then request a new price
+    return await _waitPrice(assetBase, assetQuote);
   }
 
   static bool showPriceFor(String asset) {
@@ -85,6 +136,7 @@ class PriceEquivalent extends StatefulWidget {
 class _PriceEquivalentState extends State<PriceEquivalent> {
   CachedPrice? _price;
   String? _priceAsset;
+  bool _failedToGetPrice = false;
 
   @override
   void initState() {
@@ -92,6 +144,8 @@ class _PriceEquivalentState extends State<PriceEquivalent> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _priceAsset = assetUnitToAsset(assetPricesUnit);
       _price = await PriceManager.price(widget.asset, _priceAsset!);
+      if (_price == null)
+        _failedToGetPrice = true;
       setState(() {}); // rerender
     });
   }
@@ -110,6 +164,8 @@ class _PriceEquivalentState extends State<PriceEquivalent> {
   Widget build(BuildContext context) {
     String text;
     if (!widget.showAssetAmount) {
+      if (_failedToGetPrice)
+        return SizedBox();
       if (_price == null || _priceAsset == null)
         return CircularProgressIndicator();
       text = _formattedPrice();
@@ -118,7 +174,7 @@ class _PriceEquivalentState extends State<PriceEquivalent> {
           ? assetFormatWithUnitToUser(widget.asset, widget.amount)
           : '';
       var endText = widget.extra != null ? ' ${widget.extra}' : '';
-      if (assetPricesEnabled &&
+      if (assetPricesEnabled && !_failedToGetPrice &&
           widget.asset != assetUnitToAsset(assetPricesUnit))
         text = '$assetAmount (${_formattedPrice()})$endText';
       else
