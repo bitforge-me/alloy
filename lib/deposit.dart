@@ -178,35 +178,53 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
     );
   }
 
-  Future<void> _make() async {
-    var amount = Decimal.zero;
-    if (widget.l2Network != null) {
-      var amountStr = await Navigator.push<String>(
-          context,
-          MaterialPageRoute(
-              builder: (context) => DepositAmountScreen(
-                  widget.asset.symbol, widget.l2Network?.symbol)));
-      if (amountStr == null) return;
-      var amountDec = Decimal.tryParse(amountStr);
-      if (amountDec == null || amountDec <= Decimal.zero) {
-        snackMsg(context, 'invalid amount', category: MessageCategory.Warning);
-        return;
-      }
-      amount = amountDec;
-      amount = assetAmountFromUser(widget.asset.symbol, amount);
-    }
+  Future<bool> _cryptoDeposit(Decimal amount) async {
     showAlertDialog(context, 'querying..');
     var res = await beCryptoDepositRecipient(
         widget.asset.symbol, widget.l2Network?.symbol, amount);
     Navigator.pop(context);
-    res.when(
-        (recipient, asset, l2Network) => Navigator.push(
+    return await res.when((recipient, asset, l2Network) async {
+      await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CryptoDepositNewScreen(widget.asset,
+                  widget.l2Network, recipient, widget.websocket)));
+      return true;
+    }, error: (err) async {
+      var msg = BeError.msg(err);
+      snackMsg(
+          context,
+          widget.l2Network != null
+              ? 'failed to create deposit: ${msg}'
+              : 'failed to query deposit recipient: ${msg}',
+          category: MessageCategory.Warning);
+      return false;
+    });
+  }
+
+  Future<void> _make() async {
+    var amount = Decimal.zero;
+    if (widget.l2Network != null) {
+      var success = false;
+      while (!success) {
+        var amountStr = await Navigator.push<String>(
             context,
             MaterialPageRoute(
-                builder: (context) => CryptoDepositNewScreen(widget.asset,
-                    widget.l2Network, recipient, widget.websocket))),
-        error: (err) => snackMsg(context, 'failed to query deposit recipient',
-            category: MessageCategory.Warning));
+                builder: (context) => DepositAmountScreen(
+                    widget.asset.symbol, widget.l2Network?.symbol)));
+        if (amountStr == null) return;
+        var amountDec = Decimal.tryParse(amountStr);
+        if (amountDec == null || amountDec <= Decimal.zero) {
+          snackMsg(context, 'invalid amount',
+              category: MessageCategory.Warning);
+          return;
+        }
+        amount = amountDec;
+        amount = assetAmountFromUser(widget.asset.symbol, amount);
+        success = await _cryptoDeposit(amount);
+      }
+    } else
+      await _cryptoDeposit(amount);
   }
 
   @override
@@ -509,30 +527,38 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
     if (method == null) return;
     switch (method.method) {
       case DepositMethod.account2account:
-        var amountStr = await Navigator.push<String>(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    DepositAmountScreen(widget.asset.symbol, null)));
-        if (amountStr == null) return;
-        var amount = Decimal.tryParse(amountStr);
-        if (amount == null) {
-          snackMsg(context, 'invalid amount',
-              category: MessageCategory.Warning);
-          return;
-        }
-        amount = assetAmountFromUser(widget.asset.symbol, amount);
-        showAlertDialog(context, 'querying..');
-        var res = await beFiatDepositWindcave(widget.asset.symbol, amount);
-        Navigator.pop(context);
-        res.when(
-            (deposit) => Navigator.push(
+        var success = false;
+        while (!success) {
+          var amountStr = await Navigator.push<String>(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      DepositAmountScreen(widget.asset.symbol, null)));
+          if (amountStr == null) return;
+          var amount = Decimal.tryParse(amountStr);
+          if (amount == null) {
+            snackMsg(context, 'invalid amount',
+                category: MessageCategory.Warning);
+            return;
+          }
+          amount = assetAmountFromUser(widget.asset.symbol, amount);
+          showAlertDialog(context, 'querying..');
+          var res = await beFiatDepositWindcave(widget.asset.symbol, amount);
+          Navigator.pop(context);
+          res.when((deposit) {
+            Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        FiatDepositDetailScreen(deposit, widget.websocket))),
-            error: (err) => alert(context, 'error',
-                'failed to create deposit (${BeError.msg(err)})'));
+                        FiatDepositDetailScreen(deposit, widget.websocket)));
+            success = true;
+          }, error: (err) async {
+            var msg = BeError.msg(err);
+            snackMsg(context, 'failed to create deposit: ${msg}',
+                category: MessageCategory.Warning);
+          });
+        }
+        ;
         break;
       case DepositMethod.bankDeposit:
         var res = await beFiatDepositDirect(widget.asset.symbol);

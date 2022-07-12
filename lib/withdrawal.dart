@@ -221,12 +221,14 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
             _recipientDescriptionController.text,
             tfCode);
         Navigator.pop(context);
-        res.when(
-            (withdrawal) => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => CryptoWithdrawalDetailScreen(
-                        withdrawal, widget.websocket))),
+        res.when((withdrawal) async {
+          await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CryptoWithdrawalDetailScreen(
+                      withdrawal, widget.websocket)));
+          Navigator.pop(context);
+        },
             error: (err) => alert(context, 'error',
                 'failed to create withdrawal (${BeError.msg(err)})'));
       } else {
@@ -242,12 +244,14 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
             _accountAddrCountryController.text,
             tfCode);
         Navigator.pop(context);
-        res.when(
-            (withdrawal) => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => FiatWithdrawalDetailScreen(
-                        withdrawal, widget.websocket))),
+        res.when((withdrawal) async {
+          await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => FiatWithdrawalDetailScreen(
+                      withdrawal, widget.websocket)));
+          Navigator.pop(context);
+        },
             error: (err) => alert(context, 'error',
                 'failed to create withdrawal (${BeError.msg(err)})'));
       }
@@ -309,8 +313,8 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                               icon: widget.asset.isCrypto
                                   ? Icon(Icons.currency_bitcoin)
                                   : Icon(Icons.attach_money),
-                              labelText:
-                                  'Amount (${assetUnit(widget.asset.symbol)})',
+                              labelText: 'Amount',
+                              suffixText: assetUnit(widget.asset.symbol),
                               suffixIcon: TextButton(
                                   child: Text('max',
                                       style: TextStyle(color: ZapOnPrimary)),

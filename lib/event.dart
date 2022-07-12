@@ -31,7 +31,6 @@ class _DepositReceivedScreenState extends State<DepositReceivedScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
           title: Text('Deposit Received'),
           actions: [
             assetLogo(
@@ -102,7 +101,6 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
           title: Text('Deposit'),
           actions: [
             assetLogo(
@@ -131,8 +129,7 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                                 BronzeValueInput(
                                   controller: _amountController,
                                   suffixText: '${assetUnit(widget.asset)}',
-                                  labelText:
-                                      'Amount (${assetUnit(widget.asset)})',
+                                  labelText: 'Amount',
                                   validator: (value) {
                                     if (value == null || value.isEmpty)
                                       return 'Please enter a value';
@@ -264,6 +261,9 @@ class _DepositMethodScreenState extends State<DepositMethodScreen> {
                           shrinkWrap: true,
                           itemCount: widget.methods.length,
                           itemBuilder: _buildMethod)),
+                  BronzeRoundedButton(() => Navigator.of(context).pop(),
+                      Colors.white, Colors.white30, null, 'Cancel',
+                      width: ButtonWidth, height: ButtonHeight)
                 ]))));
   }
 }

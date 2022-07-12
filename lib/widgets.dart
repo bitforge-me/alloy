@@ -44,12 +44,14 @@ class BronzeFormInput extends StatelessWidget {
   final bool? obscureText;
   final Icon? icon;
   final Widget? suffixIcon;
+  final String? suffixText;
   BronzeFormInput(this.controller,
       {this.validator,
       this.keyboardType,
       this.obscureText,
       this.labelText,
       this.suffixIcon,
+      this.suffixText,
       this.icon})
       : super();
 
@@ -70,6 +72,7 @@ class BronzeFormInput extends StatelessWidget {
           filled: true,
           floatingLabelBehavior: FloatingLabelBehavior.never,
           labelText: this.labelText ?? null,
+          suffixText: this.suffixText,
           constraints: BoxConstraints(
               minWidth: cfg.ButtonWidth, maxWidth: cfg.ButtonWidth),
           border: OutlineInputBorder(
