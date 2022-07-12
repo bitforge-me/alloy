@@ -124,10 +124,11 @@ class PriceEquivalent extends StatefulWidget {
   final String asset;
   final Decimal amount;
   final bool showAssetAmount;
-  final String? extra;
+  final String? pre;
+  final String? post;
   final TextAlign? textAlign;
   PriceEquivalent(this.asset, this.amount,
-      {this.showAssetAmount = true, this.extra, this.textAlign});
+      {this.showAssetAmount = true, this.pre, this.post, this.textAlign});
 
   @override
   State<PriceEquivalent> createState() => _PriceEquivalentState();
@@ -173,12 +174,13 @@ class _PriceEquivalentState extends State<PriceEquivalent> {
       var assetAmount = widget.showAssetAmount
           ? assetFormatWithUnitToUser(widget.asset, widget.amount)
           : '';
-      var endText = widget.extra != null ? ' ${widget.extra}' : '';
+      var startText = widget.pre != null ? '${widget.pre} ' : '';
+      var endText = widget.post != null ? ' ${widget.post}' : '';
       if (assetPricesEnabled && !_failedToGetPrice &&
           widget.asset != assetUnitToAsset(assetPricesUnit))
-        text = '$assetAmount (${_formattedPrice()})$endText';
+        text = '$startText$assetAmount (${_formattedPrice()})$endText';
       else
-        text = '$assetAmount$endText';
+        text = '$startText$assetAmount$endText';
     }
     return Text(text, textAlign: widget.textAlign);
   }

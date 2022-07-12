@@ -4,6 +4,7 @@ import 'beryllium.dart';
 import 'websocket.dart';
 import 'assets.dart';
 import 'widgets.dart';
+import 'units.dart';
 
 class BalanceScreen extends StatefulWidget {
   final List<BeBalance> balances;
@@ -21,8 +22,8 @@ class _BalanceScreenState extends State<BalanceScreen> {
     return ListTile(
         title: Text('${balance.asset}'),
         leading: assetLogo(balance.asset),
-        subtitle: Text(
-            'total: ${assetFormatWithUnitToUser(balance.asset, balance.total)}, available: ${assetFormatWithUnitToUser(balance.asset, balance.available)}'));
+        subtitle: Row(mainAxisAlignment: MainAxisAlignment.start,
+          children: [SizedBox(width: 300, child: PriceEquivalent(balance.asset, balance.total, pre: 'Total:')), PriceEquivalent(balance.asset, balance.available, pre: 'Available:')]));
   }
 
   @override

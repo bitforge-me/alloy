@@ -680,7 +680,7 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
     var withdrawal = _withdrawals[n];
     return ListTile(
       title: PriceEquivalent(withdrawal.asset, withdrawal.amount,
-          extra: ' - ${withdrawal.status.toUpperCase()}',
+          post: ' - ${withdrawal.status.toUpperCase()}',
           textAlign: TextAlign.center),
       onTap: () => _withdrawalTap(withdrawal),
     );
@@ -924,7 +924,7 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
       title: PriceEquivalent(
         withdrawal.asset,
         withdrawal.amount,
-        extra: ' - ${withdrawal.status.toUpperCase()}',
+        post: ' - ${withdrawal.status.toUpperCase()}',
         textAlign: TextAlign.center,
       ),
       onTap: () => _withdrawalTap(withdrawal),

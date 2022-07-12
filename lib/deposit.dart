@@ -173,7 +173,7 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
     var deposit = _deposits[n];
     return ListTile(
       title: PriceEquivalent(deposit.asset, deposit.amount,
-          extra: ' - ${deposit.confirmed ? 'CONFIRMED' : 'PENDING'}',
+          post: ' - ${deposit.confirmed ? 'CONFIRMED' : 'PENDING'}',
           textAlign: TextAlign.center),
       onTap: () => _depositTap(deposit),
     );
@@ -512,7 +512,7 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
     var deposit = _deposits[n];
     return ListTile(
       title: PriceEquivalent(deposit.asset, deposit.amount,
-          extra: ' - ${deposit.status.toUpperCase()}',
+          post: ' - ${deposit.status.toUpperCase()}',
           textAlign: TextAlign.center),
       onTap: () => _depositTap(deposit),
     );
