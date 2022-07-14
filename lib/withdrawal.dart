@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:alloy/units.dart';
 import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
 import 'package:logging/logging.dart';
@@ -79,8 +80,11 @@ class _WithdrawalCheckScreenState extends State<WithdrawalCheckScreen> {
                   ListView(shrinkWrap: true, children: [
                     ListTile(
                         title: Text('Amount'),
-                        subtitle: Text(
-                            '${assetFormatWithUnitToUser(widget.asset.symbol, widget.amount != null ? widget.amount! : _extractedAmount)}')),
+                        subtitle: PriceEquivalent(
+                            widget.asset.symbol,
+                            widget.amount != null
+                                ? widget.amount!
+                                : _extractedAmount)),
                     ListTile(
                         title: Text('Recipient'),
                         subtitle: Text(shortenStr(widget.recipient)))
@@ -129,6 +133,9 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
   var _availableBalance = 'xxx';
   var _max = Decimal.zero;
 
+  var _showPrice = false;
+  var _amount = Decimal.zero;
+
   @override
   void initState() {
     super.initState();
@@ -148,6 +155,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
         _max = widget.availableBalance -
             widget.availableBalance * withdrawAsset.withdrawFee;
     }
+    _showPrice = PriceManager.showPriceFor(widget.asset.symbol);
   }
 
   Future<void> _addressBook() async {
@@ -175,6 +183,18 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
   void _updateSaveRecipient(bool? value) {
     if (value == null) return;
     setState(() => _saveRecipient = value);
+  }
+
+  void _inputChanged(String? input) {
+    if (input == null) return;
+    var amount = Decimal.zero;
+    var inputAmount = Decimal.tryParse(input);
+    if (inputAmount != null)
+      amount = assetAmountFromUser(widget.asset.symbol, inputAmount);
+    if (amount != _amount)
+      setState(() {
+        _amount = amount;
+      });
   }
 
   void _withdrawalCreate() async {
@@ -337,7 +357,13 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                             if (sysAmount > _max)
                               return 'Please enter a value less then or equal to ${assetAmountToUser(widget.asset.symbol, _max)}';
                             return null;
-                          })),
+                          }, onChanged: _inputChanged)),
+                      SpacedVisibility(
+                          assetPricesEnabled &&
+                              _amount > Decimal.zero &&
+                              _showPrice,
+                          PriceEquivalent(widget.asset.symbol, _amount,
+                              showAssetAmount: false)),
                       SpacedVisibility(
                           widget.asset.isCrypto && widget.l2Network == null,
                           BronzeFormInput(_recipientController,
@@ -653,9 +679,9 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
   Widget _listItem(BuildContext context, int n) {
     var withdrawal = _withdrawals[n];
     return ListTile(
-      title: new Center(
-          child: Text(
-              '${assetFormatWithUnitToUser(withdrawal.asset, withdrawal.amount)} - ${withdrawal.status.toUpperCase()}')),
+      title: PriceEquivalent(withdrawal.asset, withdrawal.amount,
+          post: ' - ${withdrawal.status.toUpperCase()}',
+          textAlign: TextAlign.center),
       onTap: () => _withdrawalTap(withdrawal),
     );
   }
@@ -785,8 +811,7 @@ class _CryptoWithdrawalDetailScreenState
             child: ListView(children: [
           ListTile(
               title: Text('Amount'),
-              subtitle: Text(
-                  '${assetFormatWithUnitToUser(_withdrawal.asset, _withdrawal.amount)}')),
+              subtitle: PriceEquivalent(_withdrawal.asset, _withdrawal.amount)),
           ListTile(title: Text('Date'), subtitle: Text('${_withdrawal.date}')),
           ListTile(
               title: Text(
@@ -896,8 +921,12 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
   Widget _listItem(BuildContext context, int n) {
     var withdrawal = _withdrawals[n];
     return ListTile(
-      title: Text(
-          '${assetFormatWithUnitToUser(withdrawal.asset, withdrawal.amount)} - ${withdrawal.status.toUpperCase()}'),
+      title: PriceEquivalent(
+        withdrawal.asset,
+        withdrawal.amount,
+        post: ' - ${withdrawal.status.toUpperCase()}',
+        textAlign: TextAlign.center,
+      ),
       onTap: () => _withdrawalTap(withdrawal),
     );
   }
@@ -1001,8 +1030,7 @@ class _FiatWithdrawalDetailScreenState
             child: ListView(children: [
           ListTile(
               title: Text('Amount'),
-              subtitle: Text(
-                  '${assetFormatWithUnitToUser(_withdrawal.asset, _withdrawal.amount)}')),
+              subtitle: PriceEquivalent(_withdrawal.asset, _withdrawal.amount)),
           ListTile(title: Text('Date'), subtitle: Text('${_withdrawal.date}')),
           ListTile(
               title: Text('Bank Account'),
