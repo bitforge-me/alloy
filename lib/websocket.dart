@@ -65,11 +65,14 @@ class Websocket {
     log.info('socket namespace: ${socket.nsp}');
     socket.on('connect', (_) {
       log.info('ws connect');
-      var nonce = nextNonce();
-      var sig = createHmacSig(apisecret!, nonce.toString());
-      var auth = {"signature": sig, "api_key": apikey, "nonce": nonce};
-      log.info('auth: $auth');
-      socket.emit('auth', auth);
+      Future.delayed(const Duration(seconds: 2), () {
+        // delay websocket authoriztion to try and avoid any nonce race conditions with app initialization
+        var nonce = nextNonce();
+        var sig = createHmacSig(apisecret!, nonce.toString());
+        var auth = {"signature": sig, "api_key": apikey, "nonce": nonce};
+        log.info('auth: $auth');
+        socket.emit('auth', auth);
+      });
     });
     socket.on('connecting', (_) {
       log.info('ws connecting');
