@@ -165,73 +165,35 @@ Map<String, dynamic> _$BeBalanceToJson(BeBalance instance) => <String, dynamic>{
       'available': _decimalToJson(instance.available),
     };
 
-BeCryptoDeposit _$BeCryptoDepositFromJson(Map<String, dynamic> json) =>
-    BeCryptoDeposit(
+BeBalanceUpdate _$BeBalanceUpdateFromJson(Map<String, dynamic> json) =>
+    BeBalanceUpdate(
       json['token'] as String,
-      json['asset'] as String,
-      json['l2_network'] as String?,
-      _decimalFromJson(json['amount_dec']),
-      json['recipient'] as String?,
-      DateTime.parse(json['date'] as String),
-      json['confirmed'] as bool,
-      json['txid'] as String?,
-    );
-
-Map<String, dynamic> _$BeCryptoDepositToJson(BeCryptoDeposit instance) =>
-    <String, dynamic>{
-      'token': instance.token,
-      'asset': instance.asset,
-      'l2_network': instance.l2Network,
-      'amount_dec': _decimalToJson(instance.amount),
-      'recipient': instance.recipient,
-      'date': instance.date.toIso8601String(),
-      'confirmed': instance.confirmed,
-      'txid': instance.txid,
-    };
-
-BeCryptoWithdrawal _$BeCryptoWithdrawalFromJson(Map<String, dynamic> json) =>
-    BeCryptoWithdrawal(
-      json['token'] as String,
-      json['asset'] as String,
-      json['l2_network'] as String?,
-      DateTime.parse(json['date'] as String),
-      _decimalFromJson(json['amount_dec']),
-      json['recipient'] as String,
-      json['txid'] as String?,
-      json['status'] as String,
-    );
-
-Map<String, dynamic> _$BeCryptoWithdrawalToJson(BeCryptoWithdrawal instance) =>
-    <String, dynamic>{
-      'token': instance.token,
-      'asset': instance.asset,
-      'l2_network': instance.l2Network,
-      'date': instance.date.toIso8601String(),
-      'amount_dec': _decimalToJson(instance.amount),
-      'recipient': instance.recipient,
-      'txid': instance.txid,
-      'status': instance.status,
-    };
-
-BeFiatDeposit _$BeFiatDepositFromJson(Map<String, dynamic> json) =>
-    BeFiatDeposit(
-      json['token'] as String,
-      json['asset'] as String,
+      json['type'] as String,
       DateTime.parse(json['date'] as String),
       DateTime.parse(json['expiry'] as String),
+      json['asset'] as String,
+      json['l2_network'] as String?,
       _decimalFromJson(json['amount_dec']),
+      _decimalFromJson(json['fee_dec']),
+      json['recipient'] as String,
       json['status'] as String,
+      json['txid'] as String?,
       json['payment_url'] as String?,
     );
 
-Map<String, dynamic> _$BeFiatDepositToJson(BeFiatDeposit instance) =>
+Map<String, dynamic> _$BeBalanceUpdateToJson(BeBalanceUpdate instance) =>
     <String, dynamic>{
       'token': instance.token,
-      'asset': instance.asset,
+      'type': instance.type,
       'date': instance.date.toIso8601String(),
       'expiry': instance.expiry.toIso8601String(),
+      'asset': instance.asset,
+      'l2_network': instance.l2Network,
       'amount_dec': _decimalToJson(instance.amount),
+      'fee_dec': _decimalToJson(instance.fee),
+      'recipient': instance.recipient,
       'status': instance.status,
+      'txid': instance.txid,
       'payment_url': instance.paymentUrl,
     };
 
@@ -248,26 +210,6 @@ Map<String, dynamic> _$BeFiatAccountNumberToJson(
       'account_number': instance.accountNumber,
       'reference': instance.reference,
       'code': instance.code,
-    };
-
-BeFiatWithdrawal _$BeFiatWithdrawalFromJson(Map<String, dynamic> json) =>
-    BeFiatWithdrawal(
-      json['token'] as String,
-      json['asset'] as String,
-      DateTime.parse(json['date'] as String),
-      _decimalFromJson(json['amount_dec']),
-      json['recipient'] as String,
-      json['status'] as String,
-    );
-
-Map<String, dynamic> _$BeFiatWithdrawalToJson(BeFiatWithdrawal instance) =>
-    <String, dynamic>{
-      'token': instance.token,
-      'asset': instance.asset,
-      'date': instance.date.toIso8601String(),
-      'amount_dec': _decimalToJson(instance.amount),
-      'recipient': instance.recipient,
-      'status': instance.status,
     };
 
 BeAddressBookEntry _$BeAddressBookEntryFromJson(Map<String, dynamic> json) =>
