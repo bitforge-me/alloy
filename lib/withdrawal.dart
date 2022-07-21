@@ -607,7 +607,7 @@ class CryptoWithdrawalsScreen extends StatefulWidget {
 }
 
 class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
-  List<BeCryptoWithdrawal> _withdrawals = [];
+  List<BeBalanceUpdate> _withdrawals = [];
   final int _itemsPerPage = 10;
   int _pageNumber = 0;
   int _pageCount = 0;
@@ -630,18 +630,17 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.cryptoWithdrawalNew) {
-      var withdrawal = BeCryptoWithdrawal.fromJson(jsonDecode(args.msg));
+      var withdrawal = BeBalanceUpdate.fromJson(jsonDecode(args.msg));
       if (withdrawal.asset != widget.asset.symbol ||
           withdrawal.l2Network != widget.l2Network?.symbol) return;
       if (_pageNumber == 0) {
-        _withdrawals.insert(
-            0, BeCryptoWithdrawal.fromJson(jsonDecode(args.msg)));
+        _withdrawals.insert(0, BeBalanceUpdate.fromJson(jsonDecode(args.msg)));
         if (_withdrawals.length > _itemsPerPage) _withdrawals.removeLast();
         setState(() => _withdrawals = _withdrawals);
       }
     }
     if (args.event == WebsocketEvent.cryptoWithdrawalUpdate) {
-      var newWithdrawal = BeCryptoWithdrawal.fromJson(jsonDecode(args.msg));
+      var newWithdrawal = BeBalanceUpdate.fromJson(jsonDecode(args.msg));
       for (var i = 0; i < _withdrawals.length; i++) {
         var withdrawal = _withdrawals[i];
         if (withdrawal.token == newWithdrawal.token) {
@@ -668,7 +667,7 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
             'failed to get withdrawals (${BeError.msg(err)})'));
   }
 
-  Future<void> _withdrawalTap(BeCryptoWithdrawal withdrawal) async {
+  Future<void> _withdrawalTap(BeBalanceUpdate withdrawal) async {
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -741,7 +740,7 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
 }
 
 class CryptoWithdrawalDetailScreen extends StatefulWidget {
-  final BeCryptoWithdrawal withdrawal;
+  final BeBalanceUpdate withdrawal;
   final Websocket websocket;
 
   CryptoWithdrawalDetailScreen(this.withdrawal, this.websocket);
@@ -753,7 +752,7 @@ class CryptoWithdrawalDetailScreen extends StatefulWidget {
 
 class _CryptoWithdrawalDetailScreenState
     extends State<CryptoWithdrawalDetailScreen> {
-  BeCryptoWithdrawal _withdrawal;
+  BeBalanceUpdate _withdrawal;
   var _testnet = testnet();
 
   _CryptoWithdrawalDetailScreenState(this._withdrawal);
@@ -773,7 +772,7 @@ class _CryptoWithdrawalDetailScreenState
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.cryptoWithdrawalUpdate) {
-      var newWithdrawal = BeCryptoWithdrawal.fromJson(jsonDecode(args.msg));
+      var newWithdrawal = BeBalanceUpdate.fromJson(jsonDecode(args.msg));
       if (_withdrawal.token == newWithdrawal.token) {
         setState(() => _withdrawal = newWithdrawal);
         snackMsg(context, 'withdrawal updated ${newWithdrawal.token}');
@@ -812,6 +811,10 @@ class _CryptoWithdrawalDetailScreenState
           ListTile(
               title: Text('Amount'),
               subtitle: PriceEquivalent(_withdrawal.asset, _withdrawal.amount)),
+          ListTile(
+              title: Text('Fee'),
+              subtitle: Text(assetFormatWithUnitToUser(
+                  _withdrawal.asset, _withdrawal.fee))),
           ListTile(title: Text('Date'), subtitle: Text('${_withdrawal.date}')),
           ListTile(
               title: Text(
@@ -851,7 +854,7 @@ class FiatWithdrawalsScreen extends StatefulWidget {
 }
 
 class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
-  List<BeFiatWithdrawal> _withdrawals = [];
+  List<BeBalanceUpdate> _withdrawals = [];
   final int _itemsPerPage = 10;
   int _pageNumber = 0;
   int _pageCount = 0;
@@ -874,7 +877,7 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.fiatWithdrawalNew) {
-      var withdrawal = BeFiatWithdrawal.fromJson(jsonDecode(args.msg));
+      var withdrawal = BeBalanceUpdate.fromJson(jsonDecode(args.msg));
       if (withdrawal.asset != widget.asset.symbol) return;
       if (_pageNumber == 0) {
         _withdrawals.insert(0, withdrawal);
@@ -883,7 +886,7 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
       }
     }
     if (args.event == WebsocketEvent.fiatWithdrawalUpdate) {
-      var newWithdrawal = BeFiatWithdrawal.fromJson(jsonDecode(args.msg));
+      var newWithdrawal = BeBalanceUpdate.fromJson(jsonDecode(args.msg));
       for (var i = 0; i < _withdrawals.length; i++) {
         var withdrawal = _withdrawals[i];
         if (withdrawal.token == newWithdrawal.token) {
@@ -910,7 +913,7 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
             'failed to get withdrawals (${BeError.msg(err)})'));
   }
 
-  Future<void> _withdrawalTap(BeFiatWithdrawal withdrawal) async {
+  Future<void> _withdrawalTap(BeBalanceUpdate withdrawal) async {
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -979,7 +982,7 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
 }
 
 class FiatWithdrawalDetailScreen extends StatefulWidget {
-  final BeFiatWithdrawal withdrawal;
+  final BeBalanceUpdate withdrawal;
   final Websocket websocket;
 
   FiatWithdrawalDetailScreen(this.withdrawal, this.websocket);
@@ -991,7 +994,7 @@ class FiatWithdrawalDetailScreen extends StatefulWidget {
 
 class _FiatWithdrawalDetailScreenState
     extends State<FiatWithdrawalDetailScreen> {
-  BeFiatWithdrawal _withdrawal;
+  BeBalanceUpdate _withdrawal;
 
   _FiatWithdrawalDetailScreenState(this._withdrawal);
 
@@ -1010,7 +1013,7 @@ class _FiatWithdrawalDetailScreenState
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.fiatWithdrawalUpdate) {
-      var newWithdrawal = BeFiatWithdrawal.fromJson(jsonDecode(args.msg));
+      var newWithdrawal = BeBalanceUpdate.fromJson(jsonDecode(args.msg));
       if (_withdrawal.token == newWithdrawal.token) {
         setState(() => _withdrawal = newWithdrawal);
         snackMsg(context,
@@ -1031,6 +1034,10 @@ class _FiatWithdrawalDetailScreenState
           ListTile(
               title: Text('Amount'),
               subtitle: PriceEquivalent(_withdrawal.asset, _withdrawal.amount)),
+          ListTile(
+              title: Text('Fee'),
+              subtitle: Text(assetFormatWithUnitToUser(
+                  _withdrawal.asset, _withdrawal.fee))),
           ListTile(title: Text('Date'), subtitle: Text('${_withdrawal.date}')),
           ListTile(
               title: Text('Bank Account'),

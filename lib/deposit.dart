@@ -111,7 +111,7 @@ class CryptoDepositsScreen extends StatefulWidget {
 }
 
 class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
-  List<BeCryptoDeposit> _deposits = [];
+  List<BeBalanceUpdate> _deposits = [];
   final int _itemsPerPage = 10;
   int _pageNumber = 0;
   int _pageCount = 0;
@@ -134,7 +134,7 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.cryptoDepositNew) {
-      var deposit = BeCryptoDeposit.fromJson(jsonDecode(args.msg));
+      var deposit = BeBalanceUpdate.fromJson(jsonDecode(args.msg));
       if (deposit.asset != widget.asset.symbol ||
           deposit.l2Network != widget.l2Network?.symbol) return;
       if (_pageNumber == 0) {
@@ -161,7 +161,7 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
             category: MessageCategory.Warning));
   }
 
-  Future<void> _depositTap(BeCryptoDeposit deposit) async {
+  Future<void> _depositTap(BeBalanceUpdate deposit) async {
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -173,7 +173,7 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
     var deposit = _deposits[n];
     return ListTile(
       title: PriceEquivalent(deposit.asset, deposit.amount,
-          post: ' - ${deposit.confirmed ? 'CONFIRMED' : 'PENDING'}',
+          post: ' - ${deposit.status.toUpperCase()}',
           textAlign: TextAlign.center),
       onTap: () => _depositTap(deposit),
     );
@@ -267,7 +267,7 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
 }
 
 class CryptoDepositDetailScreen extends StatefulWidget {
-  final BeCryptoDeposit deposit;
+  final BeBalanceUpdate deposit;
   final Websocket websocket;
 
   CryptoDepositDetailScreen(this.deposit, this.websocket);
@@ -278,7 +278,7 @@ class CryptoDepositDetailScreen extends StatefulWidget {
 }
 
 class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
-  BeCryptoDeposit _deposit;
+  BeBalanceUpdate _deposit;
   var _testnet = testnet();
 
   _CryptoDepositDetailScreenState(this._deposit);
@@ -298,11 +298,11 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.cryptoDepositUpdate) {
-      var newDeposit = BeCryptoDeposit.fromJson(jsonDecode(args.msg));
+      var newDeposit = BeBalanceUpdate.fromJson(jsonDecode(args.msg));
       if (_deposit.token == newDeposit.token) {
         setState(() => _deposit = newDeposit);
         snackMsg(context,
-            'deposit updated ${newDeposit.token} - ${newDeposit.confirmed ? 'CONFIRMED' : 'PENDING'}');
+            'deposit updated ${newDeposit.token} - ${newDeposit.status.toUpperCase()}');
       }
     }
   }
@@ -357,8 +357,7 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
                   onPressed: _copyRecipient, icon: Icon(Icons.copy))),
           ListTile(
               title: Text('Status'),
-              subtitle:
-                  Text('${_deposit.confirmed ? 'CONFIRMED' : 'PENDING'}')),
+              subtitle: Text('${_deposit.status.toUpperCase()}')),
           VerticalSpacer(),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,
@@ -452,7 +451,7 @@ class FiatDepositsScreen extends StatefulWidget {
 }
 
 class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
-  List<BeFiatDeposit> _deposits = [];
+  List<BeBalanceUpdate> _deposits = [];
   final int _itemsPerPage = 10;
   int _pageNumber = 0;
   int _pageCount = 0;
@@ -475,7 +474,7 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.fiatDepositNew) {
-      var deposit = BeFiatDeposit.fromJson(jsonDecode(args.msg));
+      var deposit = BeBalanceUpdate.fromJson(jsonDecode(args.msg));
       if (deposit.asset != widget.asset.symbol) return;
       if (_pageNumber == 0) {
         _deposits.insert(0, deposit);
@@ -500,7 +499,7 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
             context, 'error', 'failed to get deposits (${BeError.msg(err)})'));
   }
 
-  Future<void> _depositTap(BeFiatDeposit deposit) async {
+  Future<void> _depositTap(BeBalanceUpdate deposit) async {
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -606,7 +605,7 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
 }
 
 class FiatDepositDetailScreen extends StatefulWidget {
-  final BeFiatDeposit deposit;
+  final BeBalanceUpdate deposit;
   final Websocket websocket;
 
   FiatDepositDetailScreen(this.deposit, this.websocket);
@@ -617,7 +616,7 @@ class FiatDepositDetailScreen extends StatefulWidget {
 }
 
 class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
-  BeFiatDeposit _deposit;
+  BeBalanceUpdate _deposit;
 
   _FiatDepositDetailScreenState(this._deposit);
 
@@ -636,7 +635,7 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.fiatDepositUpdate) {
-      var newDeposit = BeFiatDeposit.fromJson(jsonDecode(args.msg));
+      var newDeposit = BeBalanceUpdate.fromJson(jsonDecode(args.msg));
       if (_deposit.token == newDeposit.token) {
         setState(() => _deposit = newDeposit);
         snackMsg(context,

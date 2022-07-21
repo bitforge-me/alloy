@@ -5799,7 +5799,7 @@ class _$BeCryptoDepositsResultTearOff {
   const _$BeCryptoDepositsResultTearOff();
 
   _BeCryptoDepositsResult call(
-      List<BeCryptoDeposit> deposits, int offset, int limit, int total) {
+      List<BeBalanceUpdate> deposits, int offset, int limit, int total) {
     return _BeCryptoDepositsResult(
       deposits,
       offset,
@@ -5823,7 +5823,7 @@ mixin _$BeCryptoDepositsResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(
-            List<BeCryptoDeposit> deposits, int offset, int limit, int total)
+            List<BeBalanceUpdate> deposits, int offset, int limit, int total)
         $default, {
     required TResult Function(BeError err) error,
   }) =>
@@ -5831,7 +5831,7 @@ mixin _$BeCryptoDepositsResult {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(
-            List<BeCryptoDeposit> deposits, int offset, int limit, int total)?
+            List<BeBalanceUpdate> deposits, int offset, int limit, int total)?
         $default, {
     TResult Function(BeError err)? error,
   }) =>
@@ -5839,7 +5839,7 @@ mixin _$BeCryptoDepositsResult {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
-            List<BeCryptoDeposit> deposits, int offset, int limit, int total)?
+            List<BeBalanceUpdate> deposits, int offset, int limit, int total)?
         $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
@@ -5888,7 +5888,7 @@ abstract class _$BeCryptoDepositsResultCopyWith<$Res> {
   factory _$BeCryptoDepositsResultCopyWith(_BeCryptoDepositsResult value,
           $Res Function(_BeCryptoDepositsResult) then) =
       __$BeCryptoDepositsResultCopyWithImpl<$Res>;
-  $Res call({List<BeCryptoDeposit> deposits, int offset, int limit, int total});
+  $Res call({List<BeBalanceUpdate> deposits, int offset, int limit, int total});
 }
 
 /// @nodoc
@@ -5913,7 +5913,7 @@ class __$BeCryptoDepositsResultCopyWithImpl<$Res>
       deposits == freezed
           ? _value.deposits
           : deposits // ignore: cast_nullable_to_non_nullable
-              as List<BeCryptoDeposit>,
+              as List<BeBalanceUpdate>,
       offset == freezed
           ? _value.offset
           : offset // ignore: cast_nullable_to_non_nullable
@@ -5939,7 +5939,7 @@ class _$_BeCryptoDepositsResult
       this.deposits, this.offset, this.limit, this.total);
 
   @override
-  final List<BeCryptoDeposit> deposits;
+  final List<BeBalanceUpdate> deposits;
   @override
   final int offset;
   @override
@@ -5988,7 +5988,7 @@ class _$_BeCryptoDepositsResult
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(
-            List<BeCryptoDeposit> deposits, int offset, int limit, int total)
+            List<BeBalanceUpdate> deposits, int offset, int limit, int total)
         $default, {
     required TResult Function(BeError err) error,
   }) {
@@ -5999,7 +5999,7 @@ class _$_BeCryptoDepositsResult
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(
-            List<BeCryptoDeposit> deposits, int offset, int limit, int total)?
+            List<BeBalanceUpdate> deposits, int offset, int limit, int total)?
         $default, {
     TResult Function(BeError err)? error,
   }) {
@@ -6010,7 +6010,7 @@ class _$_BeCryptoDepositsResult
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
-            List<BeCryptoDeposit> deposits, int offset, int limit, int total)?
+            List<BeBalanceUpdate> deposits, int offset, int limit, int total)?
         $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
@@ -6055,10 +6055,10 @@ class _$_BeCryptoDepositsResult
 
 abstract class _BeCryptoDepositsResult implements BeCryptoDepositsResult {
   const factory _BeCryptoDepositsResult(
-          List<BeCryptoDeposit> deposits, int offset, int limit, int total) =
+          List<BeBalanceUpdate> deposits, int offset, int limit, int total) =
       _$_BeCryptoDepositsResult;
 
-  List<BeCryptoDeposit> get deposits;
+  List<BeBalanceUpdate> get deposits;
   int get offset;
   int get limit;
   int get total;
@@ -6154,7 +6154,7 @@ class _$_BeCryptoDepositsResultErr
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(
-            List<BeCryptoDeposit> deposits, int offset, int limit, int total)
+            List<BeBalanceUpdate> deposits, int offset, int limit, int total)
         $default, {
     required TResult Function(BeError err) error,
   }) {
@@ -6165,7 +6165,7 @@ class _$_BeCryptoDepositsResultErr
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(
-            List<BeCryptoDeposit> deposits, int offset, int limit, int total)?
+            List<BeBalanceUpdate> deposits, int offset, int limit, int total)?
         $default, {
     TResult Function(BeError err)? error,
   }) {
@@ -6176,7 +6176,7 @@ class _$_BeCryptoDepositsResultErr
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
-            List<BeCryptoDeposit> deposits, int offset, int limit, int total)?
+            List<BeBalanceUpdate> deposits, int offset, int limit, int total)?
         $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
@@ -6233,7 +6233,7 @@ abstract class _BeCryptoDepositsResultErr implements BeCryptoDepositsResult {
 class _$BeCryptoWithdrawalResultTearOff {
   const _$BeCryptoWithdrawalResultTearOff();
 
-  _BeCryptoWithdrawalResult call(BeCryptoWithdrawal withdrawal) {
+  _BeCryptoWithdrawalResult call(BeBalanceUpdate withdrawal) {
     return _BeCryptoWithdrawalResult(
       withdrawal,
     );
@@ -6253,19 +6253,19 @@ const $BeCryptoWithdrawalResult = _$BeCryptoWithdrawalResultTearOff();
 mixin _$BeCryptoWithdrawalResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(BeCryptoWithdrawal withdrawal) $default, {
+    TResult Function(BeBalanceUpdate withdrawal) $default, {
     required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(BeCryptoWithdrawal withdrawal)? $default, {
+    TResult Function(BeBalanceUpdate withdrawal)? $default, {
     TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(BeCryptoWithdrawal withdrawal)? $default, {
+    TResult Function(BeBalanceUpdate withdrawal)? $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
@@ -6313,7 +6313,7 @@ abstract class _$BeCryptoWithdrawalResultCopyWith<$Res> {
   factory _$BeCryptoWithdrawalResultCopyWith(_BeCryptoWithdrawalResult value,
           $Res Function(_BeCryptoWithdrawalResult) then) =
       __$BeCryptoWithdrawalResultCopyWithImpl<$Res>;
-  $Res call({BeCryptoWithdrawal withdrawal});
+  $Res call({BeBalanceUpdate withdrawal});
 }
 
 /// @nodoc
@@ -6336,7 +6336,7 @@ class __$BeCryptoWithdrawalResultCopyWithImpl<$Res>
       withdrawal == freezed
           ? _value.withdrawal
           : withdrawal // ignore: cast_nullable_to_non_nullable
-              as BeCryptoWithdrawal,
+              as BeBalanceUpdate,
     ));
   }
 }
@@ -6349,7 +6349,7 @@ class _$_BeCryptoWithdrawalResult
   const _$_BeCryptoWithdrawalResult(this.withdrawal);
 
   @override
-  final BeCryptoWithdrawal withdrawal;
+  final BeBalanceUpdate withdrawal;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -6385,7 +6385,7 @@ class _$_BeCryptoWithdrawalResult
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(BeCryptoWithdrawal withdrawal) $default, {
+    TResult Function(BeBalanceUpdate withdrawal) $default, {
     required TResult Function(BeError err) error,
   }) {
     return $default(withdrawal);
@@ -6394,7 +6394,7 @@ class _$_BeCryptoWithdrawalResult
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(BeCryptoWithdrawal withdrawal)? $default, {
+    TResult Function(BeBalanceUpdate withdrawal)? $default, {
     TResult Function(BeError err)? error,
   }) {
     return $default?.call(withdrawal);
@@ -6403,7 +6403,7 @@ class _$_BeCryptoWithdrawalResult
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(BeCryptoWithdrawal withdrawal)? $default, {
+    TResult Function(BeBalanceUpdate withdrawal)? $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
@@ -6446,10 +6446,10 @@ class _$_BeCryptoWithdrawalResult
 }
 
 abstract class _BeCryptoWithdrawalResult implements BeCryptoWithdrawalResult {
-  const factory _BeCryptoWithdrawalResult(BeCryptoWithdrawal withdrawal) =
+  const factory _BeCryptoWithdrawalResult(BeBalanceUpdate withdrawal) =
       _$_BeCryptoWithdrawalResult;
 
-  BeCryptoWithdrawal get withdrawal;
+  BeBalanceUpdate get withdrawal;
   @JsonKey(ignore: true)
   _$BeCryptoWithdrawalResultCopyWith<_BeCryptoWithdrawalResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -6542,7 +6542,7 @@ class _$_BeCryptoWithdrawalResultErr
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(BeCryptoWithdrawal withdrawal) $default, {
+    TResult Function(BeBalanceUpdate withdrawal) $default, {
     required TResult Function(BeError err) error,
   }) {
     return error(err);
@@ -6551,7 +6551,7 @@ class _$_BeCryptoWithdrawalResultErr
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(BeCryptoWithdrawal withdrawal)? $default, {
+    TResult Function(BeBalanceUpdate withdrawal)? $default, {
     TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
@@ -6560,7 +6560,7 @@ class _$_BeCryptoWithdrawalResultErr
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(BeCryptoWithdrawal withdrawal)? $default, {
+    TResult Function(BeBalanceUpdate withdrawal)? $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
@@ -6618,7 +6618,7 @@ class _$BeCryptoWithdrawalsResultTearOff {
   const _$BeCryptoWithdrawalsResultTearOff();
 
   _BeCryptoWithdrawalsResult call(
-      List<BeCryptoWithdrawal> withdrawals, int offset, int limit, int total) {
+      List<BeBalanceUpdate> withdrawals, int offset, int limit, int total) {
     return _BeCryptoWithdrawalsResult(
       withdrawals,
       offset,
@@ -6641,24 +6641,24 @@ const $BeCryptoWithdrawalsResult = _$BeCryptoWithdrawalsResultTearOff();
 mixin _$BeCryptoWithdrawalsResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(List<BeCryptoWithdrawal> withdrawals, int offset,
-            int limit, int total)
+    TResult Function(
+            List<BeBalanceUpdate> withdrawals, int offset, int limit, int total)
         $default, {
     required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(List<BeCryptoWithdrawal> withdrawals, int offset,
-            int limit, int total)?
+    TResult Function(List<BeBalanceUpdate> withdrawals, int offset, int limit,
+            int total)?
         $default, {
     TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(List<BeCryptoWithdrawal> withdrawals, int offset,
-            int limit, int total)?
+    TResult Function(List<BeBalanceUpdate> withdrawals, int offset, int limit,
+            int total)?
         $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
@@ -6708,7 +6708,7 @@ abstract class _$BeCryptoWithdrawalsResultCopyWith<$Res> {
           $Res Function(_BeCryptoWithdrawalsResult) then) =
       __$BeCryptoWithdrawalsResultCopyWithImpl<$Res>;
   $Res call(
-      {List<BeCryptoWithdrawal> withdrawals, int offset, int limit, int total});
+      {List<BeBalanceUpdate> withdrawals, int offset, int limit, int total});
 }
 
 /// @nodoc
@@ -6734,7 +6734,7 @@ class __$BeCryptoWithdrawalsResultCopyWithImpl<$Res>
       withdrawals == freezed
           ? _value.withdrawals
           : withdrawals // ignore: cast_nullable_to_non_nullable
-              as List<BeCryptoWithdrawal>,
+              as List<BeBalanceUpdate>,
       offset == freezed
           ? _value.offset
           : offset // ignore: cast_nullable_to_non_nullable
@@ -6760,7 +6760,7 @@ class _$_BeCryptoWithdrawalsResult
       this.withdrawals, this.offset, this.limit, this.total);
 
   @override
-  final List<BeCryptoWithdrawal> withdrawals;
+  final List<BeBalanceUpdate> withdrawals;
   @override
   final int offset;
   @override
@@ -6810,8 +6810,8 @@ class _$_BeCryptoWithdrawalsResult
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(List<BeCryptoWithdrawal> withdrawals, int offset,
-            int limit, int total)
+    TResult Function(
+            List<BeBalanceUpdate> withdrawals, int offset, int limit, int total)
         $default, {
     required TResult Function(BeError err) error,
   }) {
@@ -6821,8 +6821,8 @@ class _$_BeCryptoWithdrawalsResult
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(List<BeCryptoWithdrawal> withdrawals, int offset,
-            int limit, int total)?
+    TResult Function(List<BeBalanceUpdate> withdrawals, int offset, int limit,
+            int total)?
         $default, {
     TResult Function(BeError err)? error,
   }) {
@@ -6832,8 +6832,8 @@ class _$_BeCryptoWithdrawalsResult
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(List<BeCryptoWithdrawal> withdrawals, int offset,
-            int limit, int total)?
+    TResult Function(List<BeBalanceUpdate> withdrawals, int offset, int limit,
+            int total)?
         $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
@@ -6877,10 +6877,11 @@ class _$_BeCryptoWithdrawalsResult
 }
 
 abstract class _BeCryptoWithdrawalsResult implements BeCryptoWithdrawalsResult {
-  const factory _BeCryptoWithdrawalsResult(List<BeCryptoWithdrawal> withdrawals,
-      int offset, int limit, int total) = _$_BeCryptoWithdrawalsResult;
+  const factory _BeCryptoWithdrawalsResult(
+          List<BeBalanceUpdate> withdrawals, int offset, int limit, int total) =
+      _$_BeCryptoWithdrawalsResult;
 
-  List<BeCryptoWithdrawal> get withdrawals;
+  List<BeBalanceUpdate> get withdrawals;
   int get offset;
   int get limit;
   int get total;
@@ -6976,8 +6977,8 @@ class _$_BeCryptoWithdrawalsResultErr
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(List<BeCryptoWithdrawal> withdrawals, int offset,
-            int limit, int total)
+    TResult Function(
+            List<BeBalanceUpdate> withdrawals, int offset, int limit, int total)
         $default, {
     required TResult Function(BeError err) error,
   }) {
@@ -6987,8 +6988,8 @@ class _$_BeCryptoWithdrawalsResultErr
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(List<BeCryptoWithdrawal> withdrawals, int offset,
-            int limit, int total)?
+    TResult Function(List<BeBalanceUpdate> withdrawals, int offset, int limit,
+            int total)?
         $default, {
     TResult Function(BeError err)? error,
   }) {
@@ -6998,8 +6999,8 @@ class _$_BeCryptoWithdrawalsResultErr
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(List<BeCryptoWithdrawal> withdrawals, int offset,
-            int limit, int total)?
+    TResult Function(List<BeBalanceUpdate> withdrawals, int offset, int limit,
+            int total)?
         $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
@@ -7057,7 +7058,7 @@ abstract class _BeCryptoWithdrawalsResultErr
 class _$BeFiatDepositResultTearOff {
   const _$BeFiatDepositResultTearOff();
 
-  _BeFiatDepositResult call(BeFiatDeposit deposit) {
+  _BeFiatDepositResult call(BeBalanceUpdate deposit) {
     return _BeFiatDepositResult(
       deposit,
     );
@@ -7077,19 +7078,19 @@ const $BeFiatDepositResult = _$BeFiatDepositResultTearOff();
 mixin _$BeFiatDepositResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(BeFiatDeposit deposit) $default, {
+    TResult Function(BeBalanceUpdate deposit) $default, {
     required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(BeFiatDeposit deposit)? $default, {
+    TResult Function(BeBalanceUpdate deposit)? $default, {
     TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(BeFiatDeposit deposit)? $default, {
+    TResult Function(BeBalanceUpdate deposit)? $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
@@ -7137,7 +7138,7 @@ abstract class _$BeFiatDepositResultCopyWith<$Res> {
   factory _$BeFiatDepositResultCopyWith(_BeFiatDepositResult value,
           $Res Function(_BeFiatDepositResult) then) =
       __$BeFiatDepositResultCopyWithImpl<$Res>;
-  $Res call({BeFiatDeposit deposit});
+  $Res call({BeBalanceUpdate deposit});
 }
 
 /// @nodoc
@@ -7159,7 +7160,7 @@ class __$BeFiatDepositResultCopyWithImpl<$Res>
       deposit == freezed
           ? _value.deposit
           : deposit // ignore: cast_nullable_to_non_nullable
-              as BeFiatDeposit,
+              as BeBalanceUpdate,
     ));
   }
 }
@@ -7172,7 +7173,7 @@ class _$_BeFiatDepositResult
   const _$_BeFiatDepositResult(this.deposit);
 
   @override
-  final BeFiatDeposit deposit;
+  final BeBalanceUpdate deposit;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -7207,7 +7208,7 @@ class _$_BeFiatDepositResult
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(BeFiatDeposit deposit) $default, {
+    TResult Function(BeBalanceUpdate deposit) $default, {
     required TResult Function(BeError err) error,
   }) {
     return $default(deposit);
@@ -7216,7 +7217,7 @@ class _$_BeFiatDepositResult
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(BeFiatDeposit deposit)? $default, {
+    TResult Function(BeBalanceUpdate deposit)? $default, {
     TResult Function(BeError err)? error,
   }) {
     return $default?.call(deposit);
@@ -7225,7 +7226,7 @@ class _$_BeFiatDepositResult
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(BeFiatDeposit deposit)? $default, {
+    TResult Function(BeBalanceUpdate deposit)? $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
@@ -7268,10 +7269,10 @@ class _$_BeFiatDepositResult
 }
 
 abstract class _BeFiatDepositResult implements BeFiatDepositResult {
-  const factory _BeFiatDepositResult(BeFiatDeposit deposit) =
+  const factory _BeFiatDepositResult(BeBalanceUpdate deposit) =
       _$_BeFiatDepositResult;
 
-  BeFiatDeposit get deposit;
+  BeBalanceUpdate get deposit;
   @JsonKey(ignore: true)
   _$BeFiatDepositResultCopyWith<_BeFiatDepositResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -7361,7 +7362,7 @@ class _$_BeFiatDepositResultErr
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(BeFiatDeposit deposit) $default, {
+    TResult Function(BeBalanceUpdate deposit) $default, {
     required TResult Function(BeError err) error,
   }) {
     return error(err);
@@ -7370,7 +7371,7 @@ class _$_BeFiatDepositResultErr
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(BeFiatDeposit deposit)? $default, {
+    TResult Function(BeBalanceUpdate deposit)? $default, {
     TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
@@ -7379,7 +7380,7 @@ class _$_BeFiatDepositResultErr
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(BeFiatDeposit deposit)? $default, {
+    TResult Function(BeBalanceUpdate deposit)? $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
@@ -7821,7 +7822,7 @@ class _$BeFiatDepositsResultTearOff {
   const _$BeFiatDepositsResultTearOff();
 
   _BeFiatDepositsResult call(
-      List<BeFiatDeposit> deposits, int offset, int limit, int total) {
+      List<BeBalanceUpdate> deposits, int offset, int limit, int total) {
     return _BeFiatDepositsResult(
       deposits,
       offset,
@@ -7845,7 +7846,7 @@ mixin _$BeFiatDepositsResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(
-            List<BeFiatDeposit> deposits, int offset, int limit, int total)
+            List<BeBalanceUpdate> deposits, int offset, int limit, int total)
         $default, {
     required TResult Function(BeError err) error,
   }) =>
@@ -7853,7 +7854,7 @@ mixin _$BeFiatDepositsResult {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(
-            List<BeFiatDeposit> deposits, int offset, int limit, int total)?
+            List<BeBalanceUpdate> deposits, int offset, int limit, int total)?
         $default, {
     TResult Function(BeError err)? error,
   }) =>
@@ -7861,7 +7862,7 @@ mixin _$BeFiatDepositsResult {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
-            List<BeFiatDeposit> deposits, int offset, int limit, int total)?
+            List<BeBalanceUpdate> deposits, int offset, int limit, int total)?
         $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
@@ -7910,7 +7911,7 @@ abstract class _$BeFiatDepositsResultCopyWith<$Res> {
   factory _$BeFiatDepositsResultCopyWith(_BeFiatDepositsResult value,
           $Res Function(_BeFiatDepositsResult) then) =
       __$BeFiatDepositsResultCopyWithImpl<$Res>;
-  $Res call({List<BeFiatDeposit> deposits, int offset, int limit, int total});
+  $Res call({List<BeBalanceUpdate> deposits, int offset, int limit, int total});
 }
 
 /// @nodoc
@@ -7935,7 +7936,7 @@ class __$BeFiatDepositsResultCopyWithImpl<$Res>
       deposits == freezed
           ? _value.deposits
           : deposits // ignore: cast_nullable_to_non_nullable
-              as List<BeFiatDeposit>,
+              as List<BeBalanceUpdate>,
       offset == freezed
           ? _value.offset
           : offset // ignore: cast_nullable_to_non_nullable
@@ -7961,7 +7962,7 @@ class _$_BeFiatDepositsResult
       this.deposits, this.offset, this.limit, this.total);
 
   @override
-  final List<BeFiatDeposit> deposits;
+  final List<BeBalanceUpdate> deposits;
   @override
   final int offset;
   @override
@@ -8010,7 +8011,7 @@ class _$_BeFiatDepositsResult
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(
-            List<BeFiatDeposit> deposits, int offset, int limit, int total)
+            List<BeBalanceUpdate> deposits, int offset, int limit, int total)
         $default, {
     required TResult Function(BeError err) error,
   }) {
@@ -8021,7 +8022,7 @@ class _$_BeFiatDepositsResult
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(
-            List<BeFiatDeposit> deposits, int offset, int limit, int total)?
+            List<BeBalanceUpdate> deposits, int offset, int limit, int total)?
         $default, {
     TResult Function(BeError err)? error,
   }) {
@@ -8032,7 +8033,7 @@ class _$_BeFiatDepositsResult
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
-            List<BeFiatDeposit> deposits, int offset, int limit, int total)?
+            List<BeBalanceUpdate> deposits, int offset, int limit, int total)?
         $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
@@ -8077,10 +8078,10 @@ class _$_BeFiatDepositsResult
 
 abstract class _BeFiatDepositsResult implements BeFiatDepositsResult {
   const factory _BeFiatDepositsResult(
-          List<BeFiatDeposit> deposits, int offset, int limit, int total) =
+          List<BeBalanceUpdate> deposits, int offset, int limit, int total) =
       _$_BeFiatDepositsResult;
 
-  List<BeFiatDeposit> get deposits;
+  List<BeBalanceUpdate> get deposits;
   int get offset;
   int get limit;
   int get total;
@@ -8175,7 +8176,7 @@ class _$_BeFiatDepositsResultErr
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(
-            List<BeFiatDeposit> deposits, int offset, int limit, int total)
+            List<BeBalanceUpdate> deposits, int offset, int limit, int total)
         $default, {
     required TResult Function(BeError err) error,
   }) {
@@ -8186,7 +8187,7 @@ class _$_BeFiatDepositsResultErr
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult Function(
-            List<BeFiatDeposit> deposits, int offset, int limit, int total)?
+            List<BeBalanceUpdate> deposits, int offset, int limit, int total)?
         $default, {
     TResult Function(BeError err)? error,
   }) {
@@ -8197,7 +8198,7 @@ class _$_BeFiatDepositsResultErr
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
-            List<BeFiatDeposit> deposits, int offset, int limit, int total)?
+            List<BeBalanceUpdate> deposits, int offset, int limit, int total)?
         $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
@@ -8254,7 +8255,7 @@ abstract class _BeFiatDepositsResultErr implements BeFiatDepositsResult {
 class _$BeFiatWithdrawalResultTearOff {
   const _$BeFiatWithdrawalResultTearOff();
 
-  _BeFiatWithdrawalResult call(BeFiatWithdrawal withdrawal) {
+  _BeFiatWithdrawalResult call(BeBalanceUpdate withdrawal) {
     return _BeFiatWithdrawalResult(
       withdrawal,
     );
@@ -8274,19 +8275,19 @@ const $BeFiatWithdrawalResult = _$BeFiatWithdrawalResultTearOff();
 mixin _$BeFiatWithdrawalResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(BeFiatWithdrawal withdrawal) $default, {
+    TResult Function(BeBalanceUpdate withdrawal) $default, {
     required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(BeFiatWithdrawal withdrawal)? $default, {
+    TResult Function(BeBalanceUpdate withdrawal)? $default, {
     TResult Function(BeError err)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(BeFiatWithdrawal withdrawal)? $default, {
+    TResult Function(BeBalanceUpdate withdrawal)? $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
   }) =>
@@ -8334,7 +8335,7 @@ abstract class _$BeFiatWithdrawalResultCopyWith<$Res> {
   factory _$BeFiatWithdrawalResultCopyWith(_BeFiatWithdrawalResult value,
           $Res Function(_BeFiatWithdrawalResult) then) =
       __$BeFiatWithdrawalResultCopyWithImpl<$Res>;
-  $Res call({BeFiatWithdrawal withdrawal});
+  $Res call({BeBalanceUpdate withdrawal});
 }
 
 /// @nodoc
@@ -8356,7 +8357,7 @@ class __$BeFiatWithdrawalResultCopyWithImpl<$Res>
       withdrawal == freezed
           ? _value.withdrawal
           : withdrawal // ignore: cast_nullable_to_non_nullable
-              as BeFiatWithdrawal,
+              as BeBalanceUpdate,
     ));
   }
 }
@@ -8369,7 +8370,7 @@ class _$_BeFiatWithdrawalResult
   const _$_BeFiatWithdrawalResult(this.withdrawal);
 
   @override
-  final BeFiatWithdrawal withdrawal;
+  final BeBalanceUpdate withdrawal;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -8405,7 +8406,7 @@ class _$_BeFiatWithdrawalResult
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(BeFiatWithdrawal withdrawal) $default, {
+    TResult Function(BeBalanceUpdate withdrawal) $default, {
     required TResult Function(BeError err) error,
   }) {
     return $default(withdrawal);
@@ -8414,7 +8415,7 @@ class _$_BeFiatWithdrawalResult
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(BeFiatWithdrawal withdrawal)? $default, {
+    TResult Function(BeBalanceUpdate withdrawal)? $default, {
     TResult Function(BeError err)? error,
   }) {
     return $default?.call(withdrawal);
@@ -8423,7 +8424,7 @@ class _$_BeFiatWithdrawalResult
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(BeFiatWithdrawal withdrawal)? $default, {
+    TResult Function(BeBalanceUpdate withdrawal)? $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
@@ -8466,10 +8467,10 @@ class _$_BeFiatWithdrawalResult
 }
 
 abstract class _BeFiatWithdrawalResult implements BeFiatWithdrawalResult {
-  const factory _BeFiatWithdrawalResult(BeFiatWithdrawal withdrawal) =
+  const factory _BeFiatWithdrawalResult(BeBalanceUpdate withdrawal) =
       _$_BeFiatWithdrawalResult;
 
-  BeFiatWithdrawal get withdrawal;
+  BeBalanceUpdate get withdrawal;
   @JsonKey(ignore: true)
   _$BeFiatWithdrawalResultCopyWith<_BeFiatWithdrawalResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -8561,7 +8562,7 @@ class _$_BeFiatWithdrawalResultErr
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(BeFiatWithdrawal withdrawal) $default, {
+    TResult Function(BeBalanceUpdate withdrawal) $default, {
     required TResult Function(BeError err) error,
   }) {
     return error(err);
@@ -8570,7 +8571,7 @@ class _$_BeFiatWithdrawalResultErr
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(BeFiatWithdrawal withdrawal)? $default, {
+    TResult Function(BeBalanceUpdate withdrawal)? $default, {
     TResult Function(BeError err)? error,
   }) {
     return error?.call(err);
@@ -8579,7 +8580,7 @@ class _$_BeFiatWithdrawalResultErr
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(BeFiatWithdrawal withdrawal)? $default, {
+    TResult Function(BeBalanceUpdate withdrawal)? $default, {
     TResult Function(BeError err)? error,
     required TResult orElse(),
   }) {
@@ -8636,7 +8637,7 @@ class _$BeFiatWithdrawalsResultTearOff {
   const _$BeFiatWithdrawalsResultTearOff();
 
   _BeFiatWithdrawalsResult call(
-      List<BeFiatWithdrawal> withdrawals, int offset, int limit, int total) {
+      List<BeBalanceUpdate> withdrawals, int offset, int limit, int total) {
     return _BeFiatWithdrawalsResult(
       withdrawals,
       offset,
@@ -8659,15 +8660,15 @@ const $BeFiatWithdrawalsResult = _$BeFiatWithdrawalsResultTearOff();
 mixin _$BeFiatWithdrawalsResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(List<BeFiatWithdrawal> withdrawals, int offset, int limit,
-            int total)
+    TResult Function(
+            List<BeBalanceUpdate> withdrawals, int offset, int limit, int total)
         $default, {
     required TResult Function(BeError err) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(List<BeFiatWithdrawal> withdrawals, int offset, int limit,
+    TResult Function(List<BeBalanceUpdate> withdrawals, int offset, int limit,
             int total)?
         $default, {
     TResult Function(BeError err)? error,
@@ -8675,7 +8676,7 @@ mixin _$BeFiatWithdrawalsResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(List<BeFiatWithdrawal> withdrawals, int offset, int limit,
+    TResult Function(List<BeBalanceUpdate> withdrawals, int offset, int limit,
             int total)?
         $default, {
     TResult Function(BeError err)? error,
@@ -8726,7 +8727,7 @@ abstract class _$BeFiatWithdrawalsResultCopyWith<$Res> {
           $Res Function(_BeFiatWithdrawalsResult) then) =
       __$BeFiatWithdrawalsResultCopyWithImpl<$Res>;
   $Res call(
-      {List<BeFiatWithdrawal> withdrawals, int offset, int limit, int total});
+      {List<BeBalanceUpdate> withdrawals, int offset, int limit, int total});
 }
 
 /// @nodoc
@@ -8752,7 +8753,7 @@ class __$BeFiatWithdrawalsResultCopyWithImpl<$Res>
       withdrawals == freezed
           ? _value.withdrawals
           : withdrawals // ignore: cast_nullable_to_non_nullable
-              as List<BeFiatWithdrawal>,
+              as List<BeBalanceUpdate>,
       offset == freezed
           ? _value.offset
           : offset // ignore: cast_nullable_to_non_nullable
@@ -8778,7 +8779,7 @@ class _$_BeFiatWithdrawalsResult
       this.withdrawals, this.offset, this.limit, this.total);
 
   @override
-  final List<BeFiatWithdrawal> withdrawals;
+  final List<BeBalanceUpdate> withdrawals;
   @override
   final int offset;
   @override
@@ -8827,8 +8828,8 @@ class _$_BeFiatWithdrawalsResult
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(List<BeFiatWithdrawal> withdrawals, int offset, int limit,
-            int total)
+    TResult Function(
+            List<BeBalanceUpdate> withdrawals, int offset, int limit, int total)
         $default, {
     required TResult Function(BeError err) error,
   }) {
@@ -8838,7 +8839,7 @@ class _$_BeFiatWithdrawalsResult
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(List<BeFiatWithdrawal> withdrawals, int offset, int limit,
+    TResult Function(List<BeBalanceUpdate> withdrawals, int offset, int limit,
             int total)?
         $default, {
     TResult Function(BeError err)? error,
@@ -8849,7 +8850,7 @@ class _$_BeFiatWithdrawalsResult
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(List<BeFiatWithdrawal> withdrawals, int offset, int limit,
+    TResult Function(List<BeBalanceUpdate> withdrawals, int offset, int limit,
             int total)?
         $default, {
     TResult Function(BeError err)? error,
@@ -8894,10 +8895,11 @@ class _$_BeFiatWithdrawalsResult
 }
 
 abstract class _BeFiatWithdrawalsResult implements BeFiatWithdrawalsResult {
-  const factory _BeFiatWithdrawalsResult(List<BeFiatWithdrawal> withdrawals,
-      int offset, int limit, int total) = _$_BeFiatWithdrawalsResult;
+  const factory _BeFiatWithdrawalsResult(
+          List<BeBalanceUpdate> withdrawals, int offset, int limit, int total) =
+      _$_BeFiatWithdrawalsResult;
 
-  List<BeFiatWithdrawal> get withdrawals;
+  List<BeBalanceUpdate> get withdrawals;
   int get offset;
   int get limit;
   int get total;
@@ -8992,8 +8994,8 @@ class _$_BeFiatWithdrawalsResultErr
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(List<BeFiatWithdrawal> withdrawals, int offset, int limit,
-            int total)
+    TResult Function(
+            List<BeBalanceUpdate> withdrawals, int offset, int limit, int total)
         $default, {
     required TResult Function(BeError err) error,
   }) {
@@ -9003,7 +9005,7 @@ class _$_BeFiatWithdrawalsResultErr
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(List<BeFiatWithdrawal> withdrawals, int offset, int limit,
+    TResult Function(List<BeBalanceUpdate> withdrawals, int offset, int limit,
             int total)?
         $default, {
     TResult Function(BeError err)? error,
@@ -9014,7 +9016,7 @@ class _$_BeFiatWithdrawalsResultErr
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(List<BeFiatWithdrawal> withdrawals, int offset, int limit,
+    TResult Function(List<BeBalanceUpdate> withdrawals, int offset, int limit,
             int total)?
         $default, {
     TResult Function(BeError err)? error,

@@ -479,30 +479,47 @@ class BeCryptoDepositRecipientResult with _$BeCryptoDepositRecipientResult {
 }
 
 @JsonSerializable()
-class BeCryptoDeposit {
+class BeBalanceUpdate {
   final String token;
+  final String type;
+  final DateTime date;
+  final DateTime expiry;
   final String asset;
   @JsonKey(name: 'l2_network')
   final String? l2Network;
   @JsonKey(
       name: 'amount_dec', fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal amount;
-  final String? recipient;
-  final DateTime date;
-  final bool confirmed;
+  @JsonKey(name: 'fee_dec', fromJson: _decimalFromJson, toJson: _decimalToJson)
+  final Decimal fee;
+  final String recipient;
+  final String status;
   final String? txid;
+  @JsonKey(name: 'payment_url')
+  final String? paymentUrl;
 
-  BeCryptoDeposit(this.token, this.asset, this.l2Network, this.amount,
-      this.recipient, this.date, this.confirmed, this.txid);
-  factory BeCryptoDeposit.fromJson(Map<String, dynamic> json) =>
-      _$BeCryptoDepositFromJson(json);
-  Map<String, dynamic> toJson() => _$BeCryptoDepositToJson(this);
+  BeBalanceUpdate(
+      this.token,
+      this.type,
+      this.date,
+      this.expiry,
+      this.asset,
+      this.l2Network,
+      this.amount,
+      this.fee,
+      this.recipient,
+      this.status,
+      this.txid,
+      this.paymentUrl);
+  factory BeBalanceUpdate.fromJson(Map<String, dynamic> json) =>
+      _$BeBalanceUpdateFromJson(json);
+  Map<String, dynamic> toJson() => _$BeBalanceUpdateToJson(this);
 }
 
 @freezed
 class BeCryptoDepositsResult with _$BeCryptoDepositsResult {
   const factory BeCryptoDepositsResult(
-          List<BeCryptoDeposit> deposits, int offset, int limit, int total) =
+          List<BeBalanceUpdate> deposits, int offset, int limit, int total) =
       _BeCryptoDepositsResult;
   const factory BeCryptoDepositsResult.error(BeError err) =
       _BeCryptoDepositsResultErr;
@@ -510,9 +527,9 @@ class BeCryptoDepositsResult with _$BeCryptoDepositsResult {
   static BeCryptoDepositsResult parse(String data) {
     try {
       var json = jsonDecode(data);
-      List<BeCryptoDeposit> deposits = [];
+      List<BeBalanceUpdate> deposits = [];
       for (var item in json['deposits'])
-        deposits.add(BeCryptoDeposit.fromJson(item));
+        deposits.add(BeBalanceUpdate.fromJson(item));
       var offset = json['offset'];
       var limit = json['limit'];
       var total = json['total'];
@@ -523,30 +540,9 @@ class BeCryptoDepositsResult with _$BeCryptoDepositsResult {
   }
 }
 
-@JsonSerializable()
-class BeCryptoWithdrawal {
-  final String token;
-  final String asset;
-  @JsonKey(name: 'l2_network')
-  final String? l2Network;
-  final DateTime date;
-  @JsonKey(
-      name: 'amount_dec', fromJson: _decimalFromJson, toJson: _decimalToJson)
-  final Decimal amount;
-  final String recipient;
-  final String? txid;
-  final String status;
-
-  BeCryptoWithdrawal(this.token, this.asset, this.l2Network, this.date,
-      this.amount, this.recipient, this.txid, this.status);
-  factory BeCryptoWithdrawal.fromJson(Map<String, dynamic> json) =>
-      _$BeCryptoWithdrawalFromJson(json);
-  Map<String, dynamic> toJson() => _$BeCryptoWithdrawalToJson(this);
-}
-
 @freezed
 class BeCryptoWithdrawalResult with _$BeCryptoWithdrawalResult {
-  const factory BeCryptoWithdrawalResult(BeCryptoWithdrawal withdrawal) =
+  const factory BeCryptoWithdrawalResult(BeBalanceUpdate withdrawal) =
       _BeCryptoWithdrawalResult;
   const factory BeCryptoWithdrawalResult.error(BeError err) =
       _BeCryptoWithdrawalResultErr;
@@ -555,7 +551,7 @@ class BeCryptoWithdrawalResult with _$BeCryptoWithdrawalResult {
     try {
       var json = jsonDecode(data);
       return BeCryptoWithdrawalResult(
-          BeCryptoWithdrawal.fromJson(json['withdrawal']));
+          BeBalanceUpdate.fromJson(json['withdrawal']));
     } catch (_) {
       return BeCryptoWithdrawalResult.error(BeError.format());
     }
@@ -564,17 +560,18 @@ class BeCryptoWithdrawalResult with _$BeCryptoWithdrawalResult {
 
 @freezed
 class BeCryptoWithdrawalsResult with _$BeCryptoWithdrawalsResult {
-  const factory BeCryptoWithdrawalsResult(List<BeCryptoWithdrawal> withdrawals,
-      int offset, int limit, int total) = _BeCryptoWithdrawalsResult;
+  const factory BeCryptoWithdrawalsResult(
+          List<BeBalanceUpdate> withdrawals, int offset, int limit, int total) =
+      _BeCryptoWithdrawalsResult;
   const factory BeCryptoWithdrawalsResult.error(BeError err) =
       _BeCryptoWithdrawalsResultErr;
 
   static BeCryptoWithdrawalsResult parse(String data) {
     try {
       var json = jsonDecode(data);
-      List<BeCryptoWithdrawal> withdrawals = [];
+      List<BeBalanceUpdate> withdrawals = [];
       for (var item in json['withdrawals'])
-        withdrawals.add(BeCryptoWithdrawal.fromJson(item));
+        withdrawals.add(BeBalanceUpdate.fromJson(item));
       var offset = json['offset'];
       var limit = json['limit'];
       var total = json['total'];
@@ -585,29 +582,9 @@ class BeCryptoWithdrawalsResult with _$BeCryptoWithdrawalsResult {
   }
 }
 
-@JsonSerializable()
-class BeFiatDeposit {
-  final String token;
-  final String asset;
-  final DateTime date;
-  final DateTime expiry;
-  @JsonKey(
-      name: 'amount_dec', fromJson: _decimalFromJson, toJson: _decimalToJson)
-  final Decimal amount;
-  final String status;
-  @JsonKey(name: 'payment_url')
-  final String? paymentUrl;
-
-  BeFiatDeposit(this.token, this.asset, this.date, this.expiry, this.amount,
-      this.status, this.paymentUrl);
-  factory BeFiatDeposit.fromJson(Map<String, dynamic> json) =>
-      _$BeFiatDepositFromJson(json);
-  Map<String, dynamic> toJson() => _$BeFiatDepositToJson(this);
-}
-
 @freezed
 class BeFiatDepositResult with _$BeFiatDepositResult {
-  const factory BeFiatDepositResult(BeFiatDeposit deposit) =
+  const factory BeFiatDepositResult(BeBalanceUpdate deposit) =
       _BeFiatDepositResult;
   const factory BeFiatDepositResult.error(BeError err) =
       _BeFiatDepositResultErr;
@@ -615,7 +592,7 @@ class BeFiatDepositResult with _$BeFiatDepositResult {
   static BeFiatDepositResult parse(String data) {
     try {
       var json = jsonDecode(data);
-      return BeFiatDepositResult(BeFiatDeposit.fromJson(json['deposit']));
+      return BeFiatDepositResult(BeBalanceUpdate.fromJson(json['deposit']));
     } catch (_) {
       return BeFiatDepositResult.error(BeError.format());
     }
@@ -656,7 +633,7 @@ class BeFiatAccountNumberResult with _$BeFiatAccountNumberResult {
 @freezed
 class BeFiatDepositsResult with _$BeFiatDepositsResult {
   const factory BeFiatDepositsResult(
-          List<BeFiatDeposit> deposits, int offset, int limit, int total) =
+          List<BeBalanceUpdate> deposits, int offset, int limit, int total) =
       _BeFiatDepositsResult;
   const factory BeFiatDepositsResult.error(BeError err) =
       _BeFiatDepositsResultErr;
@@ -664,9 +641,9 @@ class BeFiatDepositsResult with _$BeFiatDepositsResult {
   static BeFiatDepositsResult parse(String data) {
     try {
       var json = jsonDecode(data);
-      List<BeFiatDeposit> deposits = [];
+      List<BeBalanceUpdate> deposits = [];
       for (var item in json['deposits'])
-        deposits.add(BeFiatDeposit.fromJson(item));
+        deposits.add(BeBalanceUpdate.fromJson(item));
       var offset = json['offset'];
       var limit = json['limit'];
       var total = json['total'];
@@ -677,27 +654,9 @@ class BeFiatDepositsResult with _$BeFiatDepositsResult {
   }
 }
 
-@JsonSerializable()
-class BeFiatWithdrawal {
-  final String token;
-  final String asset;
-  final DateTime date;
-  @JsonKey(
-      name: 'amount_dec', fromJson: _decimalFromJson, toJson: _decimalToJson)
-  final Decimal amount;
-  final String recipient;
-  final String status;
-
-  BeFiatWithdrawal(this.token, this.asset, this.date, this.amount,
-      this.recipient, this.status);
-  factory BeFiatWithdrawal.fromJson(Map<String, dynamic> json) =>
-      _$BeFiatWithdrawalFromJson(json);
-  Map<String, dynamic> toJson() => _$BeFiatWithdrawalToJson(this);
-}
-
 @freezed
 class BeFiatWithdrawalResult with _$BeFiatWithdrawalResult {
-  const factory BeFiatWithdrawalResult(BeFiatWithdrawal withdrawal) =
+  const factory BeFiatWithdrawalResult(BeBalanceUpdate withdrawal) =
       _BeFiatWithdrawalResult;
   const factory BeFiatWithdrawalResult.error(BeError err) =
       _BeFiatWithdrawalResultErr;
@@ -706,7 +665,7 @@ class BeFiatWithdrawalResult with _$BeFiatWithdrawalResult {
     try {
       var json = jsonDecode(data);
       return BeFiatWithdrawalResult(
-          BeFiatWithdrawal.fromJson(json['withdrawal']));
+          BeBalanceUpdate.fromJson(json['withdrawal']));
     } catch (_) {
       return BeFiatWithdrawalResult.error(BeError.format());
     }
@@ -715,17 +674,18 @@ class BeFiatWithdrawalResult with _$BeFiatWithdrawalResult {
 
 @freezed
 class BeFiatWithdrawalsResult with _$BeFiatWithdrawalsResult {
-  const factory BeFiatWithdrawalsResult(List<BeFiatWithdrawal> withdrawals,
-      int offset, int limit, int total) = _BeFiatWithdrawalsResult;
+  const factory BeFiatWithdrawalsResult(
+          List<BeBalanceUpdate> withdrawals, int offset, int limit, int total) =
+      _BeFiatWithdrawalsResult;
   const factory BeFiatWithdrawalsResult.error(BeError err) =
       _BeFiatWithdrawalsResultErr;
 
   static BeFiatWithdrawalsResult parse(String data) {
     try {
       var json = jsonDecode(data);
-      List<BeFiatWithdrawal> withdrawals = [];
+      List<BeBalanceUpdate> withdrawals = [];
       for (var item in json['withdrawals'])
-        withdrawals.add(BeFiatWithdrawal.fromJson(item));
+        withdrawals.add(BeBalanceUpdate.fromJson(item));
       var offset = json['offset'];
       var limit = json['limit'];
       var total = json['total'];
