@@ -346,7 +346,7 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
             foregroundColor: Colors.white,
             data: '${_deposit.recipient}',
             version: QrVersions.auto,
-            size: 200.0,
+            size: 300.0,
           ))),
           ListTile(
               title: Text(
@@ -423,7 +423,7 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
                         foregroundColor: Colors.white,
                         data: '${widget.recipient}',
                         version: QrVersions.auto,
-                        size: 200.0,
+                        size: 300.0,
                       )),
                       padding: EdgeInsets.all(10)),
                   VerticalSpacer(),
