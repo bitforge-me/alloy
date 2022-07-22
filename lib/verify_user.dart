@@ -119,7 +119,8 @@ class _VerifyUserScreenState extends State<VerifyUserScreen> {
                               'Continue the verification process on your mobile phone or re-enter your mobile phone number to start over'),
                       Container(
                           padding: EdgeInsets.all(10),
-                          child: Image.asset('assets/aplyid-logo.webp')),
+                          child: Image.asset('assets/aplyid-logo.webp',
+                              filterQuality: FilterQuality.high)),
                       phoneNumberInput(
                           _mobileNumberController,
                           (pn) => _phoneNumber = pn,
