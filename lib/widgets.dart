@@ -276,11 +276,10 @@ class BigLogoContainer extends StatelessWidget {
     var kids = List<Widget>.from(children ?? []);
     kids.insert(
         0,
-        Image.asset(
-          'assets/new-logo.png',
-          height: 200,
-          fit: BoxFit.fitHeight,
-        ));
+        Padding(
+            padding: EdgeInsets.all(50),
+            child: Image.asset('assets/new-logo.png',
+                filterQuality: FilterQuality.high)));
     return Container(
         padding: EdgeInsets.all(20),
         child: Center(child: Column(children: kids)));
