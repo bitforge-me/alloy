@@ -191,12 +191,32 @@ class ColumnView extends StatelessWidget {
 class BiforgePage extends StatelessWidget {
   final Widget? child;
   final bool scrollChild;
-  BiforgePage({this.child, this.scrollChild = false});
+  final bool showDebugInfo;
+  BiforgePage(
+      {this.child, this.scrollChild = false, this.showDebugInfo = false});
 
   @override
   Widget build(BuildContext context) {
+    Widget column;
+    if (showDebugInfo)
+      column = Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            ColumnView(child: child),
+            Align(alignment: Alignment.bottomRight, child: DebugInfo())
+          ]);
+    else
+      column = ColumnView(child: child);
     return BackgroundWebImage(
-        child: ColumnView(child: child, scrollChild: scrollChild));
+        child: scrollChild
+            ? LayoutBuilder(
+                builder: (context, constraints) => SingleChildScrollView(
+                    child: ConstrainedBox(
+                        constraints:
+                            BoxConstraints(minHeight: constraints.maxHeight),
+                        child: column)))
+            : column);
   }
 }
 
