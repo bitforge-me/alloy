@@ -147,6 +147,7 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
         ),
         body: BiforgePage(
             scrollChild: true,
+            showDebugInfo: true,
             child: Form(
                 key: _formKey,
                 child: BigLogoContainer(
@@ -189,8 +190,6 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                         fwdArrow: true,
                         width: ButtonWidth,
                         height: ButtonHeight),
-                    VerticalSpacer(),
-                    DebugInfo()
                   ],
                 ))));
   }
@@ -237,6 +236,7 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
         ),
         body: BiforgePage(
             scrollChild: true,
+            showDebugInfo: true,
             child: Form(
                 key: _formKey,
                 child: BigLogoContainer(
@@ -304,8 +304,6 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                         fwdArrow: true,
                         width: ButtonWidth,
                         height: ButtonHeight),
-                    VerticalSpacer(),
-                    DebugInfo()
                   ],
                 ))));
   }
@@ -342,6 +340,7 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
         ),
         body: BiforgePage(
             scrollChild: true,
+            showDebugInfo: true,
             child: Form(
                 key: _formKey,
                 child: BigLogoContainer(children: [
@@ -428,8 +427,6 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                     Navigator.of(context).pop(LoginChoice.doLogin());
                   }, ZapOnSurface, ZapSurface, null, 'Login',
                       fwdArrow: true, width: ButtonWidth, height: ButtonHeight),
-                  VerticalSpacer(),
-                  DebugInfo()
                 ]))));
   }
 }
@@ -653,6 +650,7 @@ class StagingFormState extends State<StagingForm> {
         ),
         body: BiforgePage(
             scrollChild: true,
+            showDebugInfo: true,
             child: BigLogoContainer(children: [
               BronzeRoundedButton(
                   () => startLoginProcess(LoginChoice.doLogin()),
@@ -694,8 +692,6 @@ class StagingFormState extends State<StagingForm> {
                       width: ButtonWidth,
                       height: ButtonHeight)
                   : SizedBox(),
-              VerticalSpacer(),
-              DebugInfo()
             ])));
   }
 }

@@ -362,6 +362,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         drawer: makeDrawer(context),
         body: BiforgePage(
           scrollChild: true,
+          showDebugInfo: true,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -405,8 +406,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                             textOutside: false,
                             borderSize: 0)
                       ]),
-                      VerticalSpacer(),
-                      DebugInfo()
                     ])),
               ],
             ),
