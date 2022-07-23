@@ -378,13 +378,15 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                             'Order History',
                             textColor: ZapOnSecondary,
                             textOutside: false,
-                            borderSize: 0),
+                            borderSize: 0,
+                            fontSize: 18),
                         SizedBox(width: 15),
                         SquareButton(_balances, Icons.wallet_rounded,
                             ZapSecondary, 'Balances',
                             textColor: ZapOnSecondary,
                             textOutside: false,
-                            borderSize: 0)
+                            borderSize: 0,
+                            fontSize: 18)
                       ]),
                       VerticalSpacer(),
                       Row(mainAxisSize: MainAxisSize.min, children: [
@@ -395,7 +397,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                             'Deposits',
                             textColor: ZapOnSecondary,
                             textOutside: false,
-                            borderSize: 0),
+                            borderSize: 0,
+                            fontSize: 18),
                         SizedBox(width: 15),
                         SquareButton(
                             _withdrawal,
@@ -404,7 +407,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                             'Withdrawals',
                             textColor: ZapOnSecondary,
                             textOutside: false,
-                            borderSize: 0)
+                            borderSize: 0,
+                            fontSize: 18)
                       ]),
                     ])),
               ],
