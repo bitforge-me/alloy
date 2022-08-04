@@ -112,8 +112,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         MaterialPageRoute(
             builder: (context) =>
                 StagingForm(invalidAuth, retry, errTitle, errMessage)));
-    if (result == null) _initApi();
-    result!.when(
+    if (result == null) {
+      _initApi();
+      return;
+    }
+    result.when(
+        choose: (_) => throw Exception(
+            'login choice should not have been passed back here'),
         acct: (_) => _initApi(),
         reset: () => _logout(),
         retry: () => _initApi(),
