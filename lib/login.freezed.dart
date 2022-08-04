@@ -28,24 +28,6 @@ class _$LoginChoiceTearOff {
   LCDApiKeyRequest doApiKeyRequest() {
     return const LCDApiKeyRequest();
   }
-
-  LCRegistration registration(AccountRegistration reg) {
-    return LCRegistration(
-      reg,
-    );
-  }
-
-  LCLogin login(AccountLogin login) {
-    return LCLogin(
-      login,
-    );
-  }
-
-  LCRequestApiKey apiKeyRequest(AccountRequestApiKey req) {
-    return LCRequestApiKey(
-      req,
-    );
-  }
 }
 
 /// @nodoc
@@ -58,9 +40,6 @@ mixin _$LoginChoice {
     required TResult Function() doLogin,
     required TResult Function() doRegistration,
     required TResult Function() doApiKeyRequest,
-    required TResult Function(AccountRegistration reg) registration,
-    required TResult Function(AccountLogin login) login,
-    required TResult Function(AccountRequestApiKey req) apiKeyRequest,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -68,9 +47,6 @@ mixin _$LoginChoice {
     TResult Function()? doLogin,
     TResult Function()? doRegistration,
     TResult Function()? doApiKeyRequest,
-    TResult Function(AccountRegistration reg)? registration,
-    TResult Function(AccountLogin login)? login,
-    TResult Function(AccountRequestApiKey req)? apiKeyRequest,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -78,9 +54,6 @@ mixin _$LoginChoice {
     TResult Function()? doLogin,
     TResult Function()? doRegistration,
     TResult Function()? doApiKeyRequest,
-    TResult Function(AccountRegistration reg)? registration,
-    TResult Function(AccountLogin login)? login,
-    TResult Function(AccountRequestApiKey req)? apiKeyRequest,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -89,9 +62,6 @@ mixin _$LoginChoice {
     required TResult Function(LCDoLogin value) doLogin,
     required TResult Function(LCDoRegistration value) doRegistration,
     required TResult Function(LCDApiKeyRequest value) doApiKeyRequest,
-    required TResult Function(LCRegistration value) registration,
-    required TResult Function(LCLogin value) login,
-    required TResult Function(LCRequestApiKey value) apiKeyRequest,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -99,9 +69,6 @@ mixin _$LoginChoice {
     TResult Function(LCDoLogin value)? doLogin,
     TResult Function(LCDoRegistration value)? doRegistration,
     TResult Function(LCDApiKeyRequest value)? doApiKeyRequest,
-    TResult Function(LCRegistration value)? registration,
-    TResult Function(LCLogin value)? login,
-    TResult Function(LCRequestApiKey value)? apiKeyRequest,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -109,9 +76,6 @@ mixin _$LoginChoice {
     TResult Function(LCDoLogin value)? doLogin,
     TResult Function(LCDoRegistration value)? doRegistration,
     TResult Function(LCDApiKeyRequest value)? doApiKeyRequest,
-    TResult Function(LCRegistration value)? registration,
-    TResult Function(LCLogin value)? login,
-    TResult Function(LCRequestApiKey value)? apiKeyRequest,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -174,9 +138,6 @@ class _$LCDoLogin implements LCDoLogin {
     required TResult Function() doLogin,
     required TResult Function() doRegistration,
     required TResult Function() doApiKeyRequest,
-    required TResult Function(AccountRegistration reg) registration,
-    required TResult Function(AccountLogin login) login,
-    required TResult Function(AccountRequestApiKey req) apiKeyRequest,
   }) {
     return doLogin();
   }
@@ -187,9 +148,6 @@ class _$LCDoLogin implements LCDoLogin {
     TResult Function()? doLogin,
     TResult Function()? doRegistration,
     TResult Function()? doApiKeyRequest,
-    TResult Function(AccountRegistration reg)? registration,
-    TResult Function(AccountLogin login)? login,
-    TResult Function(AccountRequestApiKey req)? apiKeyRequest,
   }) {
     return doLogin?.call();
   }
@@ -200,9 +158,6 @@ class _$LCDoLogin implements LCDoLogin {
     TResult Function()? doLogin,
     TResult Function()? doRegistration,
     TResult Function()? doApiKeyRequest,
-    TResult Function(AccountRegistration reg)? registration,
-    TResult Function(AccountLogin login)? login,
-    TResult Function(AccountRequestApiKey req)? apiKeyRequest,
     required TResult orElse(),
   }) {
     if (doLogin != null) {
@@ -217,9 +172,6 @@ class _$LCDoLogin implements LCDoLogin {
     required TResult Function(LCDoLogin value) doLogin,
     required TResult Function(LCDoRegistration value) doRegistration,
     required TResult Function(LCDApiKeyRequest value) doApiKeyRequest,
-    required TResult Function(LCRegistration value) registration,
-    required TResult Function(LCLogin value) login,
-    required TResult Function(LCRequestApiKey value) apiKeyRequest,
   }) {
     return doLogin(this);
   }
@@ -230,9 +182,6 @@ class _$LCDoLogin implements LCDoLogin {
     TResult Function(LCDoLogin value)? doLogin,
     TResult Function(LCDoRegistration value)? doRegistration,
     TResult Function(LCDApiKeyRequest value)? doApiKeyRequest,
-    TResult Function(LCRegistration value)? registration,
-    TResult Function(LCLogin value)? login,
-    TResult Function(LCRequestApiKey value)? apiKeyRequest,
   }) {
     return doLogin?.call(this);
   }
@@ -243,9 +192,6 @@ class _$LCDoLogin implements LCDoLogin {
     TResult Function(LCDoLogin value)? doLogin,
     TResult Function(LCDoRegistration value)? doRegistration,
     TResult Function(LCDApiKeyRequest value)? doApiKeyRequest,
-    TResult Function(LCRegistration value)? registration,
-    TResult Function(LCLogin value)? login,
-    TResult Function(LCRequestApiKey value)? apiKeyRequest,
     required TResult orElse(),
   }) {
     if (doLogin != null) {
@@ -303,9 +249,6 @@ class _$LCDoRegistration implements LCDoRegistration {
     required TResult Function() doLogin,
     required TResult Function() doRegistration,
     required TResult Function() doApiKeyRequest,
-    required TResult Function(AccountRegistration reg) registration,
-    required TResult Function(AccountLogin login) login,
-    required TResult Function(AccountRequestApiKey req) apiKeyRequest,
   }) {
     return doRegistration();
   }
@@ -316,9 +259,6 @@ class _$LCDoRegistration implements LCDoRegistration {
     TResult Function()? doLogin,
     TResult Function()? doRegistration,
     TResult Function()? doApiKeyRequest,
-    TResult Function(AccountRegistration reg)? registration,
-    TResult Function(AccountLogin login)? login,
-    TResult Function(AccountRequestApiKey req)? apiKeyRequest,
   }) {
     return doRegistration?.call();
   }
@@ -329,9 +269,6 @@ class _$LCDoRegistration implements LCDoRegistration {
     TResult Function()? doLogin,
     TResult Function()? doRegistration,
     TResult Function()? doApiKeyRequest,
-    TResult Function(AccountRegistration reg)? registration,
-    TResult Function(AccountLogin login)? login,
-    TResult Function(AccountRequestApiKey req)? apiKeyRequest,
     required TResult orElse(),
   }) {
     if (doRegistration != null) {
@@ -346,9 +283,6 @@ class _$LCDoRegistration implements LCDoRegistration {
     required TResult Function(LCDoLogin value) doLogin,
     required TResult Function(LCDoRegistration value) doRegistration,
     required TResult Function(LCDApiKeyRequest value) doApiKeyRequest,
-    required TResult Function(LCRegistration value) registration,
-    required TResult Function(LCLogin value) login,
-    required TResult Function(LCRequestApiKey value) apiKeyRequest,
   }) {
     return doRegistration(this);
   }
@@ -359,9 +293,6 @@ class _$LCDoRegistration implements LCDoRegistration {
     TResult Function(LCDoLogin value)? doLogin,
     TResult Function(LCDoRegistration value)? doRegistration,
     TResult Function(LCDApiKeyRequest value)? doApiKeyRequest,
-    TResult Function(LCRegistration value)? registration,
-    TResult Function(LCLogin value)? login,
-    TResult Function(LCRequestApiKey value)? apiKeyRequest,
   }) {
     return doRegistration?.call(this);
   }
@@ -372,9 +303,6 @@ class _$LCDoRegistration implements LCDoRegistration {
     TResult Function(LCDoLogin value)? doLogin,
     TResult Function(LCDoRegistration value)? doRegistration,
     TResult Function(LCDApiKeyRequest value)? doApiKeyRequest,
-    TResult Function(LCRegistration value)? registration,
-    TResult Function(LCLogin value)? login,
-    TResult Function(LCRequestApiKey value)? apiKeyRequest,
     required TResult orElse(),
   }) {
     if (doRegistration != null) {
@@ -432,9 +360,6 @@ class _$LCDApiKeyRequest implements LCDApiKeyRequest {
     required TResult Function() doLogin,
     required TResult Function() doRegistration,
     required TResult Function() doApiKeyRequest,
-    required TResult Function(AccountRegistration reg) registration,
-    required TResult Function(AccountLogin login) login,
-    required TResult Function(AccountRequestApiKey req) apiKeyRequest,
   }) {
     return doApiKeyRequest();
   }
@@ -445,9 +370,6 @@ class _$LCDApiKeyRequest implements LCDApiKeyRequest {
     TResult Function()? doLogin,
     TResult Function()? doRegistration,
     TResult Function()? doApiKeyRequest,
-    TResult Function(AccountRegistration reg)? registration,
-    TResult Function(AccountLogin login)? login,
-    TResult Function(AccountRequestApiKey req)? apiKeyRequest,
   }) {
     return doApiKeyRequest?.call();
   }
@@ -458,9 +380,6 @@ class _$LCDApiKeyRequest implements LCDApiKeyRequest {
     TResult Function()? doLogin,
     TResult Function()? doRegistration,
     TResult Function()? doApiKeyRequest,
-    TResult Function(AccountRegistration reg)? registration,
-    TResult Function(AccountLogin login)? login,
-    TResult Function(AccountRequestApiKey req)? apiKeyRequest,
     required TResult orElse(),
   }) {
     if (doApiKeyRequest != null) {
@@ -475,9 +394,6 @@ class _$LCDApiKeyRequest implements LCDApiKeyRequest {
     required TResult Function(LCDoLogin value) doLogin,
     required TResult Function(LCDoRegistration value) doRegistration,
     required TResult Function(LCDApiKeyRequest value) doApiKeyRequest,
-    required TResult Function(LCRegistration value) registration,
-    required TResult Function(LCLogin value) login,
-    required TResult Function(LCRequestApiKey value) apiKeyRequest,
   }) {
     return doApiKeyRequest(this);
   }
@@ -488,9 +404,6 @@ class _$LCDApiKeyRequest implements LCDApiKeyRequest {
     TResult Function(LCDoLogin value)? doLogin,
     TResult Function(LCDoRegistration value)? doRegistration,
     TResult Function(LCDApiKeyRequest value)? doApiKeyRequest,
-    TResult Function(LCRegistration value)? registration,
-    TResult Function(LCLogin value)? login,
-    TResult Function(LCRequestApiKey value)? apiKeyRequest,
   }) {
     return doApiKeyRequest?.call(this);
   }
@@ -501,9 +414,6 @@ class _$LCDApiKeyRequest implements LCDApiKeyRequest {
     TResult Function(LCDoLogin value)? doLogin,
     TResult Function(LCDoRegistration value)? doRegistration,
     TResult Function(LCDApiKeyRequest value)? doApiKeyRequest,
-    TResult Function(LCRegistration value)? registration,
-    TResult Function(LCLogin value)? login,
-    TResult Function(LCRequestApiKey value)? apiKeyRequest,
     required TResult orElse(),
   }) {
     if (doApiKeyRequest != null) {
@@ -518,474 +428,14 @@ abstract class LCDApiKeyRequest implements LoginChoice {
 }
 
 /// @nodoc
-abstract class $LCRegistrationCopyWith<$Res> {
-  factory $LCRegistrationCopyWith(
-          LCRegistration value, $Res Function(LCRegistration) then) =
-      _$LCRegistrationCopyWithImpl<$Res>;
-  $Res call({AccountRegistration reg});
-}
-
-/// @nodoc
-class _$LCRegistrationCopyWithImpl<$Res> extends _$LoginChoiceCopyWithImpl<$Res>
-    implements $LCRegistrationCopyWith<$Res> {
-  _$LCRegistrationCopyWithImpl(
-      LCRegistration _value, $Res Function(LCRegistration) _then)
-      : super(_value, (v) => _then(v as LCRegistration));
-
-  @override
-  LCRegistration get _value => super._value as LCRegistration;
-
-  @override
-  $Res call({
-    Object? reg = freezed,
-  }) {
-    return _then(LCRegistration(
-      reg == freezed
-          ? _value.reg
-          : reg // ignore: cast_nullable_to_non_nullable
-              as AccountRegistration,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$LCRegistration implements LCRegistration {
-  const _$LCRegistration(this.reg);
-
-  @override
-  final AccountRegistration reg;
-
-  @override
-  String toString() {
-    return 'LoginChoice.registration(reg: $reg)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is LCRegistration &&
-            (identical(other.reg, reg) || other.reg == reg));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, reg);
-
-  @JsonKey(ignore: true)
-  @override
-  $LCRegistrationCopyWith<LCRegistration> get copyWith =>
-      _$LCRegistrationCopyWithImpl<LCRegistration>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() doLogin,
-    required TResult Function() doRegistration,
-    required TResult Function() doApiKeyRequest,
-    required TResult Function(AccountRegistration reg) registration,
-    required TResult Function(AccountLogin login) login,
-    required TResult Function(AccountRequestApiKey req) apiKeyRequest,
-  }) {
-    return registration(reg);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? doLogin,
-    TResult Function()? doRegistration,
-    TResult Function()? doApiKeyRequest,
-    TResult Function(AccountRegistration reg)? registration,
-    TResult Function(AccountLogin login)? login,
-    TResult Function(AccountRequestApiKey req)? apiKeyRequest,
-  }) {
-    return registration?.call(reg);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? doLogin,
-    TResult Function()? doRegistration,
-    TResult Function()? doApiKeyRequest,
-    TResult Function(AccountRegistration reg)? registration,
-    TResult Function(AccountLogin login)? login,
-    TResult Function(AccountRequestApiKey req)? apiKeyRequest,
-    required TResult orElse(),
-  }) {
-    if (registration != null) {
-      return registration(reg);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LCDoLogin value) doLogin,
-    required TResult Function(LCDoRegistration value) doRegistration,
-    required TResult Function(LCDApiKeyRequest value) doApiKeyRequest,
-    required TResult Function(LCRegistration value) registration,
-    required TResult Function(LCLogin value) login,
-    required TResult Function(LCRequestApiKey value) apiKeyRequest,
-  }) {
-    return registration(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LCDoLogin value)? doLogin,
-    TResult Function(LCDoRegistration value)? doRegistration,
-    TResult Function(LCDApiKeyRequest value)? doApiKeyRequest,
-    TResult Function(LCRegistration value)? registration,
-    TResult Function(LCLogin value)? login,
-    TResult Function(LCRequestApiKey value)? apiKeyRequest,
-  }) {
-    return registration?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LCDoLogin value)? doLogin,
-    TResult Function(LCDoRegistration value)? doRegistration,
-    TResult Function(LCDApiKeyRequest value)? doApiKeyRequest,
-    TResult Function(LCRegistration value)? registration,
-    TResult Function(LCLogin value)? login,
-    TResult Function(LCRequestApiKey value)? apiKeyRequest,
-    required TResult orElse(),
-  }) {
-    if (registration != null) {
-      return registration(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class LCRegistration implements LoginChoice {
-  const factory LCRegistration(AccountRegistration reg) = _$LCRegistration;
-
-  AccountRegistration get reg;
-  @JsonKey(ignore: true)
-  $LCRegistrationCopyWith<LCRegistration> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $LCLoginCopyWith<$Res> {
-  factory $LCLoginCopyWith(LCLogin value, $Res Function(LCLogin) then) =
-      _$LCLoginCopyWithImpl<$Res>;
-  $Res call({AccountLogin login});
-}
-
-/// @nodoc
-class _$LCLoginCopyWithImpl<$Res> extends _$LoginChoiceCopyWithImpl<$Res>
-    implements $LCLoginCopyWith<$Res> {
-  _$LCLoginCopyWithImpl(LCLogin _value, $Res Function(LCLogin) _then)
-      : super(_value, (v) => _then(v as LCLogin));
-
-  @override
-  LCLogin get _value => super._value as LCLogin;
-
-  @override
-  $Res call({
-    Object? login = freezed,
-  }) {
-    return _then(LCLogin(
-      login == freezed
-          ? _value.login
-          : login // ignore: cast_nullable_to_non_nullable
-              as AccountLogin,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$LCLogin implements LCLogin {
-  const _$LCLogin(this.login);
-
-  @override
-  final AccountLogin login;
-
-  @override
-  String toString() {
-    return 'LoginChoice.login(login: $login)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is LCLogin &&
-            (identical(other.login, login) || other.login == login));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, login);
-
-  @JsonKey(ignore: true)
-  @override
-  $LCLoginCopyWith<LCLogin> get copyWith =>
-      _$LCLoginCopyWithImpl<LCLogin>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() doLogin,
-    required TResult Function() doRegistration,
-    required TResult Function() doApiKeyRequest,
-    required TResult Function(AccountRegistration reg) registration,
-    required TResult Function(AccountLogin login) login,
-    required TResult Function(AccountRequestApiKey req) apiKeyRequest,
-  }) {
-    return login(this.login);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? doLogin,
-    TResult Function()? doRegistration,
-    TResult Function()? doApiKeyRequest,
-    TResult Function(AccountRegistration reg)? registration,
-    TResult Function(AccountLogin login)? login,
-    TResult Function(AccountRequestApiKey req)? apiKeyRequest,
-  }) {
-    return login?.call(this.login);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? doLogin,
-    TResult Function()? doRegistration,
-    TResult Function()? doApiKeyRequest,
-    TResult Function(AccountRegistration reg)? registration,
-    TResult Function(AccountLogin login)? login,
-    TResult Function(AccountRequestApiKey req)? apiKeyRequest,
-    required TResult orElse(),
-  }) {
-    if (login != null) {
-      return login(this.login);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LCDoLogin value) doLogin,
-    required TResult Function(LCDoRegistration value) doRegistration,
-    required TResult Function(LCDApiKeyRequest value) doApiKeyRequest,
-    required TResult Function(LCRegistration value) registration,
-    required TResult Function(LCLogin value) login,
-    required TResult Function(LCRequestApiKey value) apiKeyRequest,
-  }) {
-    return login(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LCDoLogin value)? doLogin,
-    TResult Function(LCDoRegistration value)? doRegistration,
-    TResult Function(LCDApiKeyRequest value)? doApiKeyRequest,
-    TResult Function(LCRegistration value)? registration,
-    TResult Function(LCLogin value)? login,
-    TResult Function(LCRequestApiKey value)? apiKeyRequest,
-  }) {
-    return login?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LCDoLogin value)? doLogin,
-    TResult Function(LCDoRegistration value)? doRegistration,
-    TResult Function(LCDApiKeyRequest value)? doApiKeyRequest,
-    TResult Function(LCRegistration value)? registration,
-    TResult Function(LCLogin value)? login,
-    TResult Function(LCRequestApiKey value)? apiKeyRequest,
-    required TResult orElse(),
-  }) {
-    if (login != null) {
-      return login(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class LCLogin implements LoginChoice {
-  const factory LCLogin(AccountLogin login) = _$LCLogin;
-
-  AccountLogin get login;
-  @JsonKey(ignore: true)
-  $LCLoginCopyWith<LCLogin> get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $LCRequestApiKeyCopyWith<$Res> {
-  factory $LCRequestApiKeyCopyWith(
-          LCRequestApiKey value, $Res Function(LCRequestApiKey) then) =
-      _$LCRequestApiKeyCopyWithImpl<$Res>;
-  $Res call({AccountRequestApiKey req});
-}
-
-/// @nodoc
-class _$LCRequestApiKeyCopyWithImpl<$Res>
-    extends _$LoginChoiceCopyWithImpl<$Res>
-    implements $LCRequestApiKeyCopyWith<$Res> {
-  _$LCRequestApiKeyCopyWithImpl(
-      LCRequestApiKey _value, $Res Function(LCRequestApiKey) _then)
-      : super(_value, (v) => _then(v as LCRequestApiKey));
-
-  @override
-  LCRequestApiKey get _value => super._value as LCRequestApiKey;
-
-  @override
-  $Res call({
-    Object? req = freezed,
-  }) {
-    return _then(LCRequestApiKey(
-      req == freezed
-          ? _value.req
-          : req // ignore: cast_nullable_to_non_nullable
-              as AccountRequestApiKey,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$LCRequestApiKey implements LCRequestApiKey {
-  const _$LCRequestApiKey(this.req);
-
-  @override
-  final AccountRequestApiKey req;
-
-  @override
-  String toString() {
-    return 'LoginChoice.apiKeyRequest(req: $req)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is LCRequestApiKey &&
-            (identical(other.req, req) || other.req == req));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, req);
-
-  @JsonKey(ignore: true)
-  @override
-  $LCRequestApiKeyCopyWith<LCRequestApiKey> get copyWith =>
-      _$LCRequestApiKeyCopyWithImpl<LCRequestApiKey>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() doLogin,
-    required TResult Function() doRegistration,
-    required TResult Function() doApiKeyRequest,
-    required TResult Function(AccountRegistration reg) registration,
-    required TResult Function(AccountLogin login) login,
-    required TResult Function(AccountRequestApiKey req) apiKeyRequest,
-  }) {
-    return apiKeyRequest(req);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? doLogin,
-    TResult Function()? doRegistration,
-    TResult Function()? doApiKeyRequest,
-    TResult Function(AccountRegistration reg)? registration,
-    TResult Function(AccountLogin login)? login,
-    TResult Function(AccountRequestApiKey req)? apiKeyRequest,
-  }) {
-    return apiKeyRequest?.call(req);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? doLogin,
-    TResult Function()? doRegistration,
-    TResult Function()? doApiKeyRequest,
-    TResult Function(AccountRegistration reg)? registration,
-    TResult Function(AccountLogin login)? login,
-    TResult Function(AccountRequestApiKey req)? apiKeyRequest,
-    required TResult orElse(),
-  }) {
-    if (apiKeyRequest != null) {
-      return apiKeyRequest(req);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LCDoLogin value) doLogin,
-    required TResult Function(LCDoRegistration value) doRegistration,
-    required TResult Function(LCDApiKeyRequest value) doApiKeyRequest,
-    required TResult Function(LCRegistration value) registration,
-    required TResult Function(LCLogin value) login,
-    required TResult Function(LCRequestApiKey value) apiKeyRequest,
-  }) {
-    return apiKeyRequest(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LCDoLogin value)? doLogin,
-    TResult Function(LCDoRegistration value)? doRegistration,
-    TResult Function(LCDApiKeyRequest value)? doApiKeyRequest,
-    TResult Function(LCRegistration value)? registration,
-    TResult Function(LCLogin value)? login,
-    TResult Function(LCRequestApiKey value)? apiKeyRequest,
-  }) {
-    return apiKeyRequest?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LCDoLogin value)? doLogin,
-    TResult Function(LCDoRegistration value)? doRegistration,
-    TResult Function(LCDApiKeyRequest value)? doApiKeyRequest,
-    TResult Function(LCRegistration value)? registration,
-    TResult Function(LCLogin value)? login,
-    TResult Function(LCRequestApiKey value)? apiKeyRequest,
-    required TResult orElse(),
-  }) {
-    if (apiKeyRequest != null) {
-      return apiKeyRequest(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class LCRequestApiKey implements LoginChoice {
-  const factory LCRequestApiKey(AccountRequestApiKey req) = _$LCRequestApiKey;
-
-  AccountRequestApiKey get req;
-  @JsonKey(ignore: true)
-  $LCRequestApiKeyCopyWith<LCRequestApiKey> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
 class _$LoginResultTearOff {
   const _$LoginResultTearOff();
+
+  LRChoose choose(LoginChoice choice) {
+    return LRChoose(
+      choice,
+    );
+  }
 
   LRAcct acct(Acct acct) {
     return LRAcct(
@@ -1013,6 +463,7 @@ const $LoginResult = _$LoginResultTearOff();
 mixin _$LoginResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function(LoginChoice choice) choose,
     required TResult Function(Acct acct) acct,
     required TResult Function() reset,
     required TResult Function() retry,
@@ -1021,6 +472,7 @@ mixin _$LoginResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(LoginChoice choice)? choose,
     TResult Function(Acct acct)? acct,
     TResult Function()? reset,
     TResult Function()? retry,
@@ -1029,6 +481,7 @@ mixin _$LoginResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function(LoginChoice choice)? choose,
     TResult Function(Acct acct)? acct,
     TResult Function()? reset,
     TResult Function()? retry,
@@ -1038,6 +491,7 @@ mixin _$LoginResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(LRChoose value) choose,
     required TResult Function(LRAcct value) acct,
     required TResult Function(LRReset value) reset,
     required TResult Function(LRRetry value) retry,
@@ -1046,6 +500,7 @@ mixin _$LoginResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(LRChoose value)? choose,
     TResult Function(LRAcct value)? acct,
     TResult Function(LRReset value)? reset,
     TResult Function(LRRetry value)? retry,
@@ -1054,6 +509,7 @@ mixin _$LoginResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(LRChoose value)? choose,
     TResult Function(LRAcct value)? acct,
     TResult Function(LRReset value)? reset,
     TResult Function(LRRetry value)? retry,
@@ -1077,6 +533,163 @@ class _$LoginResultCopyWithImpl<$Res> implements $LoginResultCopyWith<$Res> {
   final LoginResult _value;
   // ignore: unused_field
   final $Res Function(LoginResult) _then;
+}
+
+/// @nodoc
+abstract class $LRChooseCopyWith<$Res> {
+  factory $LRChooseCopyWith(LRChoose value, $Res Function(LRChoose) then) =
+      _$LRChooseCopyWithImpl<$Res>;
+  $Res call({LoginChoice choice});
+
+  $LoginChoiceCopyWith<$Res> get choice;
+}
+
+/// @nodoc
+class _$LRChooseCopyWithImpl<$Res> extends _$LoginResultCopyWithImpl<$Res>
+    implements $LRChooseCopyWith<$Res> {
+  _$LRChooseCopyWithImpl(LRChoose _value, $Res Function(LRChoose) _then)
+      : super(_value, (v) => _then(v as LRChoose));
+
+  @override
+  LRChoose get _value => super._value as LRChoose;
+
+  @override
+  $Res call({
+    Object? choice = freezed,
+  }) {
+    return _then(LRChoose(
+      choice == freezed
+          ? _value.choice
+          : choice // ignore: cast_nullable_to_non_nullable
+              as LoginChoice,
+    ));
+  }
+
+  @override
+  $LoginChoiceCopyWith<$Res> get choice {
+    return $LoginChoiceCopyWith<$Res>(_value.choice, (value) {
+      return _then(_value.copyWith(choice: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$LRChoose implements LRChoose {
+  const _$LRChoose(this.choice);
+
+  @override
+  final LoginChoice choice;
+
+  @override
+  String toString() {
+    return 'LoginResult.choose(choice: $choice)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is LRChoose &&
+            (identical(other.choice, choice) || other.choice == choice));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, choice);
+
+  @JsonKey(ignore: true)
+  @override
+  $LRChooseCopyWith<LRChoose> get copyWith =>
+      _$LRChooseCopyWithImpl<LRChoose>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(LoginChoice choice) choose,
+    required TResult Function(Acct acct) acct,
+    required TResult Function() reset,
+    required TResult Function() retry,
+    required TResult Function() nothing,
+  }) {
+    return choose(choice);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(LoginChoice choice)? choose,
+    TResult Function(Acct acct)? acct,
+    TResult Function()? reset,
+    TResult Function()? retry,
+    TResult Function()? nothing,
+  }) {
+    return choose?.call(choice);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(LoginChoice choice)? choose,
+    TResult Function(Acct acct)? acct,
+    TResult Function()? reset,
+    TResult Function()? retry,
+    TResult Function()? nothing,
+    required TResult orElse(),
+  }) {
+    if (choose != null) {
+      return choose(choice);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LRChoose value) choose,
+    required TResult Function(LRAcct value) acct,
+    required TResult Function(LRReset value) reset,
+    required TResult Function(LRRetry value) retry,
+    required TResult Function(LRNothing value) nothing,
+  }) {
+    return choose(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(LRChoose value)? choose,
+    TResult Function(LRAcct value)? acct,
+    TResult Function(LRReset value)? reset,
+    TResult Function(LRRetry value)? retry,
+    TResult Function(LRNothing value)? nothing,
+  }) {
+    return choose?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LRChoose value)? choose,
+    TResult Function(LRAcct value)? acct,
+    TResult Function(LRReset value)? reset,
+    TResult Function(LRRetry value)? retry,
+    TResult Function(LRNothing value)? nothing,
+    required TResult orElse(),
+  }) {
+    if (choose != null) {
+      return choose(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class LRChoose implements LoginResult {
+  const factory LRChoose(LoginChoice choice) = _$LRChoose;
+
+  LoginChoice get choice;
+  @JsonKey(ignore: true)
+  $LRChooseCopyWith<LRChoose> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -1140,6 +753,7 @@ class _$LRAcct implements LRAcct {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function(LoginChoice choice) choose,
     required TResult Function(Acct acct) acct,
     required TResult Function() reset,
     required TResult Function() retry,
@@ -1151,6 +765,7 @@ class _$LRAcct implements LRAcct {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(LoginChoice choice)? choose,
     TResult Function(Acct acct)? acct,
     TResult Function()? reset,
     TResult Function()? retry,
@@ -1162,6 +777,7 @@ class _$LRAcct implements LRAcct {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function(LoginChoice choice)? choose,
     TResult Function(Acct acct)? acct,
     TResult Function()? reset,
     TResult Function()? retry,
@@ -1177,6 +793,7 @@ class _$LRAcct implements LRAcct {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(LRChoose value) choose,
     required TResult Function(LRAcct value) acct,
     required TResult Function(LRReset value) reset,
     required TResult Function(LRRetry value) retry,
@@ -1188,6 +805,7 @@ class _$LRAcct implements LRAcct {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(LRChoose value)? choose,
     TResult Function(LRAcct value)? acct,
     TResult Function(LRReset value)? reset,
     TResult Function(LRRetry value)? retry,
@@ -1199,6 +817,7 @@ class _$LRAcct implements LRAcct {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(LRChoose value)? choose,
     TResult Function(LRAcct value)? acct,
     TResult Function(LRReset value)? reset,
     TResult Function(LRRetry value)? retry,
@@ -1258,6 +877,7 @@ class _$LRReset implements LRReset {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function(LoginChoice choice) choose,
     required TResult Function(Acct acct) acct,
     required TResult Function() reset,
     required TResult Function() retry,
@@ -1269,6 +889,7 @@ class _$LRReset implements LRReset {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(LoginChoice choice)? choose,
     TResult Function(Acct acct)? acct,
     TResult Function()? reset,
     TResult Function()? retry,
@@ -1280,6 +901,7 @@ class _$LRReset implements LRReset {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function(LoginChoice choice)? choose,
     TResult Function(Acct acct)? acct,
     TResult Function()? reset,
     TResult Function()? retry,
@@ -1295,6 +917,7 @@ class _$LRReset implements LRReset {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(LRChoose value) choose,
     required TResult Function(LRAcct value) acct,
     required TResult Function(LRReset value) reset,
     required TResult Function(LRRetry value) retry,
@@ -1306,6 +929,7 @@ class _$LRReset implements LRReset {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(LRChoose value)? choose,
     TResult Function(LRAcct value)? acct,
     TResult Function(LRReset value)? reset,
     TResult Function(LRRetry value)? retry,
@@ -1317,6 +941,7 @@ class _$LRReset implements LRReset {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(LRChoose value)? choose,
     TResult Function(LRAcct value)? acct,
     TResult Function(LRReset value)? reset,
     TResult Function(LRRetry value)? retry,
@@ -1372,6 +997,7 @@ class _$LRRetry implements LRRetry {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function(LoginChoice choice) choose,
     required TResult Function(Acct acct) acct,
     required TResult Function() reset,
     required TResult Function() retry,
@@ -1383,6 +1009,7 @@ class _$LRRetry implements LRRetry {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(LoginChoice choice)? choose,
     TResult Function(Acct acct)? acct,
     TResult Function()? reset,
     TResult Function()? retry,
@@ -1394,6 +1021,7 @@ class _$LRRetry implements LRRetry {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function(LoginChoice choice)? choose,
     TResult Function(Acct acct)? acct,
     TResult Function()? reset,
     TResult Function()? retry,
@@ -1409,6 +1037,7 @@ class _$LRRetry implements LRRetry {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(LRChoose value) choose,
     required TResult Function(LRAcct value) acct,
     required TResult Function(LRReset value) reset,
     required TResult Function(LRRetry value) retry,
@@ -1420,6 +1049,7 @@ class _$LRRetry implements LRRetry {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(LRChoose value)? choose,
     TResult Function(LRAcct value)? acct,
     TResult Function(LRReset value)? reset,
     TResult Function(LRRetry value)? retry,
@@ -1431,6 +1061,7 @@ class _$LRRetry implements LRRetry {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(LRChoose value)? choose,
     TResult Function(LRAcct value)? acct,
     TResult Function(LRReset value)? reset,
     TResult Function(LRRetry value)? retry,
@@ -1486,6 +1117,7 @@ class _$LRNothing implements LRNothing {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function(LoginChoice choice) choose,
     required TResult Function(Acct acct) acct,
     required TResult Function() reset,
     required TResult Function() retry,
@@ -1497,6 +1129,7 @@ class _$LRNothing implements LRNothing {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(LoginChoice choice)? choose,
     TResult Function(Acct acct)? acct,
     TResult Function()? reset,
     TResult Function()? retry,
@@ -1508,6 +1141,7 @@ class _$LRNothing implements LRNothing {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function(LoginChoice choice)? choose,
     TResult Function(Acct acct)? acct,
     TResult Function()? reset,
     TResult Function()? retry,
@@ -1523,6 +1157,7 @@ class _$LRNothing implements LRNothing {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(LRChoose value) choose,
     required TResult Function(LRAcct value) acct,
     required TResult Function(LRReset value) reset,
     required TResult Function(LRRetry value) retry,
@@ -1534,6 +1169,7 @@ class _$LRNothing implements LRNothing {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(LRChoose value)? choose,
     TResult Function(LRAcct value)? acct,
     TResult Function(LRReset value)? reset,
     TResult Function(LRRetry value)? retry,
@@ -1545,6 +1181,7 @@ class _$LRNothing implements LRNothing {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(LRChoose value)? choose,
     TResult Function(LRAcct value)? acct,
     TResult Function(LRReset value)? reset,
     TResult Function(LRRetry value)? retry,

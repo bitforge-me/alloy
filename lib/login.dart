@@ -39,13 +39,8 @@ class AccountLogin {
   final String email;
   final String password;
   final String tfCode;
-  final bool? tfRequired;
 
-  AccountLogin(this.email, this.password, this.tfCode, this.tfRequired);
-
-  AccountLogin copyWithoutTfRequired() {
-    return AccountLogin(email, password, tfCode, false);
-  }
+  AccountLogin(this.email, this.password, this.tfCode);
 }
 
 class AccountRequestApiKey {
@@ -62,11 +57,6 @@ class LoginChoice with _$LoginChoice {
   const factory LoginChoice.doLogin() = LCDoLogin;
   const factory LoginChoice.doRegistration() = LCDoRegistration;
   const factory LoginChoice.doApiKeyRequest() = LCDApiKeyRequest;
-  const factory LoginChoice.registration(AccountRegistration reg) =
-      LCRegistration;
-  const factory LoginChoice.login(AccountLogin login) = LCLogin;
-  const factory LoginChoice.apiKeyRequest(AccountRequestApiKey req) =
-      LCRequestApiKey;
 }
 
 class Acct {
@@ -78,6 +68,7 @@ class Acct {
 
 @freezed
 class LoginResult with _$LoginResult {
+  const factory LoginResult.choose(LoginChoice choice) = LRChoose;
   const factory LoginResult.acct(Acct acct) = LRAcct;
   const factory LoginResult.reset() = LRReset;
   const factory LoginResult.retry() = LRRetry;
@@ -90,6 +81,35 @@ FormFieldValidator emailValidate = (value) {
   if (!EmailValidator.validate(value)) return 'Invalid email';
   return null;
 };
+
+Future<void> _loginErrorAlert(BuildContext context, BeError error) async {
+  await error.when(network: () async {
+    await alert(context, 'Network error',
+        'A network error occured when trying to login');
+  }, auth: (msg) async {
+    await alert(context, 'Authentication failed',
+        'The login details you entered are not valid ($msg)');
+  }, format: () async {
+    await alert(
+        context, 'Format error', 'A format error occured when trying to login');
+  });
+}
+
+Future<Acct?> _beLogin(BuildContext context, AccountLogin login,
+    {bool silent: false}) async {
+  var devName = await deviceName();
+  var result =
+      await beApiKeyCreate(login.email, login.password, devName, login.tfCode);
+  return await result.when<Future<Acct?>>((apikey) async {
+    // write api key
+    await Prefs.beApiKeySet(apikey.token);
+    await Prefs.beApiSecretSet(apikey.secret);
+    return Acct(login.email, apikey.token);
+  }, error: (err) async {
+    if (!silent) await _loginErrorAlert(context, err);
+    return null;
+  });
+}
 
 class BronzeRequestApiKeyForm extends StatefulWidget {
   final String deviceName;
@@ -111,6 +131,55 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
   @mustCallSuper
   void initState() {
     super.initState();
+  }
+
+  Future<Acct?> _beApiKeyClaim(
+      BuildContext context, AccountRequestApiKey req, String token,
+      {silent: false}) async {
+    var result = await beApiKeyClaim(token);
+    return await result.when<Future<Acct?>>((apikey) async {
+      // write api key
+      await Prefs.beApiKeySet(apikey.token);
+      await Prefs.beApiSecretSet(apikey.secret);
+      return Acct(req.email, apikey.token);
+    }, error: (err) async {
+      if (!silent) await _loginErrorAlert(context, err);
+      return null;
+    });
+  }
+
+  Future<Acct?> _beApiKeyRequest(
+      BuildContext context, AccountRequestApiKey req) async {
+    var result = await beApiKeyRequest(req.email, req.deviceName);
+    return await result.when((token) async {
+      Acct? acct;
+      var cancelled = false;
+      showAlertDialog(context,
+          'we are sending you a confirmation email, please follow the link in the email to confirm...',
+          showCancel: true, onCancel: () => cancelled = true, maxLines: null);
+      while (acct == null && !cancelled) {
+        await Future.delayed(Duration(seconds: 5));
+        // claim api key
+        acct = await _beApiKeyClaim(context, req, token, silent: true);
+      }
+      Navigator.pop(context);
+      return acct;
+    }, error: (err) async {
+      await alert(context, 'Network error',
+          'A network error occured when trying to login');
+      return null;
+    });
+  }
+
+  Future<void> _makeRequest() async {
+    var req =
+        AccountRequestApiKey(_emailController.text.trim(), widget.deviceName);
+    var acct = await _beApiKeyRequest(context, req);
+    if (acct != null) Navigator.of(context).pop(LoginResult.acct(acct));
+  }
+
+  void _switchToLogin() {
+    Navigator.of(context).pop(LoginResult.choose(LoginChoice.doLogin()));
   }
 
   @override
@@ -146,12 +215,7 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                     VerticalSpacer(),
                     BronzeRoundedButton(() {
                       if (_formKey.currentState == null) return;
-                      if (_formKey.currentState!.validate()) {
-                        var loginChoice = LoginChoice.apiKeyRequest(
-                            AccountRequestApiKey(_emailController.text.trim(),
-                                widget.deviceName));
-                        Navigator.of(context).pop(loginChoice);
-                      }
+                      if (_formKey.currentState!.validate()) _makeRequest();
                     }, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Continue',
                         fwdArrow: true,
                         width: ButtonWidth,
@@ -159,9 +223,8 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                     VerticalSpacer(height: 8),
                     WordDivider(),
                     VerticalSpacer(height: 8),
-                    BronzeRoundedButton(() {
-                      Navigator.of(context).pop(LoginChoice.doLogin());
-                    }, ZapOnSurface, ZapSurface, null, 'Login',
+                    BronzeRoundedButton(
+                        _switchToLogin, ZapOnSurface, ZapSurface, null, 'Login',
                         fwdArrow: true,
                         width: ButtonWidth,
                         height: ButtonHeight),
@@ -172,12 +235,8 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
 
 class BronzeLoginForm extends StatefulWidget {
   final AccountLogin? login;
-  final bool showTwoFactorCode;
-  final bool? twoFactorRequired;
 
-  BronzeLoginForm(this.login,
-      {this.showTwoFactorCode = false, this.twoFactorRequired})
-      : super();
+  BronzeLoginForm(this.login) : super();
 
   @override
   BronzeLoginFormState createState() {
@@ -190,6 +249,9 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _tfCodeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  bool showTwoFactorCode = false;
+  bool? twoFactorRequired;
 
   @protected
   @mustCallSuper
@@ -205,6 +267,59 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
   String? passwordValidate(value) {
     if (value == null || value.isEmpty) return 'Please enter a password';
     return null;
+  }
+
+  Future<Acct?> _beLoginWithTwoFactor(
+      BuildContext context, AccountLogin login) async {
+    showAlertDialog(context, 'logging in..');
+    var acct = await _beLogin(context, login);
+    Navigator.pop(context);
+    return acct;
+  }
+
+  Future<Acct?> _beLoginCheckTwoFactor(
+      BuildContext context, AccountLogin login) async {
+    showAlertDialog(context, 'logging in..');
+    var result = await beUserTwoFactorEnabledCheck(login.email, login.password);
+    Navigator.pop(context);
+    var tfEnabled =
+        await result.when((enabled) async => enabled, error: (err) async {
+      await _loginErrorAlert(context, err);
+      return null;
+    });
+    if (tfEnabled == null) return null;
+    if (!tfEnabled) {
+      showAlertDialog(context, 'logging in..');
+      var acct = await _beLogin(context, login);
+      Navigator.pop(context);
+      return acct;
+    } else {
+      setState(() {
+        showTwoFactorCode = true;
+        twoFactorRequired = true;
+      });
+      return null;
+    }
+  }
+
+  Future<void> _makeRequest() async {
+    var login = AccountLogin(_emailController.text.trim(),
+        _passwordController.text, _tfCodeController.text);
+    Acct? acct;
+    if (twoFactorRequired == null)
+      acct = await _beLoginCheckTwoFactor(context, login);
+    else
+      acct = await _beLoginWithTwoFactor(context, login);
+    if (acct != null) Navigator.of(context).pop(LoginResult.acct(acct));
+  }
+
+  void _switchToApiKeyRequest() {
+    Navigator.of(context)
+        .pop(LoginResult.choose(LoginChoice.doApiKeyRequest()));
+  }
+
+  void _switchToRegistration() {
+    Navigator.of(context).pop(LoginResult.choose(LoginChoice.doRegistration()));
   }
 
   @override
@@ -249,39 +364,30 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                         toggleObscure: true),
                     VerticalSpacer(),
                     Visibility(
-                      visible: widget.showTwoFactorCode,
+                      visible: showTwoFactorCode,
                       child: BronzeFormInput(_tfCodeController,
                           icon: Icon(Icons.lock_outline),
                           labelText: 'Two factor login code'),
                     ),
-                    VerticalSpacer(height: widget.showTwoFactorCode ? 15 : 0),
+                    VerticalSpacer(height: showTwoFactorCode ? 15 : 0),
                     BronzeRoundedButton(() {
                       if (_formKey.currentState == null) return;
-                      if (_formKey.currentState!.validate()) {
-                        var loginChoice = LoginChoice.login(AccountLogin(
-                            _emailController.text.trim(),
-                            _passwordController.text,
-                            _tfCodeController.text,
-                            widget.twoFactorRequired));
-                        Navigator.of(context).pop(loginChoice);
-                      }
+                      if (_formKey.currentState!.validate()) _makeRequest();
                     }, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Continue',
                         fwdArrow: true,
                         width: ButtonWidth,
                         height: ButtonHeight),
                     VerticalSpacer(height: 5),
-                    BronzeRoundedButton(() {
-                      Navigator.of(context).pop(LoginChoice.doApiKeyRequest());
-                    }, ZapOnSurface, ZapSurface, null, 'Lost Password',
+                    BronzeRoundedButton(_switchToApiKeyRequest, ZapOnSurface,
+                        ZapSurface, null, 'Lost Password',
                         fwdArrow: true,
                         width: ButtonWidth,
                         height: ButtonHeight),
                     VerticalSpacer(height: 8),
                     WordDivider(),
                     VerticalSpacer(height: 8),
-                    BronzeRoundedButton(() {
-                      Navigator.of(context).pop(LoginChoice.doRegistration());
-                    }, ZapOnSurface, ZapSurface, null, 'Create an Account',
+                    BronzeRoundedButton(_switchToRegistration, ZapOnSurface,
+                        ZapSurface, null, 'Create an Account',
                         fwdArrow: true,
                         width: ButtonWidth,
                         height: ButtonHeight),
@@ -321,6 +427,50 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
     if (value == null || value.isEmpty) return 'Please confirm your password';
     if (value != _newPasswordController.text) return 'Password does not match';
     return null;
+  }
+
+  Future<Acct?> _beRegister(
+      BuildContext context, AccountRegistration reg) async {
+    showAlertDialog(context, 'registering..');
+    var res = await beUserRegister(reg);
+    Navigator.pop(context);
+    var acct = await res.when((content) async {
+      var cancelled = false;
+      Acct? acct;
+      showAlertDialog(context,
+          'we are sending you a confirmation email, please follow the link in the email to confirm...',
+          showCancel: true, onCancel: () => cancelled = true, maxLines: null);
+      while (acct == null && !cancelled) {
+        await Future.delayed(Duration(seconds: 5));
+        // save account if login successful
+        acct = await _beLogin(
+            context, AccountLogin(reg.email, reg.newPassword, ''),
+            silent: true);
+      }
+      Navigator.pop(context);
+      return acct;
+    }, error: (err) async {
+      await err.when(
+          network: () async => await alert(context, 'Network error',
+              'A network error occured when trying to register'),
+          auth: (msg) async => await alert(context, 'Authorisation error',
+              'An authorisation error occured when trying to register ($msg)'),
+          format: () async => await alert(context, 'Format error',
+              'A format error occured when trying to register'));
+      return null;
+    });
+    return acct;
+  }
+
+  Future<void> _makeRequest() async {
+    var reg = AccountRegistration('', '', _emailController.text.trim(), '', '',
+        '', _newPasswordController.text, null, null);
+    var acct = await _beRegister(context, reg);
+    if (acct != null) Navigator.of(context).pop(LoginResult.acct(acct));
+  }
+
+  void _switchToLogin() {
+    Navigator.of(context).pop(LoginResult.choose(LoginChoice.doLogin()));
   }
 
   @override
@@ -374,28 +524,14 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                   VerticalSpacer(),
                   BronzeRoundedButton(() async {
                     if (_formKey.currentState == null) return;
-                    if (_formKey.currentState!.validate()) {
-                      var loginChoice = LoginChoice.registration(
-                          AccountRegistration(
-                              '',
-                              '',
-                              _emailController.text.trim(),
-                              '',
-                              '',
-                              '',
-                              _newPasswordController.text,
-                              null,
-                              null));
-                      Navigator.of(context).pop(loginChoice);
-                    }
+                    if (_formKey.currentState!.validate()) _makeRequest();
                   }, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Continue',
                       fwdArrow: true, width: ButtonWidth, height: ButtonHeight),
                   VerticalSpacer(height: 8),
                   WordDivider(),
                   VerticalSpacer(height: 8),
-                  BronzeRoundedButton(() {
-                    Navigator.of(context).pop(LoginChoice.doLogin());
-                  }, ZapOnSurface, ZapSurface, null, 'Login',
+                  BronzeRoundedButton(
+                      _switchToLogin, ZapOnSurface, ZapSurface, null, 'Login',
                       fwdArrow: true, width: ButtonWidth, height: ButtonHeight),
                 ]))));
   }
@@ -426,190 +562,52 @@ class StagingFormState extends State<StagingForm> {
           '${widget.errTitle ?? "unknown error"}', '${widget.errMessage}'));
   }
 
-  Future<void> _loginErrorAlert(BuildContext context, BeError error) async {
-    await error.when(network: () async {
-      await alert(context, 'Network error',
-          'A network error occured when trying to login');
-    }, auth: (msg) async {
-      await alert(context, 'Authentication failed',
-          'The login details you entered are not valid ($msg)');
-    }, format: () async {
-      await alert(context, 'Format error',
-          'A format error occured when trying to login');
-    });
-  }
-
-  Future<Acct?> _beLogin(BuildContext context, AccountLogin login,
-      {bool silent: false}) async {
-    var devName = await deviceName();
-    var result = await beApiKeyCreate(
-        login.email, login.password, devName, login.tfCode);
-    return await result.when<Future<Acct?>>((apikey) async {
-      // write api key
-      await Prefs.beApiKeySet(apikey.token);
-      await Prefs.beApiSecretSet(apikey.secret);
-      return Acct(login.email, apikey.token);
-    }, error: (err) async {
-      if (!silent) await _loginErrorAlert(context, err);
-      return null;
-    });
-  }
-
-  Future<LoginResult> _beRegister(
-      BuildContext context, AccountRegistration reg) async {
-    showAlertDialog(context, 'registering..');
-    var res = await beUserRegister(reg);
-    Navigator.pop(context);
-    var acct = await res.when((content) async {
-      var cancelled = false;
-      Acct? acct;
-      showAlertDialog(context,
-          'we are sending you a confirmation email, please follow the link in the email to confirm...',
-          showCancel: true, onCancel: () => cancelled = true, maxLines: null);
-      while (acct == null && !cancelled) {
-        await Future.delayed(Duration(seconds: 5));
-        // save account if login successful
-        acct = await _beLogin(
-            context, AccountLogin(reg.email, reg.newPassword, '', false),
-            silent: true);
-      }
-      Navigator.pop(context);
-      return acct;
-    }, error: (err) async {
-      await err.when(
-          network: () async => await alert(context, 'Network error',
-              'A network error occured when trying to register'),
-          auth: (msg) async => await alert(context, 'Authorisation error',
-              'An authorisation error occured when trying to register ($msg)'),
-          format: () async => await alert(context, 'Format error',
-              'A format error occured when trying to register'));
-      return null;
-    });
-    if (acct == null) return LoginResult.nothing();
-    return LoginResult.acct(acct);
-  }
-
-  Future<LoginResult> _beLoginWithTwoFactor(
-      BuildContext context, AccountLogin login) async {
-    showAlertDialog(context, 'logging in..');
-    var acct = await _beLogin(context, login);
-    Navigator.pop(context);
-    if (acct == null) return LoginResult.nothing();
-    return LoginResult.acct(acct);
-  }
-
-  Future<LoginResult> _beLoginCheckTwoFactor(
-      BuildContext context, AccountLogin login) async {
-    showAlertDialog(context, 'logging in..');
-    var result = await beUserTwoFactorEnabledCheck(login.email, login.password);
-    Navigator.pop(context);
-    var tfEnabled =
-        await result.when((enabled) async => enabled, error: (err) async {
-      await _loginErrorAlert(context, err);
-      return null;
-    });
-    if (tfEnabled == null) return LoginResult.nothing();
-    if (!tfEnabled)
-      return _processLoginChoice(
-          LoginChoice.login(login.copyWithoutTfRequired()));
-    // get the two factor code if required
-    var loginChoice = await Navigator.push<LoginChoice?>(
-      context,
-      MaterialPageRoute(
-          builder: (context) => BronzeLoginForm(login,
-              showTwoFactorCode: true, twoFactorRequired: true)),
-    );
-    if (loginChoice == null) LoginResult.nothing();
-    return await _processLoginChoice(loginChoice!);
-  }
-
-  Future<Acct?> _beApiKeyClaim(
-      BuildContext context, AccountRequestApiKey req, String token,
-      {silent: false}) async {
-    var result = await beApiKeyClaim(token);
-    return await result.when<Future<Acct?>>((apikey) async {
-      // write api key
-      await Prefs.beApiKeySet(apikey.token);
-      await Prefs.beApiSecretSet(apikey.secret);
-      return Acct(req.email, apikey.token);
-    }, error: (err) async {
-      if (!silent) await _loginErrorAlert(context, err);
-      return null;
-    });
-  }
-
-  Future<LoginResult> _beApiKeyRequest(
-      BuildContext context, AccountRequestApiKey req) async {
-    var result = await beApiKeyRequest(req.email, req.deviceName);
-    return await result.when((token) async {
-      Acct? acct;
-      var cancelled = false;
-      showAlertDialog(context,
-          'we are sending you a confirmation email, please follow the link in the email to confirm...',
-          showCancel: true, onCancel: () => cancelled = true, maxLines: null);
-      while (acct == null && !cancelled) {
-        await Future.delayed(Duration(seconds: 5));
-        // claim api key
-        acct = await _beApiKeyClaim(context, req, token, silent: true);
-      }
-      Navigator.pop(context);
-      if (acct != null) return LoginResult.acct(acct);
-      return LoginResult.nothing();
-    }, error: (err) async {
-      await alert(context, 'Network error',
-          'A network error occured when trying to login');
-      return LoginResult.nothing();
-    });
-  }
-
   Future<LoginResult> _login() async {
-    var loginChoice = await Navigator.push<LoginChoice>(
+    var loginResult = await Navigator.push<LoginResult>(
       context,
-      MaterialPageRoute(
-          builder: (context) =>
-              BronzeLoginForm(null, showTwoFactorCode: false)),
+      MaterialPageRoute(builder: (context) => BronzeLoginForm(null)),
     );
-    if (loginChoice == null) return LoginResult.nothing();
-    return await _processLoginChoice(loginChoice);
+    if (loginResult == null) return LoginResult.nothing();
+    return await _processLoginResult(loginResult);
   }
 
   Future<LoginResult> _register() async {
-    var loginChoice = await Navigator.push<LoginChoice>(
+    var loginResult = await Navigator.push<LoginResult>(
       context,
       MaterialPageRoute(builder: (context) => BronzeRegisterForm()),
     );
-    if (loginChoice == null) return LoginResult.nothing();
-    return await _processLoginChoice(loginChoice);
+    if (loginResult == null) return LoginResult.nothing();
+    return await _processLoginResult(loginResult);
   }
 
   Future<LoginResult> _loginWithEmail() async {
     // request api key form
     var devName = await deviceName();
-    var loginChoice = await Navigator.push<LoginChoice>(
+    var loginResult = await Navigator.push<LoginResult>(
       context,
       MaterialPageRoute(builder: (context) => BronzeRequestApiKeyForm(devName)),
     );
-    if (loginChoice == null) return LoginResult.nothing();
-    return await _processLoginChoice(loginChoice);
+    if (loginResult == null) return LoginResult.nothing();
+    return await _processLoginResult(loginResult);
   }
 
-  Future<LoginResult> _processLoginChoice(LoginChoice loginChoice) async {
-    return await loginChoice.when(
-      login: (AccountLogin login) async {
-        if (login.tfRequired == null)
-          return await _beLoginCheckTwoFactor(context, login);
-        return await _beLoginWithTwoFactor(context, login);
-      },
-      registration: (reg) async => await _beRegister(context, reg),
-      apiKeyRequest: (req) async => await _beApiKeyRequest(context, req),
-      doLogin: () async => await _login(),
-      doRegistration: () async => await _register(),
-      doApiKeyRequest: () async => await _loginWithEmail(),
-    );
+  Future<LoginResult> _processLoginResult(LoginResult loginResult) async {
+    return await loginResult.when(
+        choose: (choice) async {
+          return await choice.when(
+            doLogin: () async => await _login(),
+            doRegistration: () async => await _register(),
+            doApiKeyRequest: () async => await _loginWithEmail(),
+          );
+        },
+        acct: (acct) => LoginResult.acct(acct),
+        reset: () => LoginResult.reset(),
+        retry: () => LoginResult.retry(),
+        nothing: () => LoginResult.nothing());
   }
 
   void startLoginProcess(LoginChoice loginChoice) {
-    _processLoginChoice(loginChoice)
+    _processLoginResult(LoginResult.choose(loginChoice))
         .then((value) => Navigator.pop(context, value));
   }
 
