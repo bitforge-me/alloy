@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -9,8 +10,10 @@ import 'beryllium.dart';
 import 'websocket.dart';
 import 'snack.dart';
 import 'widgets.dart';
+import 'tfapage.dart';
 
-Future<String?> twoFactorQr(BuildContext context, BeTwoFactorSetup setup) {
+Future<String?> twoFactorQr(
+    BuildContext context, BeTwoFactorSetup setup) async {
   final formKey = GlobalKey<FormState>();
   final txtController = new TextEditingController();
 
@@ -32,7 +35,8 @@ Future<String?> twoFactorQr(BuildContext context, BeTwoFactorSetup setup) {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(color: Colors.white, child: Image.network(setup.image)),
+          Container(
+              color: Colors.white, child: SvgPicture.network(setup.image)),
           ListTile(
               title: Text('Key'),
               subtitle: Text(setup.key),
@@ -144,7 +148,8 @@ class _SecurityScreenState extends State<SecurityScreen> {
         code = await askString(
             context, 'Enter your two factor code to enable', null);
       if (twoFactor.method == 'authenticator' && twoFactor.setup != null)
-        code = await twoFactorQr(context, twoFactor.setup!);
+        code = await Navigator.push(context,
+            MaterialPageRoute(builder: (context) => TfaPage(twoFactor.setup!)));
       if (code != null) {
         showAlertDialog(context, 'enabling..');
         result = await beUserTwoFactorEnable(code);

@@ -1,11 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:universal_html/html.dart' as html;
 
 import 'package:zapdart/colors.dart';
 
 import 'config.dart' as cfg;
+
+enum OperatingSystem { android, ios }
+
+class AppDownloadBtn extends StatelessWidget {
+  final OperatingSystem _os;
+  final String _downloadUrl;
+  AppDownloadBtn(this._os, this._downloadUrl);
+
+  @override
+  Widget build(BuildContext context) {
+    SvgPicture downloadLogo = _os == OperatingSystem.android
+        ? SvgPicture.asset("google-play.svg")
+        : SvgPicture.asset("app-store.svg");
+    return GestureDetector(
+      onTap: () {
+        html.window.open(_downloadUrl, 'new tab');
+      },
+      child: Container(child: downloadLogo, width: 225, height: 165),
+    );
+  }
+}
 
 class SpacedVisibility extends StatelessWidget {
   // Visibility widget with VerticalSpacer placed above child Widget in Column
