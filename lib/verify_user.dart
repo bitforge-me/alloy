@@ -112,6 +112,9 @@ class _VerifyUserScreenState extends State<VerifyUserScreen> {
                 child: Container(
                     padding: EdgeInsets.all(10),
                     child: Column(children: [
+                      Text(
+                          'To comply with local regulations we must verify all users via a KYC (know your customer) process. This will involve validating your identify and address by using your phones camera and your photo ID.'),
+                      SizedBox(height: 25),
                       _userInfo.kycUrl == null
                           ? Text(
                               'Enter your mobile phone number to start the verification process')
