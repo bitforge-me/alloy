@@ -139,8 +139,8 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                           child: Container(
                               padding: EdgeInsets.only(
                                   left: 30, right: 30, top: 10, bottom: 10),
-                              // Fudge factor of 14.0 to match border radius of button
-                              width: ButtonWidth + 14.0,
+                              // Fudge factor of 54.0 to match border radius of button
+                              width: ButtonWidth + 54.0,
                               child: Column(children: [
                                 BronzeValueInput(
                                   controller: _amountController,
