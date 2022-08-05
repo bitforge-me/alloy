@@ -560,6 +560,7 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
         ;
         break;
       case DepositMethod.bankDeposit:
+        showAlertDialog(context, 'querying..');
         var res = await beFiatDepositDirect(widget.asset.symbol);
         Navigator.pop(context);
         res.when(
@@ -730,38 +731,41 @@ class _FiatAccountNumberScreenState extends State<FiatAccountNumberScreen> {
           actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
         ),
         body: BiforgePage(
-            child: SizedBox(
-                width: ButtonWidth,
-                child: ListView(children: [
-                  Container(
-                      padding: EdgeInsets.only(top: 20, bottom: 20),
-                      child: Center(
-                          child: Icon(Icons.keyboard_double_arrow_down_rounded,
-                              size: 150, color: ZapOnSecondary))),
-                  ListTile(
-                      title: Text('Account Number'),
-                      subtitle: Text(widget.account.accountNumber),
-                      trailing: IconButton(
-                          onPressed: () => _copy(
-                              'account number', widget.account.accountNumber),
-                          icon: Icon(Icons.copy))),
-                  ListTile(
-                      title: Text('Reference'),
-                      subtitle: Text(widget.account.reference),
-                      trailing: IconButton(
-                          onPressed: () =>
-                              _copy('reference', widget.account.reference),
-                          icon: Icon(Icons.copy))),
-                  ListTile(
-                      title: Text('Code'),
-                      subtitle: Text(widget.account.code),
-                      trailing: IconButton(
-                          onPressed: () => _copy('code', widget.account.code),
-                          icon: Icon(Icons.copy))),
-                  VerticalSpacer(),
-                  BronzeRoundedButton(() => Navigator.of(context).pop(),
-                      Colors.white, Colors.white30, null, 'Cancel',
-                      width: ButtonWidth, height: ButtonHeight)
-                ]))));
+            child: ListView(children: [
+          Container(
+              padding: EdgeInsets.only(top: 20, bottom: 20),
+              child: Center(
+                  child: Icon(Icons.keyboard_double_arrow_down_rounded,
+                      size: 150, color: ZapOnSecondary))),
+          Padding(
+              padding: EdgeInsets.only(bottom: 20),
+              child: Text(
+                  'Make a deposit to our bank account. It is important to provide the exact reference and code details shown here.')),
+          ListTile(
+              title: Text('Bitforge Account Number'),
+              subtitle: Text(widget.account.accountNumber),
+              trailing: IconButton(
+                  onPressed: () =>
+                      _copy('account number', widget.account.accountNumber),
+                  icon: Icon(Icons.copy))),
+          ListTile(
+              title: Text('Reference'),
+              subtitle: Text(widget.account.reference),
+              trailing: IconButton(
+                  onPressed: () => _copy('reference', widget.account.reference),
+                  icon: Icon(Icons.copy))),
+          ListTile(
+              title: Text('Code'),
+              subtitle: Text(widget.account.code),
+              trailing: IconButton(
+                  onPressed: () => _copy('code', widget.account.code),
+                  icon: Icon(Icons.copy))),
+          VerticalSpacer(),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,
+                Colors.white30, null, 'Cancel',
+                width: ButtonWidth, height: ButtonHeight)
+          ])
+        ])));
   }
 }
