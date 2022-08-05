@@ -8,7 +8,8 @@ import 'config.dart';
 
 class TfaPage extends StatefulWidget {
   final BeTwoFactorSetup twoFactor;
-  TfaPage(this.twoFactor);
+  final String userEmail;
+  TfaPage(this.twoFactor, this.userEmail);
   @override
   State<TfaPage> createState() => _TfaPageState();
 }
@@ -18,7 +19,8 @@ class _TfaPageState extends State<TfaPage> {
 
   Future<void> _getTfaDialog(BuildContext context) async {
     // Tfa code given to enable Tfa
-    String? code = await twoFactorQr(context, widget.twoFactor);
+    String? code =
+        await twoFactorQr(context, widget.twoFactor, widget.userEmail);
     setState(() {
       _TfaDialogRes = code;
     });

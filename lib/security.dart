@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:universal_html/html.dart' as html;
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
@@ -13,7 +14,7 @@ import 'widgets.dart';
 import 'tfapage.dart';
 
 Future<String?> twoFactorQr(
-    BuildContext context, BeTwoFactorSetup setup) async {
+    BuildContext context, BeTwoFactorSetup setup, String userEmail) async {
   final formKey = GlobalKey<FormState>();
   final txtController = new TextEditingController();
 
@@ -41,6 +42,19 @@ Future<String?> twoFactorQr(
               title: Text('Key'),
               subtitle: Text(setup.key),
               trailing: IconButton(icon: Icon(Icons.copy), onPressed: copyKey)),
+          ListTile(
+            title: Text('Import to App'),
+            subtitle: Text(
+                'Pressing this will import your two-factor authentication key into your downloaded two-factor authentication app'),
+            trailing: IconButton(
+              icon: Icon(Icons.import_export),
+              onPressed: () {
+                html.window.open(
+                    'otpauth://totp/Bitforge:${userEmail}?secret=${setup.key}&issuer=Bitforge',
+                    'new tab');
+              },
+            ),
+          ),
           TextFormField(
             controller: txtController,
             decoration: InputDecoration(labelText: 'Two factor code'),
@@ -148,8 +162,11 @@ class _SecurityScreenState extends State<SecurityScreen> {
         code = await askString(
             context, 'Enter your two factor code to enable', null);
       if (twoFactor.method == 'authenticator' && twoFactor.setup != null)
-        code = await Navigator.push(context,
-            MaterialPageRoute(builder: (context) => TfaPage(twoFactor.setup!)));
+        code = await Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    TfaPage(twoFactor.setup!, _userInfo.email)));
       if (code != null) {
         showAlertDialog(context, 'enabling..');
         result = await beUserTwoFactorEnable(code);
