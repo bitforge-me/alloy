@@ -88,7 +88,8 @@ Future<String?> twoFactorQr(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Authenticator app two factor setup'),
+        title: Text('Two-Factor Authentication App Setup',
+            textAlign: TextAlign.center),
         content: buildForm(context),
       );
     },
