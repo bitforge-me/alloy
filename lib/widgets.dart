@@ -24,7 +24,7 @@ class AppDownloadBtn extends StatelessWidget {
       onTap: () {
         html.window.open(_downloadUrl, 'new tab');
       },
-      child: Container(child: downloadLogo, width: 225, height: 165),
+      child: Container(child: downloadLogo, width: 225, height: 80),
     );
   }
 }

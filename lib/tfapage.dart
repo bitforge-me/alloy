@@ -68,8 +68,9 @@ class _TfaPageState extends State<TfaPage> {
                   width: ButtonWidth, height: ButtonHeight, fwdArrow: true),
               VerticalSpacer(),
               Text("Download Google Auth:"),
+              VerticalSpacer(),
               Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   AppDownloadBtn(OperatingSystem.android,
                       'https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en_NZ&gl=US'),
