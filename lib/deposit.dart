@@ -646,6 +646,10 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    BeBalanceUpdateStatus? status;
+    try {
+      status = BeBalanceUpdateStatus.values.byName(_deposit.status);
+    } catch (_) {}
     return Scaffold(
         appBar: AppBar(
           title: Text('Deposit ${_deposit.asset}'),
@@ -657,26 +661,25 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
               title: Text('Amount'),
               subtitle: PriceEquivalent(_deposit.asset, _deposit.amount)),
           ListTile(title: Text('Date'), subtitle: Text('${_deposit.date}')),
-          _deposit.paymentUrl != null
-              ? ListTile(
-                  title: Text('Payment URL'),
-                  subtitle: Column(children: [
-                    QrImage(
-                      backgroundColor: Colors.transparent,
-                      foregroundColor: Colors.white,
-                      data: '${_deposit.paymentUrl}',
-                      version: QrVersions.auto,
-                      size: 200.0,
-                    ),
-                    Text('${_deposit.paymentUrl}')
-                  ]),
-                  onTap: () => urlLaunch(_deposit.paymentUrl))
-              : SizedBox(),
           ListTile(
               title: Text('Status'),
               subtitle: Text('${_deposit.status.toUpperCase()}')),
+          _deposit.paymentUrl != null &&
+                  status != BeBalanceUpdateStatus.completed &&
+                  status != BeBalanceUpdateStatus.cancelled
+              ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  BronzeRoundedButton(
+                      () => urlLaunch(_deposit.paymentUrl),
+                      ZapOnPrimary,
+                      ZapPrimary,
+                      ZapPrimaryGradient,
+                      'Complete Payment',
+                      width: ButtonWidth,
+                      height: ButtonHeight)
+                ])
+              : SizedBox(),
           VerticalSpacer(),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,
                 Colors.white30, null, 'Close',
                 width: ButtonWidth, height: ButtonHeight)
