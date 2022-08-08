@@ -21,7 +21,9 @@ class AppstoreButton extends StatelessWidget {
     return TextButton(
         onPressed: () => urlLaunch(_downloadUrl),
         child: SvgPicture.asset(
-            _os == AppStore.android ? 'google-play.svg' : 'app-store.svg',
+            _os == AppStore.android
+                ? 'assets/google-play.svg'
+                : 'assets/app-store.svg',
             width: 150,
             height: 44.444));
   }
