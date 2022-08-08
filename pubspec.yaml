@@ -63,6 +63,9 @@ flutter:
   assets:
     - assets/logo.png
     - assets/new-logo.png
+    - assets/auth.png
+    - assets/google-play.svg
+    - assets/app-store.svg
     - assets/crypto_logos/
     - assets/deposit_methods/
     - assets/aplyid-logo.webp

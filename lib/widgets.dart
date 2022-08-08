@@ -7,25 +7,23 @@ import 'package:universal_html/html.dart' as html;
 import 'package:zapdart/colors.dart';
 
 import 'config.dart' as cfg;
+import 'utils.dart';
 
-enum OperatingSystem { android, ios }
+enum AppStore { android, ios }
 
-class AppDownloadBtn extends StatelessWidget {
-  final OperatingSystem _os;
+class AppstoreButton extends StatelessWidget {
+  final AppStore _os;
   final String _downloadUrl;
-  AppDownloadBtn(this._os, this._downloadUrl);
+  AppstoreButton(this._os, this._downloadUrl);
 
   @override
   Widget build(BuildContext context) {
-    SvgPicture downloadLogo = _os == OperatingSystem.android
-        ? SvgPicture.asset("google-play.svg")
-        : SvgPicture.asset("app-store.svg");
-    return GestureDetector(
-      onTap: () {
-        html.window.open(_downloadUrl, 'new tab');
-      },
-      child: Container(child: downloadLogo, width: 225, height: 80),
-    );
+    return TextButton(
+        onPressed: () => urlLaunch(_downloadUrl),
+        child: SvgPicture.asset(
+            _os == AppStore.android ? 'google-play.svg' : 'app-store.svg',
+            width: 150,
+            height: 44.444));
   }
 }
 

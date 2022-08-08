@@ -14,9 +14,11 @@ String vs(String? s) {
   return '';
 }
 
-Future<void> urlLaunch(String? url) async {
+Future<void> urlLaunch(String? url, {Function(String? url)? cantLaunch}) async {
   if (url == null) return;
-  await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+  if (await canLaunch(url))
+    await launch(url);
+  else if (cantLaunch != null) cantLaunch(url);
 }
 
 Decimal roundAt(Decimal value, int digit) {
