@@ -1,11 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:universal_html/html.dart' as html;
 
 import 'package:zapdart/colors.dart';
 
 import 'config.dart' as cfg;
+import 'utils.dart';
+
+enum AppStore { android, ios }
+
+class AppstoreButton extends StatelessWidget {
+  final AppStore _os;
+  final String _downloadUrl;
+  AppstoreButton(this._os, this._downloadUrl);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: () => urlLaunch(_downloadUrl),
+        child: SvgPicture.asset(
+            _os == AppStore.android ? 'google-play.svg' : 'app-store.svg',
+            width: 150,
+            height: 44.444));
+  }
+}
 
 class SpacedVisibility extends StatelessWidget {
   // Visibility widget with VerticalSpacer placed above child Widget in Column
