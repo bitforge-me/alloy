@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:universal_html/html.dart' as html;
+import 'package:universal_platform/universal_platform.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
@@ -12,7 +14,6 @@ import 'websocket.dart';
 import 'snack.dart';
 import 'widgets.dart';
 import 'config.dart';
-import 'utils.dart';
 
 class TwoFactorEnableScreen extends StatefulWidget {
   final BeTwoFactorSetup setup;
@@ -28,21 +29,27 @@ class _TwoFactorEnableScreenState extends State<TwoFactorEnableScreen> {
   final formKey = GlobalKey<FormState>();
   final txtController = new TextEditingController();
 
-  void submit() {
+  void _submit() {
     var cs = formKey.currentState;
     if (cs != null && cs.validate()) {
       Navigator.pop(context, txtController.text);
     }
   }
 
-  void copyKey() {
+  void _copyKey() {
     Clipboard.setData(ClipboardData(text: widget.setup.key));
     snackMsg(context, 'copied key');
   }
 
-  void cantLaunch(String? url) {
-    snackMsg(context, 'no app registered to import two factor data',
-        category: MessageCategory.Warning);
+  void _launchImport() {
+    if (UniversalPlatform.isWeb)
+      html.window.open(
+          'otpauth://totp/Bitforge:${widget.userEmail}?secret=${widget.setup.key}&issuer=Bitforge',
+          'new tab');
+    else
+      //TODO: intents etc on android
+      snackMsg(context, 'not implemented on this platform',
+          category: MessageCategory.Warning);
   }
 
   Widget build(BuildContext context) {
@@ -66,18 +73,14 @@ class _TwoFactorEnableScreenState extends State<TwoFactorEnableScreen> {
                           title: Text('Key'),
                           subtitle: Text(widget.setup.key),
                           trailing: IconButton(
-                              icon: Icon(Icons.copy), onPressed: copyKey)),
+                              icon: Icon(Icons.copy), onPressed: _copyKey)),
                       ListTile(
                         title: Text('Import to App'),
                         subtitle: Text(
                             'Import automatically to a Two Factor Authentication App installed on your device'),
                         trailing: IconButton(
                           icon: Icon(Icons.download),
-                          onPressed: () {
-                            urlLaunch(
-                                'otpauth://totp/Bitforge:${widget.userEmail}?secret=${widget.setup.key}&issuer=Bitforge',
-                                cantLaunch: cantLaunch);
-                          },
+                          onPressed: _launchImport,
                         ),
                       ),
                       VerticalSpacer(),
@@ -104,7 +107,7 @@ class _TwoFactorEnableScreenState extends State<TwoFactorEnableScreen> {
                                 icon: Icon(Icons.cancel),
                                 label: Text('Cancel')),
                             raisedButtonIcon(
-                                onPressed: submit,
+                                onPressed: _submit,
                                 icon: Icon(Icons.send),
                                 label: Text('Submit')),
                           ]),
@@ -141,7 +144,8 @@ class _TwoFactorScreenState extends State<TwoFactorScreen> {
         child: Column(
           children: [
             VerticalSpacer(),
-            Container(child: Image.asset('auth.png', width: 100, height: 100)),
+            Container(
+                child: Image.asset('assets/auth.png', width: 100, height: 100)),
             VerticalSpacer(),
             ListTile(
               title: Text('What is Two-Factor Authentication?',
