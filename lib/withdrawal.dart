@@ -677,12 +677,8 @@ class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
 
   Widget _listItem(BuildContext context, int n) {
     var withdrawal = _withdrawals[n];
-    return ListTile(
-      title: PriceEquivalent(withdrawal.asset, withdrawal.amount,
-          post: ' - ${withdrawal.status.toUpperCase()}',
-          textAlign: TextAlign.center),
-      onTap: () => _withdrawalTap(withdrawal),
-    );
+    return FinancialHistoryTile(withdrawal, _withdrawalTap,
+        topBorder: n == 0 ? true : false);
   }
 
   Future<void> _make() async {
@@ -923,15 +919,8 @@ class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
 
   Widget _listItem(BuildContext context, int n) {
     var withdrawal = _withdrawals[n];
-    return ListTile(
-      title: PriceEquivalent(
-        withdrawal.asset,
-        withdrawal.amount,
-        post: ' - ${withdrawal.status.toUpperCase()}',
-        textAlign: TextAlign.center,
-      ),
-      onTap: () => _withdrawalTap(withdrawal),
-    );
+    return FinancialHistoryTile(withdrawal, _withdrawalTap,
+        topBorder: n == 0 ? true : false);
   }
 
   Future<void> _make() async {

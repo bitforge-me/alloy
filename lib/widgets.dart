@@ -6,6 +6,8 @@ import 'package:universal_html/html.dart' as html;
 
 import 'package:zapdart/colors.dart';
 
+import 'beryllium.dart';
+import 'units.dart';
 import 'config.dart' as cfg;
 import 'utils.dart';
 
@@ -26,6 +28,156 @@ class AppstoreButton extends StatelessWidget {
                 : 'assets/app-store.svg',
             width: 150,
             height: 44.444));
+  }
+}
+
+String parseMonth(int monthInt) {
+  String month = "Month doesn't exist";
+  switch (monthInt) {
+    case 1:
+      month = "Jan";
+      break;
+    case 2:
+      month = "Feb";
+      break;
+    case 3:
+      month = "March";
+      break;
+    case 4:
+      month = "April";
+      break;
+    case 5:
+      month = "May";
+      break;
+    case 6:
+      month = "June";
+      break;
+    case 7:
+      month = "July";
+      break;
+    case 8:
+      month = "Aug";
+      break;
+    case 9:
+      month = "Sep";
+      break;
+    case 10:
+      month = "Oct";
+      break;
+    case 11:
+      month = "Nov";
+      break;
+    case 12:
+      month = "Dec";
+      break;
+  }
+  return month;
+}
+
+Column beautifyDate(DateTime dateInput) {
+  TextStyle greyFont = TextStyle(color: Colors.grey);
+  return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Text>[
+        Text('${dateInput.day} ${parseMonth(dateInput.month)}',
+            style: greyFont),
+        Text('${dateInput.year}', style: greyFont),
+      ]);
+}
+
+Icon paymentIcon(String balanceUpdateType) {
+  Icon returnIcon = balanceUpdateType == "withdrawal"
+      ? Icon(Icons.keyboard_double_arrow_up_rounded, color: Colors.red)
+      : Icon(Icons.keyboard_double_arrow_down_rounded, color: Colors.green);
+  return returnIcon;
+}
+
+class PaymentTypeInfo extends StatelessWidget {
+  final BeBalanceUpdate _balanceUpdate;
+  PaymentTypeInfo(this._balanceUpdate);
+
+  Row build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        PriceEquivalent(_balanceUpdate.asset, _balanceUpdate.amount,
+            verticalAlignment: true,
+            color: _balanceUpdate.type == "withdrawal"
+                ? Colors.red
+                : Colors.green),
+        paymentIcon(_balanceUpdate.type),
+      ],
+    );
+  }
+}
+
+class PaymentStatusInfo extends StatelessWidget {
+  final BeBalanceUpdate _balanceUpdate;
+  PaymentStatusInfo(this._balanceUpdate);
+
+  Icon _getStatusIcon(String status) {
+    Icon returnIcon = Icon(Icons.question_mark);
+    switch (status) {
+      case "created":
+        returnIcon = Icon(Icons.create, color: Colors.yellow);
+        break;
+      case "authorized":
+        returnIcon = Icon(Icons.thumb_up, color: Colors.green);
+        break;
+      case "completed":
+        returnIcon = Icon(Icons.check, color: Colors.green);
+        break;
+      case "cancelled":
+        returnIcon = Icon(Icons.cancel, color: Colors.red);
+        break;
+      case "withdraw":
+        returnIcon = Icon(Icons.call_made);
+    }
+    return returnIcon;
+  }
+
+  Row build(BuildContext context) {
+    String status = _balanceUpdate.status;
+    return Row(
+      children: <Widget>[
+        _getStatusIcon(status),
+        Text(status.toUpperCase()),
+      ],
+    );
+  }
+}
+
+class FinancialHistoryTile extends StatelessWidget {
+  final BeBalanceUpdate _balanceUpdate;
+  final Future<void> Function(BeBalanceUpdate) _whenTapped;
+  final bool topBorder;
+  FinancialHistoryTile(this._balanceUpdate, this._whenTapped,
+      {this.topBorder = false});
+  Widget build(BuildContext context) {
+    return InkWell(
+      highlightColor: Colors.pink,
+      onTap: () => _whenTapped(_balanceUpdate),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+              top: topBorder
+                  ? BorderSide(width: 1.0, color: Colors.grey)
+                  : BorderSide(width: 0, color: Colors.transparent),
+              bottom: BorderSide(width: 1.0, color: Colors.grey)),
+        ),
+        width: cfg.ButtonWidth,
+        height: cfg.ButtonHeight,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            beautifyDate(_balanceUpdate.date),
+            PaymentStatusInfo(_balanceUpdate),
+            PaymentTypeInfo(_balanceUpdate)
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -55,6 +207,16 @@ class VerticalSpacer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(height: height);
+  }
+}
+
+class HorizontalSpacer extends StatelessWidget {
+  final double width;
+  HorizontalSpacer({this.width = 10});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(width: width);
   }
 }
 

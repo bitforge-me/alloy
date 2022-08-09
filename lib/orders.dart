@@ -4,7 +4,6 @@ import 'dart:convert';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
-import 'package:zapdart/colors.dart';
 
 import 'beryllium.dart';
 import 'websocket.dart';
@@ -13,6 +12,7 @@ import 'assets.dart';
 import 'snack.dart';
 import 'paginator.dart';
 import 'widgets.dart';
+import 'config.dart';
 
 class OrderScreen extends StatefulWidget {
   final BeBrokerOrder order;
@@ -201,23 +201,63 @@ class _OrdersScreenState extends State<OrdersScreen> {
             builder: (context) => OrderScreen(order, widget.websocket)));
   }
 
+  Icon getTradeActionIcon(String tradeAction) {
+    Icon returnIcon = Icon(Icons.currency_exchange,
+        color: tradeAction == "Buy" ? Colors.green : Colors.red);
+    return returnIcon;
+  }
+
   Widget _listItem(BuildContext context, int n) {
     var order = _orders[n];
     var baseAmount =
         assetFormatWithUnitToUser(order.baseAsset, order.baseAmount);
-    return ListTile(
-        title: Text('${order.token}'),
-        leading: assetLogo(order.baseAsset),
-        subtitle: Text(
-            '${order.market} - ${marketSideNice(order.side)} $baseAmount - ${describeEnum(order.status).toUpperCase()}',
-            style: order.status == BeOrderStatus.expired ||
-                    order.status == BeOrderStatus.failed
-                ? TextStyle(color: ZapBlackLight)
-                : order.status == BeOrderStatus.created ||
-                        order.status == BeOrderStatus.ready
-                    ? null
-                    : TextStyle(color: ZapGreen)),
-        onTap: () => _orderTap(order));
+
+    TextStyle actionColor = TextStyle(
+        color: marketSideNice(order.side) == "Buy" ? Colors.green : Colors.red);
+
+    return InkWell(
+      onTap: () => _orderTap(order),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+              top: n == 0
+                  ? BorderSide(width: 1.0, color: Colors.grey)
+                  : BorderSide(width: 0, color: Colors.transparent),
+              bottom: BorderSide(width: 1.0, color: Colors.grey)),
+        ),
+        height: ButtonHeight,
+        width: ButtonWidth,
+        child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              beautifyDate(order.date),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    assetLogo(order.baseAsset),
+                    SizedBox(width: 4),
+                    Text(order.market),
+                  ]),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(marketSideNice(order.side), style: actionColor),
+                  SizedBox(width: 2),
+                  Text('$baseAmount', style: actionColor),
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text('${describeEnum(order.status).toUpperCase()}'),
+                  Text(order.token),
+                ],
+              ),
+            ]),
+      ),
+    );
   }
 
 /*
