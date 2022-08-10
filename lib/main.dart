@@ -410,6 +410,40 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 VerticalSpacer(),
+                FutureBuilder<BeBalanceResult>(
+                    future: beBalance(Btc),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<BeBalanceResult> snapshot) {
+                      PriceEquivalent? balanceText;
+                      bool hasLoaded = false;
+                      if (snapshot.hasData) {
+                        hasLoaded = true;
+                        balanceText = snapshot.data?.when<PriceEquivalent?>(
+                          (balance) => PriceEquivalent(
+                              Btc, balance?.total ?? Decimal.parse('0')),
+                          error: (err) => null,
+                        );
+                      } else if (snapshot.hasError) {
+                        hasLoaded = true;
+                        balanceText = null;
+                      }
+                      return Container(
+                        width: ButtonWidth,
+                        height: 100,
+                        color: ZapSecondary,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            assetLogo(Btc, size: 50),
+                            SizedBox(width: 15),
+                            hasLoaded
+                                ? balanceText ?? Text("Couldn't load balance")
+                                : Text("Loading"),
+                          ],
+                        ),
+                      );
+                    }),
+                VerticalSpacer(),
                 // home screen buttons
                 Visibility(
                     visible: _userInfo != null,
