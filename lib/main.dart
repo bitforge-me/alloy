@@ -409,8 +409,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // exchange widget
-                _userInfo != null ? ExchangeWidget(_websocket) : SizedBox(),
+                VerticalSpacer(),
                 // home screen buttons
                 Visibility(
                     visible: _userInfo != null,
@@ -432,6 +431,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                               buttonRow2
                             ]);
                     }))
+                _userInfo != null ? ExchangeWidget(_websocket) : SizedBox(),
               ],
             ),
           ),
