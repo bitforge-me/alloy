@@ -188,6 +188,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       });
       //snackMsg(context, 'user updated');
     }
+    if (args.event == WebsocketEvent.cryptoWithdrawalUpdate ||
+        args.event == WebsocketEvent.cryptoDepositUpdate) {
+      // update balance on crypto withdrawals or deposits
+      setState(() {});
+    }
     if (args.event == WebsocketEvent.lnInvoicePaid) {
       var json = jsonDecode(args.msg);
       var bolt11 = json['bolt11'];
