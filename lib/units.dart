@@ -267,7 +267,7 @@ class _UnitsScreenState extends State<UnitsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Units'),
+          title: Text('Preferences'),
         ),
         body: BiforgePage(
             child: Column(
