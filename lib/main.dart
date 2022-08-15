@@ -340,7 +340,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               onTap: _security),
           ListTile(
               leading: Icon(Icons.settings),
-              title: const Text('Units'),
+              title: const Text('Preferences'),
               onTap: _units),
           ListTile(
               leading: Icon(Icons.contact_support),
