@@ -15,6 +15,7 @@ const MaxColumnWidth = 700.0;
 const ButtonWidth = 320.0;
 const ButtonHeight = 65.0;
 const SupportUrl = 'https://support.bitforge.me/';
+const LegalUrl = 'https://bitforge.me/legal/';
 
 // the default testnet value
 const _DefaultTestnet = true;

@@ -209,6 +209,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       await urlLaunch(SupportUrl);
   }
 
+  Future<void> _legal() async {
+    await urlLaunch(LegalUrl);
+  }
+
   Future<void> _logout() async {
     if (await askYesNo(context, 'Are you sure you want to logout?')) {
       await Prefs.nukeAll();
@@ -342,6 +346,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               leading: Icon(Icons.contact_support),
               title: const Text('Support'),
               onTap: _support),
+          ListTile(
+              leading: Icon(Icons.gavel),
+              title: const Text('Legal'),
+              onTap: _legal),
           ListTile(
               leading: Icon(Icons.logout),
               title: const Text('Logout'),
