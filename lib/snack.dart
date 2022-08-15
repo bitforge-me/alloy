@@ -4,7 +4,7 @@ import 'package:zapdart/widgets.dart';
 import 'package:zapdart/colors.dart';
 
 void snackMsg(BuildContext context, String msg,
-    {int seconds = 3, MessageCategory category = MessageCategory.Info}) {
+    {int seconds = 4, MessageCategory category = MessageCategory.Info}) {
   IconData icon;
   Color color;
   switch (category) {
