@@ -197,7 +197,7 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                 child: BigLogoContainer(
                   children: <Widget>[
                     Text(
-                      "Forgot Password",
+                      "Login With Email Link",
                       style: TextStyle(
                           color: Color(0xFFFFFFFF).withOpacity(0.75),
                           fontSize: 20),
@@ -379,7 +379,7 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                         height: ButtonHeight),
                     VerticalSpacer(height: 5),
                     BronzeRoundedButton(_switchToApiKeyRequest, ZapOnSurface,
-                        ZapSurface, null, 'Lost Password',
+                        ZapSurface, null, 'Login with Email Link',
                         fwdArrow: true,
                         width: ButtonWidth,
                         height: ButtonHeight),
