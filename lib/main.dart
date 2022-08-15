@@ -58,8 +58,8 @@ class MyApp extends StatelessWidget {
       appBarTheme: AppBarTheme(centerTitle: true, color: ZapSecondary),
       // ignore: deprecated_member_use
       accentColor: ZapPrimary,
-      textTheme: ZapTextThemer(),
     );
+    ZapTextThemer(theme.textTheme);
     return MaterialApp(
       title: AppTitle,
       theme: theme,
