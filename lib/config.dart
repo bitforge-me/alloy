@@ -129,8 +129,8 @@ void initConfig() {
       zapBlack: Colors.black,
       zapBlackLight: Colors.black38,
       zapBlackMed: Colors.black87,
-      zapOutgoingFunds: Colors.red,
-      zapIncomingFunds: Colors.green,
+      zapOutgoingFunds: Colors.yellow,
+      zapIncomingFunds: Color(0xFF009075),
       zapSelfFunds: Colors.black,
       zapTextThemer: GoogleFonts.poppinsTextTheme);
 }
