@@ -3,11 +3,14 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:universal_html/html.dart' as html;
+import 'package:intl/intl.dart';
+import 'package:decimal/decimal.dart';
 
 import 'package:zapdart/colors.dart';
 
 import 'config.dart' as cfg;
 import 'utils.dart';
+import 'units.dart';
 
 enum AppStore { android, ios }
 
@@ -478,5 +481,55 @@ class BronzeRoundedButton extends StatelessWidget {
               )));
     }
     return btn;
+  }
+}
+
+enum ListTxDir { up, down }
+
+class ListTx extends StatelessWidget {
+  ListTx(this.onPressed, this.date, this.content, this.amount, this.asset,
+      this.dir,
+      {this.last = false})
+      : super();
+
+  final VoidCallback onPressed;
+  final DateTime date;
+  final Widget content;
+  final Decimal amount;
+  final String asset;
+  final ListTxDir dir;
+  final bool last;
+
+  @override
+  Widget build(BuildContext context) {
+    var color = dir == ListTxDir.up ? ZapOutgoingFunds : ZapIncomingFunds;
+    var icon = dir == ListTxDir.up
+        ? Icons.keyboard_double_arrow_up_rounded
+        : Icons.keyboard_double_arrow_down_rounded;
+    var tsLeft = TextStyle(fontSize: 12, color: ZapOnBackgroundLight);
+    var amountWidget = PriceEquivalent(asset, amount,
+        fontSize: 12,
+        color: color,
+        twoLines: true,
+        textAlign: TextAlign.center);
+    return Column(children: [
+      Divider(),
+      ListTile(
+          onTap: onPressed,
+          dense: true,
+          contentPadding: EdgeInsets.symmetric(horizontal: 8),
+          leading: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(DateFormat('d MMM').format(date).toUpperCase(),
+                    style: tsLeft),
+                Text(DateFormat('yyyy').format(date), style: tsLeft),
+              ]),
+          title: content,
+          trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [amountWidget, Icon(icon, color: color, size: 14)])),
+      Visibility(visible: last, child: Divider())
+    ]);
   }
 }

@@ -125,8 +125,17 @@ class PriceEquivalent extends StatefulWidget {
   final String? pre;
   final String? post;
   final TextAlign? textAlign;
+  final double? fontSize;
+  final Color? color;
+  final bool twoLines;
   PriceEquivalent(this.asset, this.amount,
-      {this.showAssetAmount = true, this.pre, this.post, this.textAlign});
+      {this.showAssetAmount = true,
+      this.pre,
+      this.post,
+      this.textAlign,
+      this.fontSize,
+      this.color,
+      this.twoLines = false});
 
   @override
   State<PriceEquivalent> createState() => _PriceEquivalentState();
@@ -174,12 +183,17 @@ class _PriceEquivalentState extends State<PriceEquivalent> {
       var endText = widget.post != null ? ' ${widget.post}' : '';
       if (assetPricesEnabled &&
           !_failedToGetPrice &&
-          widget.asset != assetUnitToAsset(assetPricesUnit))
-        text = '$startText$assetAmount (${_formattedPrice()})$endText';
-      else
+          widget.asset != assetUnitToAsset(assetPricesUnit)) {
+        if (widget.twoLines)
+          text = '$assetAmount\n${_formattedPrice()}';
+        else
+          text = '$startText$assetAmount (${_formattedPrice()})$endText';
+      } else
         text = '$startText$assetAmount$endText';
     }
-    return Text(text, textAlign: widget.textAlign);
+    return Text(text,
+        textAlign: widget.textAlign,
+        style: TextStyle(fontSize: widget.fontSize, color: widget.color));
   }
 }
 

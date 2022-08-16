@@ -4,7 +4,6 @@ import 'dart:convert';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
-import 'package:zapdart/colors.dart';
 
 import 'beryllium.dart';
 import 'websocket.dart';
@@ -203,21 +202,19 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   Widget _listItem(BuildContext context, int n) {
     var order = _orders[n];
-    var baseAmount =
-        assetFormatWithUnitToUser(order.baseAsset, order.baseAmount);
-    return ListTile(
-        title: Text('${order.token}'),
-        leading: assetLogo(order.baseAsset),
-        subtitle: Text(
-            '${order.market} - ${marketSideNice(order.side)} $baseAmount - ${describeEnum(order.status).toUpperCase()}',
-            style: order.status == BeOrderStatus.expired ||
-                    order.status == BeOrderStatus.failed
-                ? TextStyle(color: ZapBlackLight)
-                : order.status == BeOrderStatus.created ||
-                        order.status == BeOrderStatus.ready
-                    ? null
-                    : TextStyle(color: ZapGreen)),
-        onTap: () => _orderTap(order));
+    var content = Row(children: [
+      assetLogo(order.baseAsset),
+      SizedBox(width: 5),
+      Text(describeEnum(order.status).toUpperCase())
+    ]);
+    return ListTx(
+        () => _orderTap(order),
+        order.date,
+        content,
+        order.baseAmount,
+        order.baseAsset,
+        order.side == BeMarketSide.ask ? ListTxDir.up : ListTxDir.down,
+        last: n == _orders.length - 1);
   }
 
 /*

@@ -171,12 +171,14 @@ class _CryptoDepositsScreenState extends State<CryptoDepositsScreen> {
 
   Widget _listItem(BuildContext context, int n) {
     var deposit = _deposits[n];
-    return ListTile(
-      title: PriceEquivalent(deposit.asset, deposit.amount,
-          post: ' - ${deposit.status.toUpperCase()}',
-          textAlign: TextAlign.center),
-      onTap: () => _depositTap(deposit),
-    );
+    return ListTx(
+        () => _depositTap(deposit),
+        deposit.date,
+        Text(deposit.status.toUpperCase()),
+        deposit.amount,
+        deposit.asset,
+        ListTxDir.down,
+        last: n == _deposits.length - 1);
   }
 
   Future<bool> _cryptoDeposit(Decimal amount) async {
@@ -509,12 +511,14 @@ class _FiatDepositsScreenState extends State<FiatDepositsScreen> {
 
   Widget _listItem(BuildContext context, int n) {
     var deposit = _deposits[n];
-    return ListTile(
-      title: PriceEquivalent(deposit.asset, deposit.amount,
-          post: ' - ${deposit.status.toUpperCase()}',
-          textAlign: TextAlign.center),
-      onTap: () => _depositTap(deposit),
-    );
+    return ListTx(
+        () => _depositTap(deposit),
+        deposit.date,
+        Text(deposit.status.toUpperCase()),
+        deposit.amount,
+        deposit.asset,
+        ListTxDir.down,
+        last: n == _deposits.length - 1);
   }
 
   Future<void> _make() async {
