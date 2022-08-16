@@ -5,6 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:decimal/decimal.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
@@ -34,6 +35,7 @@ import 'widgets.dart';
 final log = Logger('Main');
 
 void main() {
+  GoogleFonts.config.allowRuntimeFetching = false;
   // setup logging
   Logger.root.level = Level.INFO;
   Logger.root.onRecord.listen((record) {
@@ -58,8 +60,8 @@ class MyApp extends StatelessWidget {
       appBarTheme: AppBarTheme(centerTitle: true, color: ZapSecondary),
       // ignore: deprecated_member_use
       accentColor: ZapPrimary,
-      textTheme: ZapTextThemer(),
     );
+    ZapTextThemer(theme.textTheme);
     return MaterialApp(
       title: AppTitle,
       theme: theme,
