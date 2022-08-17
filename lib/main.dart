@@ -11,7 +11,7 @@ import 'package:zapdart/widgets.dart';
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/account_forms.dart';
 
-import 'config.dart';
+import 'config.dart' as cfg;
 import 'prefs.dart';
 import 'beryllium.dart';
 import 'orders.dart';
@@ -39,10 +39,10 @@ void main() {
   Logger.root.onRecord.listen((record) {
     print('${record.level.name}: ${record.time}: ${record.message}');
   });
-  log.info('Git SHA: $GitSha');
-  log.info('Build Date: $BuildDate');
-  log.info('Beryllium Server: ${server()}');
-  log.info('Testnet: ${testnet()}');
+  log.info('Git SHA: ${cfg.GitSha}');
+  log.info('Build Date: ${cfg.BuildDate}');
+  log.info('Beryllium Server: ${cfg.server()}');
+  log.info('Testnet: ${cfg.testnet()}');
   // run app
   runApp(Phoenix(child: MyApp()));
 }
@@ -50,7 +50,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    initConfig();
+    cfg.initConfig();
     var theme = ThemeData(
         useMaterial3: false,
         brightness: ZapBrightness,
@@ -62,10 +62,10 @@ class MyApp extends StatelessWidget {
         textTheme:
             ZapTextThemer(ThemeData(brightness: ZapBrightness).textTheme));
     return MaterialApp(
-      title: AppTitle,
+      title: cfg.AppTitle,
       theme: theme,
       debugShowCheckedModeBanner: false,
-      home: MyHomePage(title: AppTitle),
+      home: MyHomePage(title: cfg.AppTitle),
     );
   }
 }
@@ -158,9 +158,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   void checkVersion(BeVersionResult res) {
     res.when((serverVersion, clientVersionDeployed) {
-      if (clientVersionDeployed > AppVersion) {
+      if (clientVersionDeployed > cfg.AppVersion) {
         log.info(
-            'old version $AppVersion, currently deployed version is $clientVersionDeployed');
+            'old version ${cfg.AppVersion}, currently deployed version is $clientVersionDeployed');
         if (UniversalPlatform.isWeb) {
           askYesNo(context,
                   'A newer version has been released would you like to reload?')
@@ -205,13 +205,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Future<void> _support() async {
     if (_userInfo != null)
       await urlLaunch(
-          '$SupportUrl?email=${Uri.encodeQueryComponent(_userInfo!.email)}');
+          '${cfg.SupportUrl}?email=${Uri.encodeQueryComponent(_userInfo!.email)}');
     else
-      await urlLaunch(SupportUrl);
+      await urlLaunch(cfg.SupportUrl);
   }
 
   Future<void> _legal() async {
-    await urlLaunch(LegalUrl);
+    await urlLaunch(cfg.LegalUrl);
   }
 
   Future<void> _logout() async {
@@ -362,9 +362,37 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    var buttonRow1 = Row(mainAxisSize: MainAxisSize.min, children: [
+      SquareButton(_orders, Icons.history, ZapSecondary, 'Order History',
+          textColor: ZapOnSecondary,
+          textOutside: false,
+          borderSize: 0,
+          fontSize: 18),
+      SizedBox(width: 15),
+      SquareButton(_balances, Icons.wallet_rounded, ZapSecondary, 'Balances',
+          textColor: ZapOnSecondary,
+          textOutside: false,
+          borderSize: 0,
+          fontSize: 18)
+    ]);
+    var buttonRow2 = Row(mainAxisSize: MainAxisSize.min, children: [
+      SquareButton(_deposit, Icons.keyboard_double_arrow_down_rounded,
+          ZapSecondary, 'Deposits',
+          textColor: ZapOnSecondary,
+          textOutside: false,
+          borderSize: 0,
+          fontSize: 18),
+      SizedBox(width: 15),
+      SquareButton(_withdrawal, Icons.keyboard_double_arrow_up_rounded,
+          ZapSecondary, 'Withdrawals',
+          textColor: ZapOnSecondary,
+          textOutside: false,
+          borderSize: 0,
+          fontSize: 18)
+    ]);
     return Scaffold(
         appBar: AppBar(
-            title: Image.asset(AppLogo, filterQuality: FilterQuality.high),
+            title: Image.asset(cfg.AppLogo, filterQuality: FilterQuality.high),
             leading: Builder(builder: (BuildContext context) {
               return IconButton(
                 icon: const Icon(Icons.menu),
@@ -386,45 +414,24 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 // home screen buttons
                 Visibility(
                     visible: _userInfo != null,
-                    child: Column(mainAxisSize: MainAxisSize.min, children: [
-                      Row(mainAxisSize: MainAxisSize.min, children: [
-                        SquareButton(_orders, Icons.history, ZapSecondary,
-                            'Order History',
-                            textColor: ZapOnSecondary,
-                            textOutside: false,
-                            borderSize: 0,
-                            fontSize: 18),
-                        SizedBox(width: 15),
-                        SquareButton(_balances, Icons.wallet_rounded,
-                            ZapSecondary, 'Balances',
-                            textColor: ZapOnSecondary,
-                            textOutside: false,
-                            borderSize: 0,
-                            fontSize: 18)
-                      ]),
-                      VerticalSpacer(),
-                      Row(mainAxisSize: MainAxisSize.min, children: [
-                        SquareButton(
-                            _deposit,
-                            Icons.keyboard_double_arrow_down_rounded,
-                            ZapSecondary,
-                            'Deposits',
-                            textColor: ZapOnSecondary,
-                            textOutside: false,
-                            borderSize: 0,
-                            fontSize: 18),
-                        SizedBox(width: 15),
-                        SquareButton(
-                            _withdrawal,
-                            Icons.keyboard_double_arrow_up_rounded,
-                            ZapSecondary,
-                            'Withdrawals',
-                            textColor: ZapOnSecondary,
-                            textOutside: false,
-                            borderSize: 0,
-                            fontSize: 18)
-                      ]),
-                    ])),
+                    child: LayoutBuilder(builder: (context, constraints) {
+                      if (constraints.maxWidth < cfg.MaxColumnWidth)
+                        return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              buttonRow1,
+                              VerticalSpacer(),
+                              buttonRow2
+                            ]);
+                      else
+                        return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              buttonRow1,
+                              SizedBox(width: 50),
+                              buttonRow2
+                            ]);
+                    }))
               ],
             ),
           ),
