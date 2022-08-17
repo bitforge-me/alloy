@@ -52,14 +52,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     initConfig();
     var theme = ThemeData(
-      useMaterial3: false,
-      brightness: ZapBrightness,
-      scaffoldBackgroundColor: ZapBackground,
-      appBarTheme: AppBarTheme(centerTitle: true, color: ZapSecondary),
-      // ignore: deprecated_member_use
-      accentColor: ZapPrimary,
-    );
-    ZapTextThemer(theme.textTheme);
+        useMaterial3: false,
+        brightness: ZapBrightness,
+        scaffoldBackgroundColor: ZapBackground,
+        appBarTheme: AppBarTheme(centerTitle: true, color: ZapSecondary),
+        // ignore: deprecated_member_use
+        accentColor: ZapPrimary,
+        // create text theme with the correct 'brightness' (eg light or dark)
+        textTheme:
+            ZapTextThemer(ThemeData(brightness: ZapBrightness).textTheme));
     return MaterialApp(
       title: AppTitle,
       theme: theme,
