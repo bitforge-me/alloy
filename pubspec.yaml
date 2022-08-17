@@ -43,6 +43,7 @@ dependencies:
     git:
       url: https://github.com/zap-me/zapdart.git
       ref: bbc3d8f3
+  carousel_slider: ^4.1.1
     #path: ../zapdart
 
 dev_dependencies:

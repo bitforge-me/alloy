@@ -5,6 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:decimal/decimal.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
@@ -189,7 +190,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       //snackMsg(context, 'user updated');
     }
     if (args.event == WebsocketEvent.cryptoWithdrawalUpdate ||
-        args.event == WebsocketEvent.cryptoDepositUpdate) {
+        args.event == WebsocketEvent.cryptoDepositUpdate ||
+        args.event == WebsocketEvent.fiatWithdrawalUpdate ||
+        args.event == WebsocketEvent.fiatDepositUpdate) {
       // update balance on crypto withdrawals or deposits
       setState(() {});
     }
@@ -296,6 +299,12 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         context,
         MaterialPageRoute(
             builder: (context) => VerifyUserScreen(_userInfo!, _websocket)));
+  }
+
+  Future<List<BeBalanceResult>> _getCarouselBalances() async {
+    BeBalanceResult btcBalance = await beBalance(Btc);
+    BeBalanceResult nzdBalance = await beBalance(Nzd);
+    return <BeBalanceResult>[btcBalance, nzdBalance];
   }
 
   Drawer makeDrawer(BuildContext contex) {
@@ -415,37 +424,92 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 VerticalSpacer(),
-                FutureBuilder<BeBalanceResult>(
-                    future: beBalance(Btc),
+                FutureBuilder<List<BeBalanceResult>>(
+                    future: _getCarouselBalances(),
                     builder: (BuildContext context,
-                        AsyncSnapshot<BeBalanceResult> snapshot) {
-                      PriceEquivalent? balanceText;
+                        AsyncSnapshot<List<BeBalanceResult>> snapshot) {
                       bool hasLoaded = false;
+                      PriceEquivalent? btcBalanceText;
+                      PriceEquivalent? nzdBalanceText;
                       if (snapshot.hasData) {
                         hasLoaded = true;
-                        balanceText = snapshot.data?.when<PriceEquivalent?>(
-                          (balance) => PriceEquivalent(
-                              Btc, balance?.total ?? Decimal.parse('0')),
+                        btcBalanceText =
+                            snapshot.data?[0].when<PriceEquivalent?>(
+                          (btcBalance) => PriceEquivalent(
+                              Btc, btcBalance?.total ?? Decimal.parse('0')),
+                          error: (err) => null,
+                        );
+                        nzdBalanceText =
+                            snapshot.data?[1].when<PriceEquivalent?>(
+                          (nzdBalance) => PriceEquivalent(
+                              Nzd, nzdBalance?.total ?? Decimal.parse('0')),
                           error: (err) => null,
                         );
                       } else if (snapshot.hasError) {
                         hasLoaded = true;
-                        balanceText = null;
+                        btcBalanceText = null;
+                        nzdBalanceText = null;
                       }
-                      return Container(
-                        width: ButtonWidth,
-                        height: 100,
-                        color: ZapSecondary,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            assetLogo(Btc, size: 50),
-                            SizedBox(width: 15),
-                            hasLoaded
-                                ? balanceText ?? Text("Couldn't load balance")
-                                : Text("Loading"),
-                          ],
-                        ),
+                      return CarouselSlider(
+                        options: CarouselOptions(
+                            height: 120,
+                            viewportFraction: 0.76,
+                            enableInfiniteScroll: false,
+                            enlargeCenterPage: true),
+                        items: <Container>[
+                          Container(
+                            width: ButtonWidth,
+                            height: 120,
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topRight,
+                                  end: Alignment.bottomLeft,
+                                  colors: [
+                                    Color(0xfff46b45),
+                                    Color(0xffeea849)
+                                  ],
+                                ),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                assetLogo(Btc, size: 50),
+                                SizedBox(width: 15),
+                                hasLoaded
+                                    ? btcBalanceText ??
+                                        Text("Couldn't load balance")
+                                    : Text("Loading"),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            width: ButtonWidth,
+                            height: 120,
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topRight,
+                                  end: Alignment.bottomLeft,
+                                  colors: [
+                                    Color(0xff4364F7),
+                                    Color(0xFF6FB1FC)
+                                  ],
+                                ),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                assetLogo(Nzd, size: 50),
+                                SizedBox(width: 15),
+                                hasLoaded
+                                    ? nzdBalanceText ??
+                                        Text("Couldn't load balance")
+                                    : Text("Loading"),
+                              ],
+                            ),
+                          ),
+                        ],
                       );
                     }),
                 VerticalSpacer(),
