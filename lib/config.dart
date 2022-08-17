@@ -105,7 +105,7 @@ void initConfig() {
             Color.fromRGBO(166, 83, 45, 1),
             Color.fromRGBO(123, 62, 32, 1)
           ]),
-      zapSecondary: Color(0xff22232c),
+      zapSecondary: Color(0xff282934),
       zapSecondaryDark: Color(0xff22232c),
       zapSecondaryGradient:
           LinearGradient(colors: [Color(0xff32333c), Color(0xff12131c)]),
