@@ -509,6 +509,7 @@ class ListTx extends StatelessWidget {
     var tsLeft = TextStyle(fontSize: 12, color: ZapOnBackgroundLight);
     var amountWidget = PriceEquivalent(asset, amount,
         fontSize: 12,
+        fontWeight: FontWeight.normal,
         color: color,
         twoLines: true,
         textAlign: TextAlign.center);
