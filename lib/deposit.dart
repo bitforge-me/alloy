@@ -201,11 +201,11 @@ class _DepositSelectScreenState extends State<DepositSelectScreen> {
   }
 
   Future<void> _assetTap(BeAsset asset, BeAsset? l2Network) async {
+    var success = false;
     if (assetIsCrypto(asset.symbol)) {
       // crypto deposit
       var amount = Decimal.zero;
       if (l2Network != null) {
-        var success = false;
         while (!success) {
           var amountStr = await Navigator.push<String>(
               context,
@@ -224,7 +224,7 @@ class _DepositSelectScreenState extends State<DepositSelectScreen> {
           success = await _cryptoDeposit(asset, l2Network, amount);
         }
       } else
-        await _cryptoDeposit(asset, l2Network, amount);
+        success = await _cryptoDeposit(asset, l2Network, amount);
     } else {
       // fiat deposit
       var method = await Navigator.push<DepositMethodDetails>(
@@ -235,7 +235,6 @@ class _DepositSelectScreenState extends State<DepositSelectScreen> {
       if (method == null) return;
       switch (method.method) {
         case DepositMethod.account2account:
-          var success = false;
           while (!success) {
             var amountStr = await Navigator.push<String>(
                 context,
@@ -253,8 +252,8 @@ class _DepositSelectScreenState extends State<DepositSelectScreen> {
             showAlertDialog(context, 'querying..');
             var res = await beFiatDepositWindcave(asset.symbol, amount);
             Navigator.pop(context);
-            res.when((deposit) {
-              Navigator.push(
+            await res.when((deposit) async {
+              await Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
@@ -272,16 +271,21 @@ class _DepositSelectScreenState extends State<DepositSelectScreen> {
           showAlertDialog(context, 'querying..');
           var res = await beFiatDepositDirect(asset.symbol);
           Navigator.pop(context);
-          res.when(
-              (deposit) => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => FiatAccountNumberScreen(
-                          asset, deposit, widget.websocket))),
+          await res.when((deposit) async {
+            await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FiatAccountNumberScreen(
+                        asset, deposit, widget.websocket)));
+            success = true;
+          },
               error: (err) => alert(context, 'error',
                   'failed to get deposit details (${BeError.msg(err)})'));
       }
     }
+    if (success)
+      // hide this selection screen if deposit succesfully created
+      Navigator.pop(context);
   }
 
   int _listCount() {
