@@ -126,6 +126,7 @@ class PriceEquivalent extends StatefulWidget {
   final String? post;
   final TextAlign? textAlign;
   final double? fontSize;
+  final FontWeight? fontWeight;
   final Color? color;
   final bool twoLines;
   PriceEquivalent(this.asset, this.amount,
@@ -134,6 +135,7 @@ class PriceEquivalent extends StatefulWidget {
       this.post,
       this.textAlign,
       this.fontSize,
+      this.fontWeight,
       this.color,
       this.twoLines = false});
 
@@ -193,7 +195,10 @@ class _PriceEquivalentState extends State<PriceEquivalent> {
     }
     return Text(text,
         textAlign: widget.textAlign,
-        style: TextStyle(fontSize: widget.fontSize, color: widget.color));
+        style: TextStyle(
+            fontSize: widget.fontSize,
+            fontWeight: widget.fontWeight,
+            color: widget.color));
   }
 }
 
