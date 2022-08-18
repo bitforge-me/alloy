@@ -8,7 +8,7 @@ import 'package:zapdart/colors.dart';
 
 const GitSha = 'GIT_SHA_REPLACE';
 const BuildDate = 'BUILD_DATE_REPLACE';
-const AppVersion = 9;
+const AppVersion = 12;
 const AppTitle = 'Bitforge';
 const AppLogo = 'assets/logo.png';
 const MaxColumnWidth = 700.0;

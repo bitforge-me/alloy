@@ -524,89 +524,6 @@ class BeBalanceUpdate {
   Map<String, dynamic> toJson() => _$BeBalanceUpdateToJson(this);
 }
 
-@freezed
-class BeCryptoDepositsResult with _$BeCryptoDepositsResult {
-  const factory BeCryptoDepositsResult(
-          List<BeBalanceUpdate> deposits, int offset, int limit, int total) =
-      _BeCryptoDepositsResult;
-  const factory BeCryptoDepositsResult.error(BeError err) =
-      _BeCryptoDepositsResultErr;
-
-  static BeCryptoDepositsResult parse(String data) {
-    try {
-      var json = jsonDecode(data);
-      List<BeBalanceUpdate> deposits = [];
-      for (var item in json['deposits'])
-        deposits.add(BeBalanceUpdate.fromJson(item));
-      var offset = json['offset'];
-      var limit = json['limit'];
-      var total = json['total'];
-      return BeCryptoDepositsResult(deposits, offset, limit, total);
-    } catch (_) {
-      return BeCryptoDepositsResult.error(BeError.format());
-    }
-  }
-}
-
-@freezed
-class BeCryptoWithdrawalResult with _$BeCryptoWithdrawalResult {
-  const factory BeCryptoWithdrawalResult(BeBalanceUpdate withdrawal) =
-      _BeCryptoWithdrawalResult;
-  const factory BeCryptoWithdrawalResult.error(BeError err) =
-      _BeCryptoWithdrawalResultErr;
-
-  static BeCryptoWithdrawalResult parse(String data) {
-    try {
-      var json = jsonDecode(data);
-      return BeCryptoWithdrawalResult(
-          BeBalanceUpdate.fromJson(json['withdrawal']));
-    } catch (_) {
-      return BeCryptoWithdrawalResult.error(BeError.format());
-    }
-  }
-}
-
-@freezed
-class BeCryptoWithdrawalsResult with _$BeCryptoWithdrawalsResult {
-  const factory BeCryptoWithdrawalsResult(
-          List<BeBalanceUpdate> withdrawals, int offset, int limit, int total) =
-      _BeCryptoWithdrawalsResult;
-  const factory BeCryptoWithdrawalsResult.error(BeError err) =
-      _BeCryptoWithdrawalsResultErr;
-
-  static BeCryptoWithdrawalsResult parse(String data) {
-    try {
-      var json = jsonDecode(data);
-      List<BeBalanceUpdate> withdrawals = [];
-      for (var item in json['withdrawals'])
-        withdrawals.add(BeBalanceUpdate.fromJson(item));
-      var offset = json['offset'];
-      var limit = json['limit'];
-      var total = json['total'];
-      return BeCryptoWithdrawalsResult(withdrawals, offset, limit, total);
-    } catch (_) {
-      return BeCryptoWithdrawalsResult.error(BeError.format());
-    }
-  }
-}
-
-@freezed
-class BeFiatDepositResult with _$BeFiatDepositResult {
-  const factory BeFiatDepositResult(BeBalanceUpdate deposit) =
-      _BeFiatDepositResult;
-  const factory BeFiatDepositResult.error(BeError err) =
-      _BeFiatDepositResultErr;
-
-  static BeFiatDepositResult parse(String data) {
-    try {
-      var json = jsonDecode(data);
-      return BeFiatDepositResult(BeBalanceUpdate.fromJson(json['deposit']));
-    } catch (_) {
-      return BeFiatDepositResult.error(BeError.format());
-    }
-  }
-}
-
 @JsonSerializable()
 class BeFiatAccountNumber {
   @JsonKey(name: 'account_number')
@@ -639,14 +556,28 @@ class BeFiatAccountNumberResult with _$BeFiatAccountNumberResult {
 }
 
 @freezed
-class BeFiatDepositsResult with _$BeFiatDepositsResult {
-  const factory BeFiatDepositsResult(
-          List<BeBalanceUpdate> deposits, int offset, int limit, int total) =
-      _BeFiatDepositsResult;
-  const factory BeFiatDepositsResult.error(BeError err) =
-      _BeFiatDepositsResultErr;
+class BeDepositResult with _$BeDepositResult {
+  const factory BeDepositResult(BeBalanceUpdate deposit) = _BeDepositResult;
+  const factory BeDepositResult.error(BeError err) = _BeFiatDepositResultErr;
 
-  static BeFiatDepositsResult parse(String data) {
+  static BeDepositResult parse(String data) {
+    try {
+      var json = jsonDecode(data);
+      return BeDepositResult(BeBalanceUpdate.fromJson(json['deposit']));
+    } catch (_) {
+      return BeDepositResult.error(BeError.format());
+    }
+  }
+}
+
+@freezed
+class BeDepositsResult with _$BeDepositsResult {
+  const factory BeDepositsResult(
+          List<BeBalanceUpdate> deposits, int offset, int limit, int total) =
+      _BeDepositsResult;
+  const factory BeDepositsResult.error(BeError err) = _BeDepositsResultErr;
+
+  static BeDepositsResult parse(String data) {
     try {
       var json = jsonDecode(data);
       List<BeBalanceUpdate> deposits = [];
@@ -655,40 +586,38 @@ class BeFiatDepositsResult with _$BeFiatDepositsResult {
       var offset = json['offset'];
       var limit = json['limit'];
       var total = json['total'];
-      return BeFiatDepositsResult(deposits, offset, limit, total);
+      return BeDepositsResult(deposits, offset, limit, total);
     } catch (_) {
-      return BeFiatDepositsResult.error(BeError.format());
+      return BeDepositsResult.error(BeError.format());
     }
   }
 }
 
 @freezed
-class BeFiatWithdrawalResult with _$BeFiatWithdrawalResult {
-  const factory BeFiatWithdrawalResult(BeBalanceUpdate withdrawal) =
-      _BeFiatWithdrawalResult;
-  const factory BeFiatWithdrawalResult.error(BeError err) =
-      _BeFiatWithdrawalResultErr;
+class BeWithdrawalResult with _$BeWithdrawalResult {
+  const factory BeWithdrawalResult(BeBalanceUpdate withdrawal) =
+      _BeWithdrawalResult;
+  const factory BeWithdrawalResult.error(BeError err) = _BeWithdrawalResultErr;
 
-  static BeFiatWithdrawalResult parse(String data) {
+  static BeWithdrawalResult parse(String data) {
     try {
       var json = jsonDecode(data);
-      return BeFiatWithdrawalResult(
-          BeBalanceUpdate.fromJson(json['withdrawal']));
+      return BeWithdrawalResult(BeBalanceUpdate.fromJson(json['withdrawal']));
     } catch (_) {
-      return BeFiatWithdrawalResult.error(BeError.format());
+      return BeWithdrawalResult.error(BeError.format());
     }
   }
 }
 
 @freezed
-class BeFiatWithdrawalsResult with _$BeFiatWithdrawalsResult {
-  const factory BeFiatWithdrawalsResult(
+class BeWithdrawalsResult with _$BeWithdrawalsResult {
+  const factory BeWithdrawalsResult(
           List<BeBalanceUpdate> withdrawals, int offset, int limit, int total) =
-      _BeFiatWithdrawalsResult;
-  const factory BeFiatWithdrawalsResult.error(BeError err) =
-      _BeFiatWithdrawalsResultErr;
+      _BeWithdrawalsResult;
+  const factory BeWithdrawalsResult.error(BeError err) =
+      _BeWithdrawalsResultErr;
 
-  static BeFiatWithdrawalsResult parse(String data) {
+  static BeWithdrawalsResult parse(String data) {
     try {
       var json = jsonDecode(data);
       List<BeBalanceUpdate> withdrawals = [];
@@ -697,9 +626,9 @@ class BeFiatWithdrawalsResult with _$BeFiatWithdrawalsResult {
       var offset = json['offset'];
       var limit = json['limit'];
       var total = json['total'];
-      return BeFiatWithdrawalsResult(withdrawals, offset, limit, total);
+      return BeWithdrawalsResult(withdrawals, offset, limit, total);
     } catch (_) {
-      return BeFiatWithdrawalsResult.error(BeError.format());
+      return BeWithdrawalsResult.error(BeError.format());
     }
   }
 }
@@ -1073,22 +1002,7 @@ Future<BeCryptoDepositRecipientResult> beCryptoDepositRecipient(
       error: (err) => BeCryptoDepositRecipientResult.error(err));
 }
 
-Future<BeCryptoDepositsResult> beCryptoDeposits(
-    String asset, String? l2Network, int offset, int limit) async {
-  var result = await post(
-      "crypto_deposits",
-      {
-        "asset": asset,
-        "l2_network": l2Network,
-        "offset": offset,
-        "limit": limit
-      },
-      authRequired: true);
-  return result.when((content) => BeCryptoDepositsResult.parse(content),
-      error: (err) => BeCryptoDepositsResult.error(err));
-}
-
-Future<BeCryptoWithdrawalResult> beCryptoWithdrawalCreate(
+Future<BeWithdrawalResult> beCryptoWithdrawalCreate(
     String asset,
     String? l2Network,
     Decimal amount,
@@ -1108,32 +1022,17 @@ Future<BeCryptoWithdrawalResult> beCryptoWithdrawalCreate(
         "tf_code": tfCode
       },
       authRequired: true);
-  return result.when((content) => BeCryptoWithdrawalResult.parse(content),
-      error: (err) => BeCryptoWithdrawalResult.error(err));
+  return result.when((content) => BeWithdrawalResult.parse(content),
+      error: (err) => BeWithdrawalResult.error(err));
 }
 
-Future<BeCryptoWithdrawalsResult> beCryptoWithdrawals(
-    String asset, String? l2Network, int offset, int limit) async {
-  var result = await post(
-      "crypto_withdrawals",
-      {
-        "asset": asset,
-        "l2_network": l2Network,
-        "offset": offset,
-        "limit": limit
-      },
-      authRequired: true);
-  return result.when((content) => BeCryptoWithdrawalsResult.parse(content),
-      error: (err) => BeCryptoWithdrawalsResult.error(err));
-}
-
-Future<BeFiatDepositResult> beFiatDepositWindcave(
+Future<BeDepositResult> beFiatDepositWindcave(
     String asset, Decimal amount) async {
   var result = await post("fiat_deposit_windcave",
       {"asset": asset, "amount_dec": amount.toString()},
       authRequired: true);
-  return result.when((content) => BeFiatDepositResult.parse(content),
-      error: (err) => BeFiatDepositResult.error(err));
+  return result.when((content) => BeDepositResult.parse(content),
+      error: (err) => BeDepositResult.error(err));
 }
 
 Future<BeFiatAccountNumberResult> beFiatDepositDirect(String asset) async {
@@ -1143,16 +1042,7 @@ Future<BeFiatAccountNumberResult> beFiatDepositDirect(String asset) async {
       error: (err) => BeFiatAccountNumberResult.error(err));
 }
 
-Future<BeFiatDepositsResult> beFiatDeposits(
-    String asset, int offset, int limit) async {
-  var result = await post(
-      "fiat_deposits", {"asset": asset, "offset": offset, "limit": limit},
-      authRequired: true);
-  return result.when((content) => BeFiatDepositsResult.parse(content),
-      error: (err) => BeFiatDepositsResult.error(err));
-}
-
-Future<BeFiatWithdrawalResult> beFiatWithdrawalCreate(
+Future<BeWithdrawalResult> beFiatWithdrawalCreate(
     String asset,
     Decimal amount,
     String recipient,
@@ -1176,17 +1066,54 @@ Future<BeFiatWithdrawalResult> beFiatWithdrawalCreate(
         "tf_code": tfCode
       },
       authRequired: true);
-  return result.when((content) => BeFiatWithdrawalResult.parse(content),
-      error: (err) => BeFiatWithdrawalResult.error(err));
+  return result.when((content) => BeWithdrawalResult.parse(content),
+      error: (err) => BeWithdrawalResult.error(err));
 }
 
-Future<BeFiatWithdrawalsResult> beFiatWithdrawals(
-    String asset, int offset, int limit) async {
+Future<BeDepositsResult> beDeposits(
+    String asset, String? l2Network, int offset, int limit) async {
   var result = await post(
-      "fiat_withdrawals", {"asset": asset, "offset": offset, "limit": limit},
+      "deposits",
+      {
+        "asset": asset,
+        "l2_network": l2Network,
+        "offset": offset,
+        "limit": limit
+      },
       authRequired: true);
-  return result.when((content) => BeFiatWithdrawalsResult.parse(content),
-      error: (err) => BeFiatWithdrawalsResult.error(err));
+  return result.when((content) => BeDepositsResult.parse(content),
+      error: (err) => BeDepositsResult.error(err));
+}
+
+Future<BeDepositsResult> beDepositsAll(int offset, int limit) async {
+  var result = await post("deposits",
+      {"asset": "*ALL*", "l2_network": null, "offset": offset, "limit": limit},
+      authRequired: true);
+  return result.when((content) => BeDepositsResult.parse(content),
+      error: (err) => BeDepositsResult.error(err));
+}
+
+Future<BeWithdrawalsResult> beWithdrawals(
+    String asset, String? l2Network, int offset, int limit) async {
+  var result = await post(
+      "withdrawals",
+      {
+        "asset": asset,
+        "l2_network": l2Network,
+        "offset": offset,
+        "limit": limit
+      },
+      authRequired: true);
+  return result.when((content) => BeWithdrawalsResult.parse(content),
+      error: (err) => BeWithdrawalsResult.error(err));
+}
+
+Future<BeWithdrawalsResult> beWithdrawalsAll(int offset, int limit) async {
+  var result = await post("withdrawals",
+      {"asset": "*ALL*", "l2_network": null, "offset": offset, "limit": limit},
+      authRequired: true);
+  return result.when((content) => BeWithdrawalsResult.parse(content),
+      error: (err) => BeWithdrawalsResult.error(err));
 }
 
 Future<BeAddressBookResult> beAddressBook(String asset) async {

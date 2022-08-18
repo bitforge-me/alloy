@@ -25,6 +25,233 @@ import 'qrscan.dart';
 
 final log = Logger('Withdrawal');
 
+class WithdrawalsScreen extends StatefulWidget {
+  final Websocket websocket;
+  final UserInfo? userInfo;
+
+  WithdrawalsScreen(this.websocket, this.userInfo);
+
+  @override
+  State<WithdrawalsScreen> createState() => _WithdrawalsScreenState();
+}
+
+class _WithdrawalsScreenState extends State<WithdrawalsScreen> {
+  List<BeBalanceUpdate> _withdrawals = [];
+  final int _itemsPerPage = 10;
+  int _pageNumber = 0;
+  int _pageCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.websocket.wsEvent.subscribe(_websocketEvent);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initWithdrawals(0);
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.websocket.wsEvent.unsubscribe(_websocketEvent);
+  }
+
+  void _websocketEvent(WsEventArgs? args) {
+    if (args == null) return;
+    if (args.event == WebsocketEvent.withdrawalNew) {
+      if (_pageNumber == 0) {
+        var withdrawal = BeBalanceUpdate.fromJson(jsonDecode(args.msg));
+        _withdrawals.insert(0, withdrawal);
+        if (_withdrawals.length > _itemsPerPage) _withdrawals.removeLast();
+        setState(() => _withdrawals = _withdrawals);
+      }
+    }
+    if (args.event == WebsocketEvent.withdrawalUpdate) {
+      var updatedWithdrawal = BeBalanceUpdate.fromJson(jsonDecode(args.msg));
+      for (var i = 0; i < _withdrawals.length; i++) {
+        var withdrawal = _withdrawals[i];
+        if (withdrawal.token == updatedWithdrawal.token) {
+          _withdrawals[i] = updatedWithdrawal;
+          setState(() => _withdrawals = _withdrawals);
+          snackMsg(context, 'withdrawal updated ${updatedWithdrawal.token}');
+          break;
+        }
+      }
+    }
+  }
+
+  Future<void> _initWithdrawals(int pageNumber) async {
+    showAlertDialog(context, 'querying..');
+    var res = await beWithdrawalsAll(pageNumber * _itemsPerPage, _itemsPerPage);
+    Navigator.pop(context);
+    res.when(
+        (withdrawals, offset, limit, total) => setState(() {
+              _withdrawals = withdrawals;
+              _pageNumber = pageNumber;
+              _pageCount = (total / _itemsPerPage).ceil();
+            }),
+        error: (err) => alert(context, 'error',
+            'failed to get withdrawals (${BeError.msg(err)})'));
+  }
+
+  Future<void> _withdrawalTap(BeBalanceUpdate withdrawal) async {
+    if (assetIsCrypto(withdrawal.asset))
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  CryptoWithdrawalDetailScreen(withdrawal, widget.websocket)));
+    else
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  FiatWithdrawalDetailScreen(withdrawal, widget.websocket)));
+  }
+
+  Widget _listItem(BuildContext context, int n) {
+    var withdrawal = _withdrawals[n];
+    return ListTx(
+        () => _withdrawalTap(withdrawal),
+        withdrawal.date,
+        Row(children: [
+          assetLogo(withdrawal.l2Network != null
+              ? withdrawal.l2Network!
+              : withdrawal.asset),
+          SizedBox(width: 15),
+          Text(withdrawal.status.toUpperCase())
+        ]),
+        withdrawal.amount,
+        withdrawal.asset,
+        ListTxDir.up,
+        last: n == _withdrawals.length - 1);
+  }
+
+  Future<void> _make() async {
+    showAlertDialog(context, 'querying..');
+    var res = await beAssets();
+    Navigator.pop(context);
+    res.when(
+        (assets) => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => WithdrawalSelectScreen(
+                    assets, widget.websocket, widget.userInfo))),
+        error: (err) => snackMsg(context, 'failed to query withdrawals',
+            category: MessageCategory.Warning));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Withdrawals'),
+      ),
+      body: BiforgePage(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        VerticalSpacer(),
+        BronzeRoundedButton(_make, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient,
+            'Make Withdrawal',
+            width: ButtonWidth, height: ButtonHeight, fwdArrow: true),
+        _withdrawals.length == 0
+            ? Container(
+                margin: EdgeInsets.all(20),
+                child: Center(child: Text('No withdrawals')))
+            : ListView.builder(
+                shrinkWrap: true,
+                itemBuilder: _listItem,
+                itemCount: _withdrawals.length)
+      ])),
+      bottomNavigationBar: _pageCount > 0
+          ? Paginator(_pageCount, _pageNumber, (n) => _initWithdrawals(n))
+          : null,
+    );
+  }
+}
+
+class WithdrawalSelectScreen extends StatefulWidget {
+  final List<BeAsset> assets;
+  final Websocket websocket;
+  final UserInfo? userInfo;
+
+  WithdrawalSelectScreen(this.assets, this.websocket, this.userInfo);
+
+  @override
+  State<WithdrawalSelectScreen> createState() => _WithdrawalSelectScreenState();
+}
+
+class _WithdrawalSelectScreenState extends State<WithdrawalSelectScreen> {
+  Future<void> _assetTap(BeAsset asset, BeAsset? l2Network) async {
+    showAlertDialog(context, 'querying..');
+    var res = await beBalance(asset.symbol);
+    Navigator.pop(context);
+    res.when((balance) {
+      if (balance != null) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => WithdrawalFormScreen(asset, l2Network,
+                    widget.websocket, widget.userInfo, balance.available)));
+      }
+    },
+        error: (err) => snackMsg(context, 'failed to query balances',
+            category: MessageCategory.Warning));
+  }
+
+  int _listCount() {
+    var count = 0;
+    for (var asset in widget.assets) {
+      count++;
+      if (asset.l2Network != null) count++;
+    }
+    return count;
+  }
+
+  BeAsset? _listAsset(int n) {
+    var count = 0;
+    for (var asset in widget.assets) {
+      if (count == n) return asset;
+      if (asset.l2Network != null) {
+        count++;
+        if (count == n) return asset.l2Network;
+      }
+      count++;
+    }
+    return null;
+  }
+
+  BeAsset _parentAsset(BeAsset child) {
+    for (var asset in widget.assets) if (asset.l2Network == child) return asset;
+    return child;
+  }
+
+  Widget _listItem(BuildContext context, int n) {
+    var asset = _listAsset(n);
+    assert(asset != null);
+    var parentAsset = _parentAsset(asset!);
+    BeAsset? l2Network;
+    if (asset != parentAsset) l2Network = asset;
+    return ListTile(
+      title: Text('${asset.name} (${asset.symbol})'),
+      leading: assetLogo(asset.symbol),
+      onTap: () => _assetTap(parentAsset, l2Network),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Make Withdrawal'),
+      ),
+      body: BiforgePage(
+          child: ListView.builder(
+              itemBuilder: _listItem, itemCount: _listCount())),
+    );
+  }
+}
+
 class WithdrawalCheckScreen extends StatefulWidget {
   final bool testnet;
   final BeAsset asset;
@@ -512,235 +739,6 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
   }
 }
 
-class WithdrawalSelectScreen extends StatefulWidget {
-  final List<BeAsset> assets;
-  final Websocket websocket;
-  final UserInfo? userInfo;
-
-  WithdrawalSelectScreen(this.assets, this.websocket, this.userInfo);
-
-  @override
-  State<WithdrawalSelectScreen> createState() => _WithdrawalSelectScreenState();
-}
-
-class _WithdrawalSelectScreenState extends State<WithdrawalSelectScreen> {
-  Future<void> _assetTap(BeAsset asset, BeAsset? l2Network) async {
-    if (assetIsCrypto(asset.symbol))
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CryptoWithdrawalsScreen(
-                  asset, l2Network, widget.websocket, widget.userInfo)));
-    else
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => FiatWithdrawalsScreen(
-                  asset, widget.websocket, widget.userInfo)));
-  }
-
-  int _listCount() {
-    var count = 0;
-    for (var asset in widget.assets) {
-      count++;
-      if (asset.l2Network != null) count++;
-    }
-    return count;
-  }
-
-  BeAsset? _listAsset(int n) {
-    var count = 0;
-    for (var asset in widget.assets) {
-      if (count == n) return asset;
-      if (asset.l2Network != null) {
-        count++;
-        if (count == n) return asset.l2Network;
-      }
-      count++;
-    }
-    return null;
-  }
-
-  BeAsset _parentAsset(BeAsset child) {
-    for (var asset in widget.assets) if (asset.l2Network == child) return asset;
-    return child;
-  }
-
-  Widget _listItem(BuildContext context, int n) {
-    var asset = _listAsset(n);
-    assert(asset != null);
-    var parentAsset = _parentAsset(asset!);
-    BeAsset? l2Network;
-    if (asset != parentAsset) l2Network = asset;
-    return ListTile(
-      title: Text('${asset.name} (${asset.symbol})'),
-      leading: assetLogo(asset.symbol),
-      onTap: () => _assetTap(parentAsset, l2Network),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Withdrawals'),
-      ),
-      body: BiforgePage(
-          child: ListView.builder(
-              itemBuilder: _listItem, itemCount: _listCount())),
-    );
-  }
-}
-
-class CryptoWithdrawalsScreen extends StatefulWidget {
-  final BeAsset asset;
-  final BeAsset? l2Network;
-  final Websocket websocket;
-  final UserInfo? userInfo;
-
-  CryptoWithdrawalsScreen(
-      this.asset, this.l2Network, this.websocket, this.userInfo);
-
-  @override
-  State<CryptoWithdrawalsScreen> createState() =>
-      _CryptoWithdrawalsScreenState();
-}
-
-class _CryptoWithdrawalsScreenState extends State<CryptoWithdrawalsScreen> {
-  List<BeBalanceUpdate> _withdrawals = [];
-  final int _itemsPerPage = 10;
-  int _pageNumber = 0;
-  int _pageCount = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    widget.websocket.wsEvent.subscribe(_websocketEvent);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initWithdrawals(0);
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    widget.websocket.wsEvent.unsubscribe(_websocketEvent);
-  }
-
-  void _websocketEvent(WsEventArgs? args) {
-    if (args == null) return;
-    if (args.event == WebsocketEvent.cryptoWithdrawalNew) {
-      var withdrawal = BeBalanceUpdate.fromJson(jsonDecode(args.msg));
-      if (withdrawal.asset != widget.asset.symbol ||
-          withdrawal.l2Network != widget.l2Network?.symbol) return;
-      if (_pageNumber == 0) {
-        _withdrawals.insert(0, BeBalanceUpdate.fromJson(jsonDecode(args.msg)));
-        if (_withdrawals.length > _itemsPerPage) _withdrawals.removeLast();
-        setState(() => _withdrawals = _withdrawals);
-      }
-    }
-    if (args.event == WebsocketEvent.cryptoWithdrawalUpdate) {
-      var newWithdrawal = BeBalanceUpdate.fromJson(jsonDecode(args.msg));
-      for (var i = 0; i < _withdrawals.length; i++) {
-        var withdrawal = _withdrawals[i];
-        if (withdrawal.token == newWithdrawal.token) {
-          _withdrawals[i] = newWithdrawal;
-          setState(() => _withdrawals = _withdrawals);
-          snackMsg(context, 'withdrawal updated ${newWithdrawal.token}');
-        }
-      }
-    }
-  }
-
-  Future<void> _initWithdrawals(int pageNumber) async {
-    showAlertDialog(context, 'querying..');
-    var res = await beCryptoWithdrawals(widget.asset.symbol,
-        widget.l2Network?.symbol, pageNumber * _itemsPerPage, _itemsPerPage);
-    Navigator.pop(context);
-    res.when(
-        (withdrawals, offset, limit, total) => setState(() {
-              _withdrawals = withdrawals;
-              _pageNumber = pageNumber;
-              _pageCount = (total / _itemsPerPage).ceil();
-            }),
-        error: (err) => alert(context, 'error',
-            'failed to get withdrawals (${BeError.msg(err)})'));
-  }
-
-  Future<void> _withdrawalTap(BeBalanceUpdate withdrawal) async {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                CryptoWithdrawalDetailScreen(withdrawal, widget.websocket)));
-  }
-
-  Widget _listItem(BuildContext context, int n) {
-    var withdrawal = _withdrawals[n];
-    return ListTx(
-        () => _withdrawalTap(withdrawal),
-        withdrawal.date,
-        Text(withdrawal.status.toUpperCase()),
-        withdrawal.amount,
-        withdrawal.asset,
-        ListTxDir.up,
-        last: n == _withdrawals.length - 1);
-  }
-
-  Future<void> _make() async {
-    showAlertDialog(context, 'querying..');
-    var res = await beBalance(widget.asset.symbol);
-    Navigator.pop(context);
-    res.when((balance) {
-      if (balance != null) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => WithdrawalFormScreen(
-                    widget.asset,
-                    widget.l2Network,
-                    widget.websocket,
-                    widget.userInfo,
-                    balance.available)));
-      }
-    },
-        error: (err) => snackMsg(context, 'failed to query balances',
-            category: MessageCategory.Warning));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var symbol = widget.l2Network != null
-        ? widget.l2Network?.symbol
-        : widget.asset.symbol;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('$symbol Withdrawals'),
-        actions: [assetLogo('$symbol', margin: EdgeInsets.all(10))],
-      ),
-      body: BiforgePage(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        VerticalSpacer(),
-        BronzeRoundedButton(_make, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient,
-            'Make Withdrawal',
-            width: ButtonWidth, height: ButtonHeight, fwdArrow: true),
-        _withdrawals.length == 0
-            ? Container(
-                margin: EdgeInsets.all(20),
-                child: Center(child: Text('No withdrawals')))
-            : ListView.builder(
-                shrinkWrap: true,
-                itemBuilder: _listItem,
-                itemCount: _withdrawals.length)
-      ])),
-      bottomNavigationBar: _pageCount > 0
-          ? Paginator(_pageCount, _pageNumber, (n) => _initWithdrawals(n))
-          : null,
-    );
-  }
-}
-
 class CryptoWithdrawalDetailScreen extends StatefulWidget {
   final BeBalanceUpdate withdrawal;
   final Websocket websocket;
@@ -841,144 +839,6 @@ class _CryptoWithdrawalDetailScreenState
                 width: ButtonWidth, height: ButtonHeight)
           ])
         ])));
-  }
-}
-
-class FiatWithdrawalsScreen extends StatefulWidget {
-  final BeAsset asset;
-  final Websocket websocket;
-  final UserInfo? userInfo;
-
-  FiatWithdrawalsScreen(this.asset, this.websocket, this.userInfo);
-
-  @override
-  State<FiatWithdrawalsScreen> createState() => _FiatWithdrawalsScreenState();
-}
-
-class _FiatWithdrawalsScreenState extends State<FiatWithdrawalsScreen> {
-  List<BeBalanceUpdate> _withdrawals = [];
-  final int _itemsPerPage = 10;
-  int _pageNumber = 0;
-  int _pageCount = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    widget.websocket.wsEvent.subscribe(_websocketEvent);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initWithdrawals(0);
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    widget.websocket.wsEvent.unsubscribe(_websocketEvent);
-  }
-
-  void _websocketEvent(WsEventArgs? args) {
-    if (args == null) return;
-    if (args.event == WebsocketEvent.fiatWithdrawalNew) {
-      var withdrawal = BeBalanceUpdate.fromJson(jsonDecode(args.msg));
-      if (withdrawal.asset != widget.asset.symbol) return;
-      if (_pageNumber == 0) {
-        _withdrawals.insert(0, withdrawal);
-        if (_withdrawals.length > _itemsPerPage) _withdrawals.removeLast();
-        setState(() => _withdrawals = _withdrawals);
-      }
-    }
-    if (args.event == WebsocketEvent.fiatWithdrawalUpdate) {
-      var newWithdrawal = BeBalanceUpdate.fromJson(jsonDecode(args.msg));
-      for (var i = 0; i < _withdrawals.length; i++) {
-        var withdrawal = _withdrawals[i];
-        if (withdrawal.token == newWithdrawal.token) {
-          _withdrawals[i] = newWithdrawal;
-          setState(() => _withdrawals = _withdrawals);
-          snackMsg(context, 'withdrawal updated ${newWithdrawal.token}');
-        }
-      }
-    }
-  }
-
-  Future<void> _initWithdrawals(int pageNumber) async {
-    showAlertDialog(context, 'querying..');
-    var res = await beFiatWithdrawals(
-        widget.asset.symbol, pageNumber * _itemsPerPage, _itemsPerPage);
-    Navigator.pop(context);
-    res.when(
-        (withdrawals, offset, limit, total) => setState(() {
-              _withdrawals = withdrawals;
-              _pageNumber = pageNumber;
-              _pageCount = (total / _itemsPerPage).ceil();
-            }),
-        error: (err) => alert(context, 'error',
-            'failed to get withdrawals (${BeError.msg(err)})'));
-  }
-
-  Future<void> _withdrawalTap(BeBalanceUpdate withdrawal) async {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                FiatWithdrawalDetailScreen(withdrawal, widget.websocket)));
-  }
-
-  Widget _listItem(BuildContext context, int n) {
-    var withdrawal = _withdrawals[n];
-    return ListTx(
-        () => _withdrawalTap(withdrawal),
-        withdrawal.date,
-        Text(withdrawal.status.toUpperCase()),
-        withdrawal.amount,
-        withdrawal.asset,
-        ListTxDir.up,
-        last: n == _withdrawals.length - 1);
-  }
-
-  Future<void> _make() async {
-    showAlertDialog(context, 'querying..');
-    var res = await beBalance(widget.asset.symbol);
-    Navigator.pop(context);
-    res.when((balance) {
-      if (balance != null) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => WithdrawalFormScreen(widget.asset, null,
-                    widget.websocket, widget.userInfo, balance.available)));
-      }
-    },
-        error: (err) => snackMsg(context, 'failed to query balances',
-            category: MessageCategory.Warning));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${widget.asset.symbol} Withdrawals'),
-        actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
-      ),
-      body: BiforgePage(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        VerticalSpacer(),
-        BronzeRoundedButton(_make, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient,
-            'Make Withdrawal',
-            width: ButtonWidth, height: ButtonHeight, fwdArrow: true),
-        _withdrawals.length == 0
-            ? Container(
-                margin: EdgeInsets.all(20),
-                child: Center(child: Text('No withdrawals')))
-            : ListView.builder(
-                shrinkWrap: true,
-                itemBuilder: _listItem,
-                itemCount: _withdrawals.length)
-      ])),
-      bottomNavigationBar: _pageCount > 0
-          ? Paginator(_pageCount, _pageNumber, (n) => _initWithdrawals(n))
-          : null,
-    );
   }
 }
 
