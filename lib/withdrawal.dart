@@ -186,13 +186,15 @@ class _WithdrawalSelectScreenState extends State<WithdrawalSelectScreen> {
     showAlertDialog(context, 'querying..');
     var res = await beBalance(asset.symbol);
     Navigator.pop(context);
-    res.when((balance) {
+    res.when((balance) async {
       if (balance != null) {
-        Navigator.push(
+        var success = await Navigator.push<bool>(
             context,
             MaterialPageRoute(
                 builder: (context) => WithdrawalFormScreen(asset, l2Network,
                     widget.websocket, widget.userInfo, balance.available)));
+        // hide this selection screen if withdrawal succesfully created
+        if (success != null && success) Navigator.pop(context);
       }
     },
         error: (err) => snackMsg(context, 'failed to query balances',
@@ -474,7 +476,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
               MaterialPageRoute(
                   builder: (context) => CryptoWithdrawalDetailScreen(
                       withdrawal, widget.websocket)));
-          Navigator.pop(context);
+          Navigator.pop(context, true);
         },
             error: (err) => alert(context, 'error',
                 'failed to create withdrawal (${BeError.msg(err)})'));
@@ -497,7 +499,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
               MaterialPageRoute(
                   builder: (context) => FiatWithdrawalDetailScreen(
                       withdrawal, widget.websocket)));
-          Navigator.pop(context);
+          Navigator.pop(context, true);
         },
             error: (err) => alert(context, 'error',
                 'failed to create withdrawal (${BeError.msg(err)})'));
