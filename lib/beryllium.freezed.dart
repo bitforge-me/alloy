@@ -5795,1644 +5795,6 @@ abstract class _BeCryptoDepositRecipientResultErr
 }
 
 /// @nodoc
-class _$BeCryptoDepositsResultTearOff {
-  const _$BeCryptoDepositsResultTearOff();
-
-  _BeCryptoDepositsResult call(
-      List<BeBalanceUpdate> deposits, int offset, int limit, int total) {
-    return _BeCryptoDepositsResult(
-      deposits,
-      offset,
-      limit,
-      total,
-    );
-  }
-
-  _BeCryptoDepositsResultErr error(BeError err) {
-    return _BeCryptoDepositsResultErr(
-      err,
-    );
-  }
-}
-
-/// @nodoc
-const $BeCryptoDepositsResult = _$BeCryptoDepositsResultTearOff();
-
-/// @nodoc
-mixin _$BeCryptoDepositsResult {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(
-            List<BeBalanceUpdate> deposits, int offset, int limit, int total)
-        $default, {
-    required TResult Function(BeError err) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(
-            List<BeBalanceUpdate> deposits, int offset, int limit, int total)?
-        $default, {
-    TResult Function(BeError err)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(
-            List<BeBalanceUpdate> deposits, int offset, int limit, int total)?
-        $default, {
-    TResult Function(BeError err)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_BeCryptoDepositsResult value) $default, {
-    required TResult Function(_BeCryptoDepositsResultErr value) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeCryptoDepositsResult value)? $default, {
-    TResult Function(_BeCryptoDepositsResultErr value)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeCryptoDepositsResult value)? $default, {
-    TResult Function(_BeCryptoDepositsResultErr value)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $BeCryptoDepositsResultCopyWith<$Res> {
-  factory $BeCryptoDepositsResultCopyWith(BeCryptoDepositsResult value,
-          $Res Function(BeCryptoDepositsResult) then) =
-      _$BeCryptoDepositsResultCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class _$BeCryptoDepositsResultCopyWithImpl<$Res>
-    implements $BeCryptoDepositsResultCopyWith<$Res> {
-  _$BeCryptoDepositsResultCopyWithImpl(this._value, this._then);
-
-  final BeCryptoDepositsResult _value;
-  // ignore: unused_field
-  final $Res Function(BeCryptoDepositsResult) _then;
-}
-
-/// @nodoc
-abstract class _$BeCryptoDepositsResultCopyWith<$Res> {
-  factory _$BeCryptoDepositsResultCopyWith(_BeCryptoDepositsResult value,
-          $Res Function(_BeCryptoDepositsResult) then) =
-      __$BeCryptoDepositsResultCopyWithImpl<$Res>;
-  $Res call({List<BeBalanceUpdate> deposits, int offset, int limit, int total});
-}
-
-/// @nodoc
-class __$BeCryptoDepositsResultCopyWithImpl<$Res>
-    extends _$BeCryptoDepositsResultCopyWithImpl<$Res>
-    implements _$BeCryptoDepositsResultCopyWith<$Res> {
-  __$BeCryptoDepositsResultCopyWithImpl(_BeCryptoDepositsResult _value,
-      $Res Function(_BeCryptoDepositsResult) _then)
-      : super(_value, (v) => _then(v as _BeCryptoDepositsResult));
-
-  @override
-  _BeCryptoDepositsResult get _value => super._value as _BeCryptoDepositsResult;
-
-  @override
-  $Res call({
-    Object? deposits = freezed,
-    Object? offset = freezed,
-    Object? limit = freezed,
-    Object? total = freezed,
-  }) {
-    return _then(_BeCryptoDepositsResult(
-      deposits == freezed
-          ? _value.deposits
-          : deposits // ignore: cast_nullable_to_non_nullable
-              as List<BeBalanceUpdate>,
-      offset == freezed
-          ? _value.offset
-          : offset // ignore: cast_nullable_to_non_nullable
-              as int,
-      limit == freezed
-          ? _value.limit
-          : limit // ignore: cast_nullable_to_non_nullable
-              as int,
-      total == freezed
-          ? _value.total
-          : total // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$_BeCryptoDepositsResult
-    with DiagnosticableTreeMixin
-    implements _BeCryptoDepositsResult {
-  const _$_BeCryptoDepositsResult(
-      this.deposits, this.offset, this.limit, this.total);
-
-  @override
-  final List<BeBalanceUpdate> deposits;
-  @override
-  final int offset;
-  @override
-  final int limit;
-  @override
-  final int total;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BeCryptoDepositsResult(deposits: $deposits, offset: $offset, limit: $limit, total: $total)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'BeCryptoDepositsResult'))
-      ..add(DiagnosticsProperty('deposits', deposits))
-      ..add(DiagnosticsProperty('offset', offset))
-      ..add(DiagnosticsProperty('limit', limit))
-      ..add(DiagnosticsProperty('total', total));
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _BeCryptoDepositsResult &&
-            const DeepCollectionEquality().equals(other.deposits, deposits) &&
-            (identical(other.offset, offset) || other.offset == offset) &&
-            (identical(other.limit, limit) || other.limit == limit) &&
-            (identical(other.total, total) || other.total == total));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(deposits), offset, limit, total);
-
-  @JsonKey(ignore: true)
-  @override
-  _$BeCryptoDepositsResultCopyWith<_BeCryptoDepositsResult> get copyWith =>
-      __$BeCryptoDepositsResultCopyWithImpl<_BeCryptoDepositsResult>(
-          this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(
-            List<BeBalanceUpdate> deposits, int offset, int limit, int total)
-        $default, {
-    required TResult Function(BeError err) error,
-  }) {
-    return $default(deposits, offset, limit, total);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(
-            List<BeBalanceUpdate> deposits, int offset, int limit, int total)?
-        $default, {
-    TResult Function(BeError err)? error,
-  }) {
-    return $default?.call(deposits, offset, limit, total);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(
-            List<BeBalanceUpdate> deposits, int offset, int limit, int total)?
-        $default, {
-    TResult Function(BeError err)? error,
-    required TResult orElse(),
-  }) {
-    if ($default != null) {
-      return $default(deposits, offset, limit, total);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_BeCryptoDepositsResult value) $default, {
-    required TResult Function(_BeCryptoDepositsResultErr value) error,
-  }) {
-    return $default(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeCryptoDepositsResult value)? $default, {
-    TResult Function(_BeCryptoDepositsResultErr value)? error,
-  }) {
-    return $default?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeCryptoDepositsResult value)? $default, {
-    TResult Function(_BeCryptoDepositsResultErr value)? error,
-    required TResult orElse(),
-  }) {
-    if ($default != null) {
-      return $default(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _BeCryptoDepositsResult implements BeCryptoDepositsResult {
-  const factory _BeCryptoDepositsResult(
-          List<BeBalanceUpdate> deposits, int offset, int limit, int total) =
-      _$_BeCryptoDepositsResult;
-
-  List<BeBalanceUpdate> get deposits;
-  int get offset;
-  int get limit;
-  int get total;
-  @JsonKey(ignore: true)
-  _$BeCryptoDepositsResultCopyWith<_BeCryptoDepositsResult> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$BeCryptoDepositsResultErrCopyWith<$Res> {
-  factory _$BeCryptoDepositsResultErrCopyWith(_BeCryptoDepositsResultErr value,
-          $Res Function(_BeCryptoDepositsResultErr) then) =
-      __$BeCryptoDepositsResultErrCopyWithImpl<$Res>;
-  $Res call({BeError err});
-
-  $BeErrorCopyWith<$Res> get err;
-}
-
-/// @nodoc
-class __$BeCryptoDepositsResultErrCopyWithImpl<$Res>
-    extends _$BeCryptoDepositsResultCopyWithImpl<$Res>
-    implements _$BeCryptoDepositsResultErrCopyWith<$Res> {
-  __$BeCryptoDepositsResultErrCopyWithImpl(_BeCryptoDepositsResultErr _value,
-      $Res Function(_BeCryptoDepositsResultErr) _then)
-      : super(_value, (v) => _then(v as _BeCryptoDepositsResultErr));
-
-  @override
-  _BeCryptoDepositsResultErr get _value =>
-      super._value as _BeCryptoDepositsResultErr;
-
-  @override
-  $Res call({
-    Object? err = freezed,
-  }) {
-    return _then(_BeCryptoDepositsResultErr(
-      err == freezed
-          ? _value.err
-          : err // ignore: cast_nullable_to_non_nullable
-              as BeError,
-    ));
-  }
-
-  @override
-  $BeErrorCopyWith<$Res> get err {
-    return $BeErrorCopyWith<$Res>(_value.err, (value) {
-      return _then(_value.copyWith(err: value));
-    });
-  }
-}
-
-/// @nodoc
-
-class _$_BeCryptoDepositsResultErr
-    with DiagnosticableTreeMixin
-    implements _BeCryptoDepositsResultErr {
-  const _$_BeCryptoDepositsResultErr(this.err);
-
-  @override
-  final BeError err;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BeCryptoDepositsResult.error(err: $err)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'BeCryptoDepositsResult.error'))
-      ..add(DiagnosticsProperty('err', err));
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _BeCryptoDepositsResultErr &&
-            (identical(other.err, err) || other.err == err));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, err);
-
-  @JsonKey(ignore: true)
-  @override
-  _$BeCryptoDepositsResultErrCopyWith<_BeCryptoDepositsResultErr>
-      get copyWith =>
-          __$BeCryptoDepositsResultErrCopyWithImpl<_BeCryptoDepositsResultErr>(
-              this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(
-            List<BeBalanceUpdate> deposits, int offset, int limit, int total)
-        $default, {
-    required TResult Function(BeError err) error,
-  }) {
-    return error(err);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(
-            List<BeBalanceUpdate> deposits, int offset, int limit, int total)?
-        $default, {
-    TResult Function(BeError err)? error,
-  }) {
-    return error?.call(err);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(
-            List<BeBalanceUpdate> deposits, int offset, int limit, int total)?
-        $default, {
-    TResult Function(BeError err)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(err);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_BeCryptoDepositsResult value) $default, {
-    required TResult Function(_BeCryptoDepositsResultErr value) error,
-  }) {
-    return error(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeCryptoDepositsResult value)? $default, {
-    TResult Function(_BeCryptoDepositsResultErr value)? error,
-  }) {
-    return error?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeCryptoDepositsResult value)? $default, {
-    TResult Function(_BeCryptoDepositsResultErr value)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _BeCryptoDepositsResultErr implements BeCryptoDepositsResult {
-  const factory _BeCryptoDepositsResultErr(BeError err) =
-      _$_BeCryptoDepositsResultErr;
-
-  BeError get err;
-  @JsonKey(ignore: true)
-  _$BeCryptoDepositsResultErrCopyWith<_BeCryptoDepositsResultErr>
-      get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-class _$BeCryptoWithdrawalResultTearOff {
-  const _$BeCryptoWithdrawalResultTearOff();
-
-  _BeCryptoWithdrawalResult call(BeBalanceUpdate withdrawal) {
-    return _BeCryptoWithdrawalResult(
-      withdrawal,
-    );
-  }
-
-  _BeCryptoWithdrawalResultErr error(BeError err) {
-    return _BeCryptoWithdrawalResultErr(
-      err,
-    );
-  }
-}
-
-/// @nodoc
-const $BeCryptoWithdrawalResult = _$BeCryptoWithdrawalResultTearOff();
-
-/// @nodoc
-mixin _$BeCryptoWithdrawalResult {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(BeBalanceUpdate withdrawal) $default, {
-    required TResult Function(BeError err) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(BeBalanceUpdate withdrawal)? $default, {
-    TResult Function(BeError err)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(BeBalanceUpdate withdrawal)? $default, {
-    TResult Function(BeError err)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_BeCryptoWithdrawalResult value) $default, {
-    required TResult Function(_BeCryptoWithdrawalResultErr value) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeCryptoWithdrawalResult value)? $default, {
-    TResult Function(_BeCryptoWithdrawalResultErr value)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeCryptoWithdrawalResult value)? $default, {
-    TResult Function(_BeCryptoWithdrawalResultErr value)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $BeCryptoWithdrawalResultCopyWith<$Res> {
-  factory $BeCryptoWithdrawalResultCopyWith(BeCryptoWithdrawalResult value,
-          $Res Function(BeCryptoWithdrawalResult) then) =
-      _$BeCryptoWithdrawalResultCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class _$BeCryptoWithdrawalResultCopyWithImpl<$Res>
-    implements $BeCryptoWithdrawalResultCopyWith<$Res> {
-  _$BeCryptoWithdrawalResultCopyWithImpl(this._value, this._then);
-
-  final BeCryptoWithdrawalResult _value;
-  // ignore: unused_field
-  final $Res Function(BeCryptoWithdrawalResult) _then;
-}
-
-/// @nodoc
-abstract class _$BeCryptoWithdrawalResultCopyWith<$Res> {
-  factory _$BeCryptoWithdrawalResultCopyWith(_BeCryptoWithdrawalResult value,
-          $Res Function(_BeCryptoWithdrawalResult) then) =
-      __$BeCryptoWithdrawalResultCopyWithImpl<$Res>;
-  $Res call({BeBalanceUpdate withdrawal});
-}
-
-/// @nodoc
-class __$BeCryptoWithdrawalResultCopyWithImpl<$Res>
-    extends _$BeCryptoWithdrawalResultCopyWithImpl<$Res>
-    implements _$BeCryptoWithdrawalResultCopyWith<$Res> {
-  __$BeCryptoWithdrawalResultCopyWithImpl(_BeCryptoWithdrawalResult _value,
-      $Res Function(_BeCryptoWithdrawalResult) _then)
-      : super(_value, (v) => _then(v as _BeCryptoWithdrawalResult));
-
-  @override
-  _BeCryptoWithdrawalResult get _value =>
-      super._value as _BeCryptoWithdrawalResult;
-
-  @override
-  $Res call({
-    Object? withdrawal = freezed,
-  }) {
-    return _then(_BeCryptoWithdrawalResult(
-      withdrawal == freezed
-          ? _value.withdrawal
-          : withdrawal // ignore: cast_nullable_to_non_nullable
-              as BeBalanceUpdate,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$_BeCryptoWithdrawalResult
-    with DiagnosticableTreeMixin
-    implements _BeCryptoWithdrawalResult {
-  const _$_BeCryptoWithdrawalResult(this.withdrawal);
-
-  @override
-  final BeBalanceUpdate withdrawal;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BeCryptoWithdrawalResult(withdrawal: $withdrawal)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'BeCryptoWithdrawalResult'))
-      ..add(DiagnosticsProperty('withdrawal', withdrawal));
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _BeCryptoWithdrawalResult &&
-            (identical(other.withdrawal, withdrawal) ||
-                other.withdrawal == withdrawal));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, withdrawal);
-
-  @JsonKey(ignore: true)
-  @override
-  _$BeCryptoWithdrawalResultCopyWith<_BeCryptoWithdrawalResult> get copyWith =>
-      __$BeCryptoWithdrawalResultCopyWithImpl<_BeCryptoWithdrawalResult>(
-          this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(BeBalanceUpdate withdrawal) $default, {
-    required TResult Function(BeError err) error,
-  }) {
-    return $default(withdrawal);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(BeBalanceUpdate withdrawal)? $default, {
-    TResult Function(BeError err)? error,
-  }) {
-    return $default?.call(withdrawal);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(BeBalanceUpdate withdrawal)? $default, {
-    TResult Function(BeError err)? error,
-    required TResult orElse(),
-  }) {
-    if ($default != null) {
-      return $default(withdrawal);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_BeCryptoWithdrawalResult value) $default, {
-    required TResult Function(_BeCryptoWithdrawalResultErr value) error,
-  }) {
-    return $default(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeCryptoWithdrawalResult value)? $default, {
-    TResult Function(_BeCryptoWithdrawalResultErr value)? error,
-  }) {
-    return $default?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeCryptoWithdrawalResult value)? $default, {
-    TResult Function(_BeCryptoWithdrawalResultErr value)? error,
-    required TResult orElse(),
-  }) {
-    if ($default != null) {
-      return $default(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _BeCryptoWithdrawalResult implements BeCryptoWithdrawalResult {
-  const factory _BeCryptoWithdrawalResult(BeBalanceUpdate withdrawal) =
-      _$_BeCryptoWithdrawalResult;
-
-  BeBalanceUpdate get withdrawal;
-  @JsonKey(ignore: true)
-  _$BeCryptoWithdrawalResultCopyWith<_BeCryptoWithdrawalResult> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$BeCryptoWithdrawalResultErrCopyWith<$Res> {
-  factory _$BeCryptoWithdrawalResultErrCopyWith(
-          _BeCryptoWithdrawalResultErr value,
-          $Res Function(_BeCryptoWithdrawalResultErr) then) =
-      __$BeCryptoWithdrawalResultErrCopyWithImpl<$Res>;
-  $Res call({BeError err});
-
-  $BeErrorCopyWith<$Res> get err;
-}
-
-/// @nodoc
-class __$BeCryptoWithdrawalResultErrCopyWithImpl<$Res>
-    extends _$BeCryptoWithdrawalResultCopyWithImpl<$Res>
-    implements _$BeCryptoWithdrawalResultErrCopyWith<$Res> {
-  __$BeCryptoWithdrawalResultErrCopyWithImpl(
-      _BeCryptoWithdrawalResultErr _value,
-      $Res Function(_BeCryptoWithdrawalResultErr) _then)
-      : super(_value, (v) => _then(v as _BeCryptoWithdrawalResultErr));
-
-  @override
-  _BeCryptoWithdrawalResultErr get _value =>
-      super._value as _BeCryptoWithdrawalResultErr;
-
-  @override
-  $Res call({
-    Object? err = freezed,
-  }) {
-    return _then(_BeCryptoWithdrawalResultErr(
-      err == freezed
-          ? _value.err
-          : err // ignore: cast_nullable_to_non_nullable
-              as BeError,
-    ));
-  }
-
-  @override
-  $BeErrorCopyWith<$Res> get err {
-    return $BeErrorCopyWith<$Res>(_value.err, (value) {
-      return _then(_value.copyWith(err: value));
-    });
-  }
-}
-
-/// @nodoc
-
-class _$_BeCryptoWithdrawalResultErr
-    with DiagnosticableTreeMixin
-    implements _BeCryptoWithdrawalResultErr {
-  const _$_BeCryptoWithdrawalResultErr(this.err);
-
-  @override
-  final BeError err;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BeCryptoWithdrawalResult.error(err: $err)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'BeCryptoWithdrawalResult.error'))
-      ..add(DiagnosticsProperty('err', err));
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _BeCryptoWithdrawalResultErr &&
-            (identical(other.err, err) || other.err == err));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, err);
-
-  @JsonKey(ignore: true)
-  @override
-  _$BeCryptoWithdrawalResultErrCopyWith<_BeCryptoWithdrawalResultErr>
-      get copyWith => __$BeCryptoWithdrawalResultErrCopyWithImpl<
-          _BeCryptoWithdrawalResultErr>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(BeBalanceUpdate withdrawal) $default, {
-    required TResult Function(BeError err) error,
-  }) {
-    return error(err);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(BeBalanceUpdate withdrawal)? $default, {
-    TResult Function(BeError err)? error,
-  }) {
-    return error?.call(err);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(BeBalanceUpdate withdrawal)? $default, {
-    TResult Function(BeError err)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(err);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_BeCryptoWithdrawalResult value) $default, {
-    required TResult Function(_BeCryptoWithdrawalResultErr value) error,
-  }) {
-    return error(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeCryptoWithdrawalResult value)? $default, {
-    TResult Function(_BeCryptoWithdrawalResultErr value)? error,
-  }) {
-    return error?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeCryptoWithdrawalResult value)? $default, {
-    TResult Function(_BeCryptoWithdrawalResultErr value)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _BeCryptoWithdrawalResultErr
-    implements BeCryptoWithdrawalResult {
-  const factory _BeCryptoWithdrawalResultErr(BeError err) =
-      _$_BeCryptoWithdrawalResultErr;
-
-  BeError get err;
-  @JsonKey(ignore: true)
-  _$BeCryptoWithdrawalResultErrCopyWith<_BeCryptoWithdrawalResultErr>
-      get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-class _$BeCryptoWithdrawalsResultTearOff {
-  const _$BeCryptoWithdrawalsResultTearOff();
-
-  _BeCryptoWithdrawalsResult call(
-      List<BeBalanceUpdate> withdrawals, int offset, int limit, int total) {
-    return _BeCryptoWithdrawalsResult(
-      withdrawals,
-      offset,
-      limit,
-      total,
-    );
-  }
-
-  _BeCryptoWithdrawalsResultErr error(BeError err) {
-    return _BeCryptoWithdrawalsResultErr(
-      err,
-    );
-  }
-}
-
-/// @nodoc
-const $BeCryptoWithdrawalsResult = _$BeCryptoWithdrawalsResultTearOff();
-
-/// @nodoc
-mixin _$BeCryptoWithdrawalsResult {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(
-            List<BeBalanceUpdate> withdrawals, int offset, int limit, int total)
-        $default, {
-    required TResult Function(BeError err) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(List<BeBalanceUpdate> withdrawals, int offset, int limit,
-            int total)?
-        $default, {
-    TResult Function(BeError err)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(List<BeBalanceUpdate> withdrawals, int offset, int limit,
-            int total)?
-        $default, {
-    TResult Function(BeError err)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_BeCryptoWithdrawalsResult value) $default, {
-    required TResult Function(_BeCryptoWithdrawalsResultErr value) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeCryptoWithdrawalsResult value)? $default, {
-    TResult Function(_BeCryptoWithdrawalsResultErr value)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeCryptoWithdrawalsResult value)? $default, {
-    TResult Function(_BeCryptoWithdrawalsResultErr value)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $BeCryptoWithdrawalsResultCopyWith<$Res> {
-  factory $BeCryptoWithdrawalsResultCopyWith(BeCryptoWithdrawalsResult value,
-          $Res Function(BeCryptoWithdrawalsResult) then) =
-      _$BeCryptoWithdrawalsResultCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class _$BeCryptoWithdrawalsResultCopyWithImpl<$Res>
-    implements $BeCryptoWithdrawalsResultCopyWith<$Res> {
-  _$BeCryptoWithdrawalsResultCopyWithImpl(this._value, this._then);
-
-  final BeCryptoWithdrawalsResult _value;
-  // ignore: unused_field
-  final $Res Function(BeCryptoWithdrawalsResult) _then;
-}
-
-/// @nodoc
-abstract class _$BeCryptoWithdrawalsResultCopyWith<$Res> {
-  factory _$BeCryptoWithdrawalsResultCopyWith(_BeCryptoWithdrawalsResult value,
-          $Res Function(_BeCryptoWithdrawalsResult) then) =
-      __$BeCryptoWithdrawalsResultCopyWithImpl<$Res>;
-  $Res call(
-      {List<BeBalanceUpdate> withdrawals, int offset, int limit, int total});
-}
-
-/// @nodoc
-class __$BeCryptoWithdrawalsResultCopyWithImpl<$Res>
-    extends _$BeCryptoWithdrawalsResultCopyWithImpl<$Res>
-    implements _$BeCryptoWithdrawalsResultCopyWith<$Res> {
-  __$BeCryptoWithdrawalsResultCopyWithImpl(_BeCryptoWithdrawalsResult _value,
-      $Res Function(_BeCryptoWithdrawalsResult) _then)
-      : super(_value, (v) => _then(v as _BeCryptoWithdrawalsResult));
-
-  @override
-  _BeCryptoWithdrawalsResult get _value =>
-      super._value as _BeCryptoWithdrawalsResult;
-
-  @override
-  $Res call({
-    Object? withdrawals = freezed,
-    Object? offset = freezed,
-    Object? limit = freezed,
-    Object? total = freezed,
-  }) {
-    return _then(_BeCryptoWithdrawalsResult(
-      withdrawals == freezed
-          ? _value.withdrawals
-          : withdrawals // ignore: cast_nullable_to_non_nullable
-              as List<BeBalanceUpdate>,
-      offset == freezed
-          ? _value.offset
-          : offset // ignore: cast_nullable_to_non_nullable
-              as int,
-      limit == freezed
-          ? _value.limit
-          : limit // ignore: cast_nullable_to_non_nullable
-              as int,
-      total == freezed
-          ? _value.total
-          : total // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$_BeCryptoWithdrawalsResult
-    with DiagnosticableTreeMixin
-    implements _BeCryptoWithdrawalsResult {
-  const _$_BeCryptoWithdrawalsResult(
-      this.withdrawals, this.offset, this.limit, this.total);
-
-  @override
-  final List<BeBalanceUpdate> withdrawals;
-  @override
-  final int offset;
-  @override
-  final int limit;
-  @override
-  final int total;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BeCryptoWithdrawalsResult(withdrawals: $withdrawals, offset: $offset, limit: $limit, total: $total)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'BeCryptoWithdrawalsResult'))
-      ..add(DiagnosticsProperty('withdrawals', withdrawals))
-      ..add(DiagnosticsProperty('offset', offset))
-      ..add(DiagnosticsProperty('limit', limit))
-      ..add(DiagnosticsProperty('total', total));
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _BeCryptoWithdrawalsResult &&
-            const DeepCollectionEquality()
-                .equals(other.withdrawals, withdrawals) &&
-            (identical(other.offset, offset) || other.offset == offset) &&
-            (identical(other.limit, limit) || other.limit == limit) &&
-            (identical(other.total, total) || other.total == total));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(withdrawals), offset, limit, total);
-
-  @JsonKey(ignore: true)
-  @override
-  _$BeCryptoWithdrawalsResultCopyWith<_BeCryptoWithdrawalsResult>
-      get copyWith =>
-          __$BeCryptoWithdrawalsResultCopyWithImpl<_BeCryptoWithdrawalsResult>(
-              this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(
-            List<BeBalanceUpdate> withdrawals, int offset, int limit, int total)
-        $default, {
-    required TResult Function(BeError err) error,
-  }) {
-    return $default(withdrawals, offset, limit, total);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(List<BeBalanceUpdate> withdrawals, int offset, int limit,
-            int total)?
-        $default, {
-    TResult Function(BeError err)? error,
-  }) {
-    return $default?.call(withdrawals, offset, limit, total);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(List<BeBalanceUpdate> withdrawals, int offset, int limit,
-            int total)?
-        $default, {
-    TResult Function(BeError err)? error,
-    required TResult orElse(),
-  }) {
-    if ($default != null) {
-      return $default(withdrawals, offset, limit, total);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_BeCryptoWithdrawalsResult value) $default, {
-    required TResult Function(_BeCryptoWithdrawalsResultErr value) error,
-  }) {
-    return $default(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeCryptoWithdrawalsResult value)? $default, {
-    TResult Function(_BeCryptoWithdrawalsResultErr value)? error,
-  }) {
-    return $default?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeCryptoWithdrawalsResult value)? $default, {
-    TResult Function(_BeCryptoWithdrawalsResultErr value)? error,
-    required TResult orElse(),
-  }) {
-    if ($default != null) {
-      return $default(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _BeCryptoWithdrawalsResult implements BeCryptoWithdrawalsResult {
-  const factory _BeCryptoWithdrawalsResult(
-          List<BeBalanceUpdate> withdrawals, int offset, int limit, int total) =
-      _$_BeCryptoWithdrawalsResult;
-
-  List<BeBalanceUpdate> get withdrawals;
-  int get offset;
-  int get limit;
-  int get total;
-  @JsonKey(ignore: true)
-  _$BeCryptoWithdrawalsResultCopyWith<_BeCryptoWithdrawalsResult>
-      get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$BeCryptoWithdrawalsResultErrCopyWith<$Res> {
-  factory _$BeCryptoWithdrawalsResultErrCopyWith(
-          _BeCryptoWithdrawalsResultErr value,
-          $Res Function(_BeCryptoWithdrawalsResultErr) then) =
-      __$BeCryptoWithdrawalsResultErrCopyWithImpl<$Res>;
-  $Res call({BeError err});
-
-  $BeErrorCopyWith<$Res> get err;
-}
-
-/// @nodoc
-class __$BeCryptoWithdrawalsResultErrCopyWithImpl<$Res>
-    extends _$BeCryptoWithdrawalsResultCopyWithImpl<$Res>
-    implements _$BeCryptoWithdrawalsResultErrCopyWith<$Res> {
-  __$BeCryptoWithdrawalsResultErrCopyWithImpl(
-      _BeCryptoWithdrawalsResultErr _value,
-      $Res Function(_BeCryptoWithdrawalsResultErr) _then)
-      : super(_value, (v) => _then(v as _BeCryptoWithdrawalsResultErr));
-
-  @override
-  _BeCryptoWithdrawalsResultErr get _value =>
-      super._value as _BeCryptoWithdrawalsResultErr;
-
-  @override
-  $Res call({
-    Object? err = freezed,
-  }) {
-    return _then(_BeCryptoWithdrawalsResultErr(
-      err == freezed
-          ? _value.err
-          : err // ignore: cast_nullable_to_non_nullable
-              as BeError,
-    ));
-  }
-
-  @override
-  $BeErrorCopyWith<$Res> get err {
-    return $BeErrorCopyWith<$Res>(_value.err, (value) {
-      return _then(_value.copyWith(err: value));
-    });
-  }
-}
-
-/// @nodoc
-
-class _$_BeCryptoWithdrawalsResultErr
-    with DiagnosticableTreeMixin
-    implements _BeCryptoWithdrawalsResultErr {
-  const _$_BeCryptoWithdrawalsResultErr(this.err);
-
-  @override
-  final BeError err;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BeCryptoWithdrawalsResult.error(err: $err)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'BeCryptoWithdrawalsResult.error'))
-      ..add(DiagnosticsProperty('err', err));
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _BeCryptoWithdrawalsResultErr &&
-            (identical(other.err, err) || other.err == err));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, err);
-
-  @JsonKey(ignore: true)
-  @override
-  _$BeCryptoWithdrawalsResultErrCopyWith<_BeCryptoWithdrawalsResultErr>
-      get copyWith => __$BeCryptoWithdrawalsResultErrCopyWithImpl<
-          _BeCryptoWithdrawalsResultErr>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(
-            List<BeBalanceUpdate> withdrawals, int offset, int limit, int total)
-        $default, {
-    required TResult Function(BeError err) error,
-  }) {
-    return error(err);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(List<BeBalanceUpdate> withdrawals, int offset, int limit,
-            int total)?
-        $default, {
-    TResult Function(BeError err)? error,
-  }) {
-    return error?.call(err);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(List<BeBalanceUpdate> withdrawals, int offset, int limit,
-            int total)?
-        $default, {
-    TResult Function(BeError err)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(err);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_BeCryptoWithdrawalsResult value) $default, {
-    required TResult Function(_BeCryptoWithdrawalsResultErr value) error,
-  }) {
-    return error(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeCryptoWithdrawalsResult value)? $default, {
-    TResult Function(_BeCryptoWithdrawalsResultErr value)? error,
-  }) {
-    return error?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeCryptoWithdrawalsResult value)? $default, {
-    TResult Function(_BeCryptoWithdrawalsResultErr value)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _BeCryptoWithdrawalsResultErr
-    implements BeCryptoWithdrawalsResult {
-  const factory _BeCryptoWithdrawalsResultErr(BeError err) =
-      _$_BeCryptoWithdrawalsResultErr;
-
-  BeError get err;
-  @JsonKey(ignore: true)
-  _$BeCryptoWithdrawalsResultErrCopyWith<_BeCryptoWithdrawalsResultErr>
-      get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-class _$BeFiatDepositResultTearOff {
-  const _$BeFiatDepositResultTearOff();
-
-  _BeFiatDepositResult call(BeBalanceUpdate deposit) {
-    return _BeFiatDepositResult(
-      deposit,
-    );
-  }
-
-  _BeFiatDepositResultErr error(BeError err) {
-    return _BeFiatDepositResultErr(
-      err,
-    );
-  }
-}
-
-/// @nodoc
-const $BeFiatDepositResult = _$BeFiatDepositResultTearOff();
-
-/// @nodoc
-mixin _$BeFiatDepositResult {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(BeBalanceUpdate deposit) $default, {
-    required TResult Function(BeError err) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(BeBalanceUpdate deposit)? $default, {
-    TResult Function(BeError err)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(BeBalanceUpdate deposit)? $default, {
-    TResult Function(BeError err)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_BeFiatDepositResult value) $default, {
-    required TResult Function(_BeFiatDepositResultErr value) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeFiatDepositResult value)? $default, {
-    TResult Function(_BeFiatDepositResultErr value)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeFiatDepositResult value)? $default, {
-    TResult Function(_BeFiatDepositResultErr value)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $BeFiatDepositResultCopyWith<$Res> {
-  factory $BeFiatDepositResultCopyWith(
-          BeFiatDepositResult value, $Res Function(BeFiatDepositResult) then) =
-      _$BeFiatDepositResultCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class _$BeFiatDepositResultCopyWithImpl<$Res>
-    implements $BeFiatDepositResultCopyWith<$Res> {
-  _$BeFiatDepositResultCopyWithImpl(this._value, this._then);
-
-  final BeFiatDepositResult _value;
-  // ignore: unused_field
-  final $Res Function(BeFiatDepositResult) _then;
-}
-
-/// @nodoc
-abstract class _$BeFiatDepositResultCopyWith<$Res> {
-  factory _$BeFiatDepositResultCopyWith(_BeFiatDepositResult value,
-          $Res Function(_BeFiatDepositResult) then) =
-      __$BeFiatDepositResultCopyWithImpl<$Res>;
-  $Res call({BeBalanceUpdate deposit});
-}
-
-/// @nodoc
-class __$BeFiatDepositResultCopyWithImpl<$Res>
-    extends _$BeFiatDepositResultCopyWithImpl<$Res>
-    implements _$BeFiatDepositResultCopyWith<$Res> {
-  __$BeFiatDepositResultCopyWithImpl(
-      _BeFiatDepositResult _value, $Res Function(_BeFiatDepositResult) _then)
-      : super(_value, (v) => _then(v as _BeFiatDepositResult));
-
-  @override
-  _BeFiatDepositResult get _value => super._value as _BeFiatDepositResult;
-
-  @override
-  $Res call({
-    Object? deposit = freezed,
-  }) {
-    return _then(_BeFiatDepositResult(
-      deposit == freezed
-          ? _value.deposit
-          : deposit // ignore: cast_nullable_to_non_nullable
-              as BeBalanceUpdate,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$_BeFiatDepositResult
-    with DiagnosticableTreeMixin
-    implements _BeFiatDepositResult {
-  const _$_BeFiatDepositResult(this.deposit);
-
-  @override
-  final BeBalanceUpdate deposit;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BeFiatDepositResult(deposit: $deposit)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'BeFiatDepositResult'))
-      ..add(DiagnosticsProperty('deposit', deposit));
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _BeFiatDepositResult &&
-            (identical(other.deposit, deposit) || other.deposit == deposit));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, deposit);
-
-  @JsonKey(ignore: true)
-  @override
-  _$BeFiatDepositResultCopyWith<_BeFiatDepositResult> get copyWith =>
-      __$BeFiatDepositResultCopyWithImpl<_BeFiatDepositResult>(
-          this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(BeBalanceUpdate deposit) $default, {
-    required TResult Function(BeError err) error,
-  }) {
-    return $default(deposit);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(BeBalanceUpdate deposit)? $default, {
-    TResult Function(BeError err)? error,
-  }) {
-    return $default?.call(deposit);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(BeBalanceUpdate deposit)? $default, {
-    TResult Function(BeError err)? error,
-    required TResult orElse(),
-  }) {
-    if ($default != null) {
-      return $default(deposit);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_BeFiatDepositResult value) $default, {
-    required TResult Function(_BeFiatDepositResultErr value) error,
-  }) {
-    return $default(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeFiatDepositResult value)? $default, {
-    TResult Function(_BeFiatDepositResultErr value)? error,
-  }) {
-    return $default?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeFiatDepositResult value)? $default, {
-    TResult Function(_BeFiatDepositResultErr value)? error,
-    required TResult orElse(),
-  }) {
-    if ($default != null) {
-      return $default(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _BeFiatDepositResult implements BeFiatDepositResult {
-  const factory _BeFiatDepositResult(BeBalanceUpdate deposit) =
-      _$_BeFiatDepositResult;
-
-  BeBalanceUpdate get deposit;
-  @JsonKey(ignore: true)
-  _$BeFiatDepositResultCopyWith<_BeFiatDepositResult> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$BeFiatDepositResultErrCopyWith<$Res> {
-  factory _$BeFiatDepositResultErrCopyWith(_BeFiatDepositResultErr value,
-          $Res Function(_BeFiatDepositResultErr) then) =
-      __$BeFiatDepositResultErrCopyWithImpl<$Res>;
-  $Res call({BeError err});
-
-  $BeErrorCopyWith<$Res> get err;
-}
-
-/// @nodoc
-class __$BeFiatDepositResultErrCopyWithImpl<$Res>
-    extends _$BeFiatDepositResultCopyWithImpl<$Res>
-    implements _$BeFiatDepositResultErrCopyWith<$Res> {
-  __$BeFiatDepositResultErrCopyWithImpl(_BeFiatDepositResultErr _value,
-      $Res Function(_BeFiatDepositResultErr) _then)
-      : super(_value, (v) => _then(v as _BeFiatDepositResultErr));
-
-  @override
-  _BeFiatDepositResultErr get _value => super._value as _BeFiatDepositResultErr;
-
-  @override
-  $Res call({
-    Object? err = freezed,
-  }) {
-    return _then(_BeFiatDepositResultErr(
-      err == freezed
-          ? _value.err
-          : err // ignore: cast_nullable_to_non_nullable
-              as BeError,
-    ));
-  }
-
-  @override
-  $BeErrorCopyWith<$Res> get err {
-    return $BeErrorCopyWith<$Res>(_value.err, (value) {
-      return _then(_value.copyWith(err: value));
-    });
-  }
-}
-
-/// @nodoc
-
-class _$_BeFiatDepositResultErr
-    with DiagnosticableTreeMixin
-    implements _BeFiatDepositResultErr {
-  const _$_BeFiatDepositResultErr(this.err);
-
-  @override
-  final BeError err;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BeFiatDepositResult.error(err: $err)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'BeFiatDepositResult.error'))
-      ..add(DiagnosticsProperty('err', err));
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _BeFiatDepositResultErr &&
-            (identical(other.err, err) || other.err == err));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, err);
-
-  @JsonKey(ignore: true)
-  @override
-  _$BeFiatDepositResultErrCopyWith<_BeFiatDepositResultErr> get copyWith =>
-      __$BeFiatDepositResultErrCopyWithImpl<_BeFiatDepositResultErr>(
-          this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(BeBalanceUpdate deposit) $default, {
-    required TResult Function(BeError err) error,
-  }) {
-    return error(err);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(BeBalanceUpdate deposit)? $default, {
-    TResult Function(BeError err)? error,
-  }) {
-    return error?.call(err);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(BeBalanceUpdate deposit)? $default, {
-    TResult Function(BeError err)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(err);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_BeFiatDepositResult value) $default, {
-    required TResult Function(_BeFiatDepositResultErr value) error,
-  }) {
-    return error(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeFiatDepositResult value)? $default, {
-    TResult Function(_BeFiatDepositResultErr value)? error,
-  }) {
-    return error?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeFiatDepositResult value)? $default, {
-    TResult Function(_BeFiatDepositResultErr value)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class _BeFiatDepositResultErr implements BeFiatDepositResult {
-  const factory _BeFiatDepositResultErr(BeError err) =
-      _$_BeFiatDepositResultErr;
-
-  BeError get err;
-  @JsonKey(ignore: true)
-  _$BeFiatDepositResultErrCopyWith<_BeFiatDepositResultErr> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
 class _$BeFiatAccountNumberResultTearOff {
   const _$BeFiatAccountNumberResultTearOff();
 
@@ -7818,12 +6180,388 @@ abstract class _BeFiatAccountNumberResultErr
 }
 
 /// @nodoc
-class _$BeFiatDepositsResultTearOff {
-  const _$BeFiatDepositsResultTearOff();
+class _$BeDepositResultTearOff {
+  const _$BeDepositResultTearOff();
 
-  _BeFiatDepositsResult call(
+  _BeDepositResult call(BeBalanceUpdate deposit) {
+    return _BeDepositResult(
+      deposit,
+    );
+  }
+
+  _BeFiatDepositResultErr error(BeError err) {
+    return _BeFiatDepositResultErr(
+      err,
+    );
+  }
+}
+
+/// @nodoc
+const $BeDepositResult = _$BeDepositResultTearOff();
+
+/// @nodoc
+mixin _$BeDepositResult {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(BeBalanceUpdate deposit) $default, {
+    required TResult Function(BeError err) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult Function(BeBalanceUpdate deposit)? $default, {
+    TResult Function(BeError err)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(BeBalanceUpdate deposit)? $default, {
+    TResult Function(BeError err)? error,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_BeDepositResult value) $default, {
+    required TResult Function(_BeFiatDepositResultErr value) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult Function(_BeDepositResult value)? $default, {
+    TResult Function(_BeFiatDepositResultErr value)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_BeDepositResult value)? $default, {
+    TResult Function(_BeFiatDepositResultErr value)? error,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $BeDepositResultCopyWith<$Res> {
+  factory $BeDepositResultCopyWith(
+          BeDepositResult value, $Res Function(BeDepositResult) then) =
+      _$BeDepositResultCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$BeDepositResultCopyWithImpl<$Res>
+    implements $BeDepositResultCopyWith<$Res> {
+  _$BeDepositResultCopyWithImpl(this._value, this._then);
+
+  final BeDepositResult _value;
+  // ignore: unused_field
+  final $Res Function(BeDepositResult) _then;
+}
+
+/// @nodoc
+abstract class _$BeDepositResultCopyWith<$Res> {
+  factory _$BeDepositResultCopyWith(
+          _BeDepositResult value, $Res Function(_BeDepositResult) then) =
+      __$BeDepositResultCopyWithImpl<$Res>;
+  $Res call({BeBalanceUpdate deposit});
+}
+
+/// @nodoc
+class __$BeDepositResultCopyWithImpl<$Res>
+    extends _$BeDepositResultCopyWithImpl<$Res>
+    implements _$BeDepositResultCopyWith<$Res> {
+  __$BeDepositResultCopyWithImpl(
+      _BeDepositResult _value, $Res Function(_BeDepositResult) _then)
+      : super(_value, (v) => _then(v as _BeDepositResult));
+
+  @override
+  _BeDepositResult get _value => super._value as _BeDepositResult;
+
+  @override
+  $Res call({
+    Object? deposit = freezed,
+  }) {
+    return _then(_BeDepositResult(
+      deposit == freezed
+          ? _value.deposit
+          : deposit // ignore: cast_nullable_to_non_nullable
+              as BeBalanceUpdate,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_BeDepositResult
+    with DiagnosticableTreeMixin
+    implements _BeDepositResult {
+  const _$_BeDepositResult(this.deposit);
+
+  @override
+  final BeBalanceUpdate deposit;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'BeDepositResult(deposit: $deposit)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'BeDepositResult'))
+      ..add(DiagnosticsProperty('deposit', deposit));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _BeDepositResult &&
+            (identical(other.deposit, deposit) || other.deposit == deposit));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, deposit);
+
+  @JsonKey(ignore: true)
+  @override
+  _$BeDepositResultCopyWith<_BeDepositResult> get copyWith =>
+      __$BeDepositResultCopyWithImpl<_BeDepositResult>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(BeBalanceUpdate deposit) $default, {
+    required TResult Function(BeError err) error,
+  }) {
+    return $default(deposit);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult Function(BeBalanceUpdate deposit)? $default, {
+    TResult Function(BeError err)? error,
+  }) {
+    return $default?.call(deposit);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(BeBalanceUpdate deposit)? $default, {
+    TResult Function(BeError err)? error,
+    required TResult orElse(),
+  }) {
+    if ($default != null) {
+      return $default(deposit);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_BeDepositResult value) $default, {
+    required TResult Function(_BeFiatDepositResultErr value) error,
+  }) {
+    return $default(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult Function(_BeDepositResult value)? $default, {
+    TResult Function(_BeFiatDepositResultErr value)? error,
+  }) {
+    return $default?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_BeDepositResult value)? $default, {
+    TResult Function(_BeFiatDepositResultErr value)? error,
+    required TResult orElse(),
+  }) {
+    if ($default != null) {
+      return $default(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _BeDepositResult implements BeDepositResult {
+  const factory _BeDepositResult(BeBalanceUpdate deposit) = _$_BeDepositResult;
+
+  BeBalanceUpdate get deposit;
+  @JsonKey(ignore: true)
+  _$BeDepositResultCopyWith<_BeDepositResult> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$BeFiatDepositResultErrCopyWith<$Res> {
+  factory _$BeFiatDepositResultErrCopyWith(_BeFiatDepositResultErr value,
+          $Res Function(_BeFiatDepositResultErr) then) =
+      __$BeFiatDepositResultErrCopyWithImpl<$Res>;
+  $Res call({BeError err});
+
+  $BeErrorCopyWith<$Res> get err;
+}
+
+/// @nodoc
+class __$BeFiatDepositResultErrCopyWithImpl<$Res>
+    extends _$BeDepositResultCopyWithImpl<$Res>
+    implements _$BeFiatDepositResultErrCopyWith<$Res> {
+  __$BeFiatDepositResultErrCopyWithImpl(_BeFiatDepositResultErr _value,
+      $Res Function(_BeFiatDepositResultErr) _then)
+      : super(_value, (v) => _then(v as _BeFiatDepositResultErr));
+
+  @override
+  _BeFiatDepositResultErr get _value => super._value as _BeFiatDepositResultErr;
+
+  @override
+  $Res call({
+    Object? err = freezed,
+  }) {
+    return _then(_BeFiatDepositResultErr(
+      err == freezed
+          ? _value.err
+          : err // ignore: cast_nullable_to_non_nullable
+              as BeError,
+    ));
+  }
+
+  @override
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
+      return _then(_value.copyWith(err: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$_BeFiatDepositResultErr
+    with DiagnosticableTreeMixin
+    implements _BeFiatDepositResultErr {
+  const _$_BeFiatDepositResultErr(this.err);
+
+  @override
+  final BeError err;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'BeDepositResult.error(err: $err)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'BeDepositResult.error'))
+      ..add(DiagnosticsProperty('err', err));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _BeFiatDepositResultErr &&
+            (identical(other.err, err) || other.err == err));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, err);
+
+  @JsonKey(ignore: true)
+  @override
+  _$BeFiatDepositResultErrCopyWith<_BeFiatDepositResultErr> get copyWith =>
+      __$BeFiatDepositResultErrCopyWithImpl<_BeFiatDepositResultErr>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(BeBalanceUpdate deposit) $default, {
+    required TResult Function(BeError err) error,
+  }) {
+    return error(err);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult Function(BeBalanceUpdate deposit)? $default, {
+    TResult Function(BeError err)? error,
+  }) {
+    return error?.call(err);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(BeBalanceUpdate deposit)? $default, {
+    TResult Function(BeError err)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(err);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_BeDepositResult value) $default, {
+    required TResult Function(_BeFiatDepositResultErr value) error,
+  }) {
+    return error(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult Function(_BeDepositResult value)? $default, {
+    TResult Function(_BeFiatDepositResultErr value)? error,
+  }) {
+    return error?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_BeDepositResult value)? $default, {
+    TResult Function(_BeFiatDepositResultErr value)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _BeFiatDepositResultErr implements BeDepositResult {
+  const factory _BeFiatDepositResultErr(BeError err) =
+      _$_BeFiatDepositResultErr;
+
+  BeError get err;
+  @JsonKey(ignore: true)
+  _$BeFiatDepositResultErrCopyWith<_BeFiatDepositResultErr> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+class _$BeDepositsResultTearOff {
+  const _$BeDepositsResultTearOff();
+
+  _BeDepositsResult call(
       List<BeBalanceUpdate> deposits, int offset, int limit, int total) {
-    return _BeFiatDepositsResult(
+    return _BeDepositsResult(
       deposits,
       offset,
       limit,
@@ -7831,18 +6569,18 @@ class _$BeFiatDepositsResultTearOff {
     );
   }
 
-  _BeFiatDepositsResultErr error(BeError err) {
-    return _BeFiatDepositsResultErr(
+  _BeDepositsResultErr error(BeError err) {
+    return _BeDepositsResultErr(
       err,
     );
   }
 }
 
 /// @nodoc
-const $BeFiatDepositsResult = _$BeFiatDepositsResultTearOff();
+const $BeDepositsResult = _$BeDepositsResultTearOff();
 
 /// @nodoc
-mixin _$BeFiatDepositsResult {
+mixin _$BeDepositsResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(
@@ -7870,60 +6608,60 @@ mixin _$BeFiatDepositsResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_BeFiatDepositsResult value) $default, {
-    required TResult Function(_BeFiatDepositsResultErr value) error,
+    TResult Function(_BeDepositsResult value) $default, {
+    required TResult Function(_BeDepositsResultErr value) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeFiatDepositsResult value)? $default, {
-    TResult Function(_BeFiatDepositsResultErr value)? error,
+    TResult Function(_BeDepositsResult value)? $default, {
+    TResult Function(_BeDepositsResultErr value)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeFiatDepositsResult value)? $default, {
-    TResult Function(_BeFiatDepositsResultErr value)? error,
+    TResult Function(_BeDepositsResult value)? $default, {
+    TResult Function(_BeDepositsResultErr value)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $BeFiatDepositsResultCopyWith<$Res> {
-  factory $BeFiatDepositsResultCopyWith(BeFiatDepositsResult value,
-          $Res Function(BeFiatDepositsResult) then) =
-      _$BeFiatDepositsResultCopyWithImpl<$Res>;
+abstract class $BeDepositsResultCopyWith<$Res> {
+  factory $BeDepositsResultCopyWith(
+          BeDepositsResult value, $Res Function(BeDepositsResult) then) =
+      _$BeDepositsResultCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$BeFiatDepositsResultCopyWithImpl<$Res>
-    implements $BeFiatDepositsResultCopyWith<$Res> {
-  _$BeFiatDepositsResultCopyWithImpl(this._value, this._then);
+class _$BeDepositsResultCopyWithImpl<$Res>
+    implements $BeDepositsResultCopyWith<$Res> {
+  _$BeDepositsResultCopyWithImpl(this._value, this._then);
 
-  final BeFiatDepositsResult _value;
+  final BeDepositsResult _value;
   // ignore: unused_field
-  final $Res Function(BeFiatDepositsResult) _then;
+  final $Res Function(BeDepositsResult) _then;
 }
 
 /// @nodoc
-abstract class _$BeFiatDepositsResultCopyWith<$Res> {
-  factory _$BeFiatDepositsResultCopyWith(_BeFiatDepositsResult value,
-          $Res Function(_BeFiatDepositsResult) then) =
-      __$BeFiatDepositsResultCopyWithImpl<$Res>;
+abstract class _$BeDepositsResultCopyWith<$Res> {
+  factory _$BeDepositsResultCopyWith(
+          _BeDepositsResult value, $Res Function(_BeDepositsResult) then) =
+      __$BeDepositsResultCopyWithImpl<$Res>;
   $Res call({List<BeBalanceUpdate> deposits, int offset, int limit, int total});
 }
 
 /// @nodoc
-class __$BeFiatDepositsResultCopyWithImpl<$Res>
-    extends _$BeFiatDepositsResultCopyWithImpl<$Res>
-    implements _$BeFiatDepositsResultCopyWith<$Res> {
-  __$BeFiatDepositsResultCopyWithImpl(
-      _BeFiatDepositsResult _value, $Res Function(_BeFiatDepositsResult) _then)
-      : super(_value, (v) => _then(v as _BeFiatDepositsResult));
+class __$BeDepositsResultCopyWithImpl<$Res>
+    extends _$BeDepositsResultCopyWithImpl<$Res>
+    implements _$BeDepositsResultCopyWith<$Res> {
+  __$BeDepositsResultCopyWithImpl(
+      _BeDepositsResult _value, $Res Function(_BeDepositsResult) _then)
+      : super(_value, (v) => _then(v as _BeDepositsResult));
 
   @override
-  _BeFiatDepositsResult get _value => super._value as _BeFiatDepositsResult;
+  _BeDepositsResult get _value => super._value as _BeDepositsResult;
 
   @override
   $Res call({
@@ -7932,7 +6670,7 @@ class __$BeFiatDepositsResultCopyWithImpl<$Res>
     Object? limit = freezed,
     Object? total = freezed,
   }) {
-    return _then(_BeFiatDepositsResult(
+    return _then(_BeDepositsResult(
       deposits == freezed
           ? _value.deposits
           : deposits // ignore: cast_nullable_to_non_nullable
@@ -7955,11 +6693,10 @@ class __$BeFiatDepositsResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeFiatDepositsResult
+class _$_BeDepositsResult
     with DiagnosticableTreeMixin
-    implements _BeFiatDepositsResult {
-  const _$_BeFiatDepositsResult(
-      this.deposits, this.offset, this.limit, this.total);
+    implements _BeDepositsResult {
+  const _$_BeDepositsResult(this.deposits, this.offset, this.limit, this.total);
 
   @override
   final List<BeBalanceUpdate> deposits;
@@ -7972,14 +6709,14 @@ class _$_BeFiatDepositsResult
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BeFiatDepositsResult(deposits: $deposits, offset: $offset, limit: $limit, total: $total)';
+    return 'BeDepositsResult(deposits: $deposits, offset: $offset, limit: $limit, total: $total)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'BeFiatDepositsResult'))
+      ..add(DiagnosticsProperty('type', 'BeDepositsResult'))
       ..add(DiagnosticsProperty('deposits', deposits))
       ..add(DiagnosticsProperty('offset', offset))
       ..add(DiagnosticsProperty('limit', limit))
@@ -7990,7 +6727,7 @@ class _$_BeFiatDepositsResult
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _BeFiatDepositsResult &&
+            other is _BeDepositsResult &&
             const DeepCollectionEquality().equals(other.deposits, deposits) &&
             (identical(other.offset, offset) || other.offset == offset) &&
             (identical(other.limit, limit) || other.limit == limit) &&
@@ -8003,9 +6740,8 @@ class _$_BeFiatDepositsResult
 
   @JsonKey(ignore: true)
   @override
-  _$BeFiatDepositsResultCopyWith<_BeFiatDepositsResult> get copyWith =>
-      __$BeFiatDepositsResultCopyWithImpl<_BeFiatDepositsResult>(
-          this, _$identity);
+  _$BeDepositsResultCopyWith<_BeDepositsResult> get copyWith =>
+      __$BeDepositsResultCopyWithImpl<_BeDepositsResult>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -8047,8 +6783,8 @@ class _$_BeFiatDepositsResult
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_BeFiatDepositsResult value) $default, {
-    required TResult Function(_BeFiatDepositsResultErr value) error,
+    TResult Function(_BeDepositsResult value) $default, {
+    required TResult Function(_BeDepositsResultErr value) error,
   }) {
     return $default(this);
   }
@@ -8056,8 +6792,8 @@ class _$_BeFiatDepositsResult
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeFiatDepositsResult value)? $default, {
-    TResult Function(_BeFiatDepositsResultErr value)? error,
+    TResult Function(_BeDepositsResult value)? $default, {
+    TResult Function(_BeDepositsResultErr value)? error,
   }) {
     return $default?.call(this);
   }
@@ -8065,8 +6801,8 @@ class _$_BeFiatDepositsResult
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeFiatDepositsResult value)? $default, {
-    TResult Function(_BeFiatDepositsResultErr value)? error,
+    TResult Function(_BeDepositsResult value)? $default, {
+    TResult Function(_BeDepositsResultErr value)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -8076,47 +6812,46 @@ class _$_BeFiatDepositsResult
   }
 }
 
-abstract class _BeFiatDepositsResult implements BeFiatDepositsResult {
-  const factory _BeFiatDepositsResult(
+abstract class _BeDepositsResult implements BeDepositsResult {
+  const factory _BeDepositsResult(
           List<BeBalanceUpdate> deposits, int offset, int limit, int total) =
-      _$_BeFiatDepositsResult;
+      _$_BeDepositsResult;
 
   List<BeBalanceUpdate> get deposits;
   int get offset;
   int get limit;
   int get total;
   @JsonKey(ignore: true)
-  _$BeFiatDepositsResultCopyWith<_BeFiatDepositsResult> get copyWith =>
+  _$BeDepositsResultCopyWith<_BeDepositsResult> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$BeFiatDepositsResultErrCopyWith<$Res> {
-  factory _$BeFiatDepositsResultErrCopyWith(_BeFiatDepositsResultErr value,
-          $Res Function(_BeFiatDepositsResultErr) then) =
-      __$BeFiatDepositsResultErrCopyWithImpl<$Res>;
+abstract class _$BeDepositsResultErrCopyWith<$Res> {
+  factory _$BeDepositsResultErrCopyWith(_BeDepositsResultErr value,
+          $Res Function(_BeDepositsResultErr) then) =
+      __$BeDepositsResultErrCopyWithImpl<$Res>;
   $Res call({BeError err});
 
   $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
-class __$BeFiatDepositsResultErrCopyWithImpl<$Res>
-    extends _$BeFiatDepositsResultCopyWithImpl<$Res>
-    implements _$BeFiatDepositsResultErrCopyWith<$Res> {
-  __$BeFiatDepositsResultErrCopyWithImpl(_BeFiatDepositsResultErr _value,
-      $Res Function(_BeFiatDepositsResultErr) _then)
-      : super(_value, (v) => _then(v as _BeFiatDepositsResultErr));
+class __$BeDepositsResultErrCopyWithImpl<$Res>
+    extends _$BeDepositsResultCopyWithImpl<$Res>
+    implements _$BeDepositsResultErrCopyWith<$Res> {
+  __$BeDepositsResultErrCopyWithImpl(
+      _BeDepositsResultErr _value, $Res Function(_BeDepositsResultErr) _then)
+      : super(_value, (v) => _then(v as _BeDepositsResultErr));
 
   @override
-  _BeFiatDepositsResultErr get _value =>
-      super._value as _BeFiatDepositsResultErr;
+  _BeDepositsResultErr get _value => super._value as _BeDepositsResultErr;
 
   @override
   $Res call({
     Object? err = freezed,
   }) {
-    return _then(_BeFiatDepositsResultErr(
+    return _then(_BeDepositsResultErr(
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -8134,24 +6869,24 @@ class __$BeFiatDepositsResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeFiatDepositsResultErr
+class _$_BeDepositsResultErr
     with DiagnosticableTreeMixin
-    implements _BeFiatDepositsResultErr {
-  const _$_BeFiatDepositsResultErr(this.err);
+    implements _BeDepositsResultErr {
+  const _$_BeDepositsResultErr(this.err);
 
   @override
   final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BeFiatDepositsResult.error(err: $err)';
+    return 'BeDepositsResult.error(err: $err)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'BeFiatDepositsResult.error'))
+      ..add(DiagnosticsProperty('type', 'BeDepositsResult.error'))
       ..add(DiagnosticsProperty('err', err));
   }
 
@@ -8159,7 +6894,7 @@ class _$_BeFiatDepositsResultErr
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _BeFiatDepositsResultErr &&
+            other is _BeDepositsResultErr &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -8168,8 +6903,8 @@ class _$_BeFiatDepositsResultErr
 
   @JsonKey(ignore: true)
   @override
-  _$BeFiatDepositsResultErrCopyWith<_BeFiatDepositsResultErr> get copyWith =>
-      __$BeFiatDepositsResultErrCopyWithImpl<_BeFiatDepositsResultErr>(
+  _$BeDepositsResultErrCopyWith<_BeDepositsResultErr> get copyWith =>
+      __$BeDepositsResultErrCopyWithImpl<_BeDepositsResultErr>(
           this, _$identity);
 
   @override
@@ -8212,8 +6947,8 @@ class _$_BeFiatDepositsResultErr
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_BeFiatDepositsResult value) $default, {
-    required TResult Function(_BeFiatDepositsResultErr value) error,
+    TResult Function(_BeDepositsResult value) $default, {
+    required TResult Function(_BeDepositsResultErr value) error,
   }) {
     return error(this);
   }
@@ -8221,8 +6956,8 @@ class _$_BeFiatDepositsResultErr
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeFiatDepositsResult value)? $default, {
-    TResult Function(_BeFiatDepositsResultErr value)? error,
+    TResult Function(_BeDepositsResult value)? $default, {
+    TResult Function(_BeDepositsResultErr value)? error,
   }) {
     return error?.call(this);
   }
@@ -8230,8 +6965,8 @@ class _$_BeFiatDepositsResultErr
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeFiatDepositsResult value)? $default, {
-    TResult Function(_BeFiatDepositsResultErr value)? error,
+    TResult Function(_BeDepositsResult value)? $default, {
+    TResult Function(_BeDepositsResultErr value)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -8241,38 +6976,37 @@ class _$_BeFiatDepositsResultErr
   }
 }
 
-abstract class _BeFiatDepositsResultErr implements BeFiatDepositsResult {
-  const factory _BeFiatDepositsResultErr(BeError err) =
-      _$_BeFiatDepositsResultErr;
+abstract class _BeDepositsResultErr implements BeDepositsResult {
+  const factory _BeDepositsResultErr(BeError err) = _$_BeDepositsResultErr;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$BeFiatDepositsResultErrCopyWith<_BeFiatDepositsResultErr> get copyWith =>
+  _$BeDepositsResultErrCopyWith<_BeDepositsResultErr> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-class _$BeFiatWithdrawalResultTearOff {
-  const _$BeFiatWithdrawalResultTearOff();
+class _$BeWithdrawalResultTearOff {
+  const _$BeWithdrawalResultTearOff();
 
-  _BeFiatWithdrawalResult call(BeBalanceUpdate withdrawal) {
-    return _BeFiatWithdrawalResult(
+  _BeWithdrawalResult call(BeBalanceUpdate withdrawal) {
+    return _BeWithdrawalResult(
       withdrawal,
     );
   }
 
-  _BeFiatWithdrawalResultErr error(BeError err) {
-    return _BeFiatWithdrawalResultErr(
+  _BeWithdrawalResultErr error(BeError err) {
+    return _BeWithdrawalResultErr(
       err,
     );
   }
 }
 
 /// @nodoc
-const $BeFiatWithdrawalResult = _$BeFiatWithdrawalResultTearOff();
+const $BeWithdrawalResult = _$BeWithdrawalResultTearOff();
 
 /// @nodoc
-mixin _$BeFiatWithdrawalResult {
+mixin _$BeWithdrawalResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(BeBalanceUpdate withdrawal) $default, {
@@ -8294,66 +7028,66 @@ mixin _$BeFiatWithdrawalResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_BeFiatWithdrawalResult value) $default, {
-    required TResult Function(_BeFiatWithdrawalResultErr value) error,
+    TResult Function(_BeWithdrawalResult value) $default, {
+    required TResult Function(_BeWithdrawalResultErr value) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeFiatWithdrawalResult value)? $default, {
-    TResult Function(_BeFiatWithdrawalResultErr value)? error,
+    TResult Function(_BeWithdrawalResult value)? $default, {
+    TResult Function(_BeWithdrawalResultErr value)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeFiatWithdrawalResult value)? $default, {
-    TResult Function(_BeFiatWithdrawalResultErr value)? error,
+    TResult Function(_BeWithdrawalResult value)? $default, {
+    TResult Function(_BeWithdrawalResultErr value)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $BeFiatWithdrawalResultCopyWith<$Res> {
-  factory $BeFiatWithdrawalResultCopyWith(BeFiatWithdrawalResult value,
-          $Res Function(BeFiatWithdrawalResult) then) =
-      _$BeFiatWithdrawalResultCopyWithImpl<$Res>;
+abstract class $BeWithdrawalResultCopyWith<$Res> {
+  factory $BeWithdrawalResultCopyWith(
+          BeWithdrawalResult value, $Res Function(BeWithdrawalResult) then) =
+      _$BeWithdrawalResultCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$BeFiatWithdrawalResultCopyWithImpl<$Res>
-    implements $BeFiatWithdrawalResultCopyWith<$Res> {
-  _$BeFiatWithdrawalResultCopyWithImpl(this._value, this._then);
+class _$BeWithdrawalResultCopyWithImpl<$Res>
+    implements $BeWithdrawalResultCopyWith<$Res> {
+  _$BeWithdrawalResultCopyWithImpl(this._value, this._then);
 
-  final BeFiatWithdrawalResult _value;
+  final BeWithdrawalResult _value;
   // ignore: unused_field
-  final $Res Function(BeFiatWithdrawalResult) _then;
+  final $Res Function(BeWithdrawalResult) _then;
 }
 
 /// @nodoc
-abstract class _$BeFiatWithdrawalResultCopyWith<$Res> {
-  factory _$BeFiatWithdrawalResultCopyWith(_BeFiatWithdrawalResult value,
-          $Res Function(_BeFiatWithdrawalResult) then) =
-      __$BeFiatWithdrawalResultCopyWithImpl<$Res>;
+abstract class _$BeWithdrawalResultCopyWith<$Res> {
+  factory _$BeWithdrawalResultCopyWith(
+          _BeWithdrawalResult value, $Res Function(_BeWithdrawalResult) then) =
+      __$BeWithdrawalResultCopyWithImpl<$Res>;
   $Res call({BeBalanceUpdate withdrawal});
 }
 
 /// @nodoc
-class __$BeFiatWithdrawalResultCopyWithImpl<$Res>
-    extends _$BeFiatWithdrawalResultCopyWithImpl<$Res>
-    implements _$BeFiatWithdrawalResultCopyWith<$Res> {
-  __$BeFiatWithdrawalResultCopyWithImpl(_BeFiatWithdrawalResult _value,
-      $Res Function(_BeFiatWithdrawalResult) _then)
-      : super(_value, (v) => _then(v as _BeFiatWithdrawalResult));
+class __$BeWithdrawalResultCopyWithImpl<$Res>
+    extends _$BeWithdrawalResultCopyWithImpl<$Res>
+    implements _$BeWithdrawalResultCopyWith<$Res> {
+  __$BeWithdrawalResultCopyWithImpl(
+      _BeWithdrawalResult _value, $Res Function(_BeWithdrawalResult) _then)
+      : super(_value, (v) => _then(v as _BeWithdrawalResult));
 
   @override
-  _BeFiatWithdrawalResult get _value => super._value as _BeFiatWithdrawalResult;
+  _BeWithdrawalResult get _value => super._value as _BeWithdrawalResult;
 
   @override
   $Res call({
     Object? withdrawal = freezed,
   }) {
-    return _then(_BeFiatWithdrawalResult(
+    return _then(_BeWithdrawalResult(
       withdrawal == freezed
           ? _value.withdrawal
           : withdrawal // ignore: cast_nullable_to_non_nullable
@@ -8364,24 +7098,24 @@ class __$BeFiatWithdrawalResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeFiatWithdrawalResult
+class _$_BeWithdrawalResult
     with DiagnosticableTreeMixin
-    implements _BeFiatWithdrawalResult {
-  const _$_BeFiatWithdrawalResult(this.withdrawal);
+    implements _BeWithdrawalResult {
+  const _$_BeWithdrawalResult(this.withdrawal);
 
   @override
   final BeBalanceUpdate withdrawal;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BeFiatWithdrawalResult(withdrawal: $withdrawal)';
+    return 'BeWithdrawalResult(withdrawal: $withdrawal)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'BeFiatWithdrawalResult'))
+      ..add(DiagnosticsProperty('type', 'BeWithdrawalResult'))
       ..add(DiagnosticsProperty('withdrawal', withdrawal));
   }
 
@@ -8389,7 +7123,7 @@ class _$_BeFiatWithdrawalResult
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _BeFiatWithdrawalResult &&
+            other is _BeWithdrawalResult &&
             (identical(other.withdrawal, withdrawal) ||
                 other.withdrawal == withdrawal));
   }
@@ -8399,9 +7133,8 @@ class _$_BeFiatWithdrawalResult
 
   @JsonKey(ignore: true)
   @override
-  _$BeFiatWithdrawalResultCopyWith<_BeFiatWithdrawalResult> get copyWith =>
-      __$BeFiatWithdrawalResultCopyWithImpl<_BeFiatWithdrawalResult>(
-          this, _$identity);
+  _$BeWithdrawalResultCopyWith<_BeWithdrawalResult> get copyWith =>
+      __$BeWithdrawalResultCopyWithImpl<_BeWithdrawalResult>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -8437,8 +7170,8 @@ class _$_BeFiatWithdrawalResult
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_BeFiatWithdrawalResult value) $default, {
-    required TResult Function(_BeFiatWithdrawalResultErr value) error,
+    TResult Function(_BeWithdrawalResult value) $default, {
+    required TResult Function(_BeWithdrawalResultErr value) error,
   }) {
     return $default(this);
   }
@@ -8446,8 +7179,8 @@ class _$_BeFiatWithdrawalResult
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeFiatWithdrawalResult value)? $default, {
-    TResult Function(_BeFiatWithdrawalResultErr value)? error,
+    TResult Function(_BeWithdrawalResult value)? $default, {
+    TResult Function(_BeWithdrawalResultErr value)? error,
   }) {
     return $default?.call(this);
   }
@@ -8455,8 +7188,8 @@ class _$_BeFiatWithdrawalResult
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeFiatWithdrawalResult value)? $default, {
-    TResult Function(_BeFiatWithdrawalResultErr value)? error,
+    TResult Function(_BeWithdrawalResult value)? $default, {
+    TResult Function(_BeWithdrawalResultErr value)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -8466,43 +7199,42 @@ class _$_BeFiatWithdrawalResult
   }
 }
 
-abstract class _BeFiatWithdrawalResult implements BeFiatWithdrawalResult {
-  const factory _BeFiatWithdrawalResult(BeBalanceUpdate withdrawal) =
-      _$_BeFiatWithdrawalResult;
+abstract class _BeWithdrawalResult implements BeWithdrawalResult {
+  const factory _BeWithdrawalResult(BeBalanceUpdate withdrawal) =
+      _$_BeWithdrawalResult;
 
   BeBalanceUpdate get withdrawal;
   @JsonKey(ignore: true)
-  _$BeFiatWithdrawalResultCopyWith<_BeFiatWithdrawalResult> get copyWith =>
+  _$BeWithdrawalResultCopyWith<_BeWithdrawalResult> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$BeFiatWithdrawalResultErrCopyWith<$Res> {
-  factory _$BeFiatWithdrawalResultErrCopyWith(_BeFiatWithdrawalResultErr value,
-          $Res Function(_BeFiatWithdrawalResultErr) then) =
-      __$BeFiatWithdrawalResultErrCopyWithImpl<$Res>;
+abstract class _$BeWithdrawalResultErrCopyWith<$Res> {
+  factory _$BeWithdrawalResultErrCopyWith(_BeWithdrawalResultErr value,
+          $Res Function(_BeWithdrawalResultErr) then) =
+      __$BeWithdrawalResultErrCopyWithImpl<$Res>;
   $Res call({BeError err});
 
   $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
-class __$BeFiatWithdrawalResultErrCopyWithImpl<$Res>
-    extends _$BeFiatWithdrawalResultCopyWithImpl<$Res>
-    implements _$BeFiatWithdrawalResultErrCopyWith<$Res> {
-  __$BeFiatWithdrawalResultErrCopyWithImpl(_BeFiatWithdrawalResultErr _value,
-      $Res Function(_BeFiatWithdrawalResultErr) _then)
-      : super(_value, (v) => _then(v as _BeFiatWithdrawalResultErr));
+class __$BeWithdrawalResultErrCopyWithImpl<$Res>
+    extends _$BeWithdrawalResultCopyWithImpl<$Res>
+    implements _$BeWithdrawalResultErrCopyWith<$Res> {
+  __$BeWithdrawalResultErrCopyWithImpl(_BeWithdrawalResultErr _value,
+      $Res Function(_BeWithdrawalResultErr) _then)
+      : super(_value, (v) => _then(v as _BeWithdrawalResultErr));
 
   @override
-  _BeFiatWithdrawalResultErr get _value =>
-      super._value as _BeFiatWithdrawalResultErr;
+  _BeWithdrawalResultErr get _value => super._value as _BeWithdrawalResultErr;
 
   @override
   $Res call({
     Object? err = freezed,
   }) {
-    return _then(_BeFiatWithdrawalResultErr(
+    return _then(_BeWithdrawalResultErr(
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -8520,24 +7252,24 @@ class __$BeFiatWithdrawalResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeFiatWithdrawalResultErr
+class _$_BeWithdrawalResultErr
     with DiagnosticableTreeMixin
-    implements _BeFiatWithdrawalResultErr {
-  const _$_BeFiatWithdrawalResultErr(this.err);
+    implements _BeWithdrawalResultErr {
+  const _$_BeWithdrawalResultErr(this.err);
 
   @override
   final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BeFiatWithdrawalResult.error(err: $err)';
+    return 'BeWithdrawalResult.error(err: $err)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'BeFiatWithdrawalResult.error'))
+      ..add(DiagnosticsProperty('type', 'BeWithdrawalResult.error'))
       ..add(DiagnosticsProperty('err', err));
   }
 
@@ -8545,7 +7277,7 @@ class _$_BeFiatWithdrawalResultErr
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _BeFiatWithdrawalResultErr &&
+            other is _BeWithdrawalResultErr &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -8554,10 +7286,9 @@ class _$_BeFiatWithdrawalResultErr
 
   @JsonKey(ignore: true)
   @override
-  _$BeFiatWithdrawalResultErrCopyWith<_BeFiatWithdrawalResultErr>
-      get copyWith =>
-          __$BeFiatWithdrawalResultErrCopyWithImpl<_BeFiatWithdrawalResultErr>(
-              this, _$identity);
+  _$BeWithdrawalResultErrCopyWith<_BeWithdrawalResultErr> get copyWith =>
+      __$BeWithdrawalResultErrCopyWithImpl<_BeWithdrawalResultErr>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -8593,8 +7324,8 @@ class _$_BeFiatWithdrawalResultErr
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_BeFiatWithdrawalResult value) $default, {
-    required TResult Function(_BeFiatWithdrawalResultErr value) error,
+    TResult Function(_BeWithdrawalResult value) $default, {
+    required TResult Function(_BeWithdrawalResultErr value) error,
   }) {
     return error(this);
   }
@@ -8602,8 +7333,8 @@ class _$_BeFiatWithdrawalResultErr
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeFiatWithdrawalResult value)? $default, {
-    TResult Function(_BeFiatWithdrawalResultErr value)? error,
+    TResult Function(_BeWithdrawalResult value)? $default, {
+    TResult Function(_BeWithdrawalResultErr value)? error,
   }) {
     return error?.call(this);
   }
@@ -8611,8 +7342,8 @@ class _$_BeFiatWithdrawalResultErr
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeFiatWithdrawalResult value)? $default, {
-    TResult Function(_BeFiatWithdrawalResultErr value)? error,
+    TResult Function(_BeWithdrawalResult value)? $default, {
+    TResult Function(_BeWithdrawalResultErr value)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -8622,23 +7353,22 @@ class _$_BeFiatWithdrawalResultErr
   }
 }
 
-abstract class _BeFiatWithdrawalResultErr implements BeFiatWithdrawalResult {
-  const factory _BeFiatWithdrawalResultErr(BeError err) =
-      _$_BeFiatWithdrawalResultErr;
+abstract class _BeWithdrawalResultErr implements BeWithdrawalResult {
+  const factory _BeWithdrawalResultErr(BeError err) = _$_BeWithdrawalResultErr;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$BeFiatWithdrawalResultErrCopyWith<_BeFiatWithdrawalResultErr>
-      get copyWith => throw _privateConstructorUsedError;
+  _$BeWithdrawalResultErrCopyWith<_BeWithdrawalResultErr> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-class _$BeFiatWithdrawalsResultTearOff {
-  const _$BeFiatWithdrawalsResultTearOff();
+class _$BeWithdrawalsResultTearOff {
+  const _$BeWithdrawalsResultTearOff();
 
-  _BeFiatWithdrawalsResult call(
+  _BeWithdrawalsResult call(
       List<BeBalanceUpdate> withdrawals, int offset, int limit, int total) {
-    return _BeFiatWithdrawalsResult(
+    return _BeWithdrawalsResult(
       withdrawals,
       offset,
       limit,
@@ -8646,18 +7376,18 @@ class _$BeFiatWithdrawalsResultTearOff {
     );
   }
 
-  _BeFiatWithdrawalsResultErr error(BeError err) {
-    return _BeFiatWithdrawalsResultErr(
+  _BeWithdrawalsResultErr error(BeError err) {
+    return _BeWithdrawalsResultErr(
       err,
     );
   }
 }
 
 /// @nodoc
-const $BeFiatWithdrawalsResult = _$BeFiatWithdrawalsResultTearOff();
+const $BeWithdrawalsResult = _$BeWithdrawalsResultTearOff();
 
 /// @nodoc
-mixin _$BeFiatWithdrawalsResult {
+mixin _$BeWithdrawalsResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(
@@ -8685,62 +7415,61 @@ mixin _$BeFiatWithdrawalsResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_BeFiatWithdrawalsResult value) $default, {
-    required TResult Function(_BeFiatWithdrawalsResultErr value) error,
+    TResult Function(_BeWithdrawalsResult value) $default, {
+    required TResult Function(_BeWithdrawalsResultErr value) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeFiatWithdrawalsResult value)? $default, {
-    TResult Function(_BeFiatWithdrawalsResultErr value)? error,
+    TResult Function(_BeWithdrawalsResult value)? $default, {
+    TResult Function(_BeWithdrawalsResultErr value)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeFiatWithdrawalsResult value)? $default, {
-    TResult Function(_BeFiatWithdrawalsResultErr value)? error,
+    TResult Function(_BeWithdrawalsResult value)? $default, {
+    TResult Function(_BeWithdrawalsResultErr value)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $BeFiatWithdrawalsResultCopyWith<$Res> {
-  factory $BeFiatWithdrawalsResultCopyWith(BeFiatWithdrawalsResult value,
-          $Res Function(BeFiatWithdrawalsResult) then) =
-      _$BeFiatWithdrawalsResultCopyWithImpl<$Res>;
+abstract class $BeWithdrawalsResultCopyWith<$Res> {
+  factory $BeWithdrawalsResultCopyWith(
+          BeWithdrawalsResult value, $Res Function(BeWithdrawalsResult) then) =
+      _$BeWithdrawalsResultCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$BeFiatWithdrawalsResultCopyWithImpl<$Res>
-    implements $BeFiatWithdrawalsResultCopyWith<$Res> {
-  _$BeFiatWithdrawalsResultCopyWithImpl(this._value, this._then);
+class _$BeWithdrawalsResultCopyWithImpl<$Res>
+    implements $BeWithdrawalsResultCopyWith<$Res> {
+  _$BeWithdrawalsResultCopyWithImpl(this._value, this._then);
 
-  final BeFiatWithdrawalsResult _value;
+  final BeWithdrawalsResult _value;
   // ignore: unused_field
-  final $Res Function(BeFiatWithdrawalsResult) _then;
+  final $Res Function(BeWithdrawalsResult) _then;
 }
 
 /// @nodoc
-abstract class _$BeFiatWithdrawalsResultCopyWith<$Res> {
-  factory _$BeFiatWithdrawalsResultCopyWith(_BeFiatWithdrawalsResult value,
-          $Res Function(_BeFiatWithdrawalsResult) then) =
-      __$BeFiatWithdrawalsResultCopyWithImpl<$Res>;
+abstract class _$BeWithdrawalsResultCopyWith<$Res> {
+  factory _$BeWithdrawalsResultCopyWith(_BeWithdrawalsResult value,
+          $Res Function(_BeWithdrawalsResult) then) =
+      __$BeWithdrawalsResultCopyWithImpl<$Res>;
   $Res call(
       {List<BeBalanceUpdate> withdrawals, int offset, int limit, int total});
 }
 
 /// @nodoc
-class __$BeFiatWithdrawalsResultCopyWithImpl<$Res>
-    extends _$BeFiatWithdrawalsResultCopyWithImpl<$Res>
-    implements _$BeFiatWithdrawalsResultCopyWith<$Res> {
-  __$BeFiatWithdrawalsResultCopyWithImpl(_BeFiatWithdrawalsResult _value,
-      $Res Function(_BeFiatWithdrawalsResult) _then)
-      : super(_value, (v) => _then(v as _BeFiatWithdrawalsResult));
+class __$BeWithdrawalsResultCopyWithImpl<$Res>
+    extends _$BeWithdrawalsResultCopyWithImpl<$Res>
+    implements _$BeWithdrawalsResultCopyWith<$Res> {
+  __$BeWithdrawalsResultCopyWithImpl(
+      _BeWithdrawalsResult _value, $Res Function(_BeWithdrawalsResult) _then)
+      : super(_value, (v) => _then(v as _BeWithdrawalsResult));
 
   @override
-  _BeFiatWithdrawalsResult get _value =>
-      super._value as _BeFiatWithdrawalsResult;
+  _BeWithdrawalsResult get _value => super._value as _BeWithdrawalsResult;
 
   @override
   $Res call({
@@ -8749,7 +7478,7 @@ class __$BeFiatWithdrawalsResultCopyWithImpl<$Res>
     Object? limit = freezed,
     Object? total = freezed,
   }) {
-    return _then(_BeFiatWithdrawalsResult(
+    return _then(_BeWithdrawalsResult(
       withdrawals == freezed
           ? _value.withdrawals
           : withdrawals // ignore: cast_nullable_to_non_nullable
@@ -8772,10 +7501,10 @@ class __$BeFiatWithdrawalsResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeFiatWithdrawalsResult
+class _$_BeWithdrawalsResult
     with DiagnosticableTreeMixin
-    implements _BeFiatWithdrawalsResult {
-  const _$_BeFiatWithdrawalsResult(
+    implements _BeWithdrawalsResult {
+  const _$_BeWithdrawalsResult(
       this.withdrawals, this.offset, this.limit, this.total);
 
   @override
@@ -8789,14 +7518,14 @@ class _$_BeFiatWithdrawalsResult
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BeFiatWithdrawalsResult(withdrawals: $withdrawals, offset: $offset, limit: $limit, total: $total)';
+    return 'BeWithdrawalsResult(withdrawals: $withdrawals, offset: $offset, limit: $limit, total: $total)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'BeFiatWithdrawalsResult'))
+      ..add(DiagnosticsProperty('type', 'BeWithdrawalsResult'))
       ..add(DiagnosticsProperty('withdrawals', withdrawals))
       ..add(DiagnosticsProperty('offset', offset))
       ..add(DiagnosticsProperty('limit', limit))
@@ -8807,7 +7536,7 @@ class _$_BeFiatWithdrawalsResult
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _BeFiatWithdrawalsResult &&
+            other is _BeWithdrawalsResult &&
             const DeepCollectionEquality()
                 .equals(other.withdrawals, withdrawals) &&
             (identical(other.offset, offset) || other.offset == offset) &&
@@ -8821,8 +7550,8 @@ class _$_BeFiatWithdrawalsResult
 
   @JsonKey(ignore: true)
   @override
-  _$BeFiatWithdrawalsResultCopyWith<_BeFiatWithdrawalsResult> get copyWith =>
-      __$BeFiatWithdrawalsResultCopyWithImpl<_BeFiatWithdrawalsResult>(
+  _$BeWithdrawalsResultCopyWith<_BeWithdrawalsResult> get copyWith =>
+      __$BeWithdrawalsResultCopyWithImpl<_BeWithdrawalsResult>(
           this, _$identity);
 
   @override
@@ -8865,8 +7594,8 @@ class _$_BeFiatWithdrawalsResult
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_BeFiatWithdrawalsResult value) $default, {
-    required TResult Function(_BeFiatWithdrawalsResultErr value) error,
+    TResult Function(_BeWithdrawalsResult value) $default, {
+    required TResult Function(_BeWithdrawalsResultErr value) error,
   }) {
     return $default(this);
   }
@@ -8874,8 +7603,8 @@ class _$_BeFiatWithdrawalsResult
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeFiatWithdrawalsResult value)? $default, {
-    TResult Function(_BeFiatWithdrawalsResultErr value)? error,
+    TResult Function(_BeWithdrawalsResult value)? $default, {
+    TResult Function(_BeWithdrawalsResultErr value)? error,
   }) {
     return $default?.call(this);
   }
@@ -8883,8 +7612,8 @@ class _$_BeFiatWithdrawalsResult
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeFiatWithdrawalsResult value)? $default, {
-    TResult Function(_BeFiatWithdrawalsResultErr value)? error,
+    TResult Function(_BeWithdrawalsResult value)? $default, {
+    TResult Function(_BeWithdrawalsResultErr value)? error,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -8894,48 +7623,46 @@ class _$_BeFiatWithdrawalsResult
   }
 }
 
-abstract class _BeFiatWithdrawalsResult implements BeFiatWithdrawalsResult {
-  const factory _BeFiatWithdrawalsResult(
+abstract class _BeWithdrawalsResult implements BeWithdrawalsResult {
+  const factory _BeWithdrawalsResult(
           List<BeBalanceUpdate> withdrawals, int offset, int limit, int total) =
-      _$_BeFiatWithdrawalsResult;
+      _$_BeWithdrawalsResult;
 
   List<BeBalanceUpdate> get withdrawals;
   int get offset;
   int get limit;
   int get total;
   @JsonKey(ignore: true)
-  _$BeFiatWithdrawalsResultCopyWith<_BeFiatWithdrawalsResult> get copyWith =>
+  _$BeWithdrawalsResultCopyWith<_BeWithdrawalsResult> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$BeFiatWithdrawalsResultErrCopyWith<$Res> {
-  factory _$BeFiatWithdrawalsResultErrCopyWith(
-          _BeFiatWithdrawalsResultErr value,
-          $Res Function(_BeFiatWithdrawalsResultErr) then) =
-      __$BeFiatWithdrawalsResultErrCopyWithImpl<$Res>;
+abstract class _$BeWithdrawalsResultErrCopyWith<$Res> {
+  factory _$BeWithdrawalsResultErrCopyWith(_BeWithdrawalsResultErr value,
+          $Res Function(_BeWithdrawalsResultErr) then) =
+      __$BeWithdrawalsResultErrCopyWithImpl<$Res>;
   $Res call({BeError err});
 
   $BeErrorCopyWith<$Res> get err;
 }
 
 /// @nodoc
-class __$BeFiatWithdrawalsResultErrCopyWithImpl<$Res>
-    extends _$BeFiatWithdrawalsResultCopyWithImpl<$Res>
-    implements _$BeFiatWithdrawalsResultErrCopyWith<$Res> {
-  __$BeFiatWithdrawalsResultErrCopyWithImpl(_BeFiatWithdrawalsResultErr _value,
-      $Res Function(_BeFiatWithdrawalsResultErr) _then)
-      : super(_value, (v) => _then(v as _BeFiatWithdrawalsResultErr));
+class __$BeWithdrawalsResultErrCopyWithImpl<$Res>
+    extends _$BeWithdrawalsResultCopyWithImpl<$Res>
+    implements _$BeWithdrawalsResultErrCopyWith<$Res> {
+  __$BeWithdrawalsResultErrCopyWithImpl(_BeWithdrawalsResultErr _value,
+      $Res Function(_BeWithdrawalsResultErr) _then)
+      : super(_value, (v) => _then(v as _BeWithdrawalsResultErr));
 
   @override
-  _BeFiatWithdrawalsResultErr get _value =>
-      super._value as _BeFiatWithdrawalsResultErr;
+  _BeWithdrawalsResultErr get _value => super._value as _BeWithdrawalsResultErr;
 
   @override
   $Res call({
     Object? err = freezed,
   }) {
-    return _then(_BeFiatWithdrawalsResultErr(
+    return _then(_BeWithdrawalsResultErr(
       err == freezed
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -8953,24 +7680,24 @@ class __$BeFiatWithdrawalsResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeFiatWithdrawalsResultErr
+class _$_BeWithdrawalsResultErr
     with DiagnosticableTreeMixin
-    implements _BeFiatWithdrawalsResultErr {
-  const _$_BeFiatWithdrawalsResultErr(this.err);
+    implements _BeWithdrawalsResultErr {
+  const _$_BeWithdrawalsResultErr(this.err);
 
   @override
   final BeError err;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BeFiatWithdrawalsResult.error(err: $err)';
+    return 'BeWithdrawalsResult.error(err: $err)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'BeFiatWithdrawalsResult.error'))
+      ..add(DiagnosticsProperty('type', 'BeWithdrawalsResult.error'))
       ..add(DiagnosticsProperty('err', err));
   }
 
@@ -8978,7 +7705,7 @@ class _$_BeFiatWithdrawalsResultErr
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _BeFiatWithdrawalsResultErr &&
+            other is _BeWithdrawalsResultErr &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -8987,9 +7714,9 @@ class _$_BeFiatWithdrawalsResultErr
 
   @JsonKey(ignore: true)
   @override
-  _$BeFiatWithdrawalsResultErrCopyWith<_BeFiatWithdrawalsResultErr>
-      get copyWith => __$BeFiatWithdrawalsResultErrCopyWithImpl<
-          _BeFiatWithdrawalsResultErr>(this, _$identity);
+  _$BeWithdrawalsResultErrCopyWith<_BeWithdrawalsResultErr> get copyWith =>
+      __$BeWithdrawalsResultErrCopyWithImpl<_BeWithdrawalsResultErr>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -9031,8 +7758,8 @@ class _$_BeFiatWithdrawalsResultErr
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_BeFiatWithdrawalsResult value) $default, {
-    required TResult Function(_BeFiatWithdrawalsResultErr value) error,
+    TResult Function(_BeWithdrawalsResult value) $default, {
+    required TResult Function(_BeWithdrawalsResultErr value) error,
   }) {
     return error(this);
   }
@@ -9040,8 +7767,8 @@ class _$_BeFiatWithdrawalsResultErr
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_BeFiatWithdrawalsResult value)? $default, {
-    TResult Function(_BeFiatWithdrawalsResultErr value)? error,
+    TResult Function(_BeWithdrawalsResult value)? $default, {
+    TResult Function(_BeWithdrawalsResultErr value)? error,
   }) {
     return error?.call(this);
   }
@@ -9049,8 +7776,8 @@ class _$_BeFiatWithdrawalsResultErr
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_BeFiatWithdrawalsResult value)? $default, {
-    TResult Function(_BeFiatWithdrawalsResultErr value)? error,
+    TResult Function(_BeWithdrawalsResult value)? $default, {
+    TResult Function(_BeWithdrawalsResultErr value)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -9060,14 +7787,14 @@ class _$_BeFiatWithdrawalsResultErr
   }
 }
 
-abstract class _BeFiatWithdrawalsResultErr implements BeFiatWithdrawalsResult {
-  const factory _BeFiatWithdrawalsResultErr(BeError err) =
-      _$_BeFiatWithdrawalsResultErr;
+abstract class _BeWithdrawalsResultErr implements BeWithdrawalsResult {
+  const factory _BeWithdrawalsResultErr(BeError err) =
+      _$_BeWithdrawalsResultErr;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$BeFiatWithdrawalsResultErrCopyWith<_BeFiatWithdrawalsResultErr>
-      get copyWith => throw _privateConstructorUsedError;
+  _$BeWithdrawalsResultErrCopyWith<_BeWithdrawalsResultErr> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc

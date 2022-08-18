@@ -235,30 +235,15 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   Future<void> _deposit() async {
-    showAlertDialog(context, 'querying..');
-    var res = await beAssets();
-    Navigator.pop(context);
-    res.when(
-        (assets) => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => DepositSelectScreen(assets, _websocket))),
-        error: (err) => snackMsg(context, 'failed to query deposits',
-            category: MessageCategory.Warning));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => DepositsScreen(_websocket)));
   }
 
   Future<void> _withdrawal() async {
-    showAlertDialog(context, 'querying..');
-    var res = await beAssets();
-    Navigator.pop(context);
-    res.when(
-        (assets) => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    WithdrawalSelectScreen(assets, _websocket, _userInfo))),
-        error: (err) => snackMsg(context, 'failed to query withdrawals',
-            category: MessageCategory.Warning));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => WithdrawalsScreen(_websocket, _userInfo)));
   }
 
   Future<void> _orders() async {

@@ -16,10 +16,14 @@ enum WebsocketEvent {
   userInfoUpdate,
   brokerOrderNew,
   brokerOrderUpdate,
+  depositNew,
+  depositUpdate,
   cryptoDepositNew,
   cryptoDepositUpdate,
   fiatDepositNew,
   fiatDepositUpdate,
+  withdrawalNew,
+  withdrawalUpdate,
   cryptoWithdrawalNew,
   cryptoWithdrawalUpdate,
   fiatWithdrawalNew,
@@ -106,6 +110,14 @@ class Websocket {
       call(WebsocketEvent.lnInvoicePaid, data);
       log.info('ln_invoice_paid: $data');
     });
+    socket.on('deposit_new', (data) {
+      call(WebsocketEvent.depositNew, data);
+      log.info('deposit_new: $data');
+    });
+    socket.on('deposit_update', (data) {
+      call(WebsocketEvent.depositUpdate, data);
+      log.info('deposit_update: $data');
+    });
     socket.on('crypto_deposit_new', (data) {
       call(WebsocketEvent.cryptoDepositNew, data);
       log.info('crypto_deposit_new: $data');
@@ -121,6 +133,14 @@ class Websocket {
     socket.on('fiat_deposit_update', (data) {
       call(WebsocketEvent.fiatDepositUpdate, data);
       log.info('fiat_deposit_update: $data');
+    });
+    socket.on('withdrawal_new', (data) {
+      call(WebsocketEvent.withdrawalNew, data);
+      log.info('withdrawal_new: $data');
+    });
+    socket.on('withdrawal_update', (data) {
+      call(WebsocketEvent.withdrawalUpdate, data);
+      log.info('withdrawal_update: $data');
     });
     socket.on('crypto_withdrawal_new', (data) {
       call(WebsocketEvent.cryptoWithdrawalNew, data);
