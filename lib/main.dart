@@ -432,18 +432,22 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                       bool hasLoaded = false;
                       PriceEquivalent? btcBalanceText;
                       PriceEquivalent? nzdBalanceText;
+                      TextStyle _balanceTextStyle =
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold);
                       if (snapshot.hasData) {
                         hasLoaded = true;
                         btcBalanceText =
                             snapshot.data?[0].when<PriceEquivalent?>(
                           (btcBalance) => PriceEquivalent(
-                              Btc, btcBalance?.total ?? Decimal.parse('0')),
+                              Btc, btcBalance?.total ?? Decimal.parse('0'),
+                              textStyle: _balanceTextStyle),
                           error: (err) => null,
                         );
                         nzdBalanceText =
                             snapshot.data?[1].when<PriceEquivalent?>(
                           (nzdBalance) => PriceEquivalent(
-                              Nzd, nzdBalance?.total ?? Decimal.parse('0')),
+                              Nzd, nzdBalance?.total ?? Decimal.parse('0'),
+                              textStyle: _balanceTextStyle),
                           error: (err) => null,
                         );
                       } else if (snapshot.hasError) {
@@ -464,57 +468,29 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                             viewportFraction: 0.76,
                             enableInfiniteScroll: false,
                             enlargeCenterPage: true),
-                        items: <Container>[
-                          Container(
-                            width: cfg.ButtonWidth,
-                            height: 120,
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topRight,
-                                  end: Alignment.bottomLeft,
-                                  colors: [
-                                    Color(0xfff46b45),
-                                    Color(0xffeea849)
-                                  ],
-                                ),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                assetLogo(Btc, size: 50),
-                                SizedBox(width: 15),
-                                hasLoaded
-                                    ? btcBalanceText ??
-                                        Text("Couldn't load balance")
-                                    : Text("Loading"),
-                              ],
+                        items: <BalanceCard>[
+                          BalanceCard(
+                            "Bitcoin Balance",
+                            hasLoaded
+                                ? btcBalanceText ??
+                                    Text("Couldn't load balance")
+                                : Text("Loading"),
+                            LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: [Color(0xfff46b45), Color(0xffeea849)],
                             ),
                           ),
-                          Container(
-                            width: cfg.ButtonWidth,
-                            height: 120,
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topRight,
-                                  end: Alignment.bottomLeft,
-                                  colors: [
-                                    Color(0xff4b6cb7),
-                                    Color(0xff182848)
-                                  ],
-                                ),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                assetLogo(Nzd, size: 50),
-                                SizedBox(width: 15),
-                                hasLoaded
-                                    ? nzdBalanceText ??
-                                        Text("Couldn't load balance")
-                                    : Text("Loading"),
-                              ],
+                          BalanceCard(
+                            "NZD Balance",
+                            hasLoaded
+                                ? nzdBalanceText ??
+                                    Text("Couldn't load balance")
+                                : Text("Loading"),
+                            LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: [Color(0xff4b6cb7), Color(0xff182848)],
                             ),
                           ),
                         ],

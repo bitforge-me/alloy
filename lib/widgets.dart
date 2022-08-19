@@ -12,6 +12,36 @@ import 'config.dart' as cfg;
 import 'utils.dart';
 import 'units.dart';
 
+class BalanceCard extends StatelessWidget {
+  final String titleText;
+  //balanceText is a Widget as it could be either PriceEquivalent or Text
+  final Widget balanceText;
+  final LinearGradient colorGradient;
+  BalanceCard(this.titleText, this.balanceText, this.colorGradient);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: cfg.ButtonWidth,
+      height: 120,
+      decoration: BoxDecoration(
+          gradient: colorGradient,
+          borderRadius: BorderRadius.all(Radius.circular(20))),
+      child: Row(children: <Widget>[
+        SizedBox(width: 13),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(height: 20),
+            Text(titleText, style: TextStyle(fontSize: 19)),
+            balanceText,
+          ],
+        )
+      ]),
+    );
+  }
+}
+
 enum AppStore { android, ios }
 
 class AppstoreButton extends StatelessWidget {
