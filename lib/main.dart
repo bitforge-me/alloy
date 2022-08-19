@@ -425,77 +425,126 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 VerticalSpacer(),
-                FutureBuilder<List<BeBalanceResult>>(
-                    future: _getCarouselBalances(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<BeBalanceResult>> snapshot) {
-                      bool hasLoaded = false;
-                      PriceEquivalent? btcBalanceText;
-                      PriceEquivalent? nzdBalanceText;
-                      TextStyle _balanceTextStyle =
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold);
-                      if (snapshot.hasData) {
-                        hasLoaded = true;
-                        btcBalanceText =
-                            snapshot.data?[0].when<PriceEquivalent?>(
-                          (btcBalance) => PriceEquivalent(
-                              Btc, btcBalance?.total ?? Decimal.parse('0'),
-                              textStyle: _balanceTextStyle),
-                          error: (err) => null,
-                        );
-                        nzdBalanceText =
-                            snapshot.data?[1].when<PriceEquivalent?>(
-                          (nzdBalance) => PriceEquivalent(
-                              Nzd, nzdBalance?.total ?? Decimal.parse('0'),
-                              textStyle: _balanceTextStyle),
-                          error: (err) => null,
-                        );
-                      } else if (snapshot.hasError) {
-                        hasLoaded = true;
-                        btcBalanceText = null;
-                        nzdBalanceText = null;
-                      }
-                      return CarouselSlider(
-                        options: CarouselOptions(
-                            onPageChanged:
-                                (int index, CarouselPageChangedReason reason) {
-                              setState(() {
-                                carouselInitialPage = index;
-                              });
-                            },
-                            initialPage: carouselInitialPage ?? 0,
-                            height: 120,
-                            viewportFraction: 0.76,
-                            enableInfiniteScroll: false,
-                            enlargeCenterPage: true),
-                        items: <BalanceCard>[
-                          BalanceCard(
-                            "Bitcoin Balance",
-                            hasLoaded
-                                ? btcBalanceText ??
-                                    Text("Couldn't load balance")
-                                : Text("Loading"),
-                            LinearGradient(
-                              begin: Alignment.topRight,
-                              end: Alignment.bottomLeft,
-                              colors: [Color(0xfff46b45), Color(0xffeea849)],
-                            ),
-                          ),
-                          BalanceCard(
-                            "NZD Balance",
-                            hasLoaded
-                                ? nzdBalanceText ??
-                                    Text("Couldn't load balance")
-                                : Text("Loading"),
-                            LinearGradient(
-                              begin: Alignment.topRight,
-                              end: Alignment.bottomLeft,
-                              colors: [Color(0xff4b6cb7), Color(0xff182848)],
-                            ),
-                          ),
-                        ],
-                      );
-                    }),
+                Visibility(
+                  visible: _userInfo != null,
+                  child: FutureBuilder<List<BeBalanceResult>>(
+                      future: _getCarouselBalances(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<BeBalanceResult>> snapshot) {
+                        bool hasLoaded = false;
+                        PriceEquivalent? btcBalanceText;
+                        PriceEquivalent? nzdBalanceText;
+                        TextStyle _balanceTextStyle = TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold);
+                        if (snapshot.hasData) {
+                          hasLoaded = true;
+                          btcBalanceText =
+                              snapshot.data?[0].when<PriceEquivalent?>(
+                            (btcBalance) => PriceEquivalent(
+                                Btc, btcBalance?.total ?? Decimal.parse('0'),
+                                textStyle: _balanceTextStyle),
+                            error: (err) => null,
+                          );
+                          nzdBalanceText =
+                              snapshot.data?[1].when<PriceEquivalent?>(
+                            (nzdBalance) => PriceEquivalent(
+                                Nzd, nzdBalance?.total ?? Decimal.parse('0'),
+                                textStyle: _balanceTextStyle),
+                            error: (err) => null,
+                          );
+                        } else if (snapshot.hasError) {
+                          hasLoaded = true;
+                          btcBalanceText = null;
+                          nzdBalanceText = null;
+                        }
+                        return LayoutBuilder(builder: (context, constraints) {
+                          if (constraints.maxWidth < cfg.MaxColumnWidth)
+                            return CarouselSlider(
+                              options: CarouselOptions(
+                                  onPageChanged: (int index,
+                                      CarouselPageChangedReason reason) {
+                                    setState(() {
+                                      carouselInitialPage = index;
+                                    });
+                                  },
+                                  initialPage: carouselInitialPage ?? 0,
+                                  height: 120,
+                                  viewportFraction: 0.76,
+                                  enableInfiniteScroll: false,
+                                  enlargeCenterPage: true),
+                              items: <BalanceCard>[
+                                BalanceCard(
+                                  "Bitcoin Balance",
+                                  hasLoaded
+                                      ? btcBalanceText ??
+                                          Text("Couldn't load balance")
+                                      : Text("Loading"),
+                                  LinearGradient(
+                                    begin: Alignment.topRight,
+                                    end: Alignment.bottomLeft,
+                                    colors: [
+                                      Color(0xfff46b45),
+                                      Color(0xffeea849)
+                                    ],
+                                  ),
+                                ),
+                                BalanceCard(
+                                  "NZD Balance",
+                                  hasLoaded
+                                      ? nzdBalanceText ??
+                                          Text("Couldn't load balance")
+                                      : Text("Loading"),
+                                  LinearGradient(
+                                    begin: Alignment.topRight,
+                                    end: Alignment.bottomLeft,
+                                    colors: [
+                                      Color(0xff4b6cb7),
+                                      Color(0xff182848)
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            );
+                          else
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                BalanceCard(
+                                  "Bitcoin Balance",
+                                  hasLoaded
+                                      ? btcBalanceText ??
+                                          Text("Couldn't load balance")
+                                      : Text("Loading"),
+                                  LinearGradient(
+                                    begin: Alignment.topRight,
+                                    end: Alignment.bottomLeft,
+                                    colors: [
+                                      Color(0xfff46b45),
+                                      Color(0xffeea849)
+                                    ],
+                                  ),
+                                ),
+                                BalanceCard(
+                                  "NZD Balance",
+                                  hasLoaded
+                                      ? nzdBalanceText ??
+                                          Text("Couldn't load balance")
+                                      : Text("Loading"),
+                                  LinearGradient(
+                                    begin: Alignment.topRight,
+                                    end: Alignment.bottomLeft,
+                                    colors: [
+                                      Color(0xff4b6cb7),
+                                      Color(0xff182848)
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            );
+                        });
+                      }),
+                ),
                 VerticalSpacer(),
                 // home screen buttons
                 Visibility(
