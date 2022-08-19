@@ -256,6 +256,8 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
               estimate.amountBaseAsset,
               roundAt(
                   estimate.amountQuoteAsset, assetDecimals(market.quoteAsset)),
+              estimate.feeQuoteAsset,
+              estimate.fixedFeeQuoteAsset,
               estimate.errMsg);
         case BeMarketSide.ask:
           return askQuoteAmount(market, orderbook, value);
@@ -296,6 +298,8 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     _side = side;
     _market = market;
     _amount = quote.amountBaseAsset;
+    log.info(quote.toString(
+        baseAsset: market.baseAsset, quoteAsset: market.quoteAsset));
     setState(() => _validAmount = true);
   }
 

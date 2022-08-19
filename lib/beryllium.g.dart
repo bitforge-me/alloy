@@ -139,6 +139,7 @@ BeOrderbook _$BeOrderbookFromJson(Map<String, dynamic> json) => BeOrderbook(
       _decimalFromJson(json['base_asset_withdraw_fee']),
       _decimalFromJson(json['quote_asset_withdraw_fee']),
       _decimalFromJson(json['broker_fee']),
+      DecimalMap.fromJson(json['broker_fee_fixed'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$BeOrderbookToJson(BeOrderbook instance) =>
@@ -149,6 +150,7 @@ Map<String, dynamic> _$BeOrderbookToJson(BeOrderbook instance) =>
       'quote_asset_withdraw_fee':
           _decimalToJson(instance.quoteAssetWithdrawFee),
       'broker_fee': _decimalToJson(instance.brokerFee),
+      'broker_fee_fixed': instance.brokerFeeFixed,
     };
 
 BeBalance _$BeBalanceFromJson(Map<String, dynamic> json) => BeBalance(

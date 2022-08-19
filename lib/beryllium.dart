@@ -19,8 +19,32 @@ part 'beryllium.g.dart';
 part 'beryllium.freezed.dart';
 
 final log = Logger('Beryllium');
+
 Decimal _decimalFromJson(input) => Decimal.parse(input);
 String _decimalToJson(input) => input.toString();
+
+class DecimalMap {
+  late Map<String, Decimal> _map;
+
+  DecimalMap.fromJson(Map<String, dynamic> json) {
+    _map = Map();
+    for (var key in json.keys) _map[key] = Decimal.parse(json[key]);
+  }
+
+  Map<String, dynamic> toJson() {
+    var json = Map<String, dynamic>();
+    for (var key in _map.keys) json[key] = _map[key].toString();
+    return json;
+  }
+
+  Decimal? get(String key) {
+    return _map[key];
+  }
+
+  Iterable<String> keys() {
+    return _map.keys;
+  }
+}
 
 enum BeBalanceUpdateStatus {
   created,
@@ -406,9 +430,11 @@ class BeOrderbook {
   @JsonKey(
       name: 'broker_fee', fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal brokerFee;
+  @JsonKey(name: 'broker_fee_fixed')
+  final DecimalMap brokerFeeFixed;
 
   BeOrderbook(this.bids, this.asks, this.baseAssetWithdrawFee,
-      this.quoteAssetWithdrawFee, this.brokerFee);
+      this.quoteAssetWithdrawFee, this.brokerFee, this.brokerFeeFixed);
   factory BeOrderbook.fromJson(Map<String, dynamic> json) =>
       _$BeOrderbookFromJson(json);
   Map<String, dynamic> toJson() => _$BeOrderbookToJson(this);
