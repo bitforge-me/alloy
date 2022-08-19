@@ -84,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Websocket _websocket = Websocket();
   UserInfo? _userInfo;
   List<String> _alerts = [];
+  int? carouselInitialPage;
 
   @override
   void initState() {
@@ -452,13 +453,20 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                       }
                       return CarouselSlider(
                         options: CarouselOptions(
+                            onPageChanged:
+                                (int index, CarouselPageChangedReason reason) {
+                              setState(() {
+                                carouselInitialPage = index;
+                              });
+                            },
+                            initialPage: carouselInitialPage ?? 0,
                             height: 120,
                             viewportFraction: 0.76,
                             enableInfiniteScroll: false,
                             enlargeCenterPage: true),
                         items: <Container>[
                           Container(
-                            width: ButtonWidth,
+                            width: cfg.ButtonWidth,
                             height: 120,
                             decoration: BoxDecoration(
                                 gradient: LinearGradient(
@@ -484,15 +492,15 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                             ),
                           ),
                           Container(
-                            width: ButtonWidth,
+                            width: cfg.ButtonWidth,
                             height: 120,
                             decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                   begin: Alignment.topRight,
                                   end: Alignment.bottomLeft,
                                   colors: [
-                                    Color(0xff4364F7),
-                                    Color(0xFF6FB1FC)
+                                    Color(0xff4b6cb7),
+                                    Color(0xff182848)
                                   ],
                                 ),
                                 borderRadius:
@@ -533,7 +541,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                               SizedBox(width: 50),
                               buttonRow2
                             ]);
-                    }))
+                    })),
                 _userInfo != null ? ExchangeWidget(_websocket) : SizedBox(),
               ],
             ),
