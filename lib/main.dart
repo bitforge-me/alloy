@@ -193,7 +193,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     if (args.event == WebsocketEvent.cryptoWithdrawalUpdate ||
         args.event == WebsocketEvent.cryptoDepositUpdate ||
         args.event == WebsocketEvent.fiatWithdrawalUpdate ||
-        args.event == WebsocketEvent.fiatDepositUpdate) {
+        args.event == WebsocketEvent.fiatDepositUpdate ||
+        args.event == WebsocketEvent.brokerOrderUpdate ||
+        args.event == WebsocketEvent.brokerOrderNew) {
       // update balance on crypto withdrawals or deposits
       setState(() {});
     }
@@ -487,6 +489,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                                       Color(0xffeea849)
                                     ],
                                   ),
+                                  "bitcoin-white.png",
                                 ),
                                 BalanceCard(
                                   "NZD Balance",
@@ -498,10 +501,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                                     begin: Alignment.topRight,
                                     end: Alignment.bottomLeft,
                                     colors: [
+                                      Color(0xff182848),
                                       Color(0xff4b6cb7),
-                                      Color(0xff182848)
                                     ],
                                   ),
+                                  "southern-cross.png",
                                 ),
                               ],
                             );
@@ -511,35 +515,35 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 BalanceCard(
-                                  "Bitcoin Balance",
-                                  hasLoaded
-                                      ? btcBalanceText ??
-                                          Text("Couldn't load balance")
-                                      : Text("Loading"),
-                                  LinearGradient(
-                                    begin: Alignment.topRight,
-                                    end: Alignment.bottomLeft,
-                                    colors: [
-                                      Color(0xfff46b45),
-                                      Color(0xffeea849)
-                                    ],
-                                  ),
-                                ),
+                                    "Bitcoin Balance",
+                                    hasLoaded
+                                        ? btcBalanceText ??
+                                            Text("Couldn't load balance")
+                                        : Text("Loading"),
+                                    LinearGradient(
+                                      begin: Alignment.topRight,
+                                      end: Alignment.bottomLeft,
+                                      colors: [
+                                        Color(0xfff46b45),
+                                        Color(0xffeea849)
+                                      ],
+                                    ),
+                                    "bitcoin-white.png"),
                                 BalanceCard(
-                                  "NZD Balance",
-                                  hasLoaded
-                                      ? nzdBalanceText ??
-                                          Text("Couldn't load balance")
-                                      : Text("Loading"),
-                                  LinearGradient(
-                                    begin: Alignment.topRight,
-                                    end: Alignment.bottomLeft,
-                                    colors: [
-                                      Color(0xff4b6cb7),
-                                      Color(0xff182848)
-                                    ],
-                                  ),
-                                ),
+                                    "NZD Balance",
+                                    hasLoaded
+                                        ? nzdBalanceText ??
+                                            Text("Couldn't load balance")
+                                        : Text("Loading"),
+                                    LinearGradient(
+                                      begin: Alignment.topRight,
+                                      end: Alignment.bottomLeft,
+                                      colors: [
+                                        Color(0xff182848),
+                                        Color(0xff4b6cb7),
+                                      ],
+                                    ),
+                                    "southern-cross.png"),
                               ],
                             );
                         });

@@ -17,7 +17,9 @@ class BalanceCard extends StatelessWidget {
   //balanceText is a Widget as it could be either PriceEquivalent or Text
   final Widget balanceText;
   final LinearGradient colorGradient;
-  BalanceCard(this.titleText, this.balanceText, this.colorGradient);
+  final String assetImageStr;
+  BalanceCard(
+      this.titleText, this.balanceText, this.colorGradient, this.assetImageStr);
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,16 @@ class BalanceCard extends StatelessWidget {
       width: cfg.ButtonWidth,
       height: 120,
       decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('crypto_logos/${assetImageStr}'),
+            opacity: 0.15,
+            alignment: Alignment(1.3, 2.0),
+            fit: BoxFit.fitHeight,
+            colorFilter: ColorFilter.mode(
+              Colors.transparent,
+              BlendMode.overlay,
+            ),
+          ),
           gradient: colorGradient,
           borderRadius: BorderRadius.all(Radius.circular(20))),
       child: Row(children: <Widget>[
