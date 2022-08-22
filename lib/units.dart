@@ -129,6 +129,7 @@ class PriceEquivalent extends StatefulWidget {
   final FontWeight? fontWeight;
   final Color? color;
   final bool twoLines;
+  final TextStyle? textStyle;
   PriceEquivalent(this.asset, this.amount,
       {this.showAssetAmount = true,
       this.pre,
@@ -137,7 +138,8 @@ class PriceEquivalent extends StatefulWidget {
       this.fontSize,
       this.fontWeight,
       this.color,
-      this.twoLines = false});
+      this.twoLines = false,
+      this.textStyle});
 
   @override
   State<PriceEquivalent> createState() => _PriceEquivalentState();
@@ -195,10 +197,8 @@ class _PriceEquivalentState extends State<PriceEquivalent> {
     }
     return Text(text,
         textAlign: widget.textAlign,
-        style: TextStyle(
-            fontSize: widget.fontSize,
-            fontWeight: widget.fontWeight,
-            color: widget.color));
+        style: widget.textStyle ??
+            TextStyle(fontSize: widget.fontSize, color: widget.color));
   }
 }
 

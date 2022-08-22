@@ -5,6 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:decimal/decimal.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
@@ -82,7 +83,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Websocket _websocket = Websocket();
   UserInfo? _userInfo;
+  List<BeBalance> _balances = [];
   List<String> _alerts = [];
+  int _balanceCarouselPage = 0;
+  final CarouselController _balanceCarouselController = CarouselController();
 
   @override
   void initState() {
@@ -152,11 +156,19 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         _userInfo = userInfo;
         _alerts = _generateAlerts(userInfo);
       });
+      // if we got the user info try for the balances
+      if (userInfo != null) _updateBalances();
     } else
       _startLogin(false, false);
   }
 
-  void checkVersion(BeVersionResult res) {
+  void _updateBalances() {
+    beBalances().then((value) => value.when(
+        (balances) => setState(() => _balances = balances),
+        error: (_) => false));
+  }
+
+  void _checkVersion(BeVersionResult res) {
     res.when((serverVersion, clientVersionDeployed) {
       if (clientVersionDeployed > cfg.AppVersion) {
         log.info(
@@ -177,7 +189,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.version)
-      checkVersion(BeVersionResult.parse(args.msg));
+      _checkVersion(BeVersionResult.parse(args.msg));
     if (args.event == WebsocketEvent.userInfoUpdate) {
       var info = UserInfo.fromJson(jsonDecode(args.msg));
       if (info.email != _userInfo?.email)
@@ -187,6 +199,19 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         _alerts = _generateAlerts(info);
       });
       //snackMsg(context, 'user updated');
+    }
+    if (args.event == WebsocketEvent.cryptoWithdrawalNew ||
+        args.event == WebsocketEvent.cryptoWithdrawalUpdate ||
+        args.event == WebsocketEvent.cryptoDepositNew ||
+        args.event == WebsocketEvent.cryptoDepositUpdate ||
+        args.event == WebsocketEvent.fiatWithdrawalNew ||
+        args.event == WebsocketEvent.fiatWithdrawalUpdate ||
+        args.event == WebsocketEvent.fiatDepositNew ||
+        args.event == WebsocketEvent.fiatDepositUpdate ||
+        args.event == WebsocketEvent.brokerOrderUpdate ||
+        args.event == WebsocketEvent.brokerOrderNew) {
+      // update balance on crypto withdrawals or deposits
+      _updateBalances();
     }
     if (args.event == WebsocketEvent.lnInvoicePaid) {
       var json = jsonDecode(args.msg);
@@ -221,17 +246,23 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     }
   }
 
-  Future<void> _balances() async {
-    showAlertDialog(context, 'querying..');
-    var res = await beBalances();
-    Navigator.pop(context);
-    res.when(
-        (balances) => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => BalanceScreen(balances, _websocket))),
-        error: (err) => snackMsg(context, 'failed to query balances',
-            category: MessageCategory.Warning));
+  Future<void> _showBalances() async {
+    if (_balances.length == 0) {
+      showAlertDialog(context, 'querying..');
+      var res = await beBalances();
+      Navigator.pop(context);
+      res.when(
+          (balances) => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BalanceScreen(balances, _websocket))),
+          error: (err) => snackMsg(context, 'failed to query balances',
+              category: MessageCategory.Warning));
+    } else
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BalanceScreen(_balances, _websocket)));
   }
 
   Future<void> _deposit() async {
@@ -278,7 +309,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             builder: (context) => VerifyUserScreen(_userInfo!, _websocket)));
   }
 
-  Drawer makeDrawer(BuildContext contex) {
+  Drawer _makeDrawer(BuildContext contex) {
     var header = DrawerHeader(
         decoration: BoxDecoration(
           color: ZapSecondary,
@@ -345,6 +376,71 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     );
   }
 
+  Widget _makeBalanceCarousel(BuildContext context) {
+    var cards = <BalanceCard>[];
+    for (var balance in _balances)
+      cards.add(BalanceCard(
+          '${balance.name} Balance',
+          PriceEquivalent(balance.asset, balance.available,
+              twoLines: true,
+              textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          assetGradient(balance.asset),
+          assetBackgroundPng(balance.asset)));
+    return LayoutBuilder(builder: (context, constraints) {
+      var doubleUp = constraints.maxWidth >= cfg.MaxColumnWidth;
+      var count = doubleUp ? (cards.length / 2).round() : cards.length;
+      return Column(children: [
+        CarouselSlider.builder(
+            options: CarouselOptions(
+                onPageChanged: (int index, _) =>
+                    setState(() => _balanceCarouselPage = index),
+                initialPage: _balanceCarouselPage,
+                // make the viewport fraction 1 so that the cards are always actually 'ButtonWidth' wide
+                // we will instead indicate you can slide with indicators
+                viewportFraction: 1,
+                height: BalanceCard.HEIGHT,
+                enlargeCenterPage: true),
+            carouselController: _balanceCarouselController,
+            itemCount: count,
+            itemBuilder: (context, index, realIdx) {
+              if (doubleUp) {
+                final int first = index * 2;
+                final int second = first + 1;
+                if (cards.length > second)
+                  return Row(mainAxisSize: MainAxisSize.min, children: [
+                    cards[first],
+                    SizedBox(width: 50),
+                    cards[second]
+                  ]);
+                else
+                  return cards[first];
+              } else
+                return cards[index];
+            }),
+        // row of carousel indicators
+        count > 1
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: Iterable<int>.generate(count).map((index) {
+                  return GestureDetector(
+                      onTap: () =>
+                          _balanceCarouselController.animateToPage(index),
+                      child: Container(
+                        width: 12.0,
+                        height: 12.0,
+                        margin: EdgeInsets.symmetric(
+                            vertical: 8.0, horizontal: 4.0),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: ZapOnBackground.withOpacity(
+                                _balanceCarouselPage == index ? 0.9 : 0.4)),
+                      ));
+                }).toList())
+            : SizedBox()
+      ]);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var buttonRow1 = Row(mainAxisSize: MainAxisSize.min, children: [
@@ -369,7 +465,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           borderSize: 0,
           fontSize: 18),
       SizedBox(width: 15),
-      SquareButton(_balances, Icons.wallet_rounded, ZapSecondary, 'Balances',
+      SquareButton(
+          _showBalances, Icons.wallet_rounded, ZapSecondary, 'Balances',
           textColor: ZapOnSecondary,
           textOutside: false,
           borderSize: 0,
@@ -386,13 +483,20 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 color: _alerts.isNotEmpty ? ZapWarning : null,
               );
             })),
-        drawer: makeDrawer(context),
+        drawer: _makeDrawer(context),
         body: BiforgePage(
             scrollChild: true,
             showDebugInfo: true,
             child: Center(
               child: LayoutBuilder(builder: (context, constraints) {
                 return Column(children: [
+                  VerticalSpacer(
+                      height:
+                          constraints.maxWidth >= cfg.MaxColumnWidth ? 50 : 25),
+                  // balance carousel
+                  _balances.length > 0
+                      ? _makeBalanceCarousel(context)
+                      : SizedBox(),
                   VerticalSpacer(
                       height:
                           constraints.maxWidth >= cfg.MaxColumnWidth ? 50 : 0),
