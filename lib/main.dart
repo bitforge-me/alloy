@@ -83,8 +83,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Websocket _websocket = Websocket();
   UserInfo? _userInfo;
+  List<BeBalance> _balances = [];
   List<String> _alerts = [];
-  int? carouselInitialPage;
+  int _balancePage = 0;
 
   @override
   void initState() {
@@ -154,11 +155,19 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         _userInfo = userInfo;
         _alerts = _generateAlerts(userInfo);
       });
+      // if we got the user info try for the balances
+      if (userInfo != null) _updateBalances();
     } else
       _startLogin(false, false);
   }
 
-  void checkVersion(BeVersionResult res) {
+  void _updateBalances() {
+    beBalances().then((value) => value.when(
+        (balances) => setState(() => _balances = balances),
+        error: (_) => false));
+  }
+
+  void _checkVersion(BeVersionResult res) {
     res.when((serverVersion, clientVersionDeployed) {
       if (clientVersionDeployed > cfg.AppVersion) {
         log.info(
@@ -179,7 +188,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
     if (args.event == WebsocketEvent.version)
-      checkVersion(BeVersionResult.parse(args.msg));
+      _checkVersion(BeVersionResult.parse(args.msg));
     if (args.event == WebsocketEvent.userInfoUpdate) {
       var info = UserInfo.fromJson(jsonDecode(args.msg));
       if (info.email != _userInfo?.email)
@@ -190,14 +199,18 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       });
       //snackMsg(context, 'user updated');
     }
-    if (args.event == WebsocketEvent.cryptoWithdrawalUpdate ||
+    if (args.event == WebsocketEvent.cryptoWithdrawalNew ||
+        args.event == WebsocketEvent.cryptoWithdrawalUpdate ||
+        args.event == WebsocketEvent.cryptoDepositNew ||
         args.event == WebsocketEvent.cryptoDepositUpdate ||
+        args.event == WebsocketEvent.fiatWithdrawalNew ||
         args.event == WebsocketEvent.fiatWithdrawalUpdate ||
+        args.event == WebsocketEvent.fiatDepositNew ||
         args.event == WebsocketEvent.fiatDepositUpdate ||
         args.event == WebsocketEvent.brokerOrderUpdate ||
         args.event == WebsocketEvent.brokerOrderNew) {
       // update balance on crypto withdrawals or deposits
-      setState(() {});
+      _updateBalances();
     }
     if (args.event == WebsocketEvent.lnInvoicePaid) {
       var json = jsonDecode(args.msg);
@@ -232,17 +245,23 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     }
   }
 
-  Future<void> _balances() async {
-    showAlertDialog(context, 'querying..');
-    var res = await beBalances();
-    Navigator.pop(context);
-    res.when(
-        (balances) => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => BalanceScreen(balances, _websocket))),
-        error: (err) => snackMsg(context, 'failed to query balances',
-            category: MessageCategory.Warning));
+  Future<void> _showBalances() async {
+    if (_balances.length == 0) {
+      showAlertDialog(context, 'querying..');
+      var res = await beBalances();
+      Navigator.pop(context);
+      res.when(
+          (balances) => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => BalanceScreen(balances, _websocket))),
+          error: (err) => snackMsg(context, 'failed to query balances',
+              category: MessageCategory.Warning));
+    } else
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BalanceScreen(_balances, _websocket)));
   }
 
   Future<void> _deposit() async {
@@ -304,13 +323,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             builder: (context) => VerifyUserScreen(_userInfo!, _websocket)));
   }
 
-  Future<List<BeBalanceResult>> _getCarouselBalances() async {
-    BeBalanceResult btcBalance = await beBalance(Btc);
-    BeBalanceResult nzdBalance = await beBalance(Nzd);
-    return <BeBalanceResult>[btcBalance, nzdBalance];
-  }
-
-  Drawer makeDrawer(BuildContext contex) {
+  Drawer _makeDrawer(BuildContext contex) {
     var header = DrawerHeader(
         decoration: BoxDecoration(
           color: ZapSecondary,
@@ -377,6 +390,36 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     );
   }
 
+  Widget _makeBalanceUi(BuildContext context) {
+    var cards = <BalanceCard>[];
+    for (var balance in _balances)
+      cards.add(BalanceCard(
+          '${balance.name} Balance',
+          Text('${assetFormatWithUnitToUser(balance.asset, balance.available)}'),
+          assetGradient(balance.asset),
+          assetBackgroundPng(balance.asset)));
+    return LayoutBuilder(builder: (context, constraints) {
+      if (constraints.maxWidth < cfg.MaxColumnWidth)
+        return CarouselSlider(
+          options: CarouselOptions(
+              onPageChanged: (int index, CarouselPageChangedReason reason) {
+                setState(() => _balancePage = index);
+              },
+              initialPage: _balancePage,
+              height: 120,
+              viewportFraction: 0.76,
+              enableInfiniteScroll: false,
+              enlargeCenterPage: true),
+          items: cards,
+        );
+      else
+        return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: cards);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var buttonRow1 = Row(mainAxisSize: MainAxisSize.min, children: [
@@ -386,7 +429,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           borderSize: 0,
           fontSize: 18),
       SizedBox(width: 15),
-      SquareButton(_balances, Icons.wallet_rounded, ZapSecondary, 'Balances',
+      SquareButton(
+          _showBalances, Icons.wallet_rounded, ZapSecondary, 'Balances',
           textColor: ZapOnSecondary,
           textOutside: false,
           borderSize: 0,
@@ -418,7 +462,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 color: _alerts.isNotEmpty ? ZapWarning : null,
               );
             })),
-        drawer: makeDrawer(context),
+        drawer: _makeDrawer(context),
         body: BiforgePage(
           scrollChild: true,
           showDebugInfo: true,
@@ -426,129 +470,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                VerticalSpacer(),
-                Visibility(
-                  visible: _userInfo != null,
-                  child: FutureBuilder<List<BeBalanceResult>>(
-                      future: _getCarouselBalances(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<List<BeBalanceResult>> snapshot) {
-                        bool hasLoaded = false;
-                        PriceEquivalent? btcBalanceText;
-                        PriceEquivalent? nzdBalanceText;
-                        TextStyle _balanceTextStyle = TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold);
-                        if (snapshot.hasData) {
-                          hasLoaded = true;
-                          btcBalanceText =
-                              snapshot.data?[0].when<PriceEquivalent?>(
-                            (btcBalance) => PriceEquivalent(
-                                Btc, btcBalance?.total ?? Decimal.parse('0'),
-                                textStyle: _balanceTextStyle),
-                            error: (err) => null,
-                          );
-                          nzdBalanceText =
-                              snapshot.data?[1].when<PriceEquivalent?>(
-                            (nzdBalance) => PriceEquivalent(
-                                Nzd, nzdBalance?.total ?? Decimal.parse('0'),
-                                textStyle: _balanceTextStyle),
-                            error: (err) => null,
-                          );
-                        } else if (snapshot.hasError) {
-                          hasLoaded = true;
-                          btcBalanceText = null;
-                          nzdBalanceText = null;
-                        }
-                        return LayoutBuilder(builder: (context, constraints) {
-                          if (constraints.maxWidth < cfg.MaxColumnWidth)
-                            return CarouselSlider(
-                              options: CarouselOptions(
-                                  onPageChanged: (int index,
-                                      CarouselPageChangedReason reason) {
-                                    setState(() {
-                                      carouselInitialPage = index;
-                                    });
-                                  },
-                                  initialPage: carouselInitialPage ?? 0,
-                                  height: 120,
-                                  viewportFraction: 0.76,
-                                  enableInfiniteScroll: false,
-                                  enlargeCenterPage: true),
-                              items: <BalanceCard>[
-                                BalanceCard(
-                                  "Bitcoin Balance",
-                                  hasLoaded
-                                      ? btcBalanceText ??
-                                          Text("Couldn't load balance")
-                                      : Text("Loading"),
-                                  LinearGradient(
-                                    begin: Alignment.topRight,
-                                    end: Alignment.bottomLeft,
-                                    colors: [
-                                      Color(0xfff46b45),
-                                      Color(0xffeea849)
-                                    ],
-                                  ),
-                                  "bitcoin-white.png",
-                                ),
-                                BalanceCard(
-                                  "NZD Balance",
-                                  hasLoaded
-                                      ? nzdBalanceText ??
-                                          Text("Couldn't load balance")
-                                      : Text("Loading"),
-                                  LinearGradient(
-                                    begin: Alignment.topRight,
-                                    end: Alignment.bottomLeft,
-                                    colors: [
-                                      Color(0xff182848),
-                                      Color(0xff4b6cb7),
-                                    ],
-                                  ),
-                                  "southern-cross.png",
-                                ),
-                              ],
-                            );
-                          else
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                BalanceCard(
-                                    "Bitcoin Balance",
-                                    hasLoaded
-                                        ? btcBalanceText ??
-                                            Text("Couldn't load balance")
-                                        : Text("Loading"),
-                                    LinearGradient(
-                                      begin: Alignment.topRight,
-                                      end: Alignment.bottomLeft,
-                                      colors: [
-                                        Color(0xfff46b45),
-                                        Color(0xffeea849)
-                                      ],
-                                    ),
-                                    "bitcoin-white.png"),
-                                BalanceCard(
-                                    "NZD Balance",
-                                    hasLoaded
-                                        ? nzdBalanceText ??
-                                            Text("Couldn't load balance")
-                                        : Text("Loading"),
-                                    LinearGradient(
-                                      begin: Alignment.topRight,
-                                      end: Alignment.bottomLeft,
-                                      colors: [
-                                        Color(0xff182848),
-                                        Color(0xff4b6cb7),
-                                      ],
-                                    ),
-                                    "southern-cross.png"),
-                              ],
-                            );
-                        });
-                      }),
-                ),
+                _balances.length > 0 ? VerticalSpacer() : SizedBox(),
+                _balances.length > 0 ? _makeBalanceUi(context) : SizedBox(),
                 VerticalSpacer(),
                 // home screen buttons
                 Visibility(

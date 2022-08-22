@@ -82,6 +82,37 @@ Widget assetLogo(String symbol,
       child: Center(child: SvgPicture.asset(_svgAsset(symbol))));
 }
 
+LinearGradient assetGradient(String symbol) {
+  switch (symbol) {
+    case Nzd:
+      return LinearGradient(
+        begin: Alignment.topRight,
+        end: Alignment.bottomLeft,
+        colors: [
+          Color(0xff182848),
+          Color(0xff4b6cb7),
+        ],
+      );
+    case Btc:
+      return LinearGradient(
+        begin: Alignment.topRight,
+        end: Alignment.bottomLeft,
+        colors: [Color(0xfff46b45), Color(0xffeea849)],
+      );
+  }
+  return LinearGradient(colors: [Colors.white, Colors.grey]);
+}
+
+String assetBackgroundPng(String symbol) {
+  switch (symbol) {
+    case Nzd:
+      return 'crypto_logos/southern-cross.png';
+    case Btc:
+      return 'crypto_logos/bitcoin-white.png';
+  }
+  return 'crypto_logos/default-background.png';
+}
+
 int assetDecimals(String symbol) {
   switch (symbol) {
     case Nzd:

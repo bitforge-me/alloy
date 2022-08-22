@@ -28,7 +28,7 @@ class BalanceCard extends StatelessWidget {
       height: 120,
       decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('crypto_logos/${assetImageStr}'),
+            image: AssetImage(assetImageStr),
             opacity: 0.15,
             alignment: Alignment(1.3, 2.0),
             fit: BoxFit.fitHeight,
