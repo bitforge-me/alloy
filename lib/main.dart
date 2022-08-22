@@ -85,7 +85,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   UserInfo? _userInfo;
   List<BeBalance> _balances = [];
   List<String> _alerts = [];
-  int _balancePage = 0;
+  int _balanceCarouselPage = 0;
+  final CarouselController _balanceCarouselController = CarouselController();
 
   @override
   void initState() {
@@ -390,34 +391,68 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     );
   }
 
-  Widget _makeBalanceUi(BuildContext context) {
+  Widget _makeBalanceCarousel(BuildContext context) {
     var cards = <BalanceCard>[];
     for (var balance in _balances)
       cards.add(BalanceCard(
           '${balance.name} Balance',
-          Text(
-              '${assetFormatWithUnitToUser(balance.asset, balance.available)}'),
+          PriceEquivalent(balance.asset, balance.available,
+              twoLines: true,
+              textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           assetGradient(balance.asset),
           assetBackgroundPng(balance.asset)));
     return LayoutBuilder(builder: (context, constraints) {
-      if (constraints.maxWidth < cfg.MaxColumnWidth)
-        return CarouselSlider(
-          options: CarouselOptions(
-              onPageChanged: (int index, CarouselPageChangedReason reason) {
-                setState(() => _balancePage = index);
-              },
-              initialPage: _balancePage,
-              height: 120,
-              viewportFraction: 0.76,
-              enableInfiniteScroll: false,
-              enlargeCenterPage: true),
-          items: cards,
-        );
-      else
-        return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: cards);
+      var doubleUp = constraints.maxWidth >= cfg.MaxColumnWidth;
+      var count = doubleUp ? (cards.length / 2).round() : cards.length;
+      return Column(children: [
+        CarouselSlider.builder(
+            options: CarouselOptions(
+                onPageChanged: (int index, _) =>
+                    setState(() => _balanceCarouselPage = index),
+                initialPage: _balanceCarouselPage,
+                // make the viewport fraction 1 so that the cards are always actually 'ButtonWidth' wide
+                // we will instead indicate you can slide with indicators
+                viewportFraction: 1,
+                height: BalanceCard.HEIGHT,
+                enlargeCenterPage: true),
+            carouselController: _balanceCarouselController,
+            itemCount: count,
+            itemBuilder: (context, index, realIdx) {
+              if (doubleUp) {
+                final int first = index * 2;
+                final int second = first + 1;
+                if (cards.length > second)
+                  return Row(mainAxisSize: MainAxisSize.min, children: [
+                    cards[first],
+                    SizedBox(width: 50),
+                    cards[second]
+                  ]);
+                else
+                  return cards[first];
+              } else
+                return cards[index];
+            }),
+        // row of carousel indicators
+        count > 1
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: Iterable<int>.generate(count).map((index) {
+                  return GestureDetector(
+                      onTap: () =>
+                          _balanceCarouselController.animateToPage(index),
+                      child: Container(
+                        width: 12.0,
+                        height: 12.0,
+                        margin: EdgeInsets.symmetric(
+                            vertical: 8.0, horizontal: 4.0),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: ZapOnBackground.withOpacity(
+                                _balanceCarouselPage == index ? 0.9 : 0.4)),
+                      ));
+                }).toList())
+            : SizedBox()
+      ]);
     });
   }
 
@@ -472,8 +507,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                 return Column(children: [
                   VerticalSpacer(
                       height:
-                          constraints.maxWidth >= cfg.MaxColumnWidth ? 50 : 0),
-                  _balances.length > 0 ? _makeBalanceUi(context) : SizedBox(),
+                          constraints.maxWidth >= cfg.MaxColumnWidth ? 50 : 25),
+                  // balance carousel
+                  _balances.length > 0
+                      ? _makeBalanceCarousel(context)
+                      : SizedBox(),
                   VerticalSpacer(
                       height:
                           constraints.maxWidth >= cfg.MaxColumnWidth ? 50 : 0),
