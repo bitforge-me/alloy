@@ -322,8 +322,8 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       SizedBox(
         width: inputWidth,
         child: RoundedEdgeBox(
-            borderColor: ZapPrimary,
-            gradient: ZapPrimaryGradient,
+            borderColor: ZapSurface,
+            gradient: assetGradient(_fromAsset),
             child: DropdownButton<String>(
                 isExpanded: true,
                 underline: Container(
@@ -364,8 +364,8 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       SizedBox(
         width: inputWidth,
         child: RoundedEdgeBox(
-            color: ZapSurface,
             borderColor: ZapSurface,
+            gradient: assetGradient(_toAsset),
             child: DropdownButton<String>(
                 isExpanded: true,
                 underline: Container(
