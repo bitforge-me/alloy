@@ -6,17 +6,36 @@ import 'assets.dart';
 class QuoteTotalPrice {
   final Decimal amountBaseAsset;
   final Decimal amountQuoteAsset;
+  final Decimal feeQuoteAsset;
+  final Decimal fixedFeeQuoteAsset;
   final String? errMsg;
 
-  QuoteTotalPrice(this.amountBaseAsset, this.amountQuoteAsset, this.errMsg);
+  QuoteTotalPrice(this.amountBaseAsset, this.amountQuoteAsset,
+      this.feeQuoteAsset, this.fixedFeeQuoteAsset, this.errMsg);
+
+  String toString({String baseAsset = '', String quoteAsset = ''}) {
+    return '$amountBaseAsset $baseAsset for $amountQuoteAsset $quoteAsset, fee: $feeQuoteAsset $quoteAsset, fixedFee: $fixedFeeQuoteAsset $quoteAsset';
+  }
+
+  static QuoteTotalPrice Error(String msg) {
+    return QuoteTotalPrice(
+        Decimal.zero, Decimal.zero, Decimal.zero, Decimal.zero, msg);
+  }
+}
+
+Decimal _fixedFee(BeMarket market, BeOrderbook orderbook) {
+  for (var key in orderbook.brokerFeeFixed.keys())
+    if (key == market.quoteAsset) return orderbook.brokerFeeFixed.get(key)!;
+  return Decimal.zero;
 }
 
 QuoteTotalPrice bidQuoteAmount(
     BeMarket market, BeOrderbook orderbook, Decimal amount) {
   if (amount < market.minTrade)
-    return QuoteTotalPrice(amount, Decimal.zero,
+    return QuoteTotalPrice.Error(
         'minimum trade is ${assetFormatWithUnitToUser(market.baseAsset, market.minTrade)}');
 
+  var fixedFee = _fixedFee(market, orderbook);
   var filled = Decimal.zero;
   var totalPrice = Decimal.zero;
   var n = 0;
@@ -31,15 +50,15 @@ QuoteTotalPrice bidQuoteAmount(
     filled += quantityToUse;
     totalPrice += quantityToUse * rate;
     if (filled == amount) {
+      var totalPriceIncludingFee = totalPrice *
+          (Decimal.one + orderbook.brokerFee / Decimal.fromInt(100));
+      var fee = totalPriceIncludingFee - totalPrice;
       return QuoteTotalPrice(
-          amount,
-          totalPrice *
-              (Decimal.one + orderbook.brokerFee / Decimal.fromInt(100)),
-          null);
+          amount, totalPriceIncludingFee + fixedFee, fee, fixedFee, null);
     }
     n++;
   }
-  return QuoteTotalPrice(Decimal.zero, Decimal.zero, 'not enough liquidity');
+  return QuoteTotalPrice.Error('not enough liquidity');
 }
 
 QuoteTotalPrice bidEstimateAmountFromQuoteAssetAmount(
@@ -60,21 +79,27 @@ QuoteTotalPrice bidEstimateAmountFromQuoteAssetAmount(
     totalBaseAsset += quoteAssetToUse / rate;
     if (filled == amountQuoteAsset) {
       if (totalBaseAsset < market.minTrade)
-        return QuoteTotalPrice(totalBaseAsset, amountQuoteAsset,
+        return QuoteTotalPrice(
+            totalBaseAsset,
+            amountQuoteAsset,
+            Decimal.zero,
+            Decimal.zero,
             'minimum trade is ${assetFormatWithUnitToUser(market.baseAsset, market.minTrade)}');
-      return QuoteTotalPrice(totalBaseAsset, amountQuoteAsset, null);
+      return QuoteTotalPrice(
+          totalBaseAsset, amountQuoteAsset, Decimal.zero, Decimal.zero, null);
     }
     n++;
   }
-  return QuoteTotalPrice(Decimal.zero, Decimal.zero, 'not enough liquidity');
+  return QuoteTotalPrice.Error('not enough liquidity');
 }
 
 QuoteTotalPrice askQuoteAmount(
     BeMarket market, BeOrderbook orderbook, Decimal amount) {
   if (amount < market.minTrade)
-    return QuoteTotalPrice(Decimal.zero, Decimal.zero,
+    return QuoteTotalPrice.Error(
         'minimum trade is ${assetFormatWithUnitToUser(market.baseAsset, market.minTrade)}');
 
+  var fixedFee = _fixedFee(market, orderbook);
   var filled = Decimal.zero;
   var totalPrice = Decimal.zero;
   var n = 0;
@@ -89,13 +114,13 @@ QuoteTotalPrice askQuoteAmount(
     filled += quantityToUse;
     totalPrice += quantityToUse * rate;
     if (filled == amount) {
+      var totalPriceIncludingFee = totalPrice *
+          (Decimal.one - orderbook.brokerFee / Decimal.fromInt(100));
+      var fee = totalPrice - totalPriceIncludingFee;
       return QuoteTotalPrice(
-          amount,
-          totalPrice *
-              (Decimal.one - orderbook.brokerFee / Decimal.fromInt(100)),
-          null);
+          amount, totalPriceIncludingFee - fixedFee, fee, fixedFee, null);
     }
     n++;
   }
-  return QuoteTotalPrice(Decimal.zero, Decimal.zero, 'not enough liquidity');
+  return QuoteTotalPrice.Error('not enough liquidity');
 }
