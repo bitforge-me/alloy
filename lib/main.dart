@@ -235,30 +235,15 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   Future<void> _deposit() async {
-    showAlertDialog(context, 'querying..');
-    var res = await beAssets();
-    Navigator.pop(context);
-    res.when(
-        (assets) => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => DepositSelectScreen(assets, _websocket))),
-        error: (err) => snackMsg(context, 'failed to query deposits',
-            category: MessageCategory.Warning));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => DepositsScreen(_websocket)));
   }
 
   Future<void> _withdrawal() async {
-    showAlertDialog(context, 'querying..');
-    var res = await beAssets();
-    Navigator.pop(context);
-    res.when(
-        (assets) => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    WithdrawalSelectScreen(assets, _websocket, _userInfo))),
-        error: (err) => snackMsg(context, 'failed to query withdrawals',
-            category: MessageCategory.Warning));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => WithdrawalsScreen(_websocket, _userInfo)));
   }
 
   Future<void> _orders() async {
@@ -363,19 +348,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     var buttonRow1 = Row(mainAxisSize: MainAxisSize.min, children: [
-      SquareButton(_orders, Icons.history, ZapSecondary, 'Order History',
-          textColor: ZapOnSecondary,
-          textOutside: false,
-          borderSize: 0,
-          fontSize: 18),
-      SizedBox(width: 15),
-      SquareButton(_balances, Icons.wallet_rounded, ZapSecondary, 'Balances',
-          textColor: ZapOnSecondary,
-          textOutside: false,
-          borderSize: 0,
-          fontSize: 18)
-    ]);
-    var buttonRow2 = Row(mainAxisSize: MainAxisSize.min, children: [
       SquareButton(_deposit, Icons.keyboard_double_arrow_down_rounded,
           ZapSecondary, 'Deposits',
           textColor: ZapOnSecondary,
@@ -385,6 +357,19 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       SizedBox(width: 15),
       SquareButton(_withdrawal, Icons.keyboard_double_arrow_up_rounded,
           ZapSecondary, 'Withdrawals',
+          textColor: ZapOnSecondary,
+          textOutside: false,
+          borderSize: 0,
+          fontSize: 18)
+    ]);
+    var buttonRow2 = Row(mainAxisSize: MainAxisSize.min, children: [
+      SquareButton(_orders, Icons.history, ZapSecondary, 'Order History',
+          textColor: ZapOnSecondary,
+          textOutside: false,
+          borderSize: 0,
+          fontSize: 18),
+      SizedBox(width: 15),
+      SquareButton(_balances, Icons.wallet_rounded, ZapSecondary, 'Balances',
           textColor: ZapOnSecondary,
           textOutside: false,
           borderSize: 0,
@@ -403,38 +388,42 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             })),
         drawer: makeDrawer(context),
         body: BiforgePage(
-          scrollChild: true,
-          showDebugInfo: true,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // exchange widget
-                _userInfo != null ? ExchangeWidget(_websocket) : SizedBox(),
-                // home screen buttons
-                Visibility(
-                    visible: _userInfo != null,
-                    child: LayoutBuilder(builder: (context, constraints) {
-                      if (constraints.maxWidth < cfg.MaxColumnWidth)
-                        return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              buttonRow1,
-                              VerticalSpacer(),
-                              buttonRow2
-                            ]);
-                      else
-                        return Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              buttonRow1,
-                              SizedBox(width: 50),
-                              buttonRow2
-                            ]);
-                    }))
-              ],
-            ),
-          ),
-        ));
+            scrollChild: true,
+            showDebugInfo: true,
+            child: Center(
+              child: LayoutBuilder(builder: (context, constraints) {
+                return Column(children: [
+                  VerticalSpacer(
+                      height:
+                          constraints.maxWidth >= cfg.MaxColumnWidth ? 50 : 0),
+                  // exchange widget
+                  _userInfo != null ? ExchangeWidget(_websocket) : SizedBox(),
+                  VerticalSpacer(
+                      height:
+                          constraints.maxWidth >= cfg.MaxColumnWidth ? 50 : 0),
+                  // home screen buttons
+                  Visibility(
+                      visible: _userInfo != null,
+                      child: LayoutBuilder(builder: (context, constraints) {
+                        if (constraints.maxWidth < cfg.MaxColumnWidth)
+                          return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                buttonRow1,
+                                VerticalSpacer(),
+                                buttonRow2
+                              ]);
+                        else
+                          return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                buttonRow1,
+                                SizedBox(width: 50),
+                                buttonRow2
+                              ]);
+                      }))
+                ]);
+              }),
+            )));
   }
 }
