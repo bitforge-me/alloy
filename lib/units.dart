@@ -126,6 +126,7 @@ class PriceEquivalent extends StatefulWidget {
   final String? post;
   final TextAlign? textAlign;
   final double? fontSize;
+  final FontWeight? fontWeight;
   final Color? color;
   final bool twoLines;
   final TextStyle? textStyle;
@@ -135,6 +136,7 @@ class PriceEquivalent extends StatefulWidget {
       this.post,
       this.textAlign,
       this.fontSize,
+      this.fontWeight,
       this.color,
       this.twoLines = false,
       this.textStyle});
