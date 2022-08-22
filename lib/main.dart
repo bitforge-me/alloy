@@ -395,7 +395,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     for (var balance in _balances)
       cards.add(BalanceCard(
           '${balance.name} Balance',
-          Text('${assetFormatWithUnitToUser(balance.asset, balance.available)}'),
+          Text(
+              '${assetFormatWithUnitToUser(balance.asset, balance.available)}'),
           assetGradient(balance.asset),
           assetBackgroundPng(balance.asset)));
     return LayoutBuilder(builder: (context, constraints) {
@@ -423,20 +424,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     var buttonRow1 = Row(mainAxisSize: MainAxisSize.min, children: [
-      SquareButton(_orders, Icons.history, ZapSecondary, 'Order History',
-          textColor: ZapOnSecondary,
-          textOutside: false,
-          borderSize: 0,
-          fontSize: 18),
-      SizedBox(width: 15),
-      SquareButton(
-          _showBalances, Icons.wallet_rounded, ZapSecondary, 'Balances',
-          textColor: ZapOnSecondary,
-          textOutside: false,
-          borderSize: 0,
-          fontSize: 18)
-    ]);
-    var buttonRow2 = Row(mainAxisSize: MainAxisSize.min, children: [
       SquareButton(_deposit, Icons.keyboard_double_arrow_down_rounded,
           ZapSecondary, 'Deposits',
           textColor: ZapOnSecondary,
@@ -446,6 +433,20 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       SizedBox(width: 15),
       SquareButton(_withdrawal, Icons.keyboard_double_arrow_up_rounded,
           ZapSecondary, 'Withdrawals',
+          textColor: ZapOnSecondary,
+          textOutside: false,
+          borderSize: 0,
+          fontSize: 18)
+    ]);
+    var buttonRow2 = Row(mainAxisSize: MainAxisSize.min, children: [
+      SquareButton(_orders, Icons.history, ZapSecondary, 'Order History',
+          textColor: ZapOnSecondary,
+          textOutside: false,
+          borderSize: 0,
+          fontSize: 18),
+      SizedBox(width: 15),
+      SquareButton(
+          _showBalances, Icons.wallet_rounded, ZapSecondary, 'Balances',
           textColor: ZapOnSecondary,
           textOutside: false,
           borderSize: 0,
@@ -464,40 +465,46 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             })),
         drawer: _makeDrawer(context),
         body: BiforgePage(
-          scrollChild: true,
-          showDebugInfo: true,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _balances.length > 0 ? VerticalSpacer() : SizedBox(),
-                _balances.length > 0 ? _makeBalanceUi(context) : SizedBox(),
-                VerticalSpacer(),
-                // home screen buttons
-                Visibility(
-                    visible: _userInfo != null,
-                    child: LayoutBuilder(builder: (context, constraints) {
-                      if (constraints.maxWidth < cfg.MaxColumnWidth)
-                        return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              buttonRow1,
-                              VerticalSpacer(),
-                              buttonRow2
-                            ]);
-                      else
-                        return Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              buttonRow1,
-                              SizedBox(width: 50),
-                              buttonRow2
-                            ]);
-                    })),
-                _userInfo != null ? ExchangeWidget(_websocket) : SizedBox(),
-              ],
-            ),
-          ),
-        ));
+            scrollChild: true,
+            showDebugInfo: true,
+            child: Center(
+              child: LayoutBuilder(builder: (context, constraints) {
+                return Column(children: [
+                  VerticalSpacer(
+                      height:
+                          constraints.maxWidth >= cfg.MaxColumnWidth ? 50 : 0),
+                  _balances.length > 0 ? _makeBalanceUi(context) : SizedBox(),
+                  VerticalSpacer(
+                      height:
+                          constraints.maxWidth >= cfg.MaxColumnWidth ? 50 : 0),
+                  // exchange widget
+                  _userInfo != null ? ExchangeWidget(_websocket) : SizedBox(),
+                  VerticalSpacer(
+                      height:
+                          constraints.maxWidth >= cfg.MaxColumnWidth ? 50 : 0),
+                  // home screen buttons
+                  Visibility(
+                      visible: _userInfo != null,
+                      child: LayoutBuilder(builder: (context, constraints) {
+                        if (constraints.maxWidth < cfg.MaxColumnWidth)
+                          return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                buttonRow1,
+                                VerticalSpacer(),
+                                buttonRow2
+                              ]);
+                        else
+                          return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                buttonRow1,
+                                SizedBox(width: 50),
+                                buttonRow2
+                              ]);
+                      }))
+                ]);
+              }),
+            )));
   }
 }
