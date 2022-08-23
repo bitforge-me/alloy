@@ -309,7 +309,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             builder: (context) => VerifyUserScreen(_userInfo!, _websocket)));
   }
 
-  Drawer _makeDrawer(BuildContext contex, {bool showDebugInfo = true}) {
+  Drawer _makeDrawer(BuildContext contex) {
     var header = DrawerHeader(
         decoration: BoxDecoration(
           color: ZapSecondary,
@@ -334,8 +334,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             onTap: _support)
       ]));
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
+      child: Column(
         children: [
           header,
           _alerts.isNotEmpty ? AlertDrawer(() {}, _alerts) : SizedBox(),
@@ -372,9 +371,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               leading: Icon(Icons.logout),
               title: const Text('Logout'),
               onTap: _logout),
-          showDebugInfo == true ? DebugInfo() : SizedBox(),
-        ],
-      ),
+      Expanded(child: SizedBox()),
+      DebugInfo()
+      ])
     );
   }
 
