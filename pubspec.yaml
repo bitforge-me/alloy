@@ -29,7 +29,6 @@ dependencies:
   logging: ^1.0.2
   universal_html: ^2.0.8
   qr_flutter: ^4.0.0
-  dotted_border: ^2.0.0+2
   rxdart: ^0.27.4
   intl: ^0.17.0
   #mobile_scanner: ^1.0.0
