@@ -342,7 +342,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           Visibility(
               visible: _userInfo?.kycValidated != true,
               child: ListTile(
-                leading: Icon(Icons.verified_user, color: ZapWarning),
+                leading: _gradientIcon(
+                    Icon(Icons.verified_user, color: Colors.white)),
                 title: const Text('Verify User'),
                 onTap: _verifyUser,
               )),
@@ -351,8 +352,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               title: const Text('Profile'),
               onTap: _profile),
           ListTile(
-              leading: Icon(Icons.shield,
-                  color: _userInfo?.tfEnabled == true ? null : ZapWarning),
+              leading: _userInfo?.tfEnabled == true
+                  ? Icon(Icons.shield)
+                  : _gradientIcon(Icon(Icons.shield, color: Colors.white)),
               title: const Text('Security'),
               onTap: _security),
           ListTile(
