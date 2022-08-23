@@ -61,34 +61,6 @@ QuoteTotalPrice bidQuoteAmount(
   return QuoteTotalPrice.Error('not enough liquidity');
 }
 
-QuoteTotalPrice bidEstimateAmountFromQuoteAssetAmount(
-    BeMarket market, BeOrderbook orderbook, Decimal amountQuoteAsset) {
-  var filled = Decimal.zero;
-  var totalBaseAsset = Decimal.zero;
-  var n = 0;
-  while (amountQuoteAsset > filled) {
-    if (n >= orderbook.asks.length) {
-      break;
-    }
-    var rate = orderbook.asks[n].rate;
-    var quantity = orderbook.asks[n].quantity;
-    var quoteAssetToUse = quantity * rate;
-    if (quoteAssetToUse > amountQuoteAsset - filled)
-      quoteAssetToUse = amountQuoteAsset - filled;
-    filled += quoteAssetToUse;
-    totalBaseAsset += quoteAssetToUse / rate;
-    if (filled == amountQuoteAsset) {
-      if (totalBaseAsset < market.minTrade)
-        return QuoteTotalPrice.Error(
-            'minimum trade is ${assetFormatWithUnitToUser(market.baseAsset, market.minTrade)}');
-      return QuoteTotalPrice(
-          totalBaseAsset, amountQuoteAsset, Decimal.zero, Decimal.zero, null);
-    }
-    n++;
-  }
-  return QuoteTotalPrice.Error('not enough liquidity');
-}
-
 QuoteTotalPrice askQuoteAmount(
     BeMarket market, BeOrderbook orderbook, Decimal amount) {
   if (amount < market.minTrade)
@@ -121,21 +93,19 @@ QuoteTotalPrice askQuoteAmount(
   return QuoteTotalPrice.Error('not enough liquidity');
 }
 
-QuoteTotalPrice askEstimateAmountFromQuoteAssetAmount(
-    BeMarket market, BeOrderbook orderbook, Decimal amountQuoteAsset) {
-  //
-  //TODO: can we modify bidEstimateAmountFromQuoteAssetAmount to handle this (asks vs bids)?
-  //
-
+QuoteTotalPrice estimateFromQuoteAssetAmount(BeMarketSide side, BeMarket market,
+    BeOrderbook orderbook, Decimal amountQuoteAsset) {
   var filled = Decimal.zero;
   var totalBaseAsset = Decimal.zero;
   var n = 0;
+  var orderbookSide = orderbook.asks;
+  if (side == BeMarketSide.ask) orderbookSide = orderbook.bids;
   while (amountQuoteAsset > filled) {
-    if (n >= orderbook.bids.length) {
+    if (n >= orderbookSide.length) {
       break;
     }
-    var rate = orderbook.bids[n].rate;
-    var quantity = orderbook.bids[n].quantity;
+    var rate = orderbookSide[n].rate;
+    var quantity = orderbookSide[n].quantity;
     var quoteAssetToUse = quantity * rate;
     if (quoteAssetToUse > amountQuoteAsset - filled)
       quoteAssetToUse = amountQuoteAsset - filled;

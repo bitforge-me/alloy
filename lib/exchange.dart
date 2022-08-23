@@ -201,7 +201,6 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     resb.when((balances) {
       if (field == FieldUpdated.receive) return;
       for (var bal in balances)
-        //TODO!! ERRR only if FieldUpdated.amount
         if (bal.asset == fromAsset) if (bal.available < value) {
           value = bal.available;
           _amountController.text = value.toString();
@@ -234,12 +233,19 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     var quote = await res.when<QuoteTotalPrice?>((orderbook) {
       switch (field) {
         case FieldUpdated.amount:
-          return _createQuoteUpdateFromAsset(
-              value, fromAsset, toAsset, market, side, orderbook);
+          switch (side) {
+            case BeMarketSide.bid:
+              return _bruteForceQuote(value, market, side, orderbook);
+            case BeMarketSide.ask:
+              return askQuoteAmount(market, orderbook, value);
+          }
         case FieldUpdated.receive:
-          //return _createQuote(value, fromAsset, toAsset, market, side, orderbook);
-          return _createQuoteUpdateToAsset(
-              value, fromAsset, toAsset, market, side, orderbook);
+          switch (side) {
+            case BeMarketSide.bid:
+              return bidQuoteAmount(market, orderbook, value);
+            case BeMarketSide.ask:
+              return _bruteForceQuote(value, market, side, orderbook);
+          }
       }
     }, error: (err) {
       snackMsg(context, 'failed to get orderbook',
@@ -290,126 +296,12 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     setState(() => _validAmount = true);
   }
 
-  QuoteTotalPrice? _createQuoteUpdateFromAsset(
-      Decimal value,
-      String fromAsset,
-      String toAsset,
-      BeMarket market,
-      BeMarketSide side,
-      BeOrderbook orderbook) {
-    switch (side) {
-      case BeMarketSide.bid:
-        return _bruteForceQuoteUsingFromAsset(
-            value, fromAsset, toAsset, market, side, orderbook);
-      case BeMarketSide.ask:
-        return askQuoteAmount(market, orderbook, value);
-    }
-  }
-
-  QuoteTotalPrice? _createQuoteUpdateToAsset(
-      Decimal value,
-      String fromAsset,
-      String toAsset,
-      BeMarket market,
-      BeMarketSide side,
-      BeOrderbook orderbook) {
-    switch (side) {
-      case BeMarketSide.bid:
-        return bidQuoteAmount(market, orderbook, value);
-      case BeMarketSide.ask:
-        return _bruteForceQuoteUsingToAsset(
-            value, fromAsset, toAsset, market, side, orderbook);
-    }
-  }
-
-  QuoteTotalPrice? _bruteForceQuoteUsingFromAsset(
-      Decimal value,
-      String fromAsset,
-      String toAsset,
-      BeMarket market,
-      BeMarketSide side,
-      BeOrderbook orderbook) {
-    // first do a basic estimate amount of base asset we will get using the order book
-    var quoteAssetAmount = roundAt(value, assetDecimals(fromAsset));
-    var estimate = bidEstimateAmountFromQuoteAssetAmount(
-        market, orderbook, quoteAssetAmount);
-    if (estimate.errMsg != null) {
-      // give user an idea of the estimate if we abort early
-      //if (estimate.amountBaseAsset != Decimal.zero)
-      //  targetController.text = assetFormat(toAsset,
-      //      assetAmountToUser(toAsset, estimate.amountBaseAsset));
-      return estimate;
-    }
-    // find the `smallestAmount` using the number of decimal places in the asset
-    var smallestAmount =
-        Decimal.one / power(Decimal.fromInt(10), assetDecimals(toAsset));
-    // set an initial `adjustAmount` that we will adjust the estimate each loop
-    var adjustAmount = smallestAmount * Decimal.fromInt(100);
-    // create our first estimate input
-    var estInput = roundAt(estimate.amountBaseAsset, assetDecimals(toAsset));
-    // now create our first real estimate using the same method as the server
-    //   ie. walk the order book using a set amount of the base asset and increase the quote asset required by the fee percentage
-    estimate = bidQuoteAmount(market, orderbook, estInput);
-    // now we loop as long as the server method estimate of the quote asset is not what we actually want to pay
-    //   note: it should start as larger and we reduce it each loop iteration
-    var n = 0;
-    while (roundAt(estimate.amountQuoteAsset, assetDecimals(fromAsset)) !=
-        quoteAssetAmount) {
-      // adjust estimate input
-      estInput -= adjustAmount;
-      estInput = roundAt(estInput, assetDecimals(toAsset));
-      // generate new estimate
-      estimate = bidQuoteAmount(market, orderbook, estInput);
-      if (estimate.errMsg != null) {
-        // give user an idea of the estimate if we abort early
-        //if (estimate.amountBaseAsset != Decimal.zero)
-        //  targetController.text = assetFormat(toAsset,
-        //      assetAmountToUser(toAsset, estimate.amountBaseAsset));
-        return estimate;
-      }
-      // if we overshoot we need to walk back the estimate input a bit
-      if (estimate.amountQuoteAsset < quoteAssetAmount) {
-        n = 0;
-        estInput += adjustAmount *
-            Decimal.fromInt(
-                2); // twice because we reduced it at the start of the loop
-        // if the adjustAmount is greater then the smallestAmount then we need to make it a bit more fine grained
-        if (adjustAmount > smallestAmount) {
-          adjustAmount = adjustAmount / Decimal.fromInt(2);
-          if (adjustAmount < smallestAmount) adjustAmount = smallestAmount;
-        }
-        continue;
-      }
-      // we will short cut the loop by periodically increasing the adjustment amount
-      if (n > 10) {
-        n = 0;
-        adjustAmount = adjustAmount * Decimal.fromInt(10);
-      } else
-        n = n + 1;
-    }
-    return QuoteTotalPrice(
-        estimate.amountBaseAsset,
-        roundAt(estimate.amountQuoteAsset, assetDecimals(market.quoteAsset)),
-        estimate.feeQuoteAsset,
-        estimate.fixedFeeQuoteAsset,
-        estimate.errMsg);
-  }
-
-  QuoteTotalPrice? _bruteForceQuoteUsingToAsset(
-      Decimal value,
-      String fromAsset,
-      String toAsset,
-      BeMarket market,
-      BeMarketSide side,
-      BeOrderbook orderbook) {
-    //
-    //TODO: can we modify _bruteForceQuoteUsingFromAsset to handle this??
-    //
-
+  QuoteTotalPrice? _bruteForceQuote(Decimal value, BeMarket market,
+      BeMarketSide side, BeOrderbook orderbook) {
     // first do a basic estimate amount of quote asset we will need using the order book
-    var quoteAssetAmount = roundAt(value, assetDecimals(toAsset));
-    var estimate = askEstimateAmountFromQuoteAssetAmount(
-        market, orderbook, quoteAssetAmount);
+    var quoteAssetAmount = roundAt(value, assetDecimals(market.quoteAsset));
+    var estimate =
+        estimateFromQuoteAssetAmount(side, market, orderbook, quoteAssetAmount);
     if (estimate.errMsg != null) {
       // give user an idea of the estimate if we abort early
       //if (estimate.amountBaseAsset != Decimal.zero)
@@ -418,25 +310,36 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       return estimate;
     }
     // find the `smallestAmount` using the number of decimal places in the asset
-    var smallestAmount =
-        Decimal.one / power(Decimal.fromInt(10), assetDecimals(fromAsset));
+    var smallestAmount = Decimal.one /
+        power(Decimal.fromInt(10), assetDecimals(market.baseAsset));
     // set an initial `adjustAmount` that we will adjust the estimate each loop
     var adjustAmount = smallestAmount * Decimal.fromInt(100);
     // create our first estimate input
-    var estInput = roundAt(estimate.amountBaseAsset, assetDecimals(fromAsset));
+    var estInput =
+        roundAt(estimate.amountBaseAsset, assetDecimals(market.baseAsset));
     // now create our first real estimate using the same method as the server
     //   ie. walk the order book using a set amount of the base asset and increase the quote asset required by the fee percentage
-    estimate = askQuoteAmount(market, orderbook, estInput);
+    if (side == BeMarketSide.ask)
+      estimate = askQuoteAmount(market, orderbook, estInput);
+    else
+      estimate = bidQuoteAmount(market, orderbook, estInput);
     // now we loop as long as the server method estimate of the quote asset is not what we actually want to pay
     //   note: it should start as larger and we reduce it each loop iteration
     var n = 0;
-    while (roundAt(estimate.amountQuoteAsset, assetDecimals(toAsset)) !=
-        quoteAssetAmount) {
+    while (
+        roundAt(estimate.amountQuoteAsset, assetDecimals(market.quoteAsset)) !=
+            quoteAssetAmount) {
       // adjust estimate input
-      estInput += adjustAmount;
-      estInput = roundAt(estInput, assetDecimals(fromAsset));
+      if (side == BeMarketSide.ask)
+        estInput += adjustAmount;
+      else
+        estInput -= adjustAmount;
+      estInput = roundAt(estInput, assetDecimals(market.baseAsset));
       // generate new estimate
-      estimate = askQuoteAmount(market, orderbook, estInput);
+      if (side == BeMarketSide.ask)
+        estimate = askQuoteAmount(market, orderbook, estInput);
+      else
+        estimate = bidQuoteAmount(market, orderbook, estInput);
       if (estimate.errMsg != null) {
         // give user an idea of the estimate if we abort early
         //if (estimate.amountBaseAsset != Decimal.zero)
@@ -445,11 +348,19 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         return estimate;
       }
       // if we overshoot we need to walk back the estimate input a bit
-      if (estimate.amountQuoteAsset > quoteAssetAmount) {
+      if (side == BeMarketSide.ask &&
+              estimate.amountQuoteAsset > quoteAssetAmount ||
+          side == BeMarketSide.bid &&
+              estimate.amountQuoteAsset < quoteAssetAmount) {
         n = 0;
-        estInput -= adjustAmount *
-            Decimal.fromInt(
-                2); // twice because we reduced it at the start of the loop
+        if (side == BeMarketSide.ask)
+          estInput -= adjustAmount *
+              Decimal.fromInt(
+                  2); // twice because we reduced it at the start of the loop
+        else
+          estInput += adjustAmount *
+              Decimal.fromInt(
+                  2); // twice because we reduced it at the start of the loop
         // if the adjustAmount is greater then the smallestAmount then we need to make it a bit more fine grained
         if (adjustAmount > smallestAmount) {
           adjustAmount = adjustAmount / Decimal.fromInt(2);
