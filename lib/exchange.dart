@@ -409,7 +409,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
               padding: EdgeInsets.only(top: 20),
               child: BronzeRoundedButton(_exchange, ZapOnPrimary, ZapPrimary,
                   ZapPrimaryGradient, 'Create Order',
-                  fwdArrow: true, width: inputWidth))
+                  fwdArrow: true, width: inputWidth, height: cfg.ButtonHeight))
           : SizedBox()
     ]);
   }
