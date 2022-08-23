@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:universal_html/html.dart' as html;
@@ -208,7 +207,6 @@ class BronzeValueInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return RoundedEdgeBox(
         borderColor: Colors.white,
-        dottedBorder: true,
         color: ZapSurface,
         child: TextFormField(
           controller: this.controller,
@@ -319,7 +317,6 @@ class RoundedEdgeBox extends StatelessWidget {
   final Gradient? gradient;
   final Color? color;
   final double borderRadius;
-  final bool dottedBorder;
   final double borderWidth;
   final Color? borderColor;
   final EdgeInsets padding;
@@ -329,35 +326,20 @@ class RoundedEdgeBox extends StatelessWidget {
       this.gradient,
       this.color,
       this.borderRadius = 10,
-      this.dottedBorder = false,
       this.borderWidth = 2,
       this.borderColor,
       this.padding = const EdgeInsets.all(8)});
 
-  Widget _dbox({bool drawBorder: false}) {
+  @override
+  Widget build(BuildContext context) {
     return DecoratedBox(
         decoration: BoxDecoration(
             gradient: gradient,
             color: color,
-            border: drawBorder
-                ? Border.all(
-                    color: borderColor ?? Colors.black, width: borderWidth)
-                : null,
+            border: Border.all(
+                color: borderColor ?? Colors.black, width: borderWidth),
             borderRadius: BorderRadius.circular(borderRadius)),
         child: Padding(padding: padding, child: child));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (dottedBorder)
-      return DottedBorder(
-          padding: EdgeInsets.zero,
-          borderType: BorderType.RRect,
-          strokeWidth: borderWidth,
-          radius: Radius.circular(borderRadius),
-          color: borderColor ?? Colors.black,
-          child: _dbox(drawBorder: false));
-    return _dbox(drawBorder: true);
   }
 }
 
