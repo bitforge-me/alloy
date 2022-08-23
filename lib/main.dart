@@ -481,7 +481,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             title: Image.asset(cfg.AppLogo, filterQuality: FilterQuality.high),
             leading: Builder(builder: (BuildContext context) {
               return IconButton(
-                icon: const Icon(Icons.menu),
+                icon: _gradientIcon(Icon(Icons.menu, color: Colors.white)),
                 tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
                 onPressed: () => Scaffold.of(context).openDrawer(),
                 color: _alerts.isNotEmpty ? ZapWarning : null,
