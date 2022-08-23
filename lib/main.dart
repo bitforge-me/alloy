@@ -441,37 +441,40 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     });
   }
 
+  void _onBottomNavBarTap(int index) {
+    switch (index) {
+      case 0:
+        _orders();
+        break;
+      case 1:
+        _deposit();
+        break;
+      case 2:
+        _withdrawal();
+        break;
+      case 3:
+        _showBalances();
+        break;
+      default:
+        break;
+    }
+  }
+
+  ShaderMask _gradientIcon(Icon i) {
+    return ShaderMask(
+      shaderCallback: (Rect bounds) {
+        return LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [Color(0xfff46b45), Color(0xffeea849)],
+        ).createShader(bounds);
+      },
+      child: i,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    var buttonRow1 = Row(mainAxisSize: MainAxisSize.min, children: [
-      SquareButton(_deposit, Icons.keyboard_double_arrow_down_rounded,
-          ZapSecondary, 'Deposits',
-          textColor: ZapOnSecondary,
-          textOutside: false,
-          borderSize: 0,
-          fontSize: 18),
-      SizedBox(width: 15),
-      SquareButton(_withdrawal, Icons.keyboard_double_arrow_up_rounded,
-          ZapSecondary, 'Withdrawals',
-          textColor: ZapOnSecondary,
-          textOutside: false,
-          borderSize: 0,
-          fontSize: 18)
-    ]);
-    var buttonRow2 = Row(mainAxisSize: MainAxisSize.min, children: [
-      SquareButton(_orders, Icons.history, ZapSecondary, 'Order History',
-          textColor: ZapOnSecondary,
-          textOutside: false,
-          borderSize: 0,
-          fontSize: 18),
-      SizedBox(width: 15),
-      SquareButton(
-          _showBalances, Icons.wallet_rounded, ZapSecondary, 'Balances',
-          textColor: ZapOnSecondary,
-          textOutside: false,
-          borderSize: 0,
-          fontSize: 18)
-    ]);
     return Scaffold(
         appBar: AppBar(
             title: Image.asset(cfg.AppLogo, filterQuality: FilterQuality.high),
@@ -484,6 +487,36 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               );
             })),
         drawer: _makeDrawer(context),
+        bottomNavigationBar: BottomNavigationBar(
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          type: BottomNavigationBarType.fixed,
+          landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
+          onTap: _onBottomNavBarTap,
+          backgroundColor: ZapSecondary,
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: _gradientIcon(
+                  Icon(Icons.history, color: Colors.white, size: 28.0)),
+              label: "Order History",
+            ),
+            BottomNavigationBarItem(
+              icon: _gradientIcon(Icon(Icons.keyboard_double_arrow_down_rounded,
+                  color: Colors.white, size: 28.0)),
+              label: "Deposits",
+            ),
+            BottomNavigationBarItem(
+              icon: _gradientIcon(Icon(Icons.keyboard_double_arrow_up_rounded,
+                  color: Colors.white, size: 28.0)),
+              label: "Withdrawals",
+            ),
+            BottomNavigationBarItem(
+              icon: _gradientIcon(
+                  Icon(Icons.wallet_rounded, color: Colors.white, size: 28.0)),
+              label: "Balances",
+            ),
+          ],
+        ),
         body: BiforgePage(
             scrollChild: true,
             showDebugInfo: true,
@@ -505,27 +538,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   VerticalSpacer(
                       height:
                           constraints.maxWidth >= cfg.MaxColumnWidth ? 50 : 0),
-                  // home screen buttons
-                  Visibility(
-                      visible: _userInfo != null,
-                      child: LayoutBuilder(builder: (context, constraints) {
-                        if (constraints.maxWidth < cfg.MaxColumnWidth)
-                          return Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                buttonRow1,
-                                VerticalSpacer(),
-                                buttonRow2
-                              ]);
-                        else
-                          return Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                buttonRow1,
-                                SizedBox(width: 50),
-                                buttonRow2
-                              ]);
-                      }))
                 ]);
               }),
             )));
