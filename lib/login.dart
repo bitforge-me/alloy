@@ -191,7 +191,6 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
         ),
         body: BiforgePage(
             scrollChild: true,
-            showDebugInfo: true,
             child: Form(
                 key: _formKey,
                 child: BigLogoContainer(
@@ -331,7 +330,6 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
         ),
         body: BiforgePage(
             scrollChild: true,
-            showDebugInfo: true,
             child: Form(
                 key: _formKey,
                 child: BigLogoContainer(
@@ -482,7 +480,6 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
         ),
         body: BiforgePage(
             scrollChild: true,
-            showDebugInfo: true,
             child: Form(
                 key: _formKey,
                 child: BigLogoContainer(children: [
@@ -620,7 +617,6 @@ class StagingFormState extends State<StagingForm> {
         ),
         body: BiforgePage(
             scrollChild: true,
-            showDebugInfo: true,
             child: BigLogoContainer(children: [
               BronzeRoundedButton(
                   () => startLoginProcess(LoginChoice.doLogin()),

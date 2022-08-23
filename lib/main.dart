@@ -309,7 +309,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             builder: (context) => VerifyUserScreen(_userInfo!, _websocket)));
   }
 
-  Drawer _makeDrawer(BuildContext contex) {
+  Drawer _makeDrawer(BuildContext contex, {bool showDebugInfo = true}) {
     var header = DrawerHeader(
         decoration: BoxDecoration(
           color: ZapSecondary,
@@ -371,6 +371,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               leading: Icon(Icons.logout),
               title: const Text('Logout'),
               onTap: _logout),
+          showDebugInfo == true ? DebugInfo() : SizedBox(),
         ],
       ),
     );
@@ -519,7 +520,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         ),
         body: BiforgePage(
             scrollChild: true,
-            showDebugInfo: true,
             child: Center(
               child: LayoutBuilder(builder: (context, constraints) {
                 return Column(children: [
