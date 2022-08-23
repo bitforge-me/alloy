@@ -342,8 +342,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           Visibility(
               visible: _userInfo?.kycValidated != true,
               child: ListTile(
-                leading: _gradientIcon(
-                    Icon(Icons.verified_user, color: Colors.white)),
+                leading: _gradientIcon(Icons.verified_user),
                 title: const Text('Verify User'),
                 onTap: _verifyUser,
               )),
@@ -354,7 +353,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           ListTile(
               leading: _userInfo?.tfEnabled == true
                   ? Icon(Icons.shield)
-                  : _gradientIcon(Icon(Icons.shield, color: Colors.white)),
+                  : _gradientIcon(Icons.shield),
               title: const Text('Security'),
               onTap: _security),
           ListTile(
@@ -463,7 +462,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     }
   }
 
-  ShaderMask _gradientIcon(Icon i) {
+  ShaderMask _gradientIcon(IconData icon, {double? size, String? text}) {
+    Widget widget = Icon(icon, size: size, color: Colors.white);
+    if (text != null)
+      widget = Column(children: [
+        widget,
+        Text(text, style: TextStyle(color: Colors.white))
+      ]);
     return ShaderMask(
       shaderCallback: (Rect bounds) {
         return LinearGradient(
@@ -472,7 +477,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           colors: [Color(0xfff46b45), Color(0xffeea849)],
         ).createShader(bounds);
       },
-      child: i,
+      child: widget,
     );
   }
 
@@ -483,7 +488,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             title: Image.asset(cfg.AppLogo, filterQuality: FilterQuality.high),
             leading: Builder(builder: (BuildContext context) {
               return IconButton(
-                icon: _gradientIcon(Icon(Icons.menu, color: Colors.white)),
+                icon: _gradientIcon(Icons.menu),
                 tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
                 onPressed: () => Scaffold.of(context).openDrawer(),
                 color: _alerts.isNotEmpty ? ZapWarning : null,
@@ -497,27 +502,24 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
           onTap: _onBottomNavBarTap,
           backgroundColor: ZapSecondary,
-          items: <BottomNavigationBarItem>[
+          selectedLabelStyle: TextStyle(fontSize: 12, color: ZapPrimary),
+          unselectedLabelStyle: TextStyle(fontSize: 12, color: Colors.blue),
+          items: [
             BottomNavigationBarItem(
-              icon: _gradientIcon(
-                  Icon(Icons.history, color: Colors.white, size: 28.0)),
-              label: "Order History",
-            ),
+                icon: _gradientIcon(Icons.history, text: 'Order History'),
+                label: 'Order History'),
             BottomNavigationBarItem(
-              icon: _gradientIcon(Icon(Icons.keyboard_double_arrow_down_rounded,
-                  color: Colors.white, size: 28.0)),
-              label: "Deposits",
-            ),
+                icon: _gradientIcon(Icons.keyboard_double_arrow_down_rounded,
+                    size: 28.0, text: 'Deposits'),
+                label: 'Deposits'),
             BottomNavigationBarItem(
-              icon: _gradientIcon(Icon(Icons.keyboard_double_arrow_up_rounded,
-                  color: Colors.white, size: 28.0)),
-              label: "Withdrawals",
-            ),
+                icon: _gradientIcon(Icons.keyboard_double_arrow_up_rounded,
+                    size: 28.0, text: 'Withdrawals'),
+                label: 'Widthdrawals'),
             BottomNavigationBarItem(
-              icon: _gradientIcon(
-                  Icon(Icons.wallet_rounded, color: Colors.white, size: 28.0)),
-              label: "Balances",
-            ),
+                icon: _gradientIcon(Icons.wallet_rounded,
+                    size: 28.0, text: 'Balances'),
+                label: 'Balances')
           ],
         ),
         body: BiforgePage(
