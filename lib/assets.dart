@@ -106,11 +106,11 @@ LinearGradient assetGradient(String symbol) {
 String assetBackgroundPng(String symbol) {
   switch (symbol) {
     case Nzd:
-      return 'crypto_logos/southern-cross.png';
+      return 'assets/crypto_logos/southern-cross.png';
     case Btc:
-      return 'crypto_logos/bitcoin-white.png';
+      return 'assets/crypto_logos/bitcoin-white.png';
   }
-  return 'crypto_logos/default-background.png';
+  return 'assets/crypto_logos/default-background.png';
 }
 
 int assetDecimals(String symbol) {
