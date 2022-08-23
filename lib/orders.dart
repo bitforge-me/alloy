@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'dart:convert';
 
 import 'package:zapdart/utils.dart';
-import 'package:zapdart/widgets.dart';
+import 'package:zapdart/colors.dart';
 
 import 'beryllium.dart';
 import 'websocket.dart';
@@ -12,6 +12,7 @@ import 'assets.dart';
 import 'snack.dart';
 import 'paginator.dart';
 import 'widgets.dart';
+import 'config.dart' as cfg;
 
 class OrderScreen extends StatefulWidget {
   final BeBrokerOrder order;
@@ -65,17 +66,6 @@ class _OrderScreenState extends State<OrderScreen> {
             context, 'error', 'failed to accept order (${BeError.msg(err)})'));
   }
 
-  Future<void> _update() async {
-    processOrderUpdates = false;
-    showAlertDialog(context, 'updating..');
-    var res = await beOrderStatus(_order.token);
-    Navigator.pop(context);
-    processOrderUpdates = true;
-    res.when((order) => setState(() => _order = order),
-        error: (err) => alert(
-            context, 'error', 'failed to update order (${BeError.msg(err)})'));
-  }
-
   @override
   Widget build(BuildContext context) {
     var baseAmount =
@@ -84,7 +74,7 @@ class _OrderScreenState extends State<OrderScreen> {
         assetFormatWithUnitToUser(_order.quoteAsset, _order.quoteAmount);
     return Scaffold(
         appBar: AppBar(
-          title: Text('Order ${_order.token}'),
+          title: Text('Order Information'),
           actions: [assetLogo(_order.baseAsset, margin: EdgeInsets.all(10))],
         ),
         body: BiforgePage(
@@ -106,16 +96,15 @@ class _OrderScreenState extends State<OrderScreen> {
               title: Text('Status'),
               subtitle: Text('${describeEnum(_order.status).toUpperCase()}')),
           _order.status == BeOrderStatus.created
-              ? ListTile(
-                  title:
-                      raisedButton(onPressed: _accept, child: Text('Accept')))
-              : SizedBox(),
-          _order.status != BeOrderStatus.expired &&
-                  _order.status != BeOrderStatus.failed &&
-                  _order.status != BeOrderStatus.completed
-              ? ListTile(
-                  title:
-                      raisedButton(onPressed: _update, child: Text('Update')))
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                      BronzeRoundedButton(_accept, ZapOnPrimary, ZapPrimary,
+                          ZapPrimaryGradient, 'Accept',
+                          fwdArrow: true,
+                          width: cfg.ButtonWidth,
+                          height: cfg.ButtonHeight)
+                    ])
               : SizedBox(),
         ])));
   }
