@@ -79,11 +79,7 @@ QuoteTotalPrice bidEstimateAmountFromQuoteAssetAmount(
     totalBaseAsset += quoteAssetToUse / rate;
     if (filled == amountQuoteAsset) {
       if (totalBaseAsset < market.minTrade)
-        return QuoteTotalPrice(
-            totalBaseAsset,
-            amountQuoteAsset,
-            Decimal.zero,
-            Decimal.zero,
+        return QuoteTotalPrice.Error(
             'minimum trade is ${assetFormatWithUnitToUser(market.baseAsset, market.minTrade)}');
       return QuoteTotalPrice(
           totalBaseAsset, amountQuoteAsset, Decimal.zero, Decimal.zero, null);
@@ -119,6 +115,38 @@ QuoteTotalPrice askQuoteAmount(
       var fee = totalPrice - totalPriceIncludingFee;
       return QuoteTotalPrice(
           amount, totalPriceIncludingFee - fixedFee, fee, fixedFee, null);
+    }
+    n++;
+  }
+  return QuoteTotalPrice.Error('not enough liquidity');
+}
+
+QuoteTotalPrice askEstimateAmountFromQuoteAssetAmount(
+    BeMarket market, BeOrderbook orderbook, Decimal amountQuoteAsset) {
+  //
+  //TODO: can we modify bidEstimateAmountFromQuoteAssetAmount to handle this (asks vs bids)?
+  //
+
+  var filled = Decimal.zero;
+  var totalBaseAsset = Decimal.zero;
+  var n = 0;
+  while (amountQuoteAsset > filled) {
+    if (n >= orderbook.bids.length) {
+      break;
+    }
+    var rate = orderbook.bids[n].rate;
+    var quantity = orderbook.bids[n].quantity;
+    var quoteAssetToUse = quantity * rate;
+    if (quoteAssetToUse > amountQuoteAsset - filled)
+      quoteAssetToUse = amountQuoteAsset - filled;
+    filled += quoteAssetToUse;
+    totalBaseAsset += quoteAssetToUse / rate;
+    if (filled == amountQuoteAsset) {
+      if (totalBaseAsset < market.minTrade)
+        return QuoteTotalPrice.Error(
+            'minimum trade is ${assetFormatWithUnitToUser(market.baseAsset, market.minTrade)}');
+      return QuoteTotalPrice(
+          totalBaseAsset, amountQuoteAsset, Decimal.zero, Decimal.zero, null);
     }
     n++;
   }
