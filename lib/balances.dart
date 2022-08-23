@@ -5,6 +5,7 @@ import 'websocket.dart';
 import 'assets.dart';
 import 'widgets.dart';
 import 'units.dart';
+import 'config.dart' as cfg;
 
 class BalanceScreen extends StatefulWidget {
   final List<BeBalance> balances;
@@ -18,20 +19,22 @@ class BalanceScreen extends StatefulWidget {
 
 class _BalanceScreenState extends State<BalanceScreen> {
   Widget _listItem(BuildContext context, int n) {
-    var balance = widget.balances[n];
-    return ListTile(
-        title: Text('${balance.asset}'),
-        leading: assetLogo(balance.asset),
-        subtitle: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-          SizedBox(
-              width: 300,
-              child:
-                  PriceEquivalent(balance.asset, balance.total, pre: 'Total:')),
-          PriceEquivalent(balance.asset, balance.available, pre: 'Available:')
-        ]));
+    return LayoutBuilder(builder: (context, constraints) {
+      var balance = widget.balances[n];
+      var total = PriceEquivalent(balance.asset, balance.total, pre: 'Total:');
+      var available =
+          PriceEquivalent(balance.asset, balance.available, pre: 'Available:');
+      return ListTile(
+          title: Text('${balance.asset}'),
+          leading: assetLogo(balance.asset),
+          subtitle: constraints.maxWidth < cfg.MaxColumnWidth
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [total, available])
+              : Row(children: [SizedBox(width: 300, child: total), available]));
+    });
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
