@@ -334,47 +334,45 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             onTap: _support)
       ]));
     return Drawer(
-      child: Column(
-        children: [
-          header,
-          _alerts.isNotEmpty ? AlertDrawer(() {}, _alerts) : SizedBox(),
-          Visibility(
-              visible: _userInfo?.kycValidated != true,
-              child: ListTile(
-                leading: _gradientIcon(Icons.verified_user),
-                title: const Text('Verify User'),
-                onTap: _verifyUser,
-              )),
-          ListTile(
-              leading: Icon(Icons.account_circle),
-              title: const Text('Profile'),
-              onTap: _profile),
-          ListTile(
-              leading: _userInfo?.tfEnabled == true
-                  ? Icon(Icons.shield)
-                  : _gradientIcon(Icons.shield),
-              title: const Text('Security'),
-              onTap: _security),
-          ListTile(
-              leading: Icon(Icons.settings),
-              title: const Text('Preferences'),
-              onTap: _units),
-          ListTile(
-              leading: Icon(Icons.contact_support),
-              title: const Text('Support'),
-              onTap: _support),
-          ListTile(
-              leading: Icon(Icons.gavel),
-              title: const Text('Legal'),
-              onTap: _legal),
-          ListTile(
-              leading: Icon(Icons.logout),
-              title: const Text('Logout'),
-              onTap: _logout),
+        child: Column(children: [
+      header,
+      _alerts.isNotEmpty ? AlertDrawer(() {}, _alerts) : SizedBox(),
+      Visibility(
+          visible: _userInfo?.kycValidated != true,
+          child: ListTile(
+            leading: _gradientIcon(Icons.verified_user),
+            title: const Text('Verify User'),
+            onTap: _verifyUser,
+          )),
+      ListTile(
+          leading: Icon(Icons.account_circle),
+          title: const Text('Profile'),
+          onTap: _profile),
+      ListTile(
+          leading: _userInfo?.tfEnabled == true
+              ? Icon(Icons.shield)
+              : _gradientIcon(Icons.shield),
+          title: const Text('Security'),
+          onTap: _security),
+      ListTile(
+          leading: Icon(Icons.settings),
+          title: const Text('Preferences'),
+          onTap: _units),
+      ListTile(
+          leading: Icon(Icons.contact_support),
+          title: const Text('Support'),
+          onTap: _support),
+      ListTile(
+          leading: Icon(Icons.gavel),
+          title: const Text('Legal'),
+          onTap: _legal),
+      ListTile(
+          leading: Icon(Icons.logout),
+          title: const Text('Logout'),
+          onTap: _logout),
       Expanded(child: SizedBox()),
       DebugInfo()
-      ])
-    );
+    ]));
   }
 
   Widget _makeBalanceCarousel(BuildContext context) {
