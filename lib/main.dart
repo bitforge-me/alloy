@@ -334,46 +334,45 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             onTap: _support)
       ]));
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          header,
-          _alerts.isNotEmpty ? AlertDrawer(() {}, _alerts) : SizedBox(),
-          Visibility(
-              visible: _userInfo?.kycValidated != true,
-              child: ListTile(
-                leading: Icon(Icons.verified_user, color: ZapWarning),
-                title: const Text('Verify User'),
-                onTap: _verifyUser,
-              )),
-          ListTile(
-              leading: Icon(Icons.account_circle),
-              title: const Text('Profile'),
-              onTap: _profile),
-          ListTile(
-              leading: Icon(Icons.shield,
-                  color: _userInfo?.tfEnabled == true ? null : ZapWarning),
-              title: const Text('Security'),
-              onTap: _security),
-          ListTile(
-              leading: Icon(Icons.settings),
-              title: const Text('Preferences'),
-              onTap: _units),
-          ListTile(
-              leading: Icon(Icons.contact_support),
-              title: const Text('Support'),
-              onTap: _support),
-          ListTile(
-              leading: Icon(Icons.gavel),
-              title: const Text('Legal'),
-              onTap: _legal),
-          ListTile(
-              leading: Icon(Icons.logout),
-              title: const Text('Logout'),
-              onTap: _logout),
-        ],
-      ),
-    );
+        child: Column(children: [
+      header,
+      _alerts.isNotEmpty ? AlertDrawer(() {}, _alerts) : SizedBox(),
+      Visibility(
+          visible: _userInfo?.kycValidated != true,
+          child: ListTile(
+            leading: _gradientIcon(Icons.verified_user),
+            title: const Text('Verify User'),
+            onTap: _verifyUser,
+          )),
+      ListTile(
+          leading: Icon(Icons.account_circle),
+          title: const Text('Profile'),
+          onTap: _profile),
+      ListTile(
+          leading: _userInfo?.tfEnabled == true
+              ? Icon(Icons.shield)
+              : _gradientIcon(Icons.shield),
+          title: const Text('Security'),
+          onTap: _security),
+      ListTile(
+          leading: Icon(Icons.settings),
+          title: const Text('Preferences'),
+          onTap: _units),
+      ListTile(
+          leading: Icon(Icons.contact_support),
+          title: const Text('Support'),
+          onTap: _support),
+      ListTile(
+          leading: Icon(Icons.gavel),
+          title: const Text('Legal'),
+          onTap: _legal),
+      ListTile(
+          leading: Icon(Icons.logout),
+          title: const Text('Logout'),
+          onTap: _logout),
+      Expanded(child: SizedBox()),
+      DebugInfo()
+    ]));
   }
 
   Widget _makeBalanceCarousel(BuildContext context) {
@@ -441,52 +440,87 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     });
   }
 
+  void _onBottomNavBarTap(int index) {
+    switch (index) {
+      case 0:
+        _orders();
+        break;
+      case 1:
+        _deposit();
+        break;
+      case 2:
+        _withdrawal();
+        break;
+      case 3:
+        _showBalances();
+        break;
+      default:
+        break;
+    }
+  }
+
+  ShaderMask _gradientIcon(IconData icon, {double? size, String? text}) {
+    Widget widget = Icon(icon, size: size, color: Colors.white);
+    if (text != null)
+      widget = Column(children: [
+        widget,
+        Text(text, style: TextStyle(color: Colors.white))
+      ]);
+    return ShaderMask(
+      shaderCallback: (Rect bounds) {
+        return LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [Color(0xfff46b45), Color(0xffeea849)],
+        ).createShader(bounds);
+      },
+      child: widget,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    var buttonRow1 = Row(mainAxisSize: MainAxisSize.min, children: [
-      SquareButton(_deposit, Icons.keyboard_double_arrow_down_rounded,
-          ZapSecondary, 'Deposits',
-          textColor: ZapOnSecondary,
-          textOutside: false,
-          borderSize: 0,
-          fontSize: 18),
-      SizedBox(width: 15),
-      SquareButton(_withdrawal, Icons.keyboard_double_arrow_up_rounded,
-          ZapSecondary, 'Withdrawals',
-          textColor: ZapOnSecondary,
-          textOutside: false,
-          borderSize: 0,
-          fontSize: 18)
-    ]);
-    var buttonRow2 = Row(mainAxisSize: MainAxisSize.min, children: [
-      SquareButton(_orders, Icons.history, ZapSecondary, 'Order History',
-          textColor: ZapOnSecondary,
-          textOutside: false,
-          borderSize: 0,
-          fontSize: 18),
-      SizedBox(width: 15),
-      SquareButton(
-          _showBalances, Icons.wallet_rounded, ZapSecondary, 'Balances',
-          textColor: ZapOnSecondary,
-          textOutside: false,
-          borderSize: 0,
-          fontSize: 18)
-    ]);
     return Scaffold(
         appBar: AppBar(
             title: Image.asset(cfg.AppLogo, filterQuality: FilterQuality.high),
             leading: Builder(builder: (BuildContext context) {
               return IconButton(
-                icon: const Icon(Icons.menu),
+                icon: _gradientIcon(Icons.menu),
                 tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
                 onPressed: () => Scaffold.of(context).openDrawer(),
                 color: _alerts.isNotEmpty ? ZapWarning : null,
               );
             })),
         drawer: _makeDrawer(context),
+        bottomNavigationBar: BottomNavigationBar(
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          type: BottomNavigationBarType.fixed,
+          landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
+          onTap: _onBottomNavBarTap,
+          backgroundColor: ZapSecondary,
+          selectedLabelStyle: TextStyle(fontSize: 12, color: ZapPrimary),
+          unselectedLabelStyle: TextStyle(fontSize: 12, color: Colors.blue),
+          items: [
+            BottomNavigationBarItem(
+                icon: _gradientIcon(Icons.history, text: 'Order History'),
+                label: 'Order History'),
+            BottomNavigationBarItem(
+                icon: _gradientIcon(Icons.keyboard_double_arrow_down_rounded,
+                    size: 28.0, text: 'Deposits'),
+                label: 'Deposits'),
+            BottomNavigationBarItem(
+                icon: _gradientIcon(Icons.keyboard_double_arrow_up_rounded,
+                    size: 28.0, text: 'Withdrawals'),
+                label: 'Widthdrawals'),
+            BottomNavigationBarItem(
+                icon: _gradientIcon(Icons.wallet_rounded,
+                    size: 28.0, text: 'Balances'),
+                label: 'Balances')
+          ],
+        ),
         body: BiforgePage(
             scrollChild: true,
-            showDebugInfo: true,
             child: Center(
               child: LayoutBuilder(builder: (context, constraints) {
                 return Column(children: [
@@ -505,27 +539,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   VerticalSpacer(
                       height:
                           constraints.maxWidth >= cfg.MaxColumnWidth ? 50 : 0),
-                  // home screen buttons
-                  Visibility(
-                      visible: _userInfo != null,
-                      child: LayoutBuilder(builder: (context, constraints) {
-                        if (constraints.maxWidth < cfg.MaxColumnWidth)
-                          return Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                buttonRow1,
-                                VerticalSpacer(),
-                                buttonRow2
-                              ]);
-                        else
-                          return Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                buttonRow1,
-                                SizedBox(width: 50),
-                                buttonRow2
-                              ]);
-                      }))
                 ]);
               }),
             )));
