@@ -15,8 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Insert git sha
         run: |
           sed -i -e "s|GIT_SHA_REPLACE|$GITHUB_SHA|g" lib/config.dart
@@ -32,24 +31,27 @@ jobs:
       - run: flutter analyze
       - if: ${{ github.event_name == 'push' && github.ref_name == 'master' }}
         uses: bluefireteam/flutter-gh-pages@v7
+        with:
+          webRenderer: canvaskit
       - if: ${{ github.event_name == 'push' && github.ref_name == 'prod' }}
         uses: bluefireteam/flutter-gh-pages@v7
         with:
           targetBranch: prod-gh-pages
+          webRenderer: canvaskit
 
   test-deploy:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '3.0.x'
-      - run: flutter build web
+      - run: flutter build web --web-renderer canvaskit
 
       - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v1.1
+        uses: nwtgck/actions-netlify@v1.2
         with:
           publish-dir: './build/web'
           production-branch: master
@@ -58,7 +60,10 @@ jobs:
           enable-pull-request-comment: true
           enable-commit-comment: true
           overwrites-pull-request-comment: true
+          # fail if PR from fork that cant access secrets
+          fails-without-credentials: true
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         timeout-minutes: 1
+
