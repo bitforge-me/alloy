@@ -278,4 +278,5 @@ const _$BeOrderStatusEnumMap = {
   BeOrderStatus.completed: 'completed',
   BeOrderStatus.expired: 'expired',
   BeOrderStatus.failed: 'failed',
+  BeOrderStatus.cancelled: 'cancelled',
 };

@@ -725,7 +725,8 @@ enum BeOrderStatus {
   exchanging,
   completed,
   expired,
-  failed
+  failed,
+  cancelled
 }
 
 extension EnumEx on String {
