@@ -32,10 +32,13 @@ jobs:
       - run: flutter analyze
       - if: ${{ github.event_name == 'push' && github.ref_name == 'master' }}
         uses: bluefireteam/flutter-gh-pages@v7
+        with:
+          webRenderer: canvaskit
       - if: ${{ github.event_name == 'push' && github.ref_name == 'prod' }}
         uses: bluefireteam/flutter-gh-pages@v7
         with:
           targetBranch: prod-gh-pages
+          webRenderer: canvaskit
 
   test-deploy:
     needs: build
