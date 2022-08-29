@@ -282,22 +282,30 @@ class _UnitsScreenState extends State<UnitsScreen> {
               VerticalSpacer(),
               Text('Estimated Market Value'),
               VerticalSpacer(),
-              Row(
-                  mainAxisSize: MainAxisSize.max,
+              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
                     Text('Show estimated market value:'),
                     Checkbox(
                         value: assetPricesEnabled,
                         onChanged: onAssetPricesChecked),
-                    SizedBox(width: 20),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
                     Text('Market value currency:'),
                     SizedBox(width: 5),
                     DropdownButton<String>(
                         items: assetsDropdownItems,
                         onChanged: onAssetPriceChanged,
                         value: assetPricesUnit)
-                  ]),
+                  ],
+                ),
+              ]),
               VerticalSpacer(),
               Text('Currency Units'),
               VerticalSpacer(),
