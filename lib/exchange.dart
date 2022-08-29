@@ -66,7 +66,12 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     widget.websocket.wsEvent.unsubscribe(_websocketEvent);
   }
 
-  void _websocketEvent(WsEventArgs? args) {}
+  void _websocketEvent(WsEventArgs? args) {
+    if (args?.event == WebsocketEvent.brokerOrderNew) {
+      _amountController.text = "";
+      _receiveController.text = "";
+    }
+  }
 
   Future<void> _initMarkets() async {
     setState(() => _failedMarkets = false);
