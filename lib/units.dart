@@ -270,6 +270,8 @@ class _UnitsScreenState extends State<UnitsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    TextStyle titleStyle =
+        TextStyle(fontSize: 17, decoration: TextDecoration.underline);
     return Scaffold(
         appBar: AppBar(
           title: Text('Preferences'),
@@ -279,27 +281,35 @@ class _UnitsScreenState extends State<UnitsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+              VerticalSpacer(height: 30),
+              Text('Estimated Market Value', style: titleStyle),
               VerticalSpacer(),
-              Text('Estimated Market Value'),
-              VerticalSpacer(),
-              Row(
-                  mainAxisSize: MainAxisSize.max,
+              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
                     Text('Show estimated market value:'),
                     Checkbox(
                         value: assetPricesEnabled,
                         onChanged: onAssetPricesChecked),
-                    SizedBox(width: 20),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
                     Text('Market value currency:'),
                     SizedBox(width: 5),
                     DropdownButton<String>(
                         items: assetsDropdownItems,
                         onChanged: onAssetPriceChanged,
                         value: assetPricesUnit)
-                  ]),
-              VerticalSpacer(),
-              Text('Currency Units'),
+                  ],
+                ),
+              ]),
+              VerticalSpacer(height: 30),
+              Text('Currency Units', style: titleStyle),
               VerticalSpacer(),
               ListView.builder(
                   shrinkWrap: true,
