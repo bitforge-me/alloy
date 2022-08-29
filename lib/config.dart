@@ -71,7 +71,7 @@ String server() {
       var altLocation =
           BeServerLocationOverrides[location.hostname]!.altLocation;
       if (altLocation != null) return altLocation;
-      serverUrl = location.origin + '/';
+      serverUrl = '${location.origin}/';
     }
   }
   return serverUrl;
