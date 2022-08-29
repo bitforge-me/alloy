@@ -387,11 +387,17 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     showAlertDialog(context, 'creating order..');
     var res = await beOrderCreate(_market.symbol, _side, _amount);
     Navigator.pop(context);
-    res.when(
-        (order) => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => OrderScreen(order, widget.websocket))),
+    res.when((order) {
+      _amountController.text = '';
+      _receiveController.text = '';
+      setState(() {
+        _validAmount = false;
+      });
+      return Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => OrderScreen(order, widget.websocket)));
+    },
         error: (err) => alert(
             context, 'error', 'failed to create order (${BeError.msg(err)})'));
   }
