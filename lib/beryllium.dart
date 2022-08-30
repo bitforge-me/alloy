@@ -1076,6 +1076,15 @@ Future<BeFiatAccountNumberResult> beFiatDepositDirect(String asset) async {
       error: (err) => BeFiatAccountNumberResult.error(err));
 }
 
+Future<BeFiatAccountNumberResult> beFiatDepositAutobuy(
+    String autobuyAsset) async {
+  var result = await post(
+      "fiat_deposit_autobuy", {"autobuy_asset": autobuyAsset},
+      authRequired: true);
+  return result.when((content) => BeFiatAccountNumberResult.parse(content),
+      error: (err) => BeFiatAccountNumberResult.error(err));
+}
+
 Future<BeWithdrawalResult> beFiatWithdrawalCreate(
     String asset,
     Decimal amount,

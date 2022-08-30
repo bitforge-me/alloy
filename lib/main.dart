@@ -31,6 +31,7 @@ import 'login.dart';
 import 'assets.dart';
 import 'event.dart';
 import 'widgets.dart';
+import 'autobuy.dart';
 
 final log = Logger('Main');
 
@@ -302,6 +303,25 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     setState(() {}); // force rerender
   }
 
+  Future<void> _autobuy() async {
+    showAlertDialog(context, 'querying..');
+    var res = await beAssets();
+    var res2 = await beMarkets();
+    Navigator.pop(context);
+    res.when((assets) async {
+      res2.when(
+          (markets) => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      AutobuyScreen(markets, assets, _websocket))),
+          error: (err) => snackMsg(context, 'failed to query markets',
+              category: MessageCategory.Warning));
+    },
+        error: (err) => snackMsg(context, 'failed to query assets',
+            category: MessageCategory.Warning));
+  }
+
   Future<void> _verifyUser() async {
     await Navigator.push(
         context,
@@ -358,6 +378,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           leading: Icon(Icons.settings),
           title: const Text('Preferences'),
           onTap: _units),
+      ListTile(
+          leading: Icon(Icons.auto_awesome),
+          title: const Text('Automatic Buy (DCA)'),
+          onTap: _autobuy),
       ListTile(
           leading: Icon(Icons.contact_support),
           title: const Text('Support'),
