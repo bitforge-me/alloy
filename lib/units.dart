@@ -130,6 +130,7 @@ class PriceEquivalent extends StatefulWidget {
   final Color? color;
   final bool twoLines;
   final TextStyle? textStyle;
+  final bool exchangeRateWidget;
   PriceEquivalent(this.asset, this.amount,
       {this.showAssetAmount = true,
       this.pre,
@@ -139,6 +140,7 @@ class PriceEquivalent extends StatefulWidget {
       this.fontWeight,
       this.color,
       this.twoLines = false,
+      this.exchangeRateWidget = false,
       this.textStyle});
 
   @override
@@ -168,7 +170,7 @@ class _PriceEquivalentState extends State<PriceEquivalent> {
       price = widget.amount / _price!.rate;
     else
       price = widget.amount * _price!.rate;
-    return '~${assetFormatUnit(_priceAsset!, assetPricesUnit, price)} $assetPricesUnit';
+    return '${assetFormatUnit(_priceAsset!, assetPricesUnit, price)} $assetPricesUnit';
   }
 
   @override
@@ -190,7 +192,16 @@ class _PriceEquivalentState extends State<PriceEquivalent> {
           widget.asset != assetUnitToAsset(assetPricesUnit)) {
         if (widget.twoLines)
           text = '$assetAmount\n${_formattedPrice()}';
-        else
+        else if (widget.exchangeRateWidget) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text('1 BTC', style: widget.textStyle),
+              Text('${_formattedPrice()}', style: widget.textStyle)
+            ],
+          );
+        } else
           text = '$startText$assetAmount (${_formattedPrice()})$endText';
       } else
         text = '$startText$assetAmount$endText';

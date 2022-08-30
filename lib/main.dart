@@ -381,7 +381,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       cards.add(BalanceCard(
           '${balance.name} Balance',
           PriceEquivalent(balance.asset, balance.available,
-              twoLines: true,
               textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           assetGradient(balance.asset),
           assetBackgroundPng(balance.asset)));
@@ -482,15 +481,35 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: Image.asset(cfg.AppLogo, filterQuality: FilterQuality.high),
-            leading: Builder(builder: (BuildContext context) {
-              return IconButton(
-                icon: _gradientIcon(Icons.menu),
-                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-                onPressed: () => Scaffold.of(context).openDrawer(),
-                color: _alerts.isNotEmpty ? ZapWarning : null,
-              );
-            })),
+          title: Image.asset(cfg.AppLogo, filterQuality: FilterQuality.high),
+          leading: Builder(builder: (BuildContext context) {
+            return IconButton(
+              icon: _gradientIcon(Icons.menu),
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+              onPressed: () => Scaffold.of(context).openDrawer(),
+              color: _alerts.isNotEmpty ? ZapWarning : null,
+            );
+          }),
+          actions: [
+            Row(
+              children: <Widget>[
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    PriceEquivalent(Btc, Decimal.fromInt(1),
+                        textStyle: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white.withOpacity(0.7),
+                            height: 1.2),
+                        exchangeRateWidget: true),
+                  ],
+                ),
+                SizedBox(width: 8),
+              ],
+            ),
+          ],
+        ),
         drawer: _makeDrawer(context),
         bottomNavigationBar: BottomNavigationBar(
           showSelectedLabels: false,
