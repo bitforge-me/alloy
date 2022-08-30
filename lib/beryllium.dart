@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:decimal/decimal.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
+import 'package:synchronized/synchronized.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/hmac.dart';
@@ -19,6 +20,7 @@ part 'beryllium.g.dart';
 part 'beryllium.freezed.dart';
 
 final log = Logger('Beryllium');
+var nonceLock = Lock();
 
 Decimal _decimalFromJson(input) => Decimal.parse(input);
 String _decimalToJson(input) => input.toString();
@@ -843,28 +845,33 @@ Future<http.Response?> postAndCatch(String url, String body,
 
 Future<ErrorResult> post(String endpoint, Map<String, dynamic> params,
     {bool authRequired = false}) async {
-  var baseUrl = server() + 'apiv1/';
-  var url = baseUrl + endpoint;
-  var headers = Map<String, String>();
-  var body;
-  if (authRequired) {
-    var apikey = await Prefs.beApiKeyGet();
-    var apisecret = await Prefs.beApiSecretGet();
-    checkApiKey(apikey, apisecret);
-    var nonce = nextNonce();
-    params.addAll({"api_key": apikey, "nonce": nonce});
-    body = jsonEncode(params);
-    var sig = createHmacSig(apisecret!, body);
-    headers.addAll({"X-Signature": sig});
-  } else
-    body = jsonEncode(params);
-  var response = await postAndCatch(url, body, extraHeaders: headers);
-  if (response == null) return ErrorResult.network();
-  if (response.statusCode == 200) {
-    return ErrorResult(response.body);
-  } else if (response.statusCode == 400) return ErrorResult.auth(response.body);
-  log.info(response.statusCode);
-  return ErrorResult.network();
+  // use a lock to stop different calls overlapping and then getting a network race condition
+  // on the nonce use
+  return await nonceLock.synchronized(() async {
+    var baseUrl = server() + 'apiv1/';
+    var url = baseUrl + endpoint;
+    var headers = Map<String, String>();
+    var body;
+    if (authRequired) {
+      var apikey = await Prefs.beApiKeyGet();
+      var apisecret = await Prefs.beApiSecretGet();
+      checkApiKey(apikey, apisecret);
+      var nonce = nextNonce();
+      params.addAll({"api_key": apikey, "nonce": nonce});
+      body = jsonEncode(params);
+      var sig = createHmacSig(apisecret!, body);
+      headers.addAll({"X-Signature": sig});
+    } else
+      body = jsonEncode(params);
+    var response = await postAndCatch(url, body, extraHeaders: headers);
+    if (response == null) return ErrorResult.network();
+    if (response.statusCode == 200) {
+      return ErrorResult(response.body);
+    } else if (response.statusCode == 400)
+      return ErrorResult.auth(response.body);
+    log.info(response.statusCode);
+    return ErrorResult.network();
+  });
 }
 
 Future<ErrorResult> beUserRegister(AccountRegistration reg) async {
