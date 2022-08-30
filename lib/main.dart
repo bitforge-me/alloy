@@ -6,6 +6,7 @@ import 'package:universal_platform/universal_platform.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:decimal/decimal.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'dart:async';
 
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
@@ -90,6 +91,7 @@ class _MyHomePageState extends State<MyHomePage>
   List<String> _alerts = [];
   int _balanceCarouselPage = 0;
   final CarouselController _balanceCarouselController = CarouselController();
+  Widget? priceWidget;
 
   @override
   void initState() {
@@ -178,7 +180,11 @@ class _MyHomePageState extends State<MyHomePage>
         _alerts = _generateAlerts(userInfo);
       });
       // if we got the user info try for the balances
-      if (userInfo != null) _updateBalances();
+      if (userInfo != null) {
+        _updateBalances();
+        _getPriceWidget();
+        _repeatedlyCallGetPriceWidget();
+      }
     } else
       _startLogin(false, false);
   }
@@ -265,6 +271,28 @@ class _MyHomePageState extends State<MyHomePage>
       await Prefs.nukeAll();
       Phoenix.rebirth(context);
     }
+  }
+
+  void _getPriceWidget() {
+    setState(() {
+      priceWidget = Row(
+        children: <Widget>[
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              BtcPriceWidget(),
+            ],
+          ),
+          SizedBox(width: 8),
+        ],
+      );
+    });
+  }
+
+  void _repeatedlyCallGetPriceWidget() {
+    const fiveMins = Duration(minutes: 5);
+    Timer.periodic(fiveMins, (Timer t) => _getPriceWidget());
   }
 
   Future<void> _deposit() async {
@@ -503,15 +531,19 @@ class _MyHomePageState extends State<MyHomePage>
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: Image.asset(cfg.AppLogo, filterQuality: FilterQuality.high),
-            leading: Builder(builder: (BuildContext context) {
-              return IconButton(
-                icon: _gradientIcon(Icons.menu),
-                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-                onPressed: () => Scaffold.of(context).openDrawer(),
-                color: _alerts.isNotEmpty ? ZapWarning : null,
-              );
-            })),
+          title: Image.asset(cfg.AppLogo, filterQuality: FilterQuality.high),
+          leading: Builder(builder: (BuildContext context) {
+            return IconButton(
+              icon: _gradientIcon(Icons.menu),
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+              onPressed: () => Scaffold.of(context).openDrawer(),
+              color: _alerts.isNotEmpty ? ZapWarning : null,
+            );
+          }),
+          actions: [
+            priceWidget ?? SizedBox(),
+          ],
+        ),
         drawer: _makeDrawer(context),
         onDrawerChanged: (isOpened) => unfocusText(),
         bottomNavigationBar: BottomNavigationBar(
