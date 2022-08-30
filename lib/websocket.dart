@@ -7,6 +7,7 @@ import 'package:zapdart/hmac.dart';
 import 'prefs.dart';
 import 'config.dart';
 import 'utils.dart';
+import 'beryllium.dart';
 
 final log = Logger('Websocket');
 
@@ -69,8 +70,7 @@ class Websocket {
     log.info('socket namespace: ${socket.nsp}');
     socket.on('connect', (_) {
       log.info('ws connect');
-      Future.delayed(const Duration(seconds: 2), () {
-        // delay websocket authoriztion to try and avoid any nonce race conditions with app initialization
+      nonceLock.synchronized(() async {
         var nonce = nextNonce();
         var sig = createHmacSig(apisecret!, nonce.toString());
         var auth = {"signature": sig, "api_key": apikey, "nonce": nonce};
