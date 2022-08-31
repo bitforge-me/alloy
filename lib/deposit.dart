@@ -153,10 +153,9 @@ class _DepositsScreenState extends State<DepositsScreen> {
                   ? Container(
                       margin: EdgeInsets.all(20),
                       child: Center(child: Text('No deposits')))
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      itemBuilder: _listItem,
-                      itemCount: _deposits.length)
+                  : Expanded(
+                      child: ListView.builder(
+                          itemBuilder: _listItem, itemCount: _deposits.length))
             ])),
         bottomNavigationBar: _pageCount > 0
             ? Paginator(_pageCount, _pageNumber, (n) => _initDeposits(n))
