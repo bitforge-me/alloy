@@ -158,10 +158,9 @@ class _WithdrawalsScreenState extends State<WithdrawalsScreen> {
             ? Container(
                 margin: EdgeInsets.all(20),
                 child: Center(child: Text('No withdrawals')))
-            : ListView.builder(
-                shrinkWrap: true,
-                itemBuilder: _listItem,
-                itemCount: _withdrawals.length)
+            : Expanded(
+                child: ListView.builder(
+                    itemBuilder: _listItem, itemCount: _withdrawals.length))
       ])),
       bottomNavigationBar: _pageCount > 0
           ? Paginator(_pageCount, _pageNumber, (n) => _initWithdrawals(n))
