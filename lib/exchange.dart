@@ -383,6 +383,10 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         estimate.errMsg);
   }
 
+  void _submit() {
+    if (_validAmount) _exchange();
+  }
+
   void _exchange() async {
     showAlertDialog(context, 'creating order..');
     var res = await beOrderCreate(_market.symbol, _side, _amount);
@@ -434,6 +438,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
           suffixText: assetUnit(_fromAsset),
           labelText: 'Amount',
           onChanged: _amountChanged,
+          onFieldSubmitted: (_) => _submit(),
         ),
       ),
     ]);
@@ -477,6 +482,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
           suffixText: assetUnit(_toAsset),
           labelText: 'Receive',
           onChanged: _recieveChanged,
+          onFieldSubmitted: (_) => _submit(),
         ),
       )
     ]);

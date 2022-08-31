@@ -569,24 +569,26 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                                       style: TextStyle(color: ZapOnPrimary)),
                                   onPressed: _setMax),
                               keyboardType: TextInputType.numberWithOptions(
-                                  signed: false,
-                                  decimal: true), validator: (value) {
-                            if (value == null || value.isEmpty)
-                              return 'Please enter a value';
-                            var userAmount = Decimal.tryParse(value.trim());
-                            if (userAmount == null) return 'Invalid value';
-                            if (userAmount <= Decimal.zero)
-                              'Please return a value greater then 0';
-                            var withdrawAsset =
-                                widget.l2Network ?? widget.asset;
-                            var sysAmount = assetAmountFromUser(
-                                widget.asset.symbol, userAmount);
-                            if (sysAmount < withdrawAsset.minWithdraw)
-                              return 'Please enter a value greater then or equal to ${assetAmountToUser(widget.asset.symbol, withdrawAsset.minWithdraw)}';
-                            if (sysAmount > _max)
-                              return 'Please enter a value less then or equal to ${assetAmountToUser(widget.asset.symbol, _max)}';
-                            return null;
-                          }, onChanged: _inputChanged)),
+                                  signed: false, decimal: true),
+                              validator: (value) {
+                                if (value == null || value.isEmpty)
+                                  return 'Please enter a value';
+                                var userAmount = Decimal.tryParse(value.trim());
+                                if (userAmount == null) return 'Invalid value';
+                                if (userAmount <= Decimal.zero)
+                                  'Please return a value greater then 0';
+                                var withdrawAsset =
+                                    widget.l2Network ?? widget.asset;
+                                var sysAmount = assetAmountFromUser(
+                                    widget.asset.symbol, userAmount);
+                                if (sysAmount < withdrawAsset.minWithdraw)
+                                  return 'Please enter a value greater then or equal to ${assetAmountToUser(widget.asset.symbol, withdrawAsset.minWithdraw)}';
+                                if (sysAmount > _max)
+                                  return 'Please enter a value less then or equal to ${assetAmountToUser(widget.asset.symbol, _max)}';
+                                return null;
+                              },
+                              onChanged: _inputChanged,
+                              onFieldSubmitted: (_) => _withdrawalCreate())),
                       SpacedVisibility(
                           assetPricesEnabled &&
                               _amount > Decimal.zero &&
@@ -611,13 +613,14 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                                   ]),
                               keyboardType: TextInputType.text,
                               validator: (value) {
-                            if (value == null || value.isEmpty)
-                              return 'Please enter a value';
-                            var res = addressValidate(
-                                widget.asset.symbol, _testnet, value);
-                            if (!res.result) return res.reason;
-                            return null;
-                          })),
+                                if (value == null || value.isEmpty)
+                                  return 'Please enter a value';
+                                var res = addressValidate(
+                                    widget.asset.symbol, _testnet, value);
+                                if (!res.result) return res.reason;
+                                return null;
+                              },
+                              onFieldSubmitted: (_) => _withdrawalCreate())),
                       SpacedVisibility(
                         widget.asset.isCrypto && widget.l2Network != null,
                         BronzeFormInput(_recipientController,
@@ -628,14 +631,15 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                                 icon: Icon(Icons.qr_code)),
                             keyboardType: TextInputType.text,
                             validator: (value) {
-                          if (value == null || value.isEmpty)
-                            return 'Please enter a value';
-                          value = value.trim();
-                          var res = l2RecipientValidate(
-                              widget.l2Network!.symbol, _testnet, value);
-                          if (!res.result) return res.reason;
-                          return null;
-                        }),
+                              if (value == null || value.isEmpty)
+                                return 'Please enter a value';
+                              value = value.trim();
+                              var res = l2RecipientValidate(
+                                  widget.l2Network!.symbol, _testnet, value);
+                              if (!res.result) return res.reason;
+                              return null;
+                            },
+                            onFieldSubmitted: (_) => _withdrawalCreate()),
                       ),
                       SpacedVisibility(
                           !widget.asset.isCrypto,
@@ -648,12 +652,13 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                                   onPressed: _addressBook),
                               keyboardType: TextInputType.number,
                               validator: (value) {
-                            if (value == null || value.isEmpty)
-                              return 'Please enter a value';
-                            var res = bankValidate(value);
-                            if (!res.result) return res.reason;
-                            return null;
-                          })),
+                                if (value == null || value.isEmpty)
+                                  return 'Please enter a value';
+                                var res = bankValidate(value);
+                                if (!res.result) return res.reason;
+                                return null;
+                              },
+                              onFieldSubmitted: (_) => _withdrawalCreate())),
                       SpacedVisibility(
                           !widget.asset.isCrypto || widget.l2Network == null,
                           SizedBox(
@@ -675,10 +680,11 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                                   : 'Bank Account Description',
                               keyboardType: TextInputType.text,
                               validator: (value) {
-                            if (value == null || value.isEmpty)
-                              return 'Please enter a value';
-                            return null;
-                          })),
+                                if (value == null || value.isEmpty)
+                                  return 'Please enter a value';
+                                return null;
+                              },
+                              onFieldSubmitted: (_) => _withdrawalCreate())),
                       SpacedVisibility(
                           !widget.asset.isCrypto,
                           Card(
@@ -699,7 +705,9 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                                           if (value == null || value.isEmpty)
                                             return 'Please enter a value';
                                           return null;
-                                        }),
+                                        },
+                                        onFieldSubmitted: (_) =>
+                                            _withdrawalCreate()),
                                     TextFormField(
                                         controller: _accountAddr01Controller,
                                         decoration: InputDecoration(
@@ -709,13 +717,16 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                                           if (value == null || value.isEmpty)
                                             return 'Please enter a value';
                                           return null;
-                                        }),
+                                        },
+                                        onFieldSubmitted: (_) =>
+                                            _withdrawalCreate()),
                                     TextFormField(
-                                      controller: _accountAddr02Controller,
-                                      decoration: InputDecoration(
-                                          labelText: 'Address Line 2'),
-                                      keyboardType: TextInputType.text,
-                                    ),
+                                        controller: _accountAddr02Controller,
+                                        decoration: InputDecoration(
+                                            labelText: 'Address Line 2'),
+                                        keyboardType: TextInputType.text,
+                                        onFieldSubmitted: (_) =>
+                                            _withdrawalCreate()),
                                     TextFormField(
                                         controller:
                                             _accountAddrCountryController,
@@ -726,7 +737,9 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                                           if (value == null || value.isEmpty)
                                             return 'Please enter a value';
                                           return null;
-                                        }),
+                                        },
+                                        onFieldSubmitted: (_) =>
+                                            _withdrawalCreate()),
                                   ])))),
                       VerticalSpacer(),
                       BronzeRoundedButton(_withdrawalCreate, ZapOnPrimary,

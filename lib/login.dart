@@ -182,6 +182,11 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
     Navigator.of(context).pop(LoginResult.choose(LoginChoice.doLogin()));
   }
 
+  void _submit() {
+    if (_formKey.currentState == null) return;
+    if (_formKey.currentState!.validate()) _makeRequest();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -195,7 +200,7 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
             child: Form(
                 key: _formKey,
                 child: BigLogoContainer(
-                  children: <Widget>[
+                  children: [
                     Text(
                       "Login With Email Link",
                       style: TextStyle(
@@ -211,12 +216,11 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
                         icon: Icon(Icons.email_outlined),
                         labelText: 'Email',
                         keyboardType: TextInputType.emailAddress,
-                        validator: emailValidate),
+                        validator: emailValidate,
+                        onFieldSubmitted: (_) => _submit()),
                     VerticalSpacer(),
-                    BronzeRoundedButton(() {
-                      if (_formKey.currentState == null) return;
-                      if (_formKey.currentState!.validate()) _makeRequest();
-                    }, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Continue',
+                    BronzeRoundedButton(_submit, ZapOnPrimary, ZapPrimary,
+                        ZapPrimaryGradient, 'Continue',
                         fwdArrow: true,
                         width: ButtonWidth,
                         height: ButtonHeight),
@@ -322,6 +326,11 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
     Navigator.of(context).pop(LoginResult.choose(LoginChoice.doRegistration()));
   }
 
+  void _submit() {
+    if (_formKey.currentState == null) return;
+    if (_formKey.currentState!.validate()) _makeRequest();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -354,26 +363,31 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
                       icon: Icon(Icons.person_outline),
                       keyboardType: TextInputType.emailAddress,
                       labelText: 'Email',
+                      onFieldSubmitted: (_) => _submit(),
                     ),
                     VerticalSpacer(),
-                    BronzeFormInput(_passwordController,
-                        icon: Icon(Icons.key_outlined),
-                        validator: passwordValidate,
-                        labelText: 'Password',
-                        obscureText: true,
-                        toggleObscure: true),
+                    BronzeFormInput(
+                      _passwordController,
+                      icon: Icon(Icons.key_outlined),
+                      validator: passwordValidate,
+                      labelText: 'Password',
+                      obscureText: true,
+                      toggleObscure: true,
+                      onFieldSubmitted: (_) => _submit(),
+                    ),
                     VerticalSpacer(),
                     Visibility(
                       visible: showTwoFactorCode,
-                      child: BronzeFormInput(_tfCodeController,
-                          icon: Icon(Icons.lock_outline),
-                          labelText: 'Two factor login code'),
+                      child: BronzeFormInput(
+                        _tfCodeController,
+                        icon: Icon(Icons.lock_outline),
+                        labelText: 'Two factor login code',
+                        onFieldSubmitted: (_) => _submit(),
+                      ),
                     ),
                     VerticalSpacer(height: showTwoFactorCode ? 15 : 0),
-                    BronzeRoundedButton(() {
-                      if (_formKey.currentState == null) return;
-                      if (_formKey.currentState!.validate()) _makeRequest();
-                    }, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Continue',
+                    BronzeRoundedButton(_submit, ZapOnPrimary, ZapPrimary,
+                        ZapPrimaryGradient, 'Continue',
                         fwdArrow: true,
                         width: ButtonWidth,
                         height: ButtonHeight),
@@ -473,6 +487,11 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
     Navigator.of(context).pop(LoginResult.choose(LoginChoice.doLogin()));
   }
 
+  void _submit() {
+    if (_formKey.currentState == null) return;
+    if (_formKey.currentState!.validate()) _makeRequest();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -502,30 +521,27 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
                       icon: Icon(Icons.email_outlined),
                       labelText: 'Email',
                       keyboardType: TextInputType.emailAddress,
-                      validator: emailValidate),
+                      validator: emailValidate,
+                      onFieldSubmitted: (_) => _submit()),
                   VerticalSpacer(),
-                  BronzeFormInput(
-                    _newPasswordController,
-                    icon: Icon(Icons.key_outlined),
-                    obscureText: true,
-                    toggleObscure: true,
-                    labelText: 'New Password',
-                    validator: newPasswordValidate,
-                  ),
+                  BronzeFormInput(_newPasswordController,
+                      icon: Icon(Icons.key_outlined),
+                      obscureText: true,
+                      toggleObscure: true,
+                      labelText: 'New Password',
+                      validator: newPasswordValidate,
+                      onFieldSubmitted: (_) => _submit()),
                   VerticalSpacer(),
-                  BronzeFormInput(
-                    _passwordConfirmController,
-                    icon: Icon(Icons.key_outlined),
-                    obscureText: true,
-                    toggleObscure: true,
-                    labelText: 'Password Confirmation',
-                    validator: passwordConfirmValidate,
-                  ),
+                  BronzeFormInput(_passwordConfirmController,
+                      icon: Icon(Icons.key_outlined),
+                      obscureText: true,
+                      toggleObscure: true,
+                      labelText: 'Password Confirmation',
+                      validator: passwordConfirmValidate,
+                      onFieldSubmitted: (_) => _submit()),
                   VerticalSpacer(),
-                  BronzeRoundedButton(() async {
-                    if (_formKey.currentState == null) return;
-                    if (_formKey.currentState!.validate()) _makeRequest();
-                  }, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Continue',
+                  BronzeRoundedButton(_submit, ZapOnPrimary, ZapPrimary,
+                      ZapPrimaryGradient, 'Continue',
                       fwdArrow: true, width: ButtonWidth, height: ButtonHeight),
                   VerticalSpacer(height: 8),
                   WordDivider(),

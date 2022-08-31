@@ -106,7 +106,7 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
       });
   }
 
-  void _ok() {
+  void _submit() {
     if (_formKey.currentState == null) return;
     if (_formKey.currentState!.validate())
       Navigator.of(context).pop(_amountController.text);
@@ -143,24 +143,25 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                               width: ButtonWidth + 54.0,
                               child: Column(children: [
                                 BronzeValueInput(
-                                  controller: _amountController,
-                                  suffixText: '${assetUnit(widget.asset)}',
-                                  labelText: 'Amount',
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty)
-                                      return 'Please enter a value';
-                                    var userAmount =
-                                        Decimal.tryParse(value.trim());
-                                    if (userAmount == null)
-                                      return 'Invalid value';
-                                    if (userAmount <= Decimal.zero)
-                                      'Please return a value greater then 0';
-                                    return null;
-                                  },
-                                  keyboardType: TextInputType.numberWithOptions(
-                                      signed: false, decimal: true),
-                                  onChanged: _inputChanged,
-                                ),
+                                    controller: _amountController,
+                                    suffixText: '${assetUnit(widget.asset)}',
+                                    labelText: 'Amount',
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty)
+                                        return 'Please enter a value';
+                                      var userAmount =
+                                          Decimal.tryParse(value.trim());
+                                      if (userAmount == null)
+                                        return 'Invalid value';
+                                      if (userAmount <= Decimal.zero)
+                                        'Please return a value greater then 0';
+                                      return null;
+                                    },
+                                    keyboardType:
+                                        TextInputType.numberWithOptions(
+                                            signed: false, decimal: true),
+                                    onChanged: _inputChanged,
+                                    onFieldSubmitted: (_) => _submit()),
                                 assetPricesEnabled &&
                                         _amount > Decimal.zero &&
                                         _showPrice
@@ -171,7 +172,7 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                                             showAssetAmount: false))
                                     : SizedBox(),
                               ])))),
-                  BronzeRoundedButton(_ok, ZapOnPrimary, ZapPrimary,
+                  BronzeRoundedButton(_submit, ZapOnPrimary, ZapPrimary,
                       ZapPrimaryGradient, 'Continue',
                       width: ButtonWidth, height: ButtonHeight),
                   BronzeRoundedButton(() => Navigator.of(context).pop(),
