@@ -107,6 +107,7 @@ class BronzeFormInput extends StatefulWidget {
   final Widget? suffixIcon;
   final String? suffixText;
   final void Function(String?)? onChanged;
+  final void Function(String)? onFieldSubmitted;
 
   BronzeFormInput(this.controller,
       {this.validator,
@@ -117,7 +118,8 @@ class BronzeFormInput extends StatefulWidget {
       this.keyboardType,
       this.suffixIcon,
       this.suffixText,
-      this.onChanged})
+      this.onChanged,
+      this.onFieldSubmitted})
       : super();
 
   @override
@@ -181,7 +183,8 @@ class _BronzeFormInputState extends State<BronzeFormInput> {
         keyboardType: widget.keyboardType,
         obscureText: obscureText,
         validator: widget.validator,
-        onChanged: widget.onChanged);
+        onChanged: widget.onChanged,
+        onFieldSubmitted: widget.onFieldSubmitted);
   }
 }
 
@@ -193,6 +196,7 @@ class BronzeValueInput extends StatelessWidget {
   final String? suffixText;
   final bool? readOnly;
   final Function(String)? onChanged;
+  final Function(String)? onFieldSubmitted;
 
   BronzeValueInput(
       {this.controller,
@@ -201,7 +205,8 @@ class BronzeValueInput extends StatelessWidget {
       this.validator,
       this.readOnly,
       this.suffixText,
-      this.onChanged});
+      this.onChanged,
+      this.onFieldSubmitted});
 
   @override
   Widget build(BuildContext context) {
@@ -219,6 +224,7 @@ class BronzeValueInput extends StatelessWidget {
           keyboardType: this.keyboardType,
           validator: this.validator,
           onChanged: onChanged,
+          onFieldSubmitted: onFieldSubmitted,
         ));
   }
 }
