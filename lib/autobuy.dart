@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
+import 'package:zapdart/colors.dart';
 
+import 'config.dart' as cfg;
 import 'widgets.dart';
 import 'beryllium.dart';
 import 'deposit.dart';
@@ -34,10 +36,15 @@ class AutobuyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return raisedButton(
-        onPressed: () => onPressed(context),
-        child: Text(
-            'Autobuy ${autobuyAsset.symbol} with ${asset.symbol} deposit'));
+    return BronzeRoundedButton(
+        () => onPressed(context),
+        ZapOnPrimary,
+        ZapPrimary,
+        ZapPrimaryGradient,
+        'Autobuy ${autobuyAsset.symbol} with ${asset.symbol} deposit',
+        fwdArrow: true,
+        width: cfg.ButtonWidth,
+        height: cfg.ButtonHeight);
   }
 }
 
@@ -76,9 +83,13 @@ class _AutobuyScreenState extends State<AutobuyScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                          'Here you can create special bank deposit codes and if you make a deposit we will automatically create a buy order for you'),
+                          'Here you can create special bank deposit codes and if you make a deposit we will automatically create a buy order for you',
+                          textAlign: TextAlign.center),
                       VerticalSpacer(),
-                      Row(children: buttons)
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: buttons)
                     ]))));
   }
 }
