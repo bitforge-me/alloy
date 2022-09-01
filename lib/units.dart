@@ -118,7 +118,38 @@ class PriceManager {
   }
 }
 
-class PriceEquivalent extends StatefulWidget {
+abstract class PriceInfoWidget {
+  String _formattedPrice() {
+    if (_price == null || _priceAsset == null) return '...';
+    Decimal price;
+    if (_price!.invertedMarket)
+      price = widget.amount / _price!.rate;
+    else
+      price = widget.amount * _price!.rate;
+    return '${assetFormatUnit(_priceAsset!, assetPricesUnit, price)} $assetPricesUnit';
+  }
+}
+
+class ExchangeRateWidget extends StatefulWidget with PriceInfoWidget {
+
+}
+
+class _ExchangeRateWidgetState extends State<ExchangeRateWidget> {
+
+  @override
+  Widget build(BuildContext context) {
+		return Column(
+			mainAxisAlignment: MainAxisAlignment.center,
+			crossAxisAlignment: CrossAxisAlignment.center,
+			children: <Widget>[
+				Text('1 BTC', style: widget.textStyle),
+				Text('${_formattedPrice()}', style: widget.textStyle)
+			],
+		);
+	}
+}
+
+class PriceEquivalent extends StatefulWidget with PriceInfoWidget {
   final String asset;
   final Decimal amount;
   final bool showAssetAmount;
@@ -161,16 +192,6 @@ class _PriceEquivalentState extends State<PriceEquivalent> {
       if (_price == null) _failedToGetPrice = true;
       setState(() {}); // rerender
     });
-  }
-
-  String _formattedPrice() {
-    if (_price == null || _priceAsset == null) return '...';
-    Decimal price;
-    if (_price!.invertedMarket)
-      price = widget.amount / _price!.rate;
-    else
-      price = widget.amount * _price!.rate;
-    return '${assetFormatUnit(_priceAsset!, assetPricesUnit, price)} $assetPricesUnit';
   }
 
   @override
