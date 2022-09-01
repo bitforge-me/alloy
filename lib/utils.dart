@@ -1,5 +1,6 @@
 import 'package:url_launcher/url_launcher.dart';
 import 'package:decimal/decimal.dart';
+import 'package:flutter/material.dart';
 
 var lastNonce = 0;
 int nextNonce() {
@@ -35,4 +36,9 @@ Decimal power(Decimal value, int n) {
   if (n == 1) return result;
   if (n == 0) return Decimal.one;
   throw ArgumentError();
+}
+
+void unfocusText() {
+  // unfocus any text input to stop keyboards popping up
+  FocusManager.instance.primaryFocus?.unfocus();
 }
