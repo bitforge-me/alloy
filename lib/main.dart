@@ -33,6 +33,7 @@ import 'widgets.dart';
 import 'autobuy.dart';
 
 final log = Logger('Main');
+final routeObserver = RouteObserver<Route>();
 
 void main() {
   // setup logging
@@ -67,6 +68,7 @@ class MyApp extends StatelessWidget {
       theme: theme,
       debugShowCheckedModeBanner: false,
       home: MyHomePage(title: cfg.AppTitle),
+      navigatorObservers: [routeObserver],
     );
   }
 }
@@ -80,7 +82,8 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
+class _MyHomePageState extends State<MyHomePage>
+    with WidgetsBindingObserver, RouteAware {
   Websocket _websocket = Websocket();
   UserInfo? _userInfo;
   List<BeBalance> _balances = [];
@@ -100,6 +103,24 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     log.info('App lifestyle state changed: $state');
     if (state == AppLifecycleState.resumed)
       _websocket.connect(); // reconnect websocket
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    var route = ModalRoute.of(context);
+    if (route != null) routeObserver.subscribe(this, route);
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPushNext() {
+    unfocusText();
   }
 
   List<String> _generateAlerts(UserInfo? info) {
@@ -492,6 +513,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               );
             })),
         drawer: _makeDrawer(context),
+        onDrawerChanged: (isOpened) => unfocusText(),
         bottomNavigationBar: BottomNavigationBar(
           showSelectedLabels: false,
           showUnselectedLabels: false,

@@ -173,6 +173,8 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   }
 
   Future<void> _updateQuote(FieldUpdated field) async {
+    // unfocus text input
+    unfocusText();
     // init local values
     var fromAsset = _fromAsset;
     var toAsset = _toAsset;
