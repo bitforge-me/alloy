@@ -20,7 +20,6 @@ import 'websocket.dart';
 import 'profile.dart';
 import 'security.dart';
 import 'utils.dart';
-import 'balances.dart';
 import 'deposit.dart';
 import 'withdrawal.dart';
 import 'verify_user.dart';
@@ -31,6 +30,7 @@ import 'login.dart';
 import 'assets.dart';
 import 'event.dart';
 import 'widgets.dart';
+import 'autobuy.dart';
 
 final log = Logger('Main');
 
@@ -246,25 +246,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     }
   }
 
-  Future<void> _showBalances() async {
-    if (_balances.length == 0) {
-      showAlertDialog(context, 'querying..');
-      var res = await beBalances();
-      Navigator.pop(context);
-      res.when(
-          (balances) => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => BalanceScreen(balances, _websocket))),
-          error: (err) => snackMsg(context, 'failed to query balances',
-              category: MessageCategory.Warning));
-    } else
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => BalanceScreen(_balances, _websocket)));
-  }
-
   Future<void> _deposit() async {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => DepositsScreen(_websocket)));
@@ -300,6 +281,25 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     await Navigator.push(
         context, MaterialPageRoute(builder: (context) => UnitsScreen()));
     setState(() {}); // force rerender
+  }
+
+  Future<void> _autobuy() async {
+    showAlertDialog(context, 'querying..');
+    var res = await beAssets();
+    var res2 = await beMarkets();
+    Navigator.pop(context);
+    res.when((assets) async {
+      res2.when(
+          (markets) => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      AutobuyScreen(markets, assets, _websocket))),
+          error: (err) => snackMsg(context, 'failed to query markets',
+              category: MessageCategory.Warning));
+    },
+        error: (err) => snackMsg(context, 'failed to query assets',
+            category: MessageCategory.Warning));
   }
 
   Future<void> _verifyUser() async {
@@ -452,7 +452,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         _withdrawal();
         break;
       case 3:
-        _showBalances();
+        _autobuy();
         break;
       default:
         break;
@@ -514,9 +514,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                     size: 28.0, text: 'Withdrawals'),
                 label: 'Widthdrawals'),
             BottomNavigationBarItem(
-                icon: _gradientIcon(Icons.wallet_rounded,
-                    size: 28.0, text: 'Balances'),
-                label: 'Balances')
+                icon: _gradientIcon(Icons.auto_awesome,
+                    size: 28.0, text: 'Autobuy'),
+                label: 'Autobuy')
           ],
         ),
         body: BiforgePage(
