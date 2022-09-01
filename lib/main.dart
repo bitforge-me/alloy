@@ -503,7 +503,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           unselectedLabelStyle: TextStyle(fontSize: 12, color: Colors.blue),
           items: [
             BottomNavigationBarItem(
-                icon: _gradientIcon(Icons.history, text: 'Order History'),
+                icon: _gradientIcon(Icons.history,
+                    size: 28.0, text: 'Order History'),
                 label: 'Order History'),
             BottomNavigationBarItem(
                 icon: _gradientIcon(Icons.keyboard_double_arrow_down_rounded,
