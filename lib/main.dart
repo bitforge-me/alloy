@@ -497,12 +497,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    PriceEquivalent(Btc, Decimal.fromInt(1),
-                        textStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white.withOpacity(0.7),
-                            height: 1.2),
-                        exchangeRateWidget: true),
+                    BtcPriceWidget(),
                   ],
                 ),
                 SizedBox(width: 8),
