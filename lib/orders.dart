@@ -95,17 +95,22 @@ class _OrderScreenState extends State<OrderScreen> {
           ListTile(
               title: Text('Status'),
               subtitle: Text('${describeEnum(_order.status).toUpperCase()}')),
-          _order.status == BeOrderStatus.created
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                      BronzeRoundedButton(_accept, ZapOnPrimary, ZapPrimary,
-                          ZapPrimaryGradient, 'Accept',
-                          fwdArrow: true,
-                          width: cfg.ButtonWidth,
-                          height: cfg.ButtonHeight)
-                    ])
-              : SizedBox(),
+          Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                _order.status == BeOrderStatus.created
+                    ? BronzeRoundedButton(_accept, ZapOnPrimary, ZapPrimary,
+                        ZapPrimaryGradient, 'Accept',
+                        fwdArrow: true,
+                        width: cfg.ButtonWidth,
+                        height: cfg.ButtonHeight)
+                    : SizedBox(),
+                BronzeRoundedButton(() {
+                  Navigator.pop(context);
+                }, ZapOnSurface, ZapSurface, null, 'Close',
+                    width: cfg.ButtonWidth, height: cfg.ButtonHeight)
+              ])
         ])));
   }
 }
