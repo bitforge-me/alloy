@@ -118,18 +118,17 @@ class PriceManager {
   }
 }
 
-abstract class PriceInfoWidget extends StatefulWidget {
+abstract class PriceWidget extends StatefulWidget {
   final String asset;
   final Decimal amount;
 
-  PriceInfoWidget(this.asset, this.amount);
+  PriceWidget(this.asset, this.amount);
 
   @override
-  PriceInfoWidgetState createState();
+  _PriceWidgetState createState();
 }
 
-abstract class PriceInfoWidgetState<T extends PriceInfoWidget>
-    extends State<T> {
+abstract class _PriceWidgetState<T extends PriceWidget> extends State<T> {
   CachedPrice? _price;
   String? _priceAsset;
   bool _failedToGetPrice = false;
@@ -156,16 +155,16 @@ abstract class PriceInfoWidgetState<T extends PriceInfoWidget>
   }
 }
 
-class BtcPriceWidget extends PriceInfoWidget {
+class BasicPriceWidget extends PriceWidget {
   final textStyle = TextStyle(
       fontSize: 12, color: Colors.white.withOpacity(0.7), height: 1.2);
-  BtcPriceWidget() : super(Btc, Decimal.fromInt(1));
+  BasicPriceWidget(String asset) : super(asset, Decimal.fromInt(1));
 
   @override
-  PriceInfoWidgetState<BtcPriceWidget> createState() => _BtcPriceWidgetState();
+  _PriceWidgetState<BasicPriceWidget> createState() => _BasicPriceWidgetState();
 }
 
-class _BtcPriceWidgetState extends PriceInfoWidgetState<BtcPriceWidget> {
+class _BasicPriceWidgetState extends _PriceWidgetState<BasicPriceWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -179,7 +178,7 @@ class _BtcPriceWidgetState extends PriceInfoWidgetState<BtcPriceWidget> {
   }
 }
 
-class PriceEquivalent extends PriceInfoWidget {
+class PriceEquivalent extends PriceWidget {
   final bool showAssetAmount;
   final String? pre;
   final String? post;
@@ -203,11 +202,10 @@ class PriceEquivalent extends PriceInfoWidget {
       : super(asset, amount);
 
   @override
-  PriceInfoWidgetState<PriceEquivalent> createState() =>
-      _PriceEquivalentState();
+  _PriceWidgetState<PriceEquivalent> createState() => _PriceEquivalentState();
 }
 
-class _PriceEquivalentState extends PriceInfoWidgetState<PriceEquivalent> {
+class _PriceEquivalentState extends _PriceWidgetState<PriceEquivalent> {
   @override
   Widget build(BuildContext context) {
     String text;

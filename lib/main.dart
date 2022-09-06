@@ -91,7 +91,8 @@ class _MyHomePageState extends State<MyHomePage>
   List<String> _alerts = [];
   int _balanceCarouselPage = 0;
   final CarouselController _balanceCarouselController = CarouselController();
-  Widget? priceWidget;
+  Widget? _btcPrice;
+  Timer? _btcPriceTimer;
 
   @override
   void initState() {
@@ -117,6 +118,7 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   void dispose() {
     routeObserver.unsubscribe(this);
+    _btcPriceTimer?.cancel();
     super.dispose();
   }
 
@@ -182,8 +184,7 @@ class _MyHomePageState extends State<MyHomePage>
       // if we got the user info try for the balances
       if (userInfo != null) {
         _updateBalances();
-        _getPriceWidget();
-        _repeatedlyCallGetPriceWidget();
+        _updateBtcPrice();
       }
     } else
       _startLogin(false, false);
@@ -193,6 +194,14 @@ class _MyHomePageState extends State<MyHomePage>
     beBalances().then((value) => value.when(
         (balances) => setState(() => _balances = balances),
         error: (_) => false));
+  }
+
+  void _updateBtcPrice() {
+    setState(() => _btcPrice = Padding(
+        padding: EdgeInsets.only(right: 10), child: BasicPriceWidget(Btc)));
+    if (_btcPriceTimer == null)
+      _btcPriceTimer =
+          Timer.periodic(Duration(minutes: 5), (Timer t) => _updateBtcPrice());
   }
 
   void _checkVersion(BeVersionResult res) {
@@ -271,28 +280,6 @@ class _MyHomePageState extends State<MyHomePage>
       await Prefs.nukeAll();
       Phoenix.rebirth(context);
     }
-  }
-
-  void _getPriceWidget() {
-    setState(() {
-      priceWidget = Row(
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              BtcPriceWidget(),
-            ],
-          ),
-          SizedBox(width: 8),
-        ],
-      );
-    });
-  }
-
-  void _repeatedlyCallGetPriceWidget() {
-    const fiveMins = Duration(minutes: 5);
-    Timer.periodic(fiveMins, (Timer t) => _getPriceWidget());
   }
 
   Future<void> _deposit() async {
@@ -541,7 +528,7 @@ class _MyHomePageState extends State<MyHomePage>
             );
           }),
           actions: [
-            priceWidget ?? SizedBox(),
+            _btcPrice ?? SizedBox(),
           ],
         ),
         drawer: _makeDrawer(context),
