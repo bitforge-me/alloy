@@ -24,7 +24,7 @@ jobs:
           sed -i -e "s|BUILD_DATE_REPLACE|$(date)|g" lib/config.dart
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '3.0.x'
+          flutter-version: '3.3.x'
       - run: flutter pub get
       #- run: flutter test
       - run: flutter dartfmt -n --set-exit-if-changed lib
@@ -47,7 +47,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '3.0.x'
+          flutter-version: '3.3.x'
       - run: flutter build web --web-renderer canvaskit
 
       - name: Deploy to Netlify

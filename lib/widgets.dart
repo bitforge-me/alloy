@@ -446,7 +446,7 @@ class BronzeRoundedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     var radius = BorderRadius.circular(40.0);
     var buttonStyle = ElevatedButton.styleFrom(
-        primary: fillGradient == null ? fillColor : Colors.transparent,
+        backgroundColor: fillGradient == null ? fillColor : Colors.transparent,
         side: fillGradient == null
             ? BorderSide(color: borderColor != null ? borderColor! : fillColor)
             : null,

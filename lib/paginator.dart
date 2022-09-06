@@ -29,7 +29,7 @@ class PageButton extends StatelessWidget {
   Widget build(BuildContext context) {
     var radius = BorderRadius.circular(height);
     var buttonStyle = ElevatedButton.styleFrom(
-        primary: fillColor,
+        backgroundColor: fillColor,
         side: BorderSide(color: borderColor != null ? borderColor! : fillColor),
         shape: RoundedRectangleBorder(borderRadius: radius),
         shadowColor: Colors.transparent);
