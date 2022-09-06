@@ -263,10 +263,10 @@ Future<void> assetUnitsInit() async {
 Decimal assetAmountToUnit(String symbol, String unit, Decimal amount) {
   switch (symbol) {
     case Nzd:
-      if (unit == Cents) return amount * Decimal.fromInt(100);
+      if (unit == Cents) return (amount * Decimal.fromInt(100)).floor();
       return amount;
     case Btc:
-      if (unit == Sats) return amount * Decimal.fromInt(100000000);
+      if (unit == Sats) return (amount * Decimal.fromInt(100000000)).floor();
       return amount;
     case Eth:
       if (unit == Gwei) return amount * Decimal.fromInt(1000000000);

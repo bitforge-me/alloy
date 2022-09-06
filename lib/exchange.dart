@@ -24,6 +24,8 @@ enum FieldUpdated { amount, receive }
 
 enum AmountTooHighChoice { none, adjust, gotoDeposit }
 
+enum AmountSliderSelected { none, min, half, max }
+
 class ExchangeWidget extends StatefulWidget {
   final Websocket websocket;
 
@@ -50,6 +52,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   Timer? _updateTimer;
   String _lastAmount = '';
   String _lastReceive = '';
+  AmountSliderSelected _currentlySelected = AmountSliderSelected.none;
 
   _ExchangeWidgetState();
 
@@ -67,6 +70,29 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     super.dispose();
     _updateTimer?.cancel();
     widget.websocket.wsEvent.unsubscribe(_websocketEvent);
+  }
+
+  Widget _amountSelected(String amountName, void Function() onPressed) {
+    return ShaderMask(
+      shaderCallback: (Rect bounds) {
+        return LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [Color(0xfff46b45), Color(0xffeea849)],
+        ).createShader(bounds);
+      },
+      child: CircleButton(amountName, onPressed, color: Colors.white),
+    );
+  }
+
+  Widget _amountUnselected(String amountName, void Function() onPressed) {
+    return CircleButton(amountName, onPressed);
+  }
+
+  void _clearAmountSelections() {
+    setState(() {
+      _currentlySelected = AmountSliderSelected.none;
+    });
   }
 
   void _websocketEvent(WsEventArgs? args) {}
@@ -112,6 +138,9 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   }
 
   void _fromChanged(String? value) {
+    _amountController.text = '';
+    _receiveController.text = '';
+    _clearAmountSelections();
     if (value == null) return;
     setState(() => _fromAsset = value);
     _genAssets(_markets);
@@ -119,6 +148,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   }
 
   void _toChanged(String? value) {
+    _clearAmountSelections();
     if (value == null) return;
     setState(() => _toAsset = value);
     _amountUpdate(force: true);
@@ -135,6 +165,9 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
 
   void _amountChanged(String? value) {
     _amountUpdate();
+    setState(() {
+      _currentlySelected = AmountSliderSelected.none;
+    });
   }
 
   void _amountUpdate({bool force = false}) {
@@ -455,6 +488,24 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         estimate.errMsg);
   }
 
+  BeMarket? _checkMarket(fromAsset, toAsset) {
+    BeMarket? tryMarket;
+    for (var item in _markets) {
+      if ('$fromAsset-$toAsset' == item.symbol) {
+        tryMarket = item;
+        break;
+      }
+      if ('$toAsset-$fromAsset' == item.symbol) {
+        tryMarket = item;
+        break;
+      }
+    }
+    if (tryMarket != null) {
+      _market = tryMarket;
+    }
+    return tryMarket;
+  }
+
   void _submit() {
     if (_validAmount) _exchange();
   }
@@ -471,6 +522,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     Navigator.pop(context);
     res.when((order) {
       _clearInputs();
+      _clearAmountSelections();
       return Navigator.push(
           context,
           MaterialPageRoute(
@@ -478,6 +530,59 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     },
         error: (err) => alert(
             context, 'error', 'failed to create order (${BeError.msg(err)})'));
+  }
+
+  Future<void> _getMin() async {
+    _checkMarket(_fromAsset, _toAsset);
+    _clearAmountSelections();
+    setState(
+      () {
+        _currentlySelected = AmountSliderSelected.min;
+      },
+    );
+    var value = assetAmountToUser(_fromAsset, _market.minTrade);
+    _amountController.text =
+        ceil(value, scale: assetDecimals(_fromAsset)).toString();
+    _amountUpdate();
+  }
+
+  Future<void> _getHalf() async {
+    _clearAmountSelections();
+    var resb = await beBalances();
+    resb.when((balances) {
+      for (var bal in balances)
+        if (bal.asset == _fromAsset) {
+          _clearAmountSelections();
+          setState(
+            () {
+              _currentlySelected = AmountSliderSelected.half;
+            },
+          );
+          var value = assetAmountToUser(
+              _fromAsset, Decimal.parse('${bal.available.toDouble() * 0.5}'));
+          _amountController.text =
+              _fromAsset == Nzd ? value.toStringAsFixed(2) : value.toString();
+          _amountUpdate();
+        }
+    }, error: (err) => log.severe('failed to get user balances $err'));
+  }
+
+  Future<void> _getMax() async {
+    var resb = await beBalances();
+    resb.when((balances) {
+      for (var bal in balances)
+        if (bal.asset == _fromAsset) {
+          _clearAmountSelections();
+          setState(
+            () {
+              _currentlySelected = AmountSliderSelected.max;
+            },
+          );
+          var value = assetAmountToUser(_fromAsset, bal.available);
+          _amountController.text = value.toString();
+          _amountUpdate();
+        }
+    }, error: (err) => log.severe('failed to get user balances $err'));
   }
 
   Widget _buildWidget() {
@@ -558,19 +663,54 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
           onChanged: _recieveChanged,
           onFieldSubmitted: (_) => _submit(),
         ),
-      )
+      ),
     ]);
+    var exchangeActions = Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(40.0),
+        color: ZapSecondary,
+      ),
+      width: cfg.ButtonWidth,
+      height: cfg.ButtonHeight * 0.7,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          _currentlySelected != AmountSliderSelected.min
+              ? _amountUnselected("MIN", _getMin)
+              : _amountSelected("MIN", _getMin),
+          _currentlySelected != AmountSliderSelected.half
+              ? _amountUnselected("HALF", _getHalf)
+              : _amountSelected("HALF", _getHalf),
+          _currentlySelected != AmountSliderSelected.max
+              ? _amountUnselected("MAX", _getMax)
+              : _amountSelected("MAX", _getMax),
+        ],
+      ),
+    );
     return Column(children: [
       LayoutBuilder(builder: (context, constraints) {
         if (constraints.maxWidth < cfg.MaxColumnWidth)
-          return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [from, arrowDown, to]);
+          return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            from,
+            SizedBox(height: 7.0),
+            exchangeActions,
+            arrowDown,
+            to
+          ]);
         else
-          return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [from, arrow, to]);
+          return Column(children: <Widget>[
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [from, arrow, to]),
+            SizedBox(height: 7.0),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[SizedBox(width: 8.0), exchangeActions]),
+          ]);
       }),
+      VerticalSpacer(),
       _validAmount
           ? Padding(
               padding: EdgeInsets.only(top: 20),

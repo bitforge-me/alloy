@@ -2,6 +2,13 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
+Decimal _scaleAndApply(int scale, Decimal e) {
+  final scaleFactor = Decimal.fromInt(10).pow(scale);
+  return ((e * scaleFactor).ceil() / scaleFactor);
+}
+
+Decimal ceil(Decimal e, {int scale = 0}) => _scaleAndApply(scale, e);
+
 var lastNonce = 0;
 int nextNonce() {
   var nonce = DateTime.now().toUtc().millisecondsSinceEpoch;
