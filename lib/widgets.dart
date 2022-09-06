@@ -558,3 +558,36 @@ class ListTx extends StatelessWidget {
     ]);
   }
 }
+
+Future<bool> bronzeAskYesNo(BuildContext context, String question) async {
+  var res = await showDialog<bool>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(question, textAlign: TextAlign.center),
+        contentPadding: EdgeInsets.only(bottom: 10.0),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(32.0))),
+        content: SizedBox(
+            height: cfg.ButtonHeight * 2.8,
+            width: cfg.ButtonWidth * 1.5,
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  BronzeRoundedButton(() {
+                    Navigator.pop(context, true);
+                  }, ZapOnPrimary, ZapPrimary, ZapPrimaryGradient, 'Yes',
+                      fwdArrow: true,
+                      width: cfg.ButtonWidth,
+                      height: cfg.ButtonHeight),
+                  BronzeRoundedButton(() {
+                    Navigator.pop(context, false);
+                  }, ZapOnSurface, ZapSurface, null, 'No',
+                      width: cfg.ButtonWidth, height: cfg.ButtonHeight)
+                ])),
+      );
+    },
+  );
+  return res == true;
+}

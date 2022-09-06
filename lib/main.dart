@@ -195,7 +195,7 @@ class _MyHomePageState extends State<MyHomePage>
         log.info(
             'old version ${cfg.AppVersion}, currently deployed version is $clientVersionDeployed');
         if (UniversalPlatform.isWeb) {
-          askYesNo(context,
+          bronzeAskYesNo(context,
                   'A newer version has been released would you like to reload?')
               .then((value) {
             if (value) html.window.location.reload();
@@ -261,7 +261,7 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   Future<void> _logout() async {
-    if (await askYesNo(context, 'Are you sure you want to logout?')) {
+    if (await bronzeAskYesNo(context, 'Are you sure you want to logout?')) {
       await Prefs.nukeAll();
       Phoenix.rebirth(context);
     }
