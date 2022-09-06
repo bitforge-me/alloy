@@ -147,7 +147,7 @@ class _WithdrawalsScreenState extends State<WithdrawalsScreen> {
       appBar: AppBar(
         title: Text('Withdrawals'),
       ),
-      body: BiforgePage(
+      body: BitforgePage(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         VerticalSpacer(),
@@ -246,7 +246,7 @@ class _WithdrawalSelectScreenState extends State<WithdrawalSelectScreen> {
       appBar: AppBar(
         title: Text('Make Withdrawal'),
       ),
-      body: BiforgePage(
+      body: BitforgePage(
           child: ListView.builder(
               itemBuilder: _listItem, itemCount: _listCount())),
     );
@@ -301,7 +301,7 @@ class _WithdrawalCheckScreenState extends State<WithdrawalCheckScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             child: Container(
                 padding: EdgeInsets.all(10),
                 child: Column(children: [
@@ -531,7 +531,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             scrollChild: true,
             child: Form(
                 key: _formKey,
@@ -820,7 +820,7 @@ class _CryptoWithdrawalDetailScreenState
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             child: ListView(children: [
           ListTile(
               title: Text('Amount'),
@@ -904,7 +904,7 @@ class _FiatWithdrawalDetailScreenState
           title: Text('Withdrawal ${_withdrawal.asset}'),
           actions: [assetLogo(_withdrawal.asset, margin: EdgeInsets.all(10))],
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             child: ListView(children: [
           ListTile(
               title: Text('Amount'),

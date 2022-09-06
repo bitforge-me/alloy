@@ -105,7 +105,7 @@ class _VerifyUserScreenState extends State<VerifyUserScreen> {
         appBar: AppBar(
           title: Text('Verify User'),
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             scrollChild: true,
             child: Form(
                 key: _formKey,

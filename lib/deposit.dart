@@ -140,7 +140,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
         appBar: AppBar(
           title: Text('Deposits'),
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -333,7 +333,7 @@ class _DepositSelectScreenState extends State<DepositSelectScreen> {
       appBar: AppBar(
         title: Text('Make Deposit'),
       ),
-      body: BiforgePage(
+      body: BitforgePage(
           child: ListView.builder(
               itemBuilder: _listItem, itemCount: _listCount())),
     );
@@ -407,7 +407,7 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             child: ListView(children: [
           ListTile(
               title: Text('Amount'),
@@ -480,7 +480,7 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             scrollChild: true,
             child: Container(
                 padding: EdgeInsets.all(20),
@@ -565,7 +565,7 @@ class _FiatDepositDetailScreenState extends State<FiatDepositDetailScreen> {
           title: Text('Deposit ${_deposit.asset}'),
           actions: [assetLogo(_deposit.asset, margin: EdgeInsets.all(10))],
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             child: ListView(children: [
           ListTile(
               title: Text('Amount'),
@@ -641,7 +641,7 @@ class _FiatAccountNumberScreenState extends State<FiatAccountNumberScreen> {
           title: Text('Deposit ${widget.asset.symbol}'),
           actions: [assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))],
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 25),
                 child: ListView(children: [

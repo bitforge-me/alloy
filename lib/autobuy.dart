@@ -75,7 +75,7 @@ class _AutobuyScreenState extends State<AutobuyScreen> {
         appBar: AppBar(
           title: Text('Automatic Buy (DCA)'),
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             child: Padding(
                 padding: EdgeInsets.all(15),
                 child: Column(

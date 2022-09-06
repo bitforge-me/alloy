@@ -46,7 +46,7 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
       appBar: AppBar(
           title: Text('Address Book - ${widget.asset}'),
           actions: [assetLogo(widget.asset, margin: EdgeInsets.all(10))]),
-      body: BiforgePage(
+      body: BitforgePage(
           child: ListView.builder(
               itemBuilder: _listItem, itemCount: widget.entries.length)),
     );
