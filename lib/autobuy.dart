@@ -77,19 +77,21 @@ class _AutobuyScreenState extends State<AutobuyScreen> {
         ),
         body: BiforgePage(
             child: Padding(
-                padding: EdgeInsets.all(15),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                          'Here you can create special bank deposit codes and if you make a deposit we will automatically create a buy order for you',
-                          textAlign: TextAlign.center),
-                      VerticalSpacer(),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: buttons)
-                    ]))));
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                child: ListView(children: [
+                  Container(
+                      padding: EdgeInsets.only(top: 20, bottom: 20),
+                      child: Center(
+                          child: Icon(Icons.auto_awesome,
+                              size: 150, color: ZapOnSecondary))),
+                  Text(
+                      'Here you can create special bank deposit codes and if you make a deposit we will automatically create a buy order for you',
+                      textAlign: TextAlign.center),
+                  VerticalSpacer(),
+                  Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: buttons)
+                ]))));
   }
 }
