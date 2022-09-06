@@ -40,7 +40,7 @@ class _BalanceScreenState extends State<BalanceScreen> {
         appBar: AppBar(
           title: Text('Balances'),
         ),
-        body: BiforgePage(
+        body: BitforgePage(
           child: ListView.builder(
               itemBuilder: _listItem, itemCount: widget.balances.length),
         ));

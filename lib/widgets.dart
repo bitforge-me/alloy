@@ -286,11 +286,11 @@ class ColumnView extends StatelessWidget {
   }
 }
 
-class BiforgePage extends StatelessWidget {
+class BitforgePage extends StatelessWidget {
   final Widget? child;
   final bool scrollChild;
   final bool showDebugInfo;
-  BiforgePage(
+  BitforgePage(
       {this.child, this.scrollChild = false, this.showDebugInfo = false});
 
   @override
@@ -307,14 +307,15 @@ class BiforgePage extends StatelessWidget {
     else
       column = ColumnView(child: child);
     return BackgroundWebImage(
-        child: scrollChild
-            ? LayoutBuilder(
-                builder: (context, constraints) => SingleChildScrollView(
-                    child: ConstrainedBox(
-                        constraints:
-                            BoxConstraints(minHeight: constraints.maxHeight),
-                        child: column)))
-            : column);
+        child: SelectionArea(
+            child: scrollChild
+                ? LayoutBuilder(
+                    builder: (context, constraints) => SingleChildScrollView(
+                        child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                                minHeight: constraints.maxHeight),
+                            child: column)))
+                : column));
   }
 }
 

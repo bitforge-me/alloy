@@ -311,7 +311,7 @@ class _UnitsScreenState extends State<UnitsScreen> {
         appBar: AppBar(
           title: Text('Preferences'),
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,

@@ -57,7 +57,7 @@ class _TwoFactorEnableScreenState extends State<TwoFactorEnableScreen> {
         appBar: AppBar(
           title: Text('Enable Two Factor Authentication'),
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             scrollChild: true,
             child: Form(
                 key: formKey,
@@ -139,7 +139,7 @@ class _TwoFactorScreenState extends State<TwoFactorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Two Factor Authentication')),
-      body: BiforgePage(
+      body: BitforgePage(
         scrollChild: true,
         child: Column(
           children: [
@@ -279,7 +279,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
         appBar: AppBar(
           title: Text('Security'),
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             child: ListView(children: [
           _userInfo.tfEnabled
               ? ListTile(

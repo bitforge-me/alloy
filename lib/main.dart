@@ -561,7 +561,7 @@ class _MyHomePageState extends State<MyHomePage>
                 label: 'Autobuy')
           ],
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             scrollChild: true,
             child: Center(
               child: LayoutBuilder(builder: (context, constraints) {

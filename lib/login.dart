@@ -194,7 +194,7 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
           child: Container(),
           preferredSize: Size(0, 0),
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             scrollChild: true,
             showDebugInfo: true,
             child: Form(
@@ -338,7 +338,7 @@ class BronzeLoginFormState extends State<BronzeLoginForm> {
           child: Container(),
           preferredSize: Size(0, 0),
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             scrollChild: true,
             showDebugInfo: true,
             child: Form(
@@ -499,7 +499,7 @@ class BronzeRegisterFormState extends State<BronzeRegisterForm> {
           child: Container(),
           preferredSize: Size(0, 0),
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             scrollChild: true,
             showDebugInfo: true,
             child: Form(
@@ -634,7 +634,7 @@ class StagingFormState extends State<StagingForm> {
           child: Container(),
           preferredSize: Size(0, 0),
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             scrollChild: true,
             showDebugInfo: true,
             child: BigLogoContainer(children: [

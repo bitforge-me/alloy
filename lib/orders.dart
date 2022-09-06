@@ -77,7 +77,7 @@ class _OrderScreenState extends State<OrderScreen> {
           title: Text('Order Information'),
           actions: [assetLogo(_order.baseAsset, margin: EdgeInsets.all(10))],
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             child: ListView(children: [
           ListTile(
               title: Text('Market'),
@@ -232,7 +232,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         appBar: AppBar(
           title: Text('Order History'),
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             child: ListView.builder(
                 itemBuilder: _listItem, itemCount: _orders.length)),
         /*

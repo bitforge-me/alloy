@@ -39,7 +39,7 @@ class _DepositReceivedScreenState extends State<DepositReceivedScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             scrollChild: true,
             child: Container(
                 padding: EdgeInsets.all(20),
@@ -123,7 +123,7 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             child: Container(
                 padding: EdgeInsets.all(20),
                 child: Column(children: [
@@ -273,7 +273,7 @@ class _DepositMethodScreenState extends State<DepositMethodScreen> {
                 margin: EdgeInsets.all(10))
           ],
         ),
-        body: BiforgePage(
+        body: BitforgePage(
             child: Container(
                 padding: EdgeInsets.all(20),
                 child: Column(children: [
