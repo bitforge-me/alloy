@@ -204,7 +204,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       if (field == FieldUpdated.receive) return;
       for (var bal in balances)
         if (bal.asset == fromAsset) if (bal.available < value) {
-          value = bal.available;
+          value = assetAmountToUser(_fromAsset, bal.available);
           _amountController.text = value.toString();
           snackMsg(context, 'adjusted amount to available balance',
               category: MessageCategory.Warning);
