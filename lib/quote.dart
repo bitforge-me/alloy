@@ -61,6 +61,12 @@ QuoteTotalPrice bidQuoteAmount(
   return QuoteTotalPrice.Error('not enough liquidity');
 }
 
+Map<String, dynamic> returnFeeMap(BeOrderbook orderbook) {
+  var fixedFee = orderbook.brokerFeeFixed;
+  var brokerFee = orderbook.brokerFee;
+  return {"fixedFee": fixedFee.get(Nzd), "brokerFee": brokerFee};
+}
+
 QuoteTotalPrice askQuoteAmount(
     BeMarket market, BeOrderbook orderbook, Decimal amount) {
   if (amount < market.minTrade)

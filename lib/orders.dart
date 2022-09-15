@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:decimal/decimal.dart';
 import 'dart:convert';
 
 import 'package:zapdart/utils.dart';
@@ -12,6 +13,7 @@ import 'assets.dart';
 import 'snack.dart';
 import 'paginator.dart';
 import 'widgets.dart';
+import 'quote.dart';
 import 'config.dart' as cfg;
 
 class OrderScreen extends StatefulWidget {
@@ -66,8 +68,49 @@ class _OrderScreenState extends State<OrderScreen> {
             context, 'error', 'failed to accept order (${BeError.msg(err)})'));
   }
 
+  Future<Map<String, dynamic>?> _getFees(String marketSymbol) async {
+    var res = await beOrderbook(marketSymbol);
+    BeOrderbook? orderbook = res.when((orderbook) {
+      return orderbook;
+    }, error: (err) {
+      snackMsg(context, 'failed to get orderbook');
+      return null;
+    });
+
+    if (orderbook != null) {
+      return returnFeeMap(orderbook);
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    var feeBreakdown = FutureBuilder<Map<String, dynamic>?>(
+      future: _getFees(_order.market),
+      builder: (BuildContext context,
+          AsyncSnapshot<Map<String, dynamic>?> snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data == null) {
+            return Text('Fees not retrievable');
+          } else {
+            var brokerRate =
+                (snapshot.data?['fixedFee'] / Decimal.fromInt(100));
+            var brokerRateCost = _order.baseAsset == Nzd
+                ? _order.baseAmount * brokerRate
+                : _order.quoteAmount * brokerRate;
+            // fixedFee always in NZD
+            var fixedFeeAmount = snapshot.data?['fixedFee'];
+            return Text(
+                'Fixed Fee: $fixedFeeAmount | Broker Fee: $brokerRateCost | Total Fees: ${fixedFeeAmount + brokerRateCost}');
+          }
+        }
+        if (snapshot.hasError) {
+          return Text('Failed to load async snapshot');
+        } else {
+          return Text('Loading');
+        }
+      },
+    );
     var baseAmount =
         assetFormatWithUnitToUser(_order.baseAsset, _order.baseAmount);
     var quoteAmount =
@@ -95,6 +138,9 @@ class _OrderScreenState extends State<OrderScreen> {
           ListTile(
               title: Text('Status'),
               subtitle: Text('${describeEnum(_order.status).toUpperCase()}')),
+          _order.status == BeOrderStatus.created
+              ? ListTile(title: Text('Fee Breakdown'), subtitle: feeBreakdown)
+              : SizedBox(),
           Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
