@@ -16,10 +16,13 @@ import 'orders.dart';
 import 'utils.dart';
 import 'widgets.dart';
 import 'config.dart' as cfg;
+import 'deposit.dart';
 
 final log = Logger('Exchange');
 
 enum FieldUpdated { amount, receive }
+
+enum AmountTooHighChoice { none, adjust, gotoDeposit }
 
 class ExchangeWidget extends StatefulWidget {
   final Websocket websocket;
@@ -172,6 +175,55 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     });
   }
 
+  Future<AmountTooHighChoice> _amountTooHigh(
+      BeBalance bal, Decimal amount) async {
+    var res = await showDialog<AmountTooHighChoice>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              title: const Text('Not enough funds for order'),
+              content: Text(
+                  'Your current balance is ${assetFormatWithUnitToUser(bal.asset, bal.available)}, but you have tried to convert ${assetFormatWithUnitToUser(bal.asset, amount)}.\n\nWhat would you like to do?'),
+              actions: [
+                BronzeRoundedButton(
+                    () => Navigator.of(context)
+                        .pop(AmountTooHighChoice.gotoDeposit),
+                    ZapOnSurface,
+                    ZapSurface,
+                    null,
+                    'Deposit More Funds',
+                    fwdArrow: true,
+                    width: cfg.ButtonWidth,
+                    height: cfg.ButtonHeight),
+                BronzeRoundedButton(
+                    () => Navigator.of(context).pop(AmountTooHighChoice.adjust),
+                    ZapOnSurface,
+                    ZapSurface,
+                    null,
+                    'Adjust Amount to Balance',
+                    fwdArrow: true,
+                    width: cfg.ButtonWidth,
+                    height: cfg.ButtonHeight),
+              ]);
+        });
+    if (res == null) return AmountTooHighChoice.none;
+    return res;
+  }
+
+  Future<void> _makeDeposit() async {
+    showAlertDialog(context, 'querying..');
+    var res = await beAssets();
+    Navigator.pop(context);
+    res.when(
+        (assets) => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    DepositSelectScreen(assets, widget.websocket))),
+        error: (err) => snackMsg(context, 'failed to query deposits',
+            category: MessageCategory.Warning));
+  }
+
   Future<void> _updateQuote(FieldUpdated field) async {
     // unfocus text input
     unfocusText();
@@ -199,17 +251,33 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     else
       value = assetAmountFromUser(fromAsset, value);
     // get user balance
-    var resb = await beBalances();
-    resb.when((balances) {
-      if (field == FieldUpdated.receive) return;
+    var balanceResult = await beBalances();
+    var continueResult = await balanceResult.when((balances) async {
+      if (field == FieldUpdated.receive) return true;
       for (var bal in balances)
-        if (bal.asset == fromAsset) if (bal.available < value) {
-          value = assetAmountToUser(_fromAsset, bal.available);
-          _amountController.text = value.toString();
-          snackMsg(context, 'adjusted amount to available balance',
-              category: MessageCategory.Warning);
+        if (bal.asset == fromAsset && bal.available < value) {
+          var res = await _amountTooHigh(bal, value);
+          switch (res) {
+            case AmountTooHighChoice.adjust:
+              value = assetAmountToUser(_fromAsset, bal.available);
+              _amountController.text = value.toString();
+              snackMsg(context, 'adjusted amount to available balance',
+                  category: MessageCategory.Warning);
+              return true;
+            case AmountTooHighChoice.gotoDeposit:
+              _makeDeposit();
+              _clearInputs();
+              return false;
+            case AmountTooHighChoice.none:
+              _clearInputs();
+              return false;
+          }
         }
-    }, error: (err) => log.severe('failed to get user balances $err'));
+    }, error: (err) async {
+      log.severe('failed to get user balances $err');
+      return false;
+    });
+    if (continueResult == null || !continueResult) return;
     // check market is valid
     BeMarket? tryMarket;
     var side = BeMarketSide.ask;
@@ -389,16 +457,18 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     if (_validAmount) _exchange();
   }
 
+  void _clearInputs() {
+    _amountController.text = '';
+    _receiveController.text = '';
+    setState(() => _validAmount = false);
+  }
+
   void _exchange() async {
     showAlertDialog(context, 'creating order..');
     var res = await beOrderCreate(_market.symbol, _side, _amount);
     Navigator.pop(context);
     res.when((order) {
-      _amountController.text = '';
-      _receiveController.text = '';
-      setState(() {
-        _validAmount = false;
-      });
+      _clearInputs();
       return Navigator.push(
           context,
           MaterialPageRoute(
