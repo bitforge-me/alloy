@@ -83,9 +83,8 @@ class PriceManager {
     // get exisiting price request
     if (_priceRequests.containsKey(market)) {
       req = _priceRequests[market]!;
-      // close and recreate if the request is old/stale
+      // remove and recreate if the request is old/stale
       if (req.created.add(Duration(seconds: 10)).isBefore(DateTime.now())) {
-        req.close();
         _priceRequests.remove(market);
         req = PriceRequest(assetBase, assetQuote);
       }
