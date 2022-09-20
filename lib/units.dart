@@ -224,7 +224,7 @@ class _PriceEquivalentState extends _PriceWidgetState<PriceEquivalent> {
           !_failedToGetPrice &&
           widget.asset != assetUnitToAsset(assetPricesUnit)) {
         if (widget.twoLines)
-          text = '$assetAmount\n${_formattedPrice()}';
+          text = '$assetAmount\n(${_formattedPrice()})';
         else
           text = '$startText$assetAmount (${_formattedPrice()})$endText';
       } else
