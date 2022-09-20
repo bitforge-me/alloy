@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:synchronized/synchronized.dart';
 
 import 'assets.dart';
 import 'widgets.dart';
@@ -23,6 +24,9 @@ class PriceRequest {
   final String assetQuote;
   late final BehaviorSubject<CachedPrice?> _streamController;
   late final DateTime created;
+  final Lock _lock = Lock();
+  bool _checkedOut = false;
+  bool _flaggedToClose = false;
 
   static List<BeMarket> _markets = [];
 
@@ -31,12 +35,33 @@ class PriceRequest {
     _streamController = BehaviorSubject(onListen: _queryPrice);
   }
 
-  void close() {
-    _streamController.close();
+  Future<bool> checkOut() {
+    return _lock.synchronized(() {
+      if (_streamController.isClosed)
+        return false;
+      _checkedOut = true;
+      return true;
+    });
+  }
+
+  void closeOrFlag() {
+    _lock.synchronized(() {
+      if (_checkedOut)
+        _flaggedToClose = true;
+      else
+        _streamController.close();
+    });
   }
 
   Future<CachedPrice?> result() async {
-    return await _streamController.stream.first;
+    return _lock.synchronized(() async {
+      assert(!_streamController.isClosed);
+      var val = await _streamController.stream.first;
+      _checkedOut = false;
+      if (_flaggedToClose)
+        _streamController.close();
+      return val;
+    });
   }
 
   void _queryPrice() async {
@@ -83,11 +108,16 @@ class PriceManager {
     // get exisiting price request
     if (_priceRequests.containsKey(market)) {
       req = _priceRequests[market]!;
-      // remove and recreate if the request is old/stale
+      // close and recreate if the request is old/stale
       if (req.created.add(Duration(seconds: 10)).isBefore(DateTime.now())) {
         _priceRequests.remove(market);
+        req.closeOrFlag();
         req = PriceRequest(assetBase, assetQuote);
       }
+      else
+        // checkout or recreate if unable
+        if (!await req.checkOut())
+          req = PriceRequest(assetBase, assetQuote);
     } else
       // make new request if none exists
       req = PriceRequest(assetBase, assetQuote);
