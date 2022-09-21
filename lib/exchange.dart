@@ -273,11 +273,13 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
               return false;
           }
         }
+      // default case is to continue processing
+      return true;
     }, error: (err) async {
       log.severe('failed to get user balances $err');
       return false;
     });
-    if (continueResult == null || !continueResult) return;
+    if (!continueResult) return;
     // check market is valid
     BeMarket? tryMarket;
     var side = BeMarketSide.ask;
