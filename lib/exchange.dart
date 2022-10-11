@@ -72,24 +72,30 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     widget.websocket.wsEvent.unsubscribe(_websocketEvent);
   }
 
-  Widget _amountSelected(String amountName, void Function() onPressed) {
-    return ShaderMask(
-      shaderCallback: (Rect bounds) {
-        return LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [Color(0xfff46b45), Color(0xffeea849)],
-        ).createShader(bounds);
-      },
-      child: CircleButton(amountName, onPressed, color: Colors.white),
-    );
+  Widget _createSliderButton(AmountSliderSelected amount) {
+    var _onPressed = amount == AmountSliderSelected.min
+        ? _setMin
+        : (amount == AmountSliderSelected.half ? _setHalf : _setMax);
+    var _amountName = amount == AmountSliderSelected.min
+        ? "MIN"
+        : (amount == AmountSliderSelected.half ? "HALF" : "MAX");
+    if (_currentlySelected == amount) {
+      return ShaderMask(
+        shaderCallback: (Rect bounds) {
+          return LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [Color(0xfff46b45), Color(0xffeea849)],
+          ).createShader(bounds);
+        },
+        child: CircleButton(_amountName, _onPressed, color: Colors.white),
+      );
+    } else {
+      return CircleButton(_amountName, _onPressed);
+    }
   }
 
-  Widget _amountUnselected(String amountName, void Function() onPressed) {
-    return CircleButton(amountName, onPressed);
-  }
-
-  void _clearAmountSelections() {
+  void _clearSlider() {
     setState(() {
       _currentlySelected = AmountSliderSelected.none;
     });
@@ -140,7 +146,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   void _fromChanged(String? value) {
     _amountController.text = '';
     _receiveController.text = '';
-    _clearAmountSelections();
+    _clearSlider();
     if (value == null) return;
     setState(() => _fromAsset = value);
     _genAssets(_markets);
@@ -148,7 +154,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   }
 
   void _toChanged(String? value) {
-    _clearAmountSelections();
+    _clearSlider();
     if (value == null) return;
     setState(() => _toAsset = value);
     _amountUpdate(force: true);
@@ -522,7 +528,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     Navigator.pop(context);
     res.when((order) {
       _clearInputs();
-      _clearAmountSelections();
+      _clearSlider();
       return Navigator.push(
           context,
           MaterialPageRoute(
@@ -532,9 +538,9 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
             context, 'error', 'failed to create order (${BeError.msg(err)})'));
   }
 
-  Future<void> _getMin() async {
+  Future<void> _setMin() async {
     _checkMarket(_fromAsset, _toAsset);
-    _clearAmountSelections();
+    _clearSlider();
     setState(
       () {
         _currentlySelected = AmountSliderSelected.min;
@@ -546,13 +552,13 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     _amountUpdate();
   }
 
-  Future<void> _getHalf() async {
-    _clearAmountSelections();
+  Future<void> _setHalf() async {
+    _clearSlider();
     var resb = await beBalances();
     resb.when((balances) {
       for (var bal in balances)
         if (bal.asset == _fromAsset) {
-          _clearAmountSelections();
+          _clearSlider();
           setState(
             () {
               _currentlySelected = AmountSliderSelected.half;
@@ -567,12 +573,12 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     }, error: (err) => log.severe('failed to get user balances $err'));
   }
 
-  Future<void> _getMax() async {
+  Future<void> _setMax() async {
     var resb = await beBalances();
     resb.when((balances) {
       for (var bal in balances)
         if (bal.asset == _fromAsset) {
-          _clearAmountSelections();
+          _clearSlider();
           setState(
             () {
               _currentlySelected = AmountSliderSelected.max;
@@ -676,15 +682,9 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          _currentlySelected != AmountSliderSelected.min
-              ? _amountUnselected("MIN", _getMin)
-              : _amountSelected("MIN", _getMin),
-          _currentlySelected != AmountSliderSelected.half
-              ? _amountUnselected("HALF", _getHalf)
-              : _amountSelected("HALF", _getHalf),
-          _currentlySelected != AmountSliderSelected.max
-              ? _amountUnselected("MAX", _getMax)
-              : _amountSelected("MAX", _getMax),
+          _createSliderButton(AmountSliderSelected.min),
+          _createSliderButton(AmountSliderSelected.half),
+          _createSliderButton(AmountSliderSelected.max),
         ],
       ),
     );
