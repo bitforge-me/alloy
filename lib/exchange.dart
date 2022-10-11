@@ -52,7 +52,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   Timer? _updateTimer;
   String _lastAmount = '';
   String _lastReceive = '';
-  AmountSliderSelected _currentlySelected = AmountSliderSelected.none;
+  AmountSliderSelected _sliderSelected = AmountSliderSelected.none;
 
   _ExchangeWidgetState();
 
@@ -79,7 +79,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     var _amountName = amount == AmountSliderSelected.min
         ? "MIN"
         : (amount == AmountSliderSelected.half ? "HALF" : "MAX");
-    if (_currentlySelected == amount) {
+    if (_sliderSelected == amount) {
       return ShaderMask(
         shaderCallback: (Rect bounds) {
           return LinearGradient(
@@ -97,7 +97,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
 
   void _clearSlider() {
     setState(() {
-      _currentlySelected = AmountSliderSelected.none;
+      _sliderSelected = AmountSliderSelected.none;
     });
   }
 
@@ -172,7 +172,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   void _amountChanged(String? value) {
     _amountUpdate();
     setState(() {
-      _currentlySelected = AmountSliderSelected.none;
+      _sliderSelected = AmountSliderSelected.none;
     });
   }
 
@@ -543,7 +543,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     _clearSlider();
     setState(
       () {
-        _currentlySelected = AmountSliderSelected.min;
+        _sliderSelected = AmountSliderSelected.min;
       },
     );
     var value = assetAmountToUser(_fromAsset, _market.minTrade);
@@ -561,13 +561,13 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
           _clearSlider();
           setState(
             () {
-              _currentlySelected = AmountSliderSelected.half;
+              _sliderSelected = AmountSliderSelected.half;
             },
           );
           var value = assetAmountToUser(
               _fromAsset, Decimal.parse('${bal.available.toDouble() * 0.5}'));
           _amountController.text =
-              _fromAsset == Nzd ? value.toStringAsFixed(2) : value.toString();
+              ceil(value, scale: assetDecimals(_fromAsset)).toString();
           _amountUpdate();
         }
     }, error: (err) => log.severe('failed to get user balances $err'));
@@ -581,7 +581,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
           _clearSlider();
           setState(
             () {
-              _currentlySelected = AmountSliderSelected.max;
+              _sliderSelected = AmountSliderSelected.max;
             },
           );
           var value = assetAmountToUser(_fromAsset, bal.available);
