@@ -80,15 +80,16 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         ? "MIN"
         : (amount == AmountSliderSelected.half ? "HALF" : "MAX");
     if (_sliderSelected == amount) {
-      return ShaderMask(
-        shaderCallback: (Rect bounds) {
-          return LinearGradient(
+      return Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
             colors: [Color(0xfff46b45), Color(0xffeea849)],
-          ).createShader(bounds);
-        },
-        child: CircleButton(_amountName, _onPressed, color: Colors.white),
+          ),
+        ),
+        child: CircleButton(_amountName, _onPressed),
       );
     } else {
       return CircleButton(_amountName, _onPressed);

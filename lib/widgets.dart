@@ -28,7 +28,8 @@ class CircleButton extends StatelessWidget {
       child: IconButton(
         icon: Text(text,
             softWrap: false,
-            style: TextStyle(letterSpacing: 0.5, fontSize: 10.0)),
+            style: TextStyle(
+                letterSpacing: 0.5, fontSize: 10.0, color: Colors.white)),
         onPressed: onPressed,
       ),
     );
