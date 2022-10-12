@@ -504,11 +504,9 @@ class _MyHomePageState extends State<MyHomePage>
       ]);
     return ShaderMask(
       shaderCallback: (Rect bounds) {
-        return LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [Color(0xfff46b45), Color(0xffeea849)],
-        ).createShader(bounds);
+        if (ZapPrimaryGradient != null)
+          return ZapPrimaryGradient!.createShader(bounds);
+        throw Exception('ZapPrimaryGradient not set');
       },
       child: widget,
     );
