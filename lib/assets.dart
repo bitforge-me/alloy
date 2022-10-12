@@ -269,7 +269,7 @@ Decimal assetAmountToUnit(String symbol, String unit, Decimal amount) {
       if (unit == Sats) return (amount * Decimal.fromInt(100000000)).floor();
       return amount;
     case Eth:
-      if (unit == Gwei) return amount * Decimal.fromInt(1000000000);
+      if (unit == Gwei) return (amount * Decimal.fromInt(1000000000)).floor();
       return amount;
     case Usdt:
     case Usdc:
