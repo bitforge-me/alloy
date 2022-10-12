@@ -299,8 +299,8 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
           var res = await _amountTooHigh(bal, value);
           switch (res) {
             case AmountTooHighChoice.adjust:
-              value = assetAmountToUser(_fromAsset, bal.available);
-              _amountController.text = value.toString();
+              value = bal.available;
+              _amountController.text = assetAmountToUser(_fromAsset, bal.available).toString();
               snackMsg(context, 'adjusted amount to available balance',
                   category: MessageCategory.Warning);
               return true;
