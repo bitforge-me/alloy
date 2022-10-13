@@ -540,11 +540,16 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     setState(() => _sliderSelected = AmountSliderSelected.min);
     var res = await beOrderbook(_market.symbol);
     await res.when((orderbook) {
-      var rate = orderbook.bids[0].rate;
-      var value = assetAmountToUser(_fromAsset, _market.minTrade * rate);
-      _amountController.text =
-          ceil(value, scale: assetDecimals(_fromAsset)).toString();
-      _amountUpdate(timerSeconds: 0);
+      var bids = orderbook.bids;
+      if (bids.length > 0) {
+        var rate = bids[0].rate;
+        var value = assetAmountToUser(_fromAsset, _market.minTrade * rate);
+        _amountController.text =
+            ceil(value, scale: assetDecimals(_fromAsset)).toString();
+        _amountUpdate(timerSeconds: 0);
+      } else {
+        snackMsg(context, 'bids are empty', category: MessageCategory.Warning);
+      }
     }, error: (err) {
       snackMsg(context, 'failed to get orderbook',
           category: MessageCategory.Warning);
@@ -566,7 +571,9 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
               ceil(value, scale: assetDecimals(_fromAsset)).toString();
           _amountUpdate(timerSeconds: 0);
         }
-    }, error: (err) => log.severe('failed to get user balances $err'));
+    },
+        error: (err) => snackMsg(context, 'failed to get balances $err',
+            category: MessageCategory.Warning));
   }
 
   Future<void> _setMax() async {
@@ -580,7 +587,9 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
           _amountController.text = value.toString();
           _amountUpdate(timerSeconds: 0);
         }
-    }, error: (err) => log.severe('failed to get user balances $err'));
+    },
+        error: (err) => snackMsg(context, 'failed to get balances $err',
+            category: MessageCategory.Warning));
   }
 
   Widget _buildWidget() {
