@@ -547,10 +547,18 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         _sliderSelected = AmountSliderSelected.min;
       },
     );
-    var value = assetAmountToUser(_fromAsset, _market.minTrade);
-    _amountController.text =
-        ceil(value, scale: assetDecimals(_fromAsset)).toString();
-    _amountUpdate();
+    var res = await beOrderbook(_market.symbol);
+    await res.when((orderbook) {
+      var rate = orderbook.bids[0].rate;
+      var value = assetAmountToUser(_fromAsset, _market.minTrade * rate);
+      _amountController.text =
+          ceil(value, scale: assetDecimals(_fromAsset)).toString();
+      _amountUpdate();
+    }, error: (err) {
+      snackMsg(context, 'failed to get orderbook',
+          category: MessageCategory.Warning);
+      return null;
+    });
   }
 
   Future<void> _setHalf() async {
