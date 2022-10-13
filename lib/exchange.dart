@@ -83,11 +83,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       return Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [Color(0xfff46b45), Color(0xffeea849)],
-          ),
+          gradient: ZapPrimaryGradient,
         ),
         child: CircleButton(_amountName, _onPressed),
       );
@@ -172,12 +168,10 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
 
   void _amountChanged(String? value) {
     _amountUpdate();
-    setState(() {
-      _sliderSelected = AmountSliderSelected.none;
-    });
+    setState(() => _sliderSelected = AmountSliderSelected.none);
   }
 
-  void _amountUpdate({bool force = false}) {
+  void _amountUpdate({bool force = false, int timerSeconds = 1}) {
     // cancel any running timer
     _updateTimer?.cancel();
     // check we actually want to start the timer
@@ -188,7 +182,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     // in the mean time update the state
     _setProcessing(FieldUpdated.amount);
     // start the quote timer
-    _updateTimer = Timer(Duration(seconds: 2), () async {
+    _updateTimer = Timer(Duration(seconds: timerSeconds), () async {
       await _updateQuote(FieldUpdated.amount);
       setState(() => _calculating = false);
     });
@@ -299,8 +293,9 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
           var res = await _amountTooHigh(bal, value);
           switch (res) {
             case AmountTooHighChoice.adjust:
-              value = assetAmountToUser(_fromAsset, bal.available);
-              _amountController.text = value.toString();
+              value = bal.available;
+              _amountController.text =
+                  assetAmountToUser(_fromAsset, bal.available).toString();
               snackMsg(context, 'adjusted amount to available balance',
                   category: MessageCategory.Warning);
               return true;
@@ -542,18 +537,14 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   Future<void> _setMin() async {
     _checkMarket(_fromAsset, _toAsset);
     _clearSlider();
-    setState(
-      () {
-        _sliderSelected = AmountSliderSelected.min;
-      },
-    );
+    setState(() => _sliderSelected = AmountSliderSelected.min);
     var res = await beOrderbook(_market.symbol);
     await res.when((orderbook) {
       var rate = orderbook.bids[0].rate;
       var value = assetAmountToUser(_fromAsset, _market.minTrade * rate);
       _amountController.text =
           ceil(value, scale: assetDecimals(_fromAsset)).toString();
-      _amountUpdate();
+      _amountUpdate(timerSeconds: 0);
     }, error: (err) {
       snackMsg(context, 'failed to get orderbook',
           category: MessageCategory.Warning);
@@ -568,16 +559,12 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       for (var bal in balances)
         if (bal.asset == _fromAsset) {
           _clearSlider();
-          setState(
-            () {
-              _sliderSelected = AmountSliderSelected.half;
-            },
-          );
+          setState(() => _sliderSelected = AmountSliderSelected.half);
           var value = assetAmountToUser(
               _fromAsset, Decimal.parse('${bal.available.toDouble() * 0.5}'));
           _amountController.text =
               ceil(value, scale: assetDecimals(_fromAsset)).toString();
-          _amountUpdate();
+          _amountUpdate(timerSeconds: 0);
         }
     }, error: (err) => log.severe('failed to get user balances $err'));
   }
@@ -588,14 +575,10 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       for (var bal in balances)
         if (bal.asset == _fromAsset) {
           _clearSlider();
-          setState(
-            () {
-              _sliderSelected = AmountSliderSelected.max;
-            },
-          );
+          setState(() => _sliderSelected = AmountSliderSelected.max);
           var value = assetAmountToUser(_fromAsset, bal.available);
           _amountController.text = value.toString();
-          _amountUpdate();
+          _amountUpdate(timerSeconds: 0);
         }
     }, error: (err) => log.severe('failed to get user balances $err'));
   }
@@ -690,7 +673,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
+        children: [
           _createSliderButton(AmountSliderSelected.min),
           _createSliderButton(AmountSliderSelected.half),
           _createSliderButton(AmountSliderSelected.max),
