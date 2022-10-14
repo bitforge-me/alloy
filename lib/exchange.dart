@@ -547,9 +547,8 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         _amountController.text =
             ceil(value, scale: assetDecimals(_fromAsset)).toString();
         _amountUpdate(timerSeconds: 0);
-      } else {
-        snackMsg(context, 'bids are empty', category: MessageCategory.Warning);
-      }
+      } else
+        snackMsg(context, 'failed to get minimum order size', category: MessageCategory.Warning);
     }, error: (err) {
       snackMsg(context, 'failed to get orderbook',
           category: MessageCategory.Warning);
