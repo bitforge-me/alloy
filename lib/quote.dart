@@ -23,7 +23,7 @@ class QuoteTotalPrice {
   }
 }
 
-Decimal _fixedFee(BeMarket market, BeOrderbook orderbook) {
+Decimal getFixedFee(BeMarket market, BeOrderbook orderbook) {
   for (var key in orderbook.brokerFeeFixed.keys())
     if (key == market.quoteAsset) return orderbook.brokerFeeFixed.get(key)!;
   return Decimal.zero;
@@ -35,7 +35,7 @@ QuoteTotalPrice bidQuoteAmount(
     return QuoteTotalPrice.Error(
         'minimum trade is ${assetFormatWithUnitToUser(market.baseAsset, market.minTrade)}');
 
-  var fixedFee = _fixedFee(market, orderbook);
+  var fixedFee = getFixedFee(market, orderbook);
   var filled = Decimal.zero;
   var totalPrice = Decimal.zero;
   var n = 0;
@@ -67,7 +67,7 @@ QuoteTotalPrice askQuoteAmount(
     return QuoteTotalPrice.Error(
         'minimum trade is ${assetFormatWithUnitToUser(market.baseAsset, market.minTrade)}');
 
-  var fixedFee = _fixedFee(market, orderbook);
+  var fixedFee = getFixedFee(market, orderbook);
   var filled = Decimal.zero;
   var totalPrice = Decimal.zero;
   var n = 0;

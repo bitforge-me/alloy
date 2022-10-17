@@ -543,9 +543,18 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       var bids = orderbook.bids;
       if (bids.length > 0) {
         var rate = bids[0].rate;
-        var value = assetAmountToUser(_fromAsset, _market.minTrade * rate);
+        var feeRate =
+            (Decimal.one + (orderbook.brokerFee / Decimal.fromInt(100)));
+        var valueAfterFee = _fromAsset == Btc
+            ? (_market.minTrade * feeRate)
+            : (_market.minTrade * feeRate * rate);
+        var fixedFee = _fromAsset == Btc
+            ? (getFixedFee(_market, orderbook) / rate)
+            : getFixedFee(_market, orderbook);
+        var totalAmount = valueAfterFee + fixedFee;
+        var convertedValue = assetAmountToUser(_fromAsset, totalAmount);
         _amountController.text =
-            ceil(value, scale: assetDecimals(_fromAsset)).toString();
+            ceil(convertedValue, scale: assetDecimals(_fromAsset)).toString();
         _amountUpdate(timerSeconds: 0);
       } else
         snackMsg(context, 'failed to get minimum order size',
