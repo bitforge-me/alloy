@@ -14,14 +14,14 @@ const AppLogo = 'assets/logo.png';
 const MaxColumnWidth = 700.0;
 const ButtonWidth = 320.0;
 const ButtonHeight = 65.0;
-const SupportUrl = 'https://support.bitforge.me/';
+const SupportUrl = 'https://be.bitforge.me/support/';
 const LegalUrl = 'https://bitforge.me/legal/';
 
 // the default testnet value
 const _DefaultTestnet = true;
 
 // beryllium settings
-const String _BeServerUrl = 'https://beryllium-test.zap.me/';
+const String _BeServerUrl = 'https://be-test.bitforge.me/';
 
 class BeLocationOverride {
   final String? altLocation;
@@ -33,7 +33,7 @@ class BeLocationOverride {
 const Map<String, BeLocationOverride> BeServerLocationOverrides = {
   'app.bitforge.me': BeLocationOverride('https://be.bitforge.me/', false),
   'be.bitforge.me': BeLocationOverride(null, false),
-  'beryllium-test.zap.me': BeLocationOverride(null, true)
+  'be-test.bitforge.me': BeLocationOverride(null, true)
 };
 // registration
 const bool RequireMobileNumber = true;
