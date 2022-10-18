@@ -550,7 +550,8 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
             : (_market.minTrade * feeRate * rate);
         var fixedFee = _fromAsset == Btc
             ? (getFixedFee(_market, orderbook) / rate)
-            : getFixedFee(_market, orderbook);
+            // add a margin of error (~0.10 NZD) for the exchange rate being inaccurate
+            : getFixedFee(_market, orderbook) + Decimal.fromJson('0.10');
         var totalAmount = valueAfterFee + fixedFee;
         var convertedValue = assetAmountToUser(_fromAsset, totalAmount);
         _amountController.text =
