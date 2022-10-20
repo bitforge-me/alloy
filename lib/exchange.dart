@@ -24,6 +24,14 @@ enum FieldUpdated { amount, receive }
 
 enum AmountTooHighChoice { none, adjust, gotoDeposit }
 
+enum AmountSliderSelected { none, min, half, max }
+
+class MarketType {
+  BeMarket market;
+  BeMarketSide side;
+  MarketType(this.market, this.side);
+}
+
 class ExchangeWidget extends StatefulWidget {
   final Websocket websocket;
 
@@ -50,6 +58,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   Timer? _updateTimer;
   String _lastAmount = '';
   String _lastReceive = '';
+  AmountSliderSelected _sliderSelected = AmountSliderSelected.none;
 
   _ExchangeWidgetState();
 
@@ -67,6 +76,32 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     super.dispose();
     _updateTimer?.cancel();
     widget.websocket.wsEvent.unsubscribe(_websocketEvent);
+  }
+
+  Widget _createSliderButton(AmountSliderSelected amount) {
+    var _onPressed = amount == AmountSliderSelected.min
+        ? _setMin
+        : (amount == AmountSliderSelected.half ? _setHalf : _setMax);
+    var _amountName = amount == AmountSliderSelected.min
+        ? "MIN"
+        : (amount == AmountSliderSelected.half ? "HALF" : "MAX");
+    if (_sliderSelected == amount) {
+      return Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: ZapPrimaryGradient,
+        ),
+        child: CircleButton(_amountName, _onPressed),
+      );
+    } else {
+      return CircleButton(_amountName, _onPressed);
+    }
+  }
+
+  void _clearSlider() {
+    setState(() {
+      _sliderSelected = AmountSliderSelected.none;
+    });
   }
 
   void _websocketEvent(WsEventArgs? args) {}
@@ -112,16 +147,20 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   }
 
   void _fromChanged(String? value) {
+    _amountController.text = '';
+    _receiveController.text = '';
+    _clearSlider();
     if (value == null) return;
     setState(() => _fromAsset = value);
     _genAssets(_markets);
-    _amountUpdate(force: true);
+    _amountUpdate(force: true, timerSeconds: 0);
   }
 
   void _toChanged(String? value) {
+    _clearSlider();
     if (value == null) return;
     setState(() => _toAsset = value);
-    _amountUpdate(force: true);
+    _amountUpdate(force: true, timerSeconds: 0);
   }
 
   void _setProcessing(FieldUpdated field) {
@@ -135,9 +174,10 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
 
   void _amountChanged(String? value) {
     _amountUpdate();
+    setState(() => _sliderSelected = AmountSliderSelected.none);
   }
 
-  void _amountUpdate({bool force = false}) {
+  void _amountUpdate({bool force = false, int timerSeconds = 1}) {
     // cancel any running timer
     _updateTimer?.cancel();
     // check we actually want to start the timer
@@ -148,7 +188,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     // in the mean time update the state
     _setProcessing(FieldUpdated.amount);
     // start the quote timer
-    _updateTimer = Timer(Duration(seconds: 2), () async {
+    _updateTimer = Timer(Duration(seconds: timerSeconds), () async {
       await _updateQuote(FieldUpdated.amount);
       setState(() => _calculating = false);
     });
@@ -259,8 +299,9 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
           var res = await _amountTooHigh(bal, value);
           switch (res) {
             case AmountTooHighChoice.adjust:
-              value = assetAmountToUser(_fromAsset, bal.available);
-              _amountController.text = value.toString();
+              value = bal.available;
+              _amountController.text =
+                  assetAmountToUser(_fromAsset, bal.available).toString();
               snackMsg(context, 'adjusted amount to available balance',
                   category: MessageCategory.Warning);
               return true;
@@ -281,25 +322,13 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     });
     if (!continueResult) return;
     // check market is valid
-    BeMarket? tryMarket;
-    var side = BeMarketSide.ask;
-    for (var item in _markets) {
-      if ('$fromAsset-$toAsset' == item.symbol) {
-        tryMarket = item;
-        side = BeMarketSide.ask;
-        break;
-      }
-      if ('$toAsset-$fromAsset' == item.symbol) {
-        tryMarket = item;
-        side = BeMarketSide.bid;
-        break;
-      }
-    }
+    MarketType? tryMarket = _checkMarket(_fromAsset, _toAsset);
     if (tryMarket == null) {
       snackMsg(context, 'invalid market', category: MessageCategory.Warning);
       return;
     }
-    var market = tryMarket;
+    var market = tryMarket.market;
+    var side = tryMarket.side;
     // get market orderbook and quote
     var res = await beOrderbook(market.symbol);
     var quote = await res.when<QuoteTotalPrice?>((orderbook) {
@@ -455,6 +484,16 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         estimate.errMsg);
   }
 
+  MarketType? _checkMarket(String fromAsset, String toAsset) {
+    for (var item in _markets) {
+      if ('$fromAsset-$toAsset' == item.symbol)
+        return MarketType(item, BeMarketSide.ask);
+      if ('$toAsset-$fromAsset' == item.symbol)
+        return MarketType(item, BeMarketSide.bid);
+    }
+    return null;
+  }
+
   void _submit() {
     if (_validAmount) _exchange();
   }
@@ -471,6 +510,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     Navigator.pop(context);
     res.when((order) {
       _clearInputs();
+      _clearSlider();
       return Navigator.push(
           context,
           MaterialPageRoute(
@@ -478,6 +518,74 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     },
         error: (err) => alert(
             context, 'error', 'failed to create order (${BeError.msg(err)})'));
+  }
+
+  Future<void> _setMin() async {
+    var tryMarket = _checkMarket(_fromAsset, _toAsset);
+    if (tryMarket == null) {
+      snackMsg(context, 'invalid market', category: MessageCategory.Warning);
+      return;
+    }
+    var market = tryMarket.market;
+    // min trade of baseAsset from dasset
+    var minValue = market.minTrade;
+    var res = await beOrderbook(market.symbol);
+    await res.when((orderbook) {
+      var bids = orderbook.bids;
+      if (bids.length > 0) {
+        // get best buy rate for baseAsset
+        var rate = bids[0].rate;
+        // convert min value from baseAsset to quoteAsset if required
+        if (market.quoteAsset == _fromAsset) minValue = minValue * rate;
+        // apply fee
+        minValue *= Decimal.one + orderbook.brokerFee;
+        // apply fixed fee
+        var fixedFee = getFixedFee(market, orderbook);
+        if (market.baseAsset == _fromAsset) fixedFee /= rate;
+        minValue += fixedFee;
+        // add 2% margin
+        minValue *= Decimal.parse('1.02');
+        _setSliderValue(AmountSliderSelected.min, minValue);
+      } else
+        snackMsg(context, 'failed to calculate minimum order size',
+            category: MessageCategory.Warning);
+    }, error: (err) {
+      snackMsg(context, 'failed to get orderbook',
+          category: MessageCategory.Warning);
+      return;
+    });
+  }
+
+  Future<void> _setHalf() async {
+    var res = await beBalances();
+    res.when((balances) {
+      for (var bal in balances)
+        if (bal.asset == _fromAsset)
+          _setSliderValue(
+              AmountSliderSelected.half, bal.available / Decimal.fromInt(2));
+    },
+        error: (err) => snackMsg(context, 'failed to get balances $err',
+            category: MessageCategory.Warning));
+  }
+
+  Future<void> _setMax() async {
+    var res = await beBalances();
+    res.when((balances) {
+      for (var bal in balances)
+        if (bal.asset == _fromAsset)
+          _setSliderValue(AmountSliderSelected.max, bal.available);
+    },
+        error: (err) => snackMsg(context, 'failed to get balances $err',
+            category: MessageCategory.Warning));
+  }
+
+  void _setSliderValue(AmountSliderSelected sliderSelected, Decimal value) {
+    _clearSlider();
+    setState(() => _sliderSelected = sliderSelected);
+    var valueForUser = assetAmountToUser(_fromAsset, value);
+    _amountController.text =
+        ceil(valueForUser, scale: assetDecimals(_fromAsset)).toString();
+    _amountUpdate(timerSeconds: 0);
   }
 
   Widget _buildWidget() {
@@ -558,19 +666,48 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
           onChanged: _recieveChanged,
           onFieldSubmitted: (_) => _submit(),
         ),
-      )
+      ),
     ]);
+    var exchangeActions = Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(40.0),
+        color: ZapSecondary,
+      ),
+      width: cfg.ButtonWidth,
+      height: cfg.ButtonHeight * 0.7,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          _createSliderButton(AmountSliderSelected.min),
+          _createSliderButton(AmountSliderSelected.half),
+          _createSliderButton(AmountSliderSelected.max),
+        ],
+      ),
+    );
     return Column(children: [
       LayoutBuilder(builder: (context, constraints) {
         if (constraints.maxWidth < cfg.MaxColumnWidth)
-          return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [from, arrowDown, to]);
+          return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            from,
+            SizedBox(height: 7.0),
+            exchangeActions,
+            arrowDown,
+            to
+          ]);
         else
-          return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [from, arrow, to]);
+          return Column(children: [
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [from, arrow, to]),
+            SizedBox(height: 7.0),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [SizedBox(width: 8.0), exchangeActions]),
+          ]);
       }),
+      VerticalSpacer(),
       _validAmount
           ? Padding(
               padding: EdgeInsets.only(top: 20),

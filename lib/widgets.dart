@@ -11,6 +11,31 @@ import 'config.dart' as cfg;
 import 'utils.dart';
 import 'units.dart';
 
+class CircleButton extends StatelessWidget {
+  final String text;
+  final void Function() onPressed;
+  final Color color;
+  final double radius;
+
+  CircleButton(this.text, this.onPressed,
+      {this.color = Colors.transparent, this.radius = 30.0});
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      radius: radius,
+      backgroundColor: color,
+      child: IconButton(
+        icon: Text(text,
+            softWrap: false,
+            style: TextStyle(
+                letterSpacing: 0.5, fontSize: 10.0, color: Colors.white)),
+        onPressed: onPressed,
+      ),
+    );
+  }
+}
+
 class BalanceCard extends StatelessWidget {
   static final double HEIGHT = 120;
   final String titleText;
