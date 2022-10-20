@@ -26,6 +26,12 @@ enum AmountTooHighChoice { none, adjust, gotoDeposit }
 
 enum AmountSliderSelected { none, min, half, max }
 
+class MarketType {
+  BeMarket market;
+  BeMarketSide side;
+  MarketType(this.market, this.side);
+}
+
 class ExchangeWidget extends StatefulWidget {
   final Websocket websocket;
 
@@ -147,14 +153,14 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     if (value == null) return;
     setState(() => _fromAsset = value);
     _genAssets(_markets);
-    _amountUpdate(force: true);
+    _amountUpdate(force: true, timerSeconds: 0);
   }
 
   void _toChanged(String? value) {
     _clearSlider();
     if (value == null) return;
     setState(() => _toAsset = value);
-    _amountUpdate(force: true);
+    _amountUpdate(force: true, timerSeconds: 0);
   }
 
   void _setProcessing(FieldUpdated field) {
@@ -316,25 +322,13 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     });
     if (!continueResult) return;
     // check market is valid
-    BeMarket? tryMarket;
-    var side = BeMarketSide.ask;
-    for (var item in _markets) {
-      if ('$fromAsset-$toAsset' == item.symbol) {
-        tryMarket = item;
-        side = BeMarketSide.ask;
-        break;
-      }
-      if ('$toAsset-$fromAsset' == item.symbol) {
-        tryMarket = item;
-        side = BeMarketSide.bid;
-        break;
-      }
-    }
+    MarketType? tryMarket = _checkMarket(_fromAsset, _toAsset);
     if (tryMarket == null) {
       snackMsg(context, 'invalid market', category: MessageCategory.Warning);
       return;
     }
-    var market = tryMarket;
+    var market = tryMarket.market;
+    var side = tryMarket.side;
     // get market orderbook and quote
     var res = await beOrderbook(market.symbol);
     var quote = await res.when<QuoteTotalPrice?>((orderbook) {
@@ -490,22 +484,14 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         estimate.errMsg);
   }
 
-  BeMarket? _checkMarket(fromAsset, toAsset) {
-    BeMarket? tryMarket;
+  MarketType? _checkMarket(String fromAsset, String toAsset) {
     for (var item in _markets) {
-      if ('$fromAsset-$toAsset' == item.symbol) {
-        tryMarket = item;
-        break;
-      }
-      if ('$toAsset-$fromAsset' == item.symbol) {
-        tryMarket = item;
-        break;
-      }
+      if ('$fromAsset-$toAsset' == item.symbol)
+        return MarketType(item, BeMarketSide.ask);
+      if ('$toAsset-$fromAsset' == item.symbol)
+        return MarketType(item, BeMarketSide.bid);
     }
-    if (tryMarket != null) {
-      _market = tryMarket;
-    }
-    return tryMarket;
+    return null;
   }
 
   void _submit() {
@@ -535,71 +521,71 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   }
 
   Future<void> _setMin() async {
-    _checkMarket(_fromAsset, _toAsset);
-    _clearSlider();
-    setState(() => _sliderSelected = AmountSliderSelected.min);
-    var res = await beOrderbook(_market.symbol);
+    var tryMarket = _checkMarket(_fromAsset, _toAsset);
+    if (tryMarket == null) {
+      snackMsg(context, 'invalid market', category: MessageCategory.Warning);
+      return;
+    }
+    var market = tryMarket.market;
+    // min trade of baseAsset from dasset
+    var minValue = market.minTrade;
+    var res = await beOrderbook(market.symbol);
     await res.when((orderbook) {
       var bids = orderbook.bids;
       if (bids.length > 0) {
+        // get best buy rate for baseAsset
         var rate = bids[0].rate;
-        var feeRate =
-            (Decimal.one + (orderbook.brokerFee / Decimal.fromInt(100)));
-        var valueAfterFee = _fromAsset == Btc
-            ? (_market.minTrade * feeRate)
-            : (_market.minTrade * feeRate * rate);
-        var fixedFee = _fromAsset == Btc
-            ? (getFixedFee(_market, orderbook) / rate)
-            // add a margin of error (~0.10 NZD) for the exchange rate being inaccurate
-            : getFixedFee(_market, orderbook) + Decimal.fromJson('0.10');
-        var totalAmount = valueAfterFee + fixedFee;
-        var convertedValue = assetAmountToUser(_fromAsset, totalAmount);
-        _amountController.text =
-            ceil(convertedValue, scale: assetDecimals(_fromAsset)).toString();
-        _amountUpdate(timerSeconds: 0);
+        // convert min value from baseAsset to quoteAsset if required
+        if (market.quoteAsset == _fromAsset) minValue = minValue * rate;
+        // apply fee
+        minValue *= Decimal.one + orderbook.brokerFee;
+        // apply fixed fee
+        var fixedFee = getFixedFee(market, orderbook);
+        if (market.baseAsset == _fromAsset) fixedFee /= rate;
+        minValue += fixedFee;
+        // add 2% margin
+        minValue *= Decimal.parse('1.02');
+        _setSliderValue(AmountSliderSelected.min, minValue);
       } else
-        snackMsg(context, 'failed to get minimum order size',
+        snackMsg(context, 'failed to calculate minimum order size',
             category: MessageCategory.Warning);
     }, error: (err) {
       snackMsg(context, 'failed to get orderbook',
           category: MessageCategory.Warning);
-      return null;
+      return;
     });
   }
 
   Future<void> _setHalf() async {
-    _clearSlider();
-    var resb = await beBalances();
-    resb.when((balances) {
+    var res = await beBalances();
+    res.when((balances) {
       for (var bal in balances)
-        if (bal.asset == _fromAsset) {
-          _clearSlider();
-          setState(() => _sliderSelected = AmountSliderSelected.half);
-          var value = assetAmountToUser(
-              _fromAsset, Decimal.parse('${bal.available.toDouble() * 0.5}'));
-          _amountController.text =
-              ceil(value, scale: assetDecimals(_fromAsset)).toString();
-          _amountUpdate(timerSeconds: 0);
-        }
+        if (bal.asset == _fromAsset)
+          _setSliderValue(
+              AmountSliderSelected.half, bal.available / Decimal.fromInt(2));
     },
         error: (err) => snackMsg(context, 'failed to get balances $err',
             category: MessageCategory.Warning));
   }
 
   Future<void> _setMax() async {
-    var resb = await beBalances();
-    resb.when((balances) {
+    var res = await beBalances();
+    res.when((balances) {
       for (var bal in balances)
-        if (bal.asset == _fromAsset) {
-          _clearSlider();
-          setState(() => _sliderSelected = AmountSliderSelected.max);
-          var value = assetAmountToUser(_fromAsset, bal.available);
-          _amountController.text = value.toString();
-          _amountUpdate(timerSeconds: 0);
-        }
+        if (bal.asset == _fromAsset)
+          _setSliderValue(AmountSliderSelected.max, bal.available);
     },
         error: (err) => snackMsg(context, 'failed to get balances $err',
             category: MessageCategory.Warning));
+  }
+
+  void _setSliderValue(AmountSliderSelected sliderSelected, Decimal value) {
+    _clearSlider();
+    setState(() => _sliderSelected = sliderSelected);
+    var valueForUser = assetAmountToUser(_fromAsset, value);
+    _amountController.text =
+        ceil(valueForUser, scale: assetDecimals(_fromAsset)).toString();
+    _amountUpdate(timerSeconds: 0);
   }
 
   Widget _buildWidget() {
@@ -710,7 +696,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
             to
           ]);
         else
-          return Column(children: <Widget>[
+          return Column(children: [
             Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [from, arrow, to]),
@@ -718,7 +704,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
             Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[SizedBox(width: 8.0), exchangeActions]),
+                children: [SizedBox(width: 8.0), exchangeActions]),
           ]);
       }),
       VerticalSpacer(),

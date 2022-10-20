@@ -24,8 +24,8 @@ class QuoteTotalPrice {
 }
 
 Decimal getFixedFee(BeMarket market, BeOrderbook orderbook) {
-  for (var key in orderbook.brokerFeeFixed.keys())
-    if (key == market.quoteAsset) return orderbook.brokerFeeFixed.get(key)!;
+  if (orderbook.brokerFeeFixed.keys().contains(market.quoteAsset))
+    return orderbook.brokerFeeFixed.get(market.quoteAsset)!;
   return Decimal.zero;
 }
 
