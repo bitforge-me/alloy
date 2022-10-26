@@ -627,12 +627,14 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     var arrow = Container(
         margin: EdgeInsets.all(10),
         child: _calculating
-            ? CircularProgressIndicator()
+            ? SizedBox(
+                width: 24, height: 24, child: CircularProgressIndicator())
             : Icon(Icons.arrow_forward, color: ZapPrimary, size: 24));
     var arrowDown = Container(
         margin: EdgeInsets.all(20),
         child: _calculating
-            ? CircularProgressIndicator()
+            ? SizedBox(
+                width: 24, height: 24, child: CircularProgressIndicator())
             : Icon(Icons.arrow_downward, color: ZapPrimary, size: 24));
     var to = Column(children: [
       SizedBox(
@@ -708,13 +710,13 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
           ]);
       }),
       VerticalSpacer(),
-      _validAmount
-          ? Padding(
-              padding: EdgeInsets.only(top: 20),
-              child: BronzeRoundedButton(_exchange, ZapOnPrimary, ZapPrimary,
+      Padding(
+          padding: EdgeInsets.only(top: 20),
+          child: _validAmount
+              ? BronzeRoundedButton(_exchange, ZapOnPrimary, ZapPrimary,
                   ZapPrimaryGradient, 'Create Order',
-                  fwdArrow: true, width: inputWidth, height: cfg.ButtonHeight))
-          : SizedBox()
+                  fwdArrow: true, width: inputWidth, height: cfg.ButtonHeight)
+              : SizedBox(width: inputWidth, height: cfg.ButtonHeight))
     ]);
   }
 
