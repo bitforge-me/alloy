@@ -95,13 +95,13 @@ class _OrderScreenState extends State<OrderScreen> {
           } else {
             var brokerRate =
                 (snapshot.data?['fixedFee'] / Decimal.fromInt(100));
-            var brokerRateCost = _order.baseAsset == Nzd
+            var brokerRateCost = roundToNZD(_order.baseAsset == Nzd
                 ? _order.baseAmount * brokerRate
-                : _order.quoteAmount * brokerRate;
+                : _order.quoteAmount * brokerRate);
             // fixedFee always in NZD
-            var fixedFeeAmount = snapshot.data?['fixedFee'];
+            var fixedFeeAmount = roundToNZD(snapshot.data?['fixedFee']);
             return Text(
-                'Fixed Fee: $fixedFeeAmount | Broker Fee: $brokerRateCost | Total Fees: ${fixedFeeAmount + brokerRateCost}');
+                'Fixed Fee: ${fixedFeeAmount} | Broker Fee: $brokerRateCost | Total Fees: ${fixedFeeAmount + brokerRateCost}');
           }
         }
         if (snapshot.hasError) {

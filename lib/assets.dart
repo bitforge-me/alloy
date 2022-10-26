@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:decimal/decimal.dart';
 
 import 'beryllium.dart';
+import 'utils.dart';
 import 'prefs.dart';
 
 const String Nzd = 'NZD';
@@ -305,6 +306,10 @@ Decimal assetAmountFromUser(String symbol, Decimal amount) {
       return amount;
   }
   return -Decimal.one;
+}
+
+Decimal roundToNZD(Decimal val) {
+	return ceil(val, scale: assetDecimals(Nzd));
 }
 
 String? addressBlockExplorer(String symbol, bool testnet, String address) {
