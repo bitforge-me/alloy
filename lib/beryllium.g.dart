@@ -33,8 +33,8 @@ Map<String, dynamic> _$UserInfoToJson(UserInfo instance) => <String, dynamic>{
       'photo': instance.photo,
       'photo_type': instance.photoType,
       'permissions':
-          instance.permissions?.map((e) => _$BePermissionEnumMap[e]).toList(),
-      'roles': instance.roles.map((e) => _$BeRoleEnumMap[e]).toList(),
+          instance.permissions?.map((e) => _$BePermissionEnumMap[e]!).toList(),
+      'roles': instance.roles.map((e) => _$BeRoleEnumMap[e]!).toList(),
       'kyc_validated': instance.kycValidated,
       'kyc_url': instance.kycUrl,
       'aplyid_req_exists': instance.aplyidReqExists,
@@ -247,6 +247,8 @@ BeBrokerOrder _$BeBrokerOrderFromJson(Map<String, dynamic> json) =>
       json['quote_asset'] as String,
       _decimalFromJson(json['base_amount_dec']),
       _decimalFromJson(json['quote_amount_dec']),
+      _decimalOrNullFromJson(json['quote_fee_dec']),
+      _decimalOrNullFromJson(json['quote_fee_fixed_dec']),
       $enumDecode(_$BeOrderStatusEnumMap, json['status']),
     );
 
@@ -256,12 +258,14 @@ Map<String, dynamic> _$BeBrokerOrderToJson(BeBrokerOrder instance) =>
       'date': instance.date.toIso8601String(),
       'expiry': instance.expiry.toIso8601String(),
       'market': instance.market,
-      'side': _$BeMarketSideEnumMap[instance.side],
+      'side': _$BeMarketSideEnumMap[instance.side]!,
       'base_asset': instance.baseAsset,
       'quote_asset': instance.quoteAsset,
       'base_amount_dec': _decimalToJson(instance.baseAmount),
       'quote_amount_dec': _decimalToJson(instance.quoteAmount),
-      'status': _$BeOrderStatusEnumMap[instance.status],
+      'quote_fee_dec': _decimalOrNullToJson(instance.quoteFee),
+      'quote_fee_fixed_dec': _decimalOrNullToJson(instance.quoteFeeFixed),
+      'status': _$BeOrderStatusEnumMap[instance.status]!,
     };
 
 const _$BeMarketSideEnumMap = {
