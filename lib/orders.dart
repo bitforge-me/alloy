@@ -39,7 +39,8 @@ class OrderFees extends StatelessWidget {
         width: cfg.ButtonWidth,
         child: Text(
             'Exchange Fee: ${exchangeFee()}\nProcessing Fee: ${processingFee()}',
-            style: TextStyle(color: ZapOnBackgroundLight, fontSize: 10), textAlign: centerText ? TextAlign.center : TextAlign.start));
+            style: TextStyle(color: ZapOnBackgroundLight, fontSize: 10),
+            textAlign: centerText ? TextAlign.center : TextAlign.start));
   }
 }
 
