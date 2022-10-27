@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'login.dart';
@@ -11,27 +12,7 @@ part of 'login.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$LoginChoiceTearOff {
-  const _$LoginChoiceTearOff();
-
-  LCDoLogin doLogin() {
-    return const LCDoLogin();
-  }
-
-  LCDoRegistration doRegistration() {
-    return const LCDoRegistration();
-  }
-
-  LCDApiKeyRequest doApiKeyRequest() {
-    return const LCDApiKeyRequest();
-  }
-}
-
-/// @nodoc
-const $LoginChoice = _$LoginChoiceTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$LoginChoice {
@@ -44,9 +25,9 @@ mixin _$LoginChoice {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? doLogin,
-    TResult Function()? doRegistration,
-    TResult Function()? doApiKeyRequest,
+    TResult? Function()? doLogin,
+    TResult? Function()? doRegistration,
+    TResult? Function()? doApiKeyRequest,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -66,9 +47,9 @@ mixin _$LoginChoice {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LCDoLogin value)? doLogin,
-    TResult Function(LCDoRegistration value)? doRegistration,
-    TResult Function(LCDApiKeyRequest value)? doApiKeyRequest,
+    TResult? Function(LCDoLogin value)? doLogin,
+    TResult? Function(LCDoRegistration value)? doRegistration,
+    TResult? Function(LCDApiKeyRequest value)? doApiKeyRequest,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -85,32 +66,34 @@ mixin _$LoginChoice {
 abstract class $LoginChoiceCopyWith<$Res> {
   factory $LoginChoiceCopyWith(
           LoginChoice value, $Res Function(LoginChoice) then) =
-      _$LoginChoiceCopyWithImpl<$Res>;
+      _$LoginChoiceCopyWithImpl<$Res, LoginChoice>;
 }
 
 /// @nodoc
-class _$LoginChoiceCopyWithImpl<$Res> implements $LoginChoiceCopyWith<$Res> {
+class _$LoginChoiceCopyWithImpl<$Res, $Val extends LoginChoice>
+    implements $LoginChoiceCopyWith<$Res> {
   _$LoginChoiceCopyWithImpl(this._value, this._then);
 
-  final LoginChoice _value;
   // ignore: unused_field
-  final $Res Function(LoginChoice) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 }
 
 /// @nodoc
-abstract class $LCDoLoginCopyWith<$Res> {
-  factory $LCDoLoginCopyWith(LCDoLogin value, $Res Function(LCDoLogin) then) =
-      _$LCDoLoginCopyWithImpl<$Res>;
+abstract class _$$LCDoLoginCopyWith<$Res> {
+  factory _$$LCDoLoginCopyWith(
+          _$LCDoLogin value, $Res Function(_$LCDoLogin) then) =
+      __$$LCDoLoginCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$LCDoLoginCopyWithImpl<$Res> extends _$LoginChoiceCopyWithImpl<$Res>
-    implements $LCDoLoginCopyWith<$Res> {
-  _$LCDoLoginCopyWithImpl(LCDoLogin _value, $Res Function(LCDoLogin) _then)
-      : super(_value, (v) => _then(v as LCDoLogin));
-
-  @override
-  LCDoLogin get _value => super._value as LCDoLogin;
+class __$$LCDoLoginCopyWithImpl<$Res>
+    extends _$LoginChoiceCopyWithImpl<$Res, _$LCDoLogin>
+    implements _$$LCDoLoginCopyWith<$Res> {
+  __$$LCDoLoginCopyWithImpl(
+      _$LCDoLogin _value, $Res Function(_$LCDoLogin) _then)
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -126,7 +109,7 @@ class _$LCDoLogin implements LCDoLogin {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is LCDoLogin);
+        (other.runtimeType == runtimeType && other is _$LCDoLogin);
   }
 
   @override
@@ -145,9 +128,9 @@ class _$LCDoLogin implements LCDoLogin {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? doLogin,
-    TResult Function()? doRegistration,
-    TResult Function()? doApiKeyRequest,
+    TResult? Function()? doLogin,
+    TResult? Function()? doRegistration,
+    TResult? Function()? doApiKeyRequest,
   }) {
     return doLogin?.call();
   }
@@ -179,9 +162,9 @@ class _$LCDoLogin implements LCDoLogin {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LCDoLogin value)? doLogin,
-    TResult Function(LCDoRegistration value)? doRegistration,
-    TResult Function(LCDApiKeyRequest value)? doApiKeyRequest,
+    TResult? Function(LCDoLogin value)? doLogin,
+    TResult? Function(LCDoRegistration value)? doRegistration,
+    TResult? Function(LCDApiKeyRequest value)? doApiKeyRequest,
   }) {
     return doLogin?.call(this);
   }
@@ -206,22 +189,19 @@ abstract class LCDoLogin implements LoginChoice {
 }
 
 /// @nodoc
-abstract class $LCDoRegistrationCopyWith<$Res> {
-  factory $LCDoRegistrationCopyWith(
-          LCDoRegistration value, $Res Function(LCDoRegistration) then) =
-      _$LCDoRegistrationCopyWithImpl<$Res>;
+abstract class _$$LCDoRegistrationCopyWith<$Res> {
+  factory _$$LCDoRegistrationCopyWith(
+          _$LCDoRegistration value, $Res Function(_$LCDoRegistration) then) =
+      __$$LCDoRegistrationCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$LCDoRegistrationCopyWithImpl<$Res>
-    extends _$LoginChoiceCopyWithImpl<$Res>
-    implements $LCDoRegistrationCopyWith<$Res> {
-  _$LCDoRegistrationCopyWithImpl(
-      LCDoRegistration _value, $Res Function(LCDoRegistration) _then)
-      : super(_value, (v) => _then(v as LCDoRegistration));
-
-  @override
-  LCDoRegistration get _value => super._value as LCDoRegistration;
+class __$$LCDoRegistrationCopyWithImpl<$Res>
+    extends _$LoginChoiceCopyWithImpl<$Res, _$LCDoRegistration>
+    implements _$$LCDoRegistrationCopyWith<$Res> {
+  __$$LCDoRegistrationCopyWithImpl(
+      _$LCDoRegistration _value, $Res Function(_$LCDoRegistration) _then)
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -237,7 +217,7 @@ class _$LCDoRegistration implements LCDoRegistration {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is LCDoRegistration);
+        (other.runtimeType == runtimeType && other is _$LCDoRegistration);
   }
 
   @override
@@ -256,9 +236,9 @@ class _$LCDoRegistration implements LCDoRegistration {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? doLogin,
-    TResult Function()? doRegistration,
-    TResult Function()? doApiKeyRequest,
+    TResult? Function()? doLogin,
+    TResult? Function()? doRegistration,
+    TResult? Function()? doApiKeyRequest,
   }) {
     return doRegistration?.call();
   }
@@ -290,9 +270,9 @@ class _$LCDoRegistration implements LCDoRegistration {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LCDoLogin value)? doLogin,
-    TResult Function(LCDoRegistration value)? doRegistration,
-    TResult Function(LCDApiKeyRequest value)? doApiKeyRequest,
+    TResult? Function(LCDoLogin value)? doLogin,
+    TResult? Function(LCDoRegistration value)? doRegistration,
+    TResult? Function(LCDApiKeyRequest value)? doApiKeyRequest,
   }) {
     return doRegistration?.call(this);
   }
@@ -317,22 +297,19 @@ abstract class LCDoRegistration implements LoginChoice {
 }
 
 /// @nodoc
-abstract class $LCDApiKeyRequestCopyWith<$Res> {
-  factory $LCDApiKeyRequestCopyWith(
-          LCDApiKeyRequest value, $Res Function(LCDApiKeyRequest) then) =
-      _$LCDApiKeyRequestCopyWithImpl<$Res>;
+abstract class _$$LCDApiKeyRequestCopyWith<$Res> {
+  factory _$$LCDApiKeyRequestCopyWith(
+          _$LCDApiKeyRequest value, $Res Function(_$LCDApiKeyRequest) then) =
+      __$$LCDApiKeyRequestCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$LCDApiKeyRequestCopyWithImpl<$Res>
-    extends _$LoginChoiceCopyWithImpl<$Res>
-    implements $LCDApiKeyRequestCopyWith<$Res> {
-  _$LCDApiKeyRequestCopyWithImpl(
-      LCDApiKeyRequest _value, $Res Function(LCDApiKeyRequest) _then)
-      : super(_value, (v) => _then(v as LCDApiKeyRequest));
-
-  @override
-  LCDApiKeyRequest get _value => super._value as LCDApiKeyRequest;
+class __$$LCDApiKeyRequestCopyWithImpl<$Res>
+    extends _$LoginChoiceCopyWithImpl<$Res, _$LCDApiKeyRequest>
+    implements _$$LCDApiKeyRequestCopyWith<$Res> {
+  __$$LCDApiKeyRequestCopyWithImpl(
+      _$LCDApiKeyRequest _value, $Res Function(_$LCDApiKeyRequest) _then)
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -348,7 +325,7 @@ class _$LCDApiKeyRequest implements LCDApiKeyRequest {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is LCDApiKeyRequest);
+        (other.runtimeType == runtimeType && other is _$LCDApiKeyRequest);
   }
 
   @override
@@ -367,9 +344,9 @@ class _$LCDApiKeyRequest implements LCDApiKeyRequest {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? doLogin,
-    TResult Function()? doRegistration,
-    TResult Function()? doApiKeyRequest,
+    TResult? Function()? doLogin,
+    TResult? Function()? doRegistration,
+    TResult? Function()? doApiKeyRequest,
   }) {
     return doApiKeyRequest?.call();
   }
@@ -401,9 +378,9 @@ class _$LCDApiKeyRequest implements LCDApiKeyRequest {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LCDoLogin value)? doLogin,
-    TResult Function(LCDoRegistration value)? doRegistration,
-    TResult Function(LCDApiKeyRequest value)? doApiKeyRequest,
+    TResult? Function(LCDoLogin value)? doLogin,
+    TResult? Function(LCDoRegistration value)? doRegistration,
+    TResult? Function(LCDApiKeyRequest value)? doApiKeyRequest,
   }) {
     return doApiKeyRequest?.call(this);
   }
@@ -428,38 +405,6 @@ abstract class LCDApiKeyRequest implements LoginChoice {
 }
 
 /// @nodoc
-class _$LoginResultTearOff {
-  const _$LoginResultTearOff();
-
-  LRChoose choose(LoginChoice choice) {
-    return LRChoose(
-      choice,
-    );
-  }
-
-  LRAcct acct(Acct acct) {
-    return LRAcct(
-      acct,
-    );
-  }
-
-  LRReset reset() {
-    return const LRReset();
-  }
-
-  LRRetry retry() {
-    return const LRRetry();
-  }
-
-  LRNothing nothing() {
-    return const LRNothing();
-  }
-}
-
-/// @nodoc
-const $LoginResult = _$LoginResultTearOff();
-
-/// @nodoc
 mixin _$LoginResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -472,11 +417,11 @@ mixin _$LoginResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(LoginChoice choice)? choose,
-    TResult Function(Acct acct)? acct,
-    TResult Function()? reset,
-    TResult Function()? retry,
-    TResult Function()? nothing,
+    TResult? Function(LoginChoice choice)? choose,
+    TResult? Function(Acct acct)? acct,
+    TResult? Function()? reset,
+    TResult? Function()? retry,
+    TResult? Function()? nothing,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -500,11 +445,11 @@ mixin _$LoginResult {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LRChoose value)? choose,
-    TResult Function(LRAcct value)? acct,
-    TResult Function(LRReset value)? reset,
-    TResult Function(LRRetry value)? retry,
-    TResult Function(LRNothing value)? nothing,
+    TResult? Function(LRChoose value)? choose,
+    TResult? Function(LRAcct value)? acct,
+    TResult? Function(LRReset value)? reset,
+    TResult? Function(LRRetry value)? retry,
+    TResult? Function(LRNothing value)? nothing,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -523,42 +468,45 @@ mixin _$LoginResult {
 abstract class $LoginResultCopyWith<$Res> {
   factory $LoginResultCopyWith(
           LoginResult value, $Res Function(LoginResult) then) =
-      _$LoginResultCopyWithImpl<$Res>;
+      _$LoginResultCopyWithImpl<$Res, LoginResult>;
 }
 
 /// @nodoc
-class _$LoginResultCopyWithImpl<$Res> implements $LoginResultCopyWith<$Res> {
+class _$LoginResultCopyWithImpl<$Res, $Val extends LoginResult>
+    implements $LoginResultCopyWith<$Res> {
   _$LoginResultCopyWithImpl(this._value, this._then);
 
-  final LoginResult _value;
   // ignore: unused_field
-  final $Res Function(LoginResult) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 }
 
 /// @nodoc
-abstract class $LRChooseCopyWith<$Res> {
-  factory $LRChooseCopyWith(LRChoose value, $Res Function(LRChoose) then) =
-      _$LRChooseCopyWithImpl<$Res>;
+abstract class _$$LRChooseCopyWith<$Res> {
+  factory _$$LRChooseCopyWith(
+          _$LRChoose value, $Res Function(_$LRChoose) then) =
+      __$$LRChooseCopyWithImpl<$Res>;
+  @useResult
   $Res call({LoginChoice choice});
 
   $LoginChoiceCopyWith<$Res> get choice;
 }
 
 /// @nodoc
-class _$LRChooseCopyWithImpl<$Res> extends _$LoginResultCopyWithImpl<$Res>
-    implements $LRChooseCopyWith<$Res> {
-  _$LRChooseCopyWithImpl(LRChoose _value, $Res Function(LRChoose) _then)
-      : super(_value, (v) => _then(v as LRChoose));
+class __$$LRChooseCopyWithImpl<$Res>
+    extends _$LoginResultCopyWithImpl<$Res, _$LRChoose>
+    implements _$$LRChooseCopyWith<$Res> {
+  __$$LRChooseCopyWithImpl(_$LRChoose _value, $Res Function(_$LRChoose) _then)
+      : super(_value, _then);
 
-  @override
-  LRChoose get _value => super._value as LRChoose;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? choice = freezed,
+    Object? choice = null,
   }) {
-    return _then(LRChoose(
-      choice == freezed
+    return _then(_$LRChoose(
+      null == choice
           ? _value.choice
           : choice // ignore: cast_nullable_to_non_nullable
               as LoginChoice,
@@ -566,6 +514,7 @@ class _$LRChooseCopyWithImpl<$Res> extends _$LoginResultCopyWithImpl<$Res>
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $LoginChoiceCopyWith<$Res> get choice {
     return $LoginChoiceCopyWith<$Res>(_value.choice, (value) {
       return _then(_value.copyWith(choice: value));
@@ -590,7 +539,7 @@ class _$LRChoose implements LRChoose {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is LRChoose &&
+            other is _$LRChoose &&
             (identical(other.choice, choice) || other.choice == choice));
   }
 
@@ -599,8 +548,9 @@ class _$LRChoose implements LRChoose {
 
   @JsonKey(ignore: true)
   @override
-  $LRChooseCopyWith<LRChoose> get copyWith =>
-      _$LRChooseCopyWithImpl<LRChoose>(this, _$identity);
+  @pragma('vm:prefer-inline')
+  _$$LRChooseCopyWith<_$LRChoose> get copyWith =>
+      __$$LRChooseCopyWithImpl<_$LRChoose>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -617,11 +567,11 @@ class _$LRChoose implements LRChoose {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(LoginChoice choice)? choose,
-    TResult Function(Acct acct)? acct,
-    TResult Function()? reset,
-    TResult Function()? retry,
-    TResult Function()? nothing,
+    TResult? Function(LoginChoice choice)? choose,
+    TResult? Function(Acct acct)? acct,
+    TResult? Function()? reset,
+    TResult? Function()? retry,
+    TResult? Function()? nothing,
   }) {
     return choose?.call(choice);
   }
@@ -657,11 +607,11 @@ class _$LRChoose implements LRChoose {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LRChoose value)? choose,
-    TResult Function(LRAcct value)? acct,
-    TResult Function(LRReset value)? reset,
-    TResult Function(LRRetry value)? retry,
-    TResult Function(LRNothing value)? nothing,
+    TResult? Function(LRChoose value)? choose,
+    TResult? Function(LRAcct value)? acct,
+    TResult? Function(LRReset value)? reset,
+    TResult? Function(LRRetry value)? retry,
+    TResult? Function(LRNothing value)? nothing,
   }) {
     return choose?.call(this);
   }
@@ -684,36 +634,36 @@ class _$LRChoose implements LRChoose {
 }
 
 abstract class LRChoose implements LoginResult {
-  const factory LRChoose(LoginChoice choice) = _$LRChoose;
+  const factory LRChoose(final LoginChoice choice) = _$LRChoose;
 
   LoginChoice get choice;
   @JsonKey(ignore: true)
-  $LRChooseCopyWith<LRChoose> get copyWith =>
+  _$$LRChooseCopyWith<_$LRChoose> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $LRAcctCopyWith<$Res> {
-  factory $LRAcctCopyWith(LRAcct value, $Res Function(LRAcct) then) =
-      _$LRAcctCopyWithImpl<$Res>;
+abstract class _$$LRAcctCopyWith<$Res> {
+  factory _$$LRAcctCopyWith(_$LRAcct value, $Res Function(_$LRAcct) then) =
+      __$$LRAcctCopyWithImpl<$Res>;
+  @useResult
   $Res call({Acct acct});
 }
 
 /// @nodoc
-class _$LRAcctCopyWithImpl<$Res> extends _$LoginResultCopyWithImpl<$Res>
-    implements $LRAcctCopyWith<$Res> {
-  _$LRAcctCopyWithImpl(LRAcct _value, $Res Function(LRAcct) _then)
-      : super(_value, (v) => _then(v as LRAcct));
+class __$$LRAcctCopyWithImpl<$Res>
+    extends _$LoginResultCopyWithImpl<$Res, _$LRAcct>
+    implements _$$LRAcctCopyWith<$Res> {
+  __$$LRAcctCopyWithImpl(_$LRAcct _value, $Res Function(_$LRAcct) _then)
+      : super(_value, _then);
 
-  @override
-  LRAcct get _value => super._value as LRAcct;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? acct = freezed,
+    Object? acct = null,
   }) {
-    return _then(LRAcct(
-      acct == freezed
+    return _then(_$LRAcct(
+      null == acct
           ? _value.acct
           : acct // ignore: cast_nullable_to_non_nullable
               as Acct,
@@ -738,7 +688,7 @@ class _$LRAcct implements LRAcct {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is LRAcct &&
+            other is _$LRAcct &&
             (identical(other.acct, acct) || other.acct == acct));
   }
 
@@ -747,8 +697,9 @@ class _$LRAcct implements LRAcct {
 
   @JsonKey(ignore: true)
   @override
-  $LRAcctCopyWith<LRAcct> get copyWith =>
-      _$LRAcctCopyWithImpl<LRAcct>(this, _$identity);
+  @pragma('vm:prefer-inline')
+  _$$LRAcctCopyWith<_$LRAcct> get copyWith =>
+      __$$LRAcctCopyWithImpl<_$LRAcct>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -765,11 +716,11 @@ class _$LRAcct implements LRAcct {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(LoginChoice choice)? choose,
-    TResult Function(Acct acct)? acct,
-    TResult Function()? reset,
-    TResult Function()? retry,
-    TResult Function()? nothing,
+    TResult? Function(LoginChoice choice)? choose,
+    TResult? Function(Acct acct)? acct,
+    TResult? Function()? reset,
+    TResult? Function()? retry,
+    TResult? Function()? nothing,
   }) {
     return acct?.call(this.acct);
   }
@@ -805,11 +756,11 @@ class _$LRAcct implements LRAcct {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LRChoose value)? choose,
-    TResult Function(LRAcct value)? acct,
-    TResult Function(LRReset value)? reset,
-    TResult Function(LRRetry value)? retry,
-    TResult Function(LRNothing value)? nothing,
+    TResult? Function(LRChoose value)? choose,
+    TResult? Function(LRAcct value)? acct,
+    TResult? Function(LRReset value)? reset,
+    TResult? Function(LRRetry value)? retry,
+    TResult? Function(LRNothing value)? nothing,
   }) {
     return acct?.call(this);
   }
@@ -832,27 +783,26 @@ class _$LRAcct implements LRAcct {
 }
 
 abstract class LRAcct implements LoginResult {
-  const factory LRAcct(Acct acct) = _$LRAcct;
+  const factory LRAcct(final Acct acct) = _$LRAcct;
 
   Acct get acct;
   @JsonKey(ignore: true)
-  $LRAcctCopyWith<LRAcct> get copyWith => throw _privateConstructorUsedError;
+  _$$LRAcctCopyWith<_$LRAcct> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $LRResetCopyWith<$Res> {
-  factory $LRResetCopyWith(LRReset value, $Res Function(LRReset) then) =
-      _$LRResetCopyWithImpl<$Res>;
+abstract class _$$LRResetCopyWith<$Res> {
+  factory _$$LRResetCopyWith(_$LRReset value, $Res Function(_$LRReset) then) =
+      __$$LRResetCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$LRResetCopyWithImpl<$Res> extends _$LoginResultCopyWithImpl<$Res>
-    implements $LRResetCopyWith<$Res> {
-  _$LRResetCopyWithImpl(LRReset _value, $Res Function(LRReset) _then)
-      : super(_value, (v) => _then(v as LRReset));
-
-  @override
-  LRReset get _value => super._value as LRReset;
+class __$$LRResetCopyWithImpl<$Res>
+    extends _$LoginResultCopyWithImpl<$Res, _$LRReset>
+    implements _$$LRResetCopyWith<$Res> {
+  __$$LRResetCopyWithImpl(_$LRReset _value, $Res Function(_$LRReset) _then)
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -868,7 +818,7 @@ class _$LRReset implements LRReset {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is LRReset);
+        (other.runtimeType == runtimeType && other is _$LRReset);
   }
 
   @override
@@ -889,11 +839,11 @@ class _$LRReset implements LRReset {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(LoginChoice choice)? choose,
-    TResult Function(Acct acct)? acct,
-    TResult Function()? reset,
-    TResult Function()? retry,
-    TResult Function()? nothing,
+    TResult? Function(LoginChoice choice)? choose,
+    TResult? Function(Acct acct)? acct,
+    TResult? Function()? reset,
+    TResult? Function()? retry,
+    TResult? Function()? nothing,
   }) {
     return reset?.call();
   }
@@ -929,11 +879,11 @@ class _$LRReset implements LRReset {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LRChoose value)? choose,
-    TResult Function(LRAcct value)? acct,
-    TResult Function(LRReset value)? reset,
-    TResult Function(LRRetry value)? retry,
-    TResult Function(LRNothing value)? nothing,
+    TResult? Function(LRChoose value)? choose,
+    TResult? Function(LRAcct value)? acct,
+    TResult? Function(LRReset value)? reset,
+    TResult? Function(LRRetry value)? retry,
+    TResult? Function(LRNothing value)? nothing,
   }) {
     return reset?.call(this);
   }
@@ -960,19 +910,17 @@ abstract class LRReset implements LoginResult {
 }
 
 /// @nodoc
-abstract class $LRRetryCopyWith<$Res> {
-  factory $LRRetryCopyWith(LRRetry value, $Res Function(LRRetry) then) =
-      _$LRRetryCopyWithImpl<$Res>;
+abstract class _$$LRRetryCopyWith<$Res> {
+  factory _$$LRRetryCopyWith(_$LRRetry value, $Res Function(_$LRRetry) then) =
+      __$$LRRetryCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$LRRetryCopyWithImpl<$Res> extends _$LoginResultCopyWithImpl<$Res>
-    implements $LRRetryCopyWith<$Res> {
-  _$LRRetryCopyWithImpl(LRRetry _value, $Res Function(LRRetry) _then)
-      : super(_value, (v) => _then(v as LRRetry));
-
-  @override
-  LRRetry get _value => super._value as LRRetry;
+class __$$LRRetryCopyWithImpl<$Res>
+    extends _$LoginResultCopyWithImpl<$Res, _$LRRetry>
+    implements _$$LRRetryCopyWith<$Res> {
+  __$$LRRetryCopyWithImpl(_$LRRetry _value, $Res Function(_$LRRetry) _then)
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -988,7 +936,7 @@ class _$LRRetry implements LRRetry {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is LRRetry);
+        (other.runtimeType == runtimeType && other is _$LRRetry);
   }
 
   @override
@@ -1009,11 +957,11 @@ class _$LRRetry implements LRRetry {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(LoginChoice choice)? choose,
-    TResult Function(Acct acct)? acct,
-    TResult Function()? reset,
-    TResult Function()? retry,
-    TResult Function()? nothing,
+    TResult? Function(LoginChoice choice)? choose,
+    TResult? Function(Acct acct)? acct,
+    TResult? Function()? reset,
+    TResult? Function()? retry,
+    TResult? Function()? nothing,
   }) {
     return retry?.call();
   }
@@ -1049,11 +997,11 @@ class _$LRRetry implements LRRetry {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LRChoose value)? choose,
-    TResult Function(LRAcct value)? acct,
-    TResult Function(LRReset value)? reset,
-    TResult Function(LRRetry value)? retry,
-    TResult Function(LRNothing value)? nothing,
+    TResult? Function(LRChoose value)? choose,
+    TResult? Function(LRAcct value)? acct,
+    TResult? Function(LRReset value)? reset,
+    TResult? Function(LRRetry value)? retry,
+    TResult? Function(LRNothing value)? nothing,
   }) {
     return retry?.call(this);
   }
@@ -1080,19 +1028,19 @@ abstract class LRRetry implements LoginResult {
 }
 
 /// @nodoc
-abstract class $LRNothingCopyWith<$Res> {
-  factory $LRNothingCopyWith(LRNothing value, $Res Function(LRNothing) then) =
-      _$LRNothingCopyWithImpl<$Res>;
+abstract class _$$LRNothingCopyWith<$Res> {
+  factory _$$LRNothingCopyWith(
+          _$LRNothing value, $Res Function(_$LRNothing) then) =
+      __$$LRNothingCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$LRNothingCopyWithImpl<$Res> extends _$LoginResultCopyWithImpl<$Res>
-    implements $LRNothingCopyWith<$Res> {
-  _$LRNothingCopyWithImpl(LRNothing _value, $Res Function(LRNothing) _then)
-      : super(_value, (v) => _then(v as LRNothing));
-
-  @override
-  LRNothing get _value => super._value as LRNothing;
+class __$$LRNothingCopyWithImpl<$Res>
+    extends _$LoginResultCopyWithImpl<$Res, _$LRNothing>
+    implements _$$LRNothingCopyWith<$Res> {
+  __$$LRNothingCopyWithImpl(
+      _$LRNothing _value, $Res Function(_$LRNothing) _then)
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -1108,7 +1056,7 @@ class _$LRNothing implements LRNothing {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is LRNothing);
+        (other.runtimeType == runtimeType && other is _$LRNothing);
   }
 
   @override
@@ -1129,11 +1077,11 @@ class _$LRNothing implements LRNothing {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(LoginChoice choice)? choose,
-    TResult Function(Acct acct)? acct,
-    TResult Function()? reset,
-    TResult Function()? retry,
-    TResult Function()? nothing,
+    TResult? Function(LoginChoice choice)? choose,
+    TResult? Function(Acct acct)? acct,
+    TResult? Function()? reset,
+    TResult? Function()? retry,
+    TResult? Function()? nothing,
   }) {
     return nothing?.call();
   }
@@ -1169,11 +1117,11 @@ class _$LRNothing implements LRNothing {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(LRChoose value)? choose,
-    TResult Function(LRAcct value)? acct,
-    TResult Function(LRReset value)? reset,
-    TResult Function(LRRetry value)? retry,
-    TResult Function(LRNothing value)? nothing,
+    TResult? Function(LRChoose value)? choose,
+    TResult? Function(LRAcct value)? acct,
+    TResult? Function(LRReset value)? reset,
+    TResult? Function(LRRetry value)? retry,
+    TResult? Function(LRNothing value)? nothing,
   }) {
     return nothing?.call(this);
   }

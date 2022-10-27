@@ -7,6 +7,7 @@ import 'package:decimal/decimal.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:synchronized/synchronized.dart';
+import 'package:collection/collection.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/hmac.dart';
@@ -23,7 +24,16 @@ final log = Logger('Beryllium');
 var nonceLock = Lock();
 
 Decimal _decimalFromJson(input) => Decimal.parse(input);
+Decimal? _decimalOrNullFromJson(input) {
+  if (input == null) return null;
+  return _decimalFromJson(input);
+}
+
 String _decimalToJson(input) => input.toString();
+String? _decimalOrNullToJson(input) {
+  if (input == null) return null;
+  return _decimalToJson(input);
+}
 
 class DecimalMap {
   late Map<String, Decimal> _map;
@@ -760,6 +770,16 @@ class BeBrokerOrder {
       fromJson: _decimalFromJson,
       toJson: _decimalToJson)
   final Decimal quoteAmount;
+  @JsonKey(
+      name: 'quote_fee_dec',
+      fromJson: _decimalOrNullFromJson,
+      toJson: _decimalOrNullToJson)
+  final Decimal? quoteFee;
+  @JsonKey(
+      name: 'quote_fee_fixed_dec',
+      fromJson: _decimalOrNullFromJson,
+      toJson: _decimalOrNullToJson)
+  final Decimal? quoteFeeFixed;
   final BeOrderStatus status;
 
   BeBrokerOrder(
@@ -772,6 +792,8 @@ class BeBrokerOrder {
       this.quoteAsset,
       this.baseAmount,
       this.quoteAmount,
+      this.quoteFee,
+      this.quoteFeeFixed,
       this.status);
 
   factory BeBrokerOrder.fromJson(Map<String, dynamic> json) =>

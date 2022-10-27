@@ -14,6 +14,34 @@ import 'paginator.dart';
 import 'widgets.dart';
 import 'config.dart' as cfg;
 
+class OrderFees extends StatelessWidget {
+  final BeBrokerOrder? _order;
+
+  OrderFees(this._order);
+
+  String? exchangeFee() {
+    if (_order != null && _order!.quoteFee != null)
+      return assetFormatWithUnitToUser(_order!.quoteAsset, _order!.quoteFee!);
+    return null;
+  }
+
+  String? processingFee() {
+    if (_order != null && _order!.quoteFeeFixed != null)
+      return assetFormatWithUnitToUser(
+          _order!.quoteAsset, _order!.quoteFeeFixed!);
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: cfg.ButtonWidth,
+        child: Text(
+            'Exchange Fee: ${exchangeFee()}\nProcessing Fee: ${processingFee()}',
+            style: TextStyle(color: ZapOnBackgroundLight, fontSize: 10)));
+  }
+}
+
 class OrderScreen extends StatefulWidget {
   final BeBrokerOrder order;
   final Websocket websocket;
@@ -85,7 +113,12 @@ class _OrderScreenState extends State<OrderScreen> {
                   '${_order.market} - ${marketSideNice(_order.side)} $baseAmount')),
           ListTile(
               title: Text('Price'),
-              subtitle: Text('$baseAmount for $quoteAmount')),
+              subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('$baseAmount for $quoteAmount'),
+                    OrderFees(_order)
+                  ])),
           ListTile(title: Text('Date'), subtitle: Text('${_order.date}')),
           _order.status == BeOrderStatus.created ||
                   _order.status == BeOrderStatus.ready

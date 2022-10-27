@@ -50,7 +50,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   List<String> _toAssets = [];
   TextEditingController _amountController = TextEditingController();
   TextEditingController _receiveController = TextEditingController();
-  bool _validAmount = false;
+  BeBrokerOrder? _validatedOrder = null;
   BeMarketSide _side = BeMarketSide.ask;
   BeMarket _market = BeMarket('', '', '', 0, '', Decimal.zero, '');
   Decimal _amount = Decimal.zero;
@@ -167,7 +167,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     if (field == FieldUpdated.amount) _receiveController.text = '';
     if (field == FieldUpdated.receive) _amountController.text = '';
     setState(() {
-      _validAmount = false;
+      _validatedOrder = null;
       _calculating = true;
     });
   }
@@ -361,15 +361,15 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     // double check amount with server
     BeBrokerOrderResult res2 =
         await beOrderValidate(market.symbol, side, quote.amountBaseAsset);
-    if (!res2.when<bool>((order) {
-      log.info(
-          '$side ${order.baseAmount} ${order.baseAsset}, ${order.quoteAmount} ${order.quoteAsset}');
-      return true;
-    }, error: (err) {
+    var validatedOrder =
+        res2.when<BeBrokerOrder?>((order) => order, error: (err) {
       snackMsg(context, 'failed to validate order (${BeError.msg(err)})',
           category: MessageCategory.Warning);
-      return false;
-    })) return;
+      return null;
+    });
+    if (validatedOrder == null) return;
+    log.info(
+        '$side ${validatedOrder.baseAmount} ${validatedOrder.baseAsset}, ${validatedOrder.quoteAmount} ${validatedOrder.quoteAsset}');
     // set amount
     switch (side) {
       case BeMarketSide.bid:
@@ -394,7 +394,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     _amount = quote.amountBaseAsset;
     log.info(quote.toString(
         baseAsset: market.baseAsset, quoteAsset: market.quoteAsset));
-    setState(() => _validAmount = true);
+    setState(() => _validatedOrder = validatedOrder);
   }
 
   QuoteTotalPrice? _bruteForceQuote(Decimal value, BeMarket market,
@@ -495,13 +495,13 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   }
 
   void _submit() {
-    if (_validAmount) _exchange();
+    if (_validatedOrder != null) _exchange();
   }
 
   void _clearInputs() {
     _amountController.text = '';
     _receiveController.text = '';
-    setState(() => _validAmount = false);
+    setState(() => _validatedOrder = null);
   }
 
   void _exchange() async {
@@ -710,13 +710,23 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
           ]);
       }),
       VerticalSpacer(),
-      Padding(
-          padding: EdgeInsets.only(top: 20),
-          child: _validAmount
-              ? BronzeRoundedButton(_exchange, ZapOnPrimary, ZapPrimary,
-                  ZapPrimaryGradient, 'Create Order',
-                  fwdArrow: true, width: inputWidth, height: cfg.ButtonHeight)
-              : SizedBox(width: inputWidth, height: cfg.ButtonHeight))
+      Visibility(
+          visible: _validatedOrder != null,
+          maintainSize: true,
+          maintainAnimation: true,
+          maintainState: true,
+          child: Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    BronzeRoundedButton(_exchange, ZapOnPrimary, ZapPrimary,
+                        ZapPrimaryGradient, 'Create Order',
+                        fwdArrow: true,
+                        width: inputWidth,
+                        height: cfg.ButtonHeight),
+                    OrderFees(_validatedOrder)
+                  ])))
     ]);
   }
 
