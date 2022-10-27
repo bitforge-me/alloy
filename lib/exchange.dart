@@ -725,7 +725,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
                         fwdArrow: true,
                         width: inputWidth,
                         height: cfg.ButtonHeight),
-                    OrderFees(_validatedOrder)
+                    OrderFees(_validatedOrder, centerText: true)
                   ])))
     ]);
   }

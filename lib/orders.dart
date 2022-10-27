@@ -15,20 +15,21 @@ import 'widgets.dart';
 import 'config.dart' as cfg;
 
 class OrderFees extends StatelessWidget {
-  final BeBrokerOrder? _order;
+  final BeBrokerOrder? order;
+  final bool centerText;
 
-  OrderFees(this._order);
+  OrderFees(this.order, {this.centerText = false});
 
   String? exchangeFee() {
-    if (_order != null && _order!.quoteFee != null)
-      return assetFormatWithUnitToUser(_order!.quoteAsset, _order!.quoteFee!);
+    if (order != null && order!.quoteFee != null)
+      return assetFormatWithUnitToUser(order!.quoteAsset, order!.quoteFee!);
     return null;
   }
 
   String? processingFee() {
-    if (_order != null && _order!.quoteFeeFixed != null)
+    if (order != null && order!.quoteFeeFixed != null)
       return assetFormatWithUnitToUser(
-          _order!.quoteAsset, _order!.quoteFeeFixed!);
+          order!.quoteAsset, order!.quoteFeeFixed!);
     return null;
   }
 
@@ -38,7 +39,7 @@ class OrderFees extends StatelessWidget {
         width: cfg.ButtonWidth,
         child: Text(
             'Exchange Fee: ${exchangeFee()}\nProcessing Fee: ${processingFee()}',
-            style: TextStyle(color: ZapOnBackgroundLight, fontSize: 10)));
+            style: TextStyle(color: ZapOnBackgroundLight, fontSize: 10), textAlign: centerText ? TextAlign.center : TextAlign.start));
   }
 }
 
