@@ -124,7 +124,10 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   void didPushNext() {
+    // hide mobile keyboards
     unfocusText();
+    // update exchange widget
+    setState(() {});
   }
 
   List<String> _generateAlerts(UserInfo? info) {

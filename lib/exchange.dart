@@ -72,6 +72,13 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   }
 
   @override
+  void didUpdateWidget(ExchangeWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _clearInputs();
+    _clearSlider();
+  }
+
+  @override
   void dispose() {
     super.dispose();
     _updateTimer?.cancel();
@@ -499,6 +506,8 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   }
 
   void _clearInputs() {
+    _lastAmount = '';
+    _lastReceive = '';
     _amountController.text = '';
     _receiveController.text = '';
     setState(() => _validatedOrder = null);
