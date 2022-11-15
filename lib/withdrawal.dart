@@ -58,21 +58,22 @@ class _WithdrawalsScreenState extends State<WithdrawalsScreen> {
 
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
+    var withdrawals = _withdrawals.toList();
     if (args.event == WebsocketEvent.withdrawalNew) {
       if (_pageNumber == 0) {
         var withdrawal = BeBalanceUpdate.fromJson(jsonDecode(args.msg));
-        _withdrawals.insert(0, withdrawal);
-        if (_withdrawals.length > _itemsPerPage) _withdrawals.removeLast();
-        setState(() => _withdrawals = _withdrawals);
+        withdrawals.insert(0, withdrawal);
+        if (withdrawals.length > _itemsPerPage) withdrawals.removeLast();
+        setState(() => _withdrawals = withdrawals);
       }
     }
     if (args.event == WebsocketEvent.withdrawalUpdate) {
       var updatedWithdrawal = BeBalanceUpdate.fromJson(jsonDecode(args.msg));
-      for (var i = 0; i < _withdrawals.length; i++) {
-        var withdrawal = _withdrawals[i];
+      for (var i = 0; i < withdrawals.length; i++) {
+        var withdrawal = withdrawals[i];
         if (withdrawal.token == updatedWithdrawal.token) {
-          _withdrawals[i] = updatedWithdrawal;
-          setState(() => _withdrawals = _withdrawals);
+          withdrawals[i] = updatedWithdrawal;
+          setState(() => _withdrawals = withdrawals);
           snackMsg(context, 'withdrawal updated ${updatedWithdrawal.token}');
           break;
         }
