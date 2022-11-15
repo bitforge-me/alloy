@@ -847,6 +847,12 @@ class _CryptoWithdrawalDetailScreenState
           ListTile(
               title: Text('Status'),
               subtitle: Text('${_withdrawal.status.toUpperCase()}')),
+          Visibility(
+              visible: _withdrawal.status == BeBalanceUpdateStatus.created.name,
+              child: ListTile(
+                  subtitle: Text(
+                      'Check email for withdrawal confirmation link!',
+                      style: TextStyle(color: ZapWarning)))),
           VerticalSpacer(),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,
@@ -921,6 +927,12 @@ class _FiatWithdrawalDetailScreenState
           ListTile(
               title: Text('Status'),
               subtitle: Text('${_withdrawal.status.toUpperCase()}')),
+          Visibility(
+              visible: _withdrawal.status == BeBalanceUpdateStatus.created.name,
+              child: ListTile(
+                  subtitle: Text(
+                      'Check email for withdrawal confirmation link!',
+                      style: TextStyle(color: ZapWarning)))),
           VerticalSpacer(),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,
