@@ -52,21 +52,22 @@ class _DepositsScreenState extends State<DepositsScreen> {
 
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
+    var deposits = _deposits.toList();
     if (args.event == WebsocketEvent.depositNew) {
       if (_pageNumber == 0) {
         var deposit = BeBalanceUpdate.fromJson(jsonDecode(args.msg));
-        _deposits.insert(0, deposit);
-        if (_deposits.length > _itemsPerPage) _deposits.removeLast();
-        setState(() => _deposits = _deposits);
+        deposits.insert(0, deposit);
+        if (deposits.length > _itemsPerPage) deposits.removeLast();
+        setState(() => _deposits = deposits);
       }
     }
     if (args.event == WebsocketEvent.depositUpdate) {
       var updatedDeposit = BeBalanceUpdate.fromJson(jsonDecode(args.msg));
-      for (var i = 0; i < _deposits.length; i++) {
-        var deposit = _deposits[i];
+      for (var i = 0; i < deposits.length; i++) {
+        var deposit = deposits[i];
         if (updatedDeposit.token == deposit.token) {
-          _deposits[i] = updatedDeposit;
-          setState(() => _deposits = _deposits);
+          deposits[i] = updatedDeposit;
+          setState(() => _deposits = deposits);
           snackMsg(context, 'deposit updated ${updatedDeposit.token}');
           break;
         }

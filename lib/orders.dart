@@ -198,27 +198,28 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   void _websocketEvent(WsEventArgs? args) {
     if (args == null) return;
+    var orders = _orders.toList();
     if (args.event == WebsocketEvent.brokerOrderNew) {
       var newOrder = BeBrokerOrder.fromJson(jsonDecode(args.msg));
       if (_pageNumber == 0) {
-        _orders.insert(0, newOrder);
-        if (_orders.length > _itemsPerPage) _orders.removeLast();
-        setState(() => _orders = _orders);
+        orders.insert(0, newOrder);
+        if (orders.length > _itemsPerPage) orders.removeLast();
+        setState(() => _orders = orders);
       }
       snackMsg(context,
           'broker order created ${newOrder.token} - ${describeEnum(newOrder.status).toUpperCase()}');
     }
     if (args.event == WebsocketEvent.brokerOrderUpdate) {
-      var newOrders = <BeBrokerOrder>[];
-      var newOrder = BeBrokerOrder.fromJson(jsonDecode(args.msg));
-      for (var order in _orders)
-        if (order.token == newOrder.token)
-          newOrders.add(newOrder);
-        else
-          newOrders.add(order);
-      setState(() => _orders = newOrders);
-      snackMsg(context,
-          'broker order updated ${newOrder.token} - ${describeEnum(newOrder.status).toUpperCase()}');
+      var updatedOrder = BeBrokerOrder.fromJson(jsonDecode(args.msg));
+      for (var i = 0; i < orders.length; i++) {
+        var order = orders[i];
+        if (updatedOrder.token == order.token) {
+          orders[i] = updatedOrder;
+          setState(() => _orders = orders);
+          snackMsg(context, 'broker order updated ${updatedOrder.token}');
+          break;
+        }
+      }
     }
   }
 
