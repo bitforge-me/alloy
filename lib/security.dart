@@ -254,11 +254,16 @@ class _SecurityScreenState extends State<SecurityScreen> {
         code = await askString(
             context, 'Enter your two factor code to enable', null);
       if (twoFactor.method == 'authenticator' && twoFactor.setup != null)
-        code = await Navigator.push<String>(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    TwoFactorScreen(twoFactor.setup!, _userInfo.email)));
+        code = await Navigator.push<String>(context,
+            MaterialPageRoute(builder: (context) {
+          // remove dashes ('-') from key as some apps cant process the key otherwise
+          var setup = BeTwoFactorSetup(
+              twoFactor.setup!.image,
+              twoFactor.setup!.key.replaceAll(RegExp('-'), ''),
+              twoFactor.setup!.issuer,
+              twoFactor.setup!.username);
+          return TwoFactorScreen(setup, _userInfo.email);
+        }));
       if (code != null) {
         showAlertDialog(context, 'enabling..');
         result = await beUserTwoFactorEnable(code);
