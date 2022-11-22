@@ -71,7 +71,8 @@ class _TwoFactorEnableScreenState extends State<TwoFactorEnableScreen> {
                           child: SvgPicture.network(widget.setup.image)),
                       ListTile(
                           title: Text('Key'),
-                          subtitle: Text(widget.setup.key),
+                          subtitle: Text(widget.setup.key,
+                              style: TextStyle(fontFamily: MonospaceFont)),
                           trailing: IconButton(
                               icon: Icon(Icons.copy), onPressed: _copyKey)),
                       ListTile(
