@@ -426,7 +426,8 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
           ListTile(
               title: Text(
                   "${_deposit.l2Network == null ? 'Recipient' : 'Invoice'}"),
-              subtitle: Text(shortenStr(_deposit.recipient)),
+              subtitle: Text(shortenStr(_deposit.recipient),
+                  style: TextStyle(fontFamily: MonospaceFont)),
               onTap: _deposit.l2Network == null ? _addrLaunch : _copyRecipient,
               trailing: IconButton(
                   onPressed: _copyRecipient, icon: Icon(Icons.copy))),
@@ -501,7 +502,8 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
                       )),
                       padding: EdgeInsets.all(10)),
                   VerticalSpacer(),
-                  Text(shortenStr(widget.recipient)),
+                  Text(shortenStr(widget.recipient),
+                      style: TextStyle(fontFamily: MonospaceFont)),
                   VerticalSpacer(),
                   BronzeRoundedButton(_copyRecipient, Colors.white,
                       Color(0xff32333b), null, 'Copy to Clipboard',
@@ -662,21 +664,24 @@ class _FiatAccountNumberScreenState extends State<FiatAccountNumberScreen> {
                       : SizedBox(),
                   ListTile(
                       title: Text('Bitforge Account Number'),
-                      subtitle: Text(widget.account.accountNumber),
+                      subtitle: Text(widget.account.accountNumber,
+                          style: TextStyle(fontFamily: MonospaceFont)),
                       trailing: IconButton(
                           onPressed: () => _copy(
                               'account number', widget.account.accountNumber),
                           icon: Icon(Icons.copy))),
                   ListTile(
                       title: Text('Reference'),
-                      subtitle: Text(widget.account.reference),
+                      subtitle: Text(widget.account.reference,
+                          style: TextStyle(fontFamily: MonospaceFont)),
                       trailing: IconButton(
                           onPressed: () =>
                               _copy('reference', widget.account.reference),
                           icon: Icon(Icons.copy))),
                   ListTile(
                       title: Text('Code'),
-                      subtitle: Text(widget.account.code),
+                      subtitle: Text(widget.account.code,
+                          style: TextStyle(fontFamily: MonospaceFont)),
                       trailing: IconButton(
                           onPressed: () => _copy('code', widget.account.code),
                           icon: Icon(Icons.copy))),

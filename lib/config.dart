@@ -16,6 +16,7 @@ const ButtonWidth = 320.0;
 const ButtonHeight = 65.0;
 const SupportUrl = 'https://be.bitforge.me/support/';
 const LegalUrl = 'https://bitforge.me/legal/';
+const MonospaceFont = 'RobotoMono';
 
 // the default testnet value
 const _DefaultTestnet = true;

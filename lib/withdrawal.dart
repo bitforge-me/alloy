@@ -834,7 +834,8 @@ class _CryptoWithdrawalDetailScreenState
           ListTile(
               title: Text(
                   "${_withdrawal.l2Network == null ? 'Recipient' : 'Invoice'}"),
-              subtitle: Text(shortenStr(_withdrawal.recipient)),
+              subtitle: Text(shortenStr(_withdrawal.recipient),
+                  style: TextStyle(fontFamily: MonospaceFont)),
               onTap:
                   _withdrawal.l2Network == null ? _addrLaunch : _copyRecipient,
               trailing: IconButton(
@@ -843,7 +844,8 @@ class _CryptoWithdrawalDetailScreenState
               visible: _withdrawal.txid != null,
               child: ListTile(
                   title: Text('Transaction Id'),
-                  subtitle: Text('${_withdrawal.txid}'))),
+                  subtitle: Text('${_withdrawal.txid}',
+                      style: TextStyle(fontFamily: MonospaceFont)))),
           ListTile(
               title: Text('Status'),
               subtitle: Text('${_withdrawal.status.toUpperCase()}')),
