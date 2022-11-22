@@ -214,7 +214,7 @@ class DepositMethodDetails {
       case DepositMethod.account2account:
         return 'Deposit immediately using Account2Account (ANZ, ASB, BNZ, COOP, Kiwibank, TSB, Westpac)';
       case DepositMethod.bankDeposit:
-        return 'Deposit using a standard bank transfer (all banks)';
+        return 'Deposit using a standard bank transfer (all NZ banks, one business day to clear)';
     }
   }
 
