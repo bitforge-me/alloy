@@ -142,6 +142,28 @@ int assetDecimals(String symbol) {
   return -1;
 }
 
+String assetName(String symbol) {
+  switch (symbol) {
+    case Nzd:
+      return 'New Zealand Dollars';
+    case Btc:
+      return 'Bitcoin';
+    case Usdt:
+      return 'Tether USD';
+    case Usdc:
+      return 'USDC';
+    case Eth:
+      return 'Ethereum';
+    case Doge:
+      return 'Dogecoin';
+    case Ltc:
+      return 'Lightcoin';
+    case Waves:
+      return 'Waves';
+  }
+  return '*ERR*';
+}
+
 bool assetIsCrypto(String asset) {
   switch (asset) {
     case BtcLn:

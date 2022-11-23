@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:synchronized/synchronized.dart';
+import 'package:zapdart/colors.dart';
 
 import 'assets.dart';
 import 'widgets.dart';
@@ -181,9 +182,9 @@ abstract class _PriceWidgetState<T extends PriceWidget> extends State<T> {
 }
 
 class BasicPriceWidget extends PriceWidget {
-  final textStyle = TextStyle(
-      fontSize: 12, color: Colors.white.withOpacity(0.7), height: 1.2);
-  BasicPriceWidget(String asset) : super(asset, Decimal.fromInt(1));
+  final bool small;
+  BasicPriceWidget(String asset, {this.small = false})
+      : super(asset, Decimal.fromInt(1));
 
   @override
   _PriceWidgetState<BasicPriceWidget> createState() => _BasicPriceWidgetState();
@@ -192,12 +193,16 @@ class BasicPriceWidget extends PriceWidget {
 class _BasicPriceWidgetState extends _PriceWidgetState<BasicPriceWidget> {
   @override
   Widget build(BuildContext context) {
+    final textStyle = TextStyle(
+        fontSize: widget.small ? 8 : 12,
+        color: Colors.white.withOpacity(0.7),
+        height: 1.2);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Text('1 BTC', style: widget.textStyle),
-        Text('${_formattedPrice()}', style: widget.textStyle)
+      children: [
+        Text('1 BTC', style: textStyle),
+        Text('${_formattedPrice()}', style: textStyle)
       ],
     );
   }
@@ -259,6 +264,52 @@ class _PriceEquivalentState extends _PriceWidgetState<PriceEquivalent> {
         textAlign: widget.textAlign,
         style: widget.textStyle ??
             TextStyle(fontSize: widget.fontSize, color: widget.color));
+  }
+}
+
+class UnitSelectorMini extends StatelessWidget {
+  final String asset;
+  final String selectedUnit;
+  final void Function(String, String)? onSelect;
+  final bool small;
+  late final List<String> unitOptions;
+
+  UnitSelectorMini(this.asset, this.selectedUnit,
+      {this.onSelect, this.small = false}) {
+    unitOptions = assetUnitOptions(asset);
+  }
+
+  void onPressed(String unit) {
+    if (onSelect != null) onSelect!(asset, unit);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> options = [];
+    var textStyle = TextStyle(
+        fontSize: small ? 8 : 12,
+        color: Colors.white.withOpacity(0.7),
+        height: 1.2);
+    var textStyleSelected =
+        TextStyle(fontSize: small ? 8 : 12, color: ZapPrimary, height: 1.2);
+    unitOptions.forEach((t) {
+      options.add(SizedBox(
+        child: TextButton(
+            onPressed: onSelect != null ? () => onPressed(t) : null,
+            child: Text(t,
+                style: t == selectedUnit ? textStyleSelected : textStyle)),
+        width: small ? 35 : 40,
+        height: small ? 10 : 14,
+      ));
+    });
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text('${assetName(asset)} Unit', style: textStyle),
+        Row(children: options)
+      ],
+    );
   }
 }
 
