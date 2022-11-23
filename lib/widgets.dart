@@ -432,7 +432,7 @@ class WordDivider extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
+      children: [
         SizedBox(
             width: lineLength,
             child: Divider(

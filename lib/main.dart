@@ -93,6 +93,7 @@ class _MyHomePageState extends State<MyHomePage>
   final CarouselController _balanceCarouselController = CarouselController();
   Widget? _btcPrice;
   Timer? _btcPriceTimer;
+  Widget? _btcUnit;
 
   @override
   void initState() {
@@ -188,6 +189,7 @@ class _MyHomePageState extends State<MyHomePage>
       if (userInfo != null) {
         _updateBalances();
         _updateBtcPrice();
+        _updateUnitWidget();
       }
     } else
       _startLogin(false, false);
@@ -200,11 +202,18 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   void _updateBtcPrice() {
-    setState(() => _btcPrice = Padding(
-        padding: EdgeInsets.only(right: 10), child: BasicPriceWidget(Btc)));
+    setState(() => _btcPrice = BasicPriceWidget(Btc, small: true));
     if (_btcPriceTimer == null)
       _btcPriceTimer =
           Timer.periodic(Duration(minutes: 5), (Timer t) => _updateBtcPrice());
+  }
+
+  void _updateUnitWidget() {
+    setState(() => _btcUnit =
+            UnitSelectorMini(Btc, assetUnit(Btc), onSelect: (symbol, unit) {
+          assetUnitSet(symbol, unit);
+          _updateUnitWidget();
+        }, small: true));
   }
 
   void _checkVersion(BeVersionResult res) {
@@ -346,6 +355,16 @@ class _MyHomePageState extends State<MyHomePage>
         context,
         MaterialPageRoute(
             builder: (context) => VerifyUserScreen(_userInfo!, _websocket)));
+  }
+
+  Widget _makeActionWidgets(BuildContext context) {
+    if (_btcUnit != null && _btcPrice != null)
+      return Row(children: [_btcUnit!, SizedBox(width: 10), _btcPrice!]);
+    if (_btcUnit != null)
+      return Padding(padding: EdgeInsets.only(right: 10), child: _btcUnit);
+    if (_btcPrice != null)
+      return Padding(padding: EdgeInsets.only(right: 10), child: _btcPrice);
+    return SizedBox();
   }
 
   Drawer _makeDrawer(BuildContext contex) {
@@ -529,7 +548,7 @@ class _MyHomePageState extends State<MyHomePage>
             );
           }),
           actions: [
-            _btcPrice ?? SizedBox(),
+            _makeActionWidgets(context),
           ],
         ),
         drawer: _makeDrawer(context),
