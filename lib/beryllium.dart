@@ -387,6 +387,7 @@ class BeMarket {
 
   BeMarket(this.symbol, this.baseAsset, this.quoteAsset, this.precision,
       this.status, this.minTrade, this.message);
+  factory BeMarket.empty() => BeMarket('', '', '', 0, '', Decimal.zero, '');
   factory BeMarket.fromJson(Map<String, dynamic> json) =>
       _$BeMarketFromJson(json);
   Map<String, dynamic> toJson() => _$BeMarketToJson(this);
