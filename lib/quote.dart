@@ -1,7 +1,6 @@
 import 'package:decimal/decimal.dart';
 
 import 'beryllium.dart';
-import 'assets.dart';
 
 class QuoteTotalPrice {
   final Decimal amountBaseAsset;
@@ -32,8 +31,7 @@ Decimal getFixedFee(BeMarket market, BeOrderbook orderbook) {
 QuoteTotalPrice bidQuoteAmount(
     BeMarket market, BeOrderbook orderbook, Decimal amount) {
   if (amount < market.minTrade)
-    return QuoteTotalPrice.Error(
-        'minimum trade is ${assetFormatWithUnitToUser(market.baseAsset, market.minTrade)}');
+    return QuoteTotalPrice.Error('trade amount too small');
 
   var fixedFee = getFixedFee(market, orderbook);
   var filled = Decimal.zero;
@@ -64,8 +62,7 @@ QuoteTotalPrice bidQuoteAmount(
 QuoteTotalPrice askQuoteAmount(
     BeMarket market, BeOrderbook orderbook, Decimal amount) {
   if (amount < market.minTrade)
-    return QuoteTotalPrice.Error(
-        'minimum trade is ${assetFormatWithUnitToUser(market.baseAsset, market.minTrade)}');
+    return QuoteTotalPrice.Error('trade amount too small');
 
   var fixedFee = getFixedFee(market, orderbook);
   var filled = Decimal.zero;
@@ -113,8 +110,7 @@ QuoteTotalPrice estimateFromQuoteAssetAmount(BeMarketSide side, BeMarket market,
     totalBaseAsset += quoteAssetToUse / rate;
     if (filled == amountQuoteAsset) {
       if (totalBaseAsset < market.minTrade)
-        return QuoteTotalPrice.Error(
-            'minimum trade is ${assetFormatWithUnitToUser(market.baseAsset, market.minTrade)}');
+        return QuoteTotalPrice.Error('trade amount too small');
       return QuoteTotalPrice(
           totalBaseAsset, amountQuoteAsset, Decimal.zero, Decimal.zero, null);
     }

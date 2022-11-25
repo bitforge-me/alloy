@@ -32,6 +32,15 @@ class MarketType {
   MarketType(this.market, this.side);
 }
 
+class MarketMin {
+  BeMarket market;
+  Decimal min;
+  String? error;
+  MarketMin(this.market, this.min, {this.error});
+  factory MarketMin.Err(String error) =>
+      MarketMin(BeMarket.empty(), Decimal.zero, error: error);
+}
+
 class ExchangeWidget extends StatefulWidget {
   final Websocket websocket;
 
@@ -54,6 +63,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   BeMarketSide _side = BeMarketSide.ask;
   BeMarket _market = BeMarket('', '', '', 0, '', Decimal.zero, '');
   Decimal _amount = Decimal.zero;
+  String? _minAmount;
   bool _calculating = false;
   Timer? _updateTimer;
   String _lastAmount = '';
@@ -151,6 +161,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       _toAsset = _toAsset;
       _fromAsset = _fromAsset;
     });
+    _setMinAmount();
   }
 
   void _fromChanged(String? value) {
@@ -161,6 +172,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     setState(() => _fromAsset = value);
     _genAssets(_markets);
     _amountUpdate(force: true, timerSeconds: 0);
+    _setMinAmount();
   }
 
   void _toChanged(String? value) {
@@ -168,6 +180,16 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     if (value == null) return;
     setState(() => _toAsset = value);
     _amountUpdate(force: true, timerSeconds: 0);
+    _setMinAmount();
+  }
+
+  void _setMinAmount() async {
+    var tryMarket = _checkMarket(_fromAsset, _toAsset);
+    if (tryMarket == null) return;
+    var marketMin = await _marketMin(tryMarket.market);
+    if (marketMin.error != null) return;
+    setState(() => _minAmount =
+        assetFormat(_fromAsset, assetAmountToUser(_fromAsset, marketMin.min)));
   }
 
   void _setProcessing(FieldUpdated field) {
@@ -506,11 +528,13 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
   }
 
   void _clearInputs() {
+    _minAmount = null;
     _lastAmount = '';
     _lastReceive = '';
     _amountController.text = '';
     _receiveController.text = '';
     setState(() => _validatedOrder = null);
+    _setMinAmount();
   }
 
   void _exchange() async {
@@ -529,17 +553,11 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
             context, 'error', 'failed to create order (${BeError.msg(err)})'));
   }
 
-  Future<void> _setMin() async {
-    var tryMarket = _checkMarket(_fromAsset, _toAsset);
-    if (tryMarket == null) {
-      snackMsg(context, 'invalid market', category: MessageCategory.Warning);
-      return;
-    }
-    var market = tryMarket.market;
+  Future<MarketMin> _marketMin(BeMarket market) async {
     // min trade of baseAsset from dasset
     var minValue = market.minTrade;
     var res = await beOrderbook(market.symbol);
-    await res.when((orderbook) {
+    return await res.when((orderbook) {
       var bids = orderbook.bids;
       if (bids.length > 0) {
         // get best buy rate for baseAsset
@@ -554,15 +572,25 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         minValue += fixedFee;
         // add 2% margin
         minValue *= Decimal.parse('1.02');
-        _setSliderValue(AmountSliderSelected.min, minValue);
+        return MarketMin(market, minValue);
       } else
-        snackMsg(context, 'failed to calculate minimum order size',
-            category: MessageCategory.Warning);
+        return MarketMin.Err('failed to calculate minimum order size');
     }, error: (err) {
-      snackMsg(context, 'failed to get orderbook',
-          category: MessageCategory.Warning);
-      return;
+      return MarketMin.Err('failed to get orderbook');
     });
+  }
+
+  Future<void> _setMin() async {
+    var tryMarket = _checkMarket(_fromAsset, _toAsset);
+    if (tryMarket == null) {
+      snackMsg(context, 'invalid market', category: MessageCategory.Warning);
+      return;
+    }
+    var marketMin = await _marketMin(tryMarket.market);
+    if (marketMin.error != null)
+      snackMsg(context, marketMin.error!, category: MessageCategory.Warning);
+    else
+      _setSliderValue(AmountSliderSelected.min, marketMin.min);
   }
 
   Future<void> _setHalf() async {
@@ -627,7 +655,8 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         child: BronzeValueInput(
           controller: _amountController,
           suffixText: assetUnit(_fromAsset),
-          labelText: 'Amount',
+          labelText:
+              _minAmount == null ? 'Amount' : 'Amount (minimum $_minAmount)',
           onChanged: _amountChanged,
           onFieldSubmitted: (_) => _submit(),
         ),
