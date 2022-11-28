@@ -18,11 +18,12 @@ const String Doge = 'DOGE';
 const String Ltc = 'LTC';
 const String Waves = 'WAVES';
 
+const MainAsset = Btc;
 var assetPricesEnabled = true;
 var assetPricesUnit = Nzd;
 var assetUnits = {
   Nzd: Nzd,
-  Btc: Sats,
+  Btc: Btc,
   /*
   Usdt: Usdt,
   Usdc: Usdc,

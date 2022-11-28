@@ -7,6 +7,7 @@ import 'package:universal_html/html.dart' as html;
 import 'package:decimal/decimal.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'dart:async';
+import 'package:provider/provider.dart';
 
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
@@ -47,7 +48,9 @@ void main() {
   log.info('Beryllium Server: ${cfg.server()}');
   log.info('Testnet: ${cfg.testnet()}');
   // run app
-  runApp(Phoenix(child: MyApp()));
+  runApp(Phoenix(child: ChangeNotifierProvider(
+    create: (context) => PriceNotifier(MainAsset),
+    child: MyApp())));
 }
 
 class MyApp extends StatelessWidget {
@@ -91,9 +94,12 @@ class _MyHomePageState extends State<MyHomePage>
   List<String> _alerts = [];
   int _balanceCarouselPage = 0;
   final CarouselController _balanceCarouselController = CarouselController();
-  Widget? _btcPrice;
-  Timer? _btcPriceTimer;
-  Widget? _btcUnit;
+  Timer? _mainPriceTimer;
+  late String _btcUnit;
+
+  _MyHomePageState() {
+    _btcUnit = assetUnit(Btc);
+  }
 
   @override
   void initState() {
@@ -119,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   void dispose() {
     routeObserver.unsubscribe(this);
-    _btcPriceTimer?.cancel();
+    _mainPriceTimer?.cancel();
     super.dispose();
   }
 
@@ -188,8 +194,8 @@ class _MyHomePageState extends State<MyHomePage>
       // if we got the user info try for the balances
       if (userInfo != null) {
         _updateBalances();
-        _updateBtcPrice();
-        _updateUnitWidget();
+        _updateMainPrice();
+        _updateUnitWidget(Btc, assetUnit(Btc));
       }
     } else
       _startLogin(false, false);
@@ -201,19 +207,17 @@ class _MyHomePageState extends State<MyHomePage>
         error: (_) => false));
   }
 
-  void _updateBtcPrice() {
-    setState(() => _btcPrice = BasicPriceWidget(Btc, small: true));
-    if (_btcPriceTimer == null)
-      _btcPriceTimer =
-          Timer.periodic(Duration(minutes: 5), (Timer t) => _updateBtcPrice());
+  void _updateMainPrice() {
+    var pn = context.read<PriceNotifier>();
+    pn.updatePrice();
+    if (_mainPriceTimer == null)
+      _mainPriceTimer =
+          Timer.periodic(Duration(minutes: 5), (Timer t) => _updateMainPrice());
   }
 
-  void _updateUnitWidget() {
-    setState(() => _btcUnit =
-            UnitSelectorMini(Btc, assetUnit(Btc), onSelect: (symbol, unit) {
-          assetUnitSet(symbol, unit);
-          _updateUnitWidget();
-        }, small: true));
+  void _updateUnitWidget(symbol, unit) {
+    assetUnitSet(symbol, unit);
+    setState(() => _btcUnit = assetUnit(Btc));
   }
 
   void _checkVersion(BeVersionResult res) {
@@ -358,13 +362,13 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   Widget _makeActionWidgets(BuildContext context) {
-    if (_btcUnit != null && _btcPrice != null)
-      return Row(children: [_btcUnit!, SizedBox(width: 10), _btcPrice!]);
-    if (_btcUnit != null)
-      return Padding(padding: EdgeInsets.only(right: 10), child: _btcUnit);
-    if (_btcPrice != null)
-      return Padding(padding: EdgeInsets.only(right: 10), child: _btcPrice);
-    return SizedBox();
+    return Consumer<PriceNotifier>(builder: (context, pn, child) {
+      var pw = BasicPriceWidget(pn);
+      var us = UnitSelectorMini(Btc, assetUnit(Btc), onSelect: _updateUnitWidget);
+      if (pn.currentPrice() != null)
+        return Row(children: [us, SizedBox(width: 10), pw]);
+      return Padding(padding: EdgeInsets.only(right: 10), child: us);
+    });
   }
 
   Drawer _makeDrawer(BuildContext contex) {
