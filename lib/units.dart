@@ -144,17 +144,93 @@ class PriceManager {
   }
 }
 
-abstract class PriceWidget extends StatefulWidget {
-  final String asset;
-  final Decimal amount;
+class PriceNotifier with ChangeNotifier {
+  final String _asset;
+  CachedPrice? _price;
+  bool _failedToGetPrice = false;
+  late String _priceAsset;
 
-  PriceWidget(this.asset, this.amount);
+  PriceNotifier(this._asset) {
+    _priceAsset = assetUnitToAsset(assetPricesUnit);
+    updatePrice();
+  }
 
-  @override
-  _PriceWidgetState createState();
+  void updatePrice() {
+    PriceManager.price(_asset, _priceAsset).then((value) {
+      _price = value;
+      _failedToGetPrice = value == null;
+      notifyListeners();
+    });
+  }
+
+  CachedPrice? currentPrice() => _price;
+  bool failed() => _failedToGetPrice;
+  String asset() => _asset;
+  String priceAsset() => _priceAsset;
+
+  String formattedPrice(Decimal amount) {
+    if (_price == null) return '...';
+    Decimal price;
+    if (_price!.invertedMarket)
+      price = amount / _price!.rate;
+    else
+      price = amount * _price!.rate;
+    return '${assetFormatUnit(_priceAsset, assetPricesUnit, price)} $assetPricesUnit';
+  }
 }
 
-abstract class _PriceWidgetState<T extends PriceWidget> extends State<T> {
+class BasicPriceWidget extends StatelessWidget {
+  final PriceNotifier priceNotifier;
+  final bool small;
+  BasicPriceWidget(this.priceNotifier, {this.small = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final textStyle = TextStyle(
+        fontSize: small ? 8 : 12,
+        color: Colors.white.withOpacity(0.7),
+        height: 1.2);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text('1 BTC', style: textStyle),
+        Text('${priceNotifier.formattedPrice(Decimal.fromInt(1))}',
+            style: textStyle)
+      ],
+    );
+  }
+}
+
+class PriceEquivalent extends StatefulWidget {
+  final String asset;
+  final Decimal amount;
+  final bool showAssetAmount;
+  final String? pre;
+  final String? post;
+  final TextAlign? textAlign;
+  final FontWeight? fontWeight;
+  final Color? color;
+  final bool twoLines;
+  final double? fontSize;
+  final TextStyle? textStyle;
+
+  PriceEquivalent(this.asset, this.amount,
+      {this.showAssetAmount = true,
+      this.pre,
+      this.post,
+      this.textAlign,
+      this.color,
+      this.fontWeight,
+      this.twoLines = false,
+      this.fontSize,
+      this.textStyle});
+
+  @override
+  _PriceEquivalentState createState() => _PriceEquivalentState();
+}
+
+class _PriceEquivalentState extends State<PriceEquivalent> {
   CachedPrice? _price;
   String? _priceAsset;
   bool _failedToGetPrice = false;
@@ -179,63 +255,7 @@ abstract class _PriceWidgetState<T extends PriceWidget> extends State<T> {
       price = widget.amount * _price!.rate;
     return '${assetFormatUnit(_priceAsset!, assetPricesUnit, price)} $assetPricesUnit';
   }
-}
 
-class BasicPriceWidget extends PriceWidget {
-  final bool small;
-  BasicPriceWidget(String asset, {this.small = false})
-      : super(asset, Decimal.fromInt(1));
-
-  @override
-  _PriceWidgetState<BasicPriceWidget> createState() => _BasicPriceWidgetState();
-}
-
-class _BasicPriceWidgetState extends _PriceWidgetState<BasicPriceWidget> {
-  @override
-  Widget build(BuildContext context) {
-    final textStyle = TextStyle(
-        fontSize: widget.small ? 8 : 12,
-        color: Colors.white.withOpacity(0.7),
-        height: 1.2);
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text('1 BTC', style: textStyle),
-        Text('${_formattedPrice()}', style: textStyle)
-      ],
-    );
-  }
-}
-
-class PriceEquivalent extends PriceWidget {
-  final bool showAssetAmount;
-  final String? pre;
-  final String? post;
-  final TextAlign? textAlign;
-  final FontWeight? fontWeight;
-  final Color? color;
-  final bool twoLines;
-  final double? fontSize;
-  final TextStyle? textStyle;
-
-  PriceEquivalent(String asset, Decimal amount,
-      {this.showAssetAmount = true,
-      this.pre,
-      this.post,
-      this.textAlign,
-      this.color,
-      this.fontWeight,
-      this.twoLines = false,
-      this.fontSize,
-      this.textStyle})
-      : super(asset, amount);
-
-  @override
-  _PriceWidgetState<PriceEquivalent> createState() => _PriceEquivalentState();
-}
-
-class _PriceEquivalentState extends _PriceWidgetState<PriceEquivalent> {
   @override
   Widget build(BuildContext context) {
     String text;
@@ -298,17 +318,14 @@ class UnitSelectorMini extends StatelessWidget {
             onPressed: onSelect != null ? () => onPressed(t) : null,
             child: Text(t,
                 style: t == selectedUnit ? textStyleSelected : textStyle)),
-        width: small ? 35 : 40,
+        width: small ? 35 : 45,
         height: small ? 10 : 14,
       ));
     });
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text('${assetName(asset)} Unit', style: textStyle),
-        Row(children: options)
-      ],
+      children: options,
     );
   }
 }
