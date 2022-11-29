@@ -41,96 +41,48 @@ class MarketMin {
       MarketMin(BeMarket.empty(), Decimal.zero, error: error);
 }
 
-class ExchangeWidget extends StatefulWidget {
-  final Websocket websocket;
-
-  ExchangeWidget(this.websocket);
-
-  @override
-  State<ExchangeWidget> createState() => _ExchangeWidgetState();
-}
-
-class _ExchangeWidgetState extends State<ExchangeWidget> {
+class ExchangeModel extends ChangeNotifier {
   List<BeMarket> _markets = [];
   bool _failedMarkets = false;
   String _fromAsset = 'NZD';
   String _toAsset = 'BTC';
   List<String> _fromAssets = [];
   List<String> _toAssets = [];
-  TextEditingController _amountController = TextEditingController();
-  TextEditingController _receiveController = TextEditingController();
   BeBrokerOrder? _validatedOrder = null;
   BeMarketSide _side = BeMarketSide.ask;
   BeMarket _market = BeMarket('', '', '', 0, '', Decimal.zero, '');
   Decimal _amount = Decimal.zero;
   String? _minAmount;
-  bool _calculating = false;
-  Timer? _updateTimer;
-  String _lastAmount = '';
-  String _lastReceive = '';
   AmountSliderSelected _sliderSelected = AmountSliderSelected.none;
 
-  _ExchangeWidgetState();
+  Timer? _updateTimer;
+  bool _calculating = false;
+  TextEditingController _amountController = TextEditingController();
+  TextEditingController _receiveController = TextEditingController();
+  String _lastAmount = '';
+  String _lastReceive = '';
 
-  @override
-  void initState() {
-    super.initState();
-    widget.websocket.wsEvent.subscribe(_websocketEvent);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initMarkets();
-    });
-  }
-
-  @override
-  void didUpdateWidget(ExchangeWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _clearInputs();
-    _clearSlider();
-  }
+  ExchangeModel();
 
   @override
   void dispose() {
     super.dispose();
+    cancelTimer();
+  }
+
+  void cancelTimer() {
     _updateTimer?.cancel();
-    widget.websocket.wsEvent.unsubscribe(_websocketEvent);
   }
 
-  Widget _createSliderButton(AmountSliderSelected amount) {
-    var _onPressed = amount == AmountSliderSelected.min
-        ? _setMin
-        : (amount == AmountSliderSelected.half ? _setHalf : _setMax);
-    var _amountName = amount == AmountSliderSelected.min
-        ? "MIN"
-        : (amount == AmountSliderSelected.half ? "HALF" : "MAX");
-    if (_sliderSelected == amount) {
-      return Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: ZapPrimaryGradient,
-        ),
-        child: CircleButton(_amountName, _onPressed),
-      );
-    } else {
-      return CircleButton(_amountName, _onPressed);
-    }
-  }
-
-  void _clearSlider() {
-    setState(() {
-      _sliderSelected = AmountSliderSelected.none;
-    });
-  }
-
-  void _websocketEvent(WsEventArgs? args) {}
-
-  Future<void> _initMarkets() async {
-    setState(() => _failedMarkets = false);
+  Future<bool> initMarkets() async {
+    _failedMarkets = false;
+    notifyListeners();
     var res = await beMarkets();
     res.when((markets) => _genAssets(markets), error: (err) {
-      setState(() => _failedMarkets = true);
-      snackMsg(context, 'failed to get markets',
-          category: MessageCategory.Warning);
+      _failedMarkets = true;
+      notifyListeners();
     });
+    return !_failedMarkets;
   }
 
   void _genAssets(List<BeMarket> markets) {
@@ -154,59 +106,77 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     }
     if (!toAssets.contains(_toAsset)) _toAsset = toAssets.first;
     if (!fromAssets.contains(_fromAsset)) _fromAsset = fromAssets.first;
-    setState(() {
-      _fromAssets = fromAssets;
-      _toAssets = toAssets;
-      _markets = markets;
-      _toAsset = _toAsset;
-      _fromAsset = _fromAsset;
-    });
-    _setMinAmount();
+    this._fromAssets = fromAssets;
+    this._toAssets = toAssets;
+    this._markets = markets;
+    notifyListeners();
+    setMinAmount();
   }
 
-  void _fromChanged(String? value) {
+  void clearSlider() {
+    _sliderSelected = AmountSliderSelected.none;
+    notifyListeners();
+  }
+
+  void clearInputs() {
+    _minAmount = null;
+    _lastAmount = '';
+    _lastReceive = '';
     _amountController.text = '';
     _receiveController.text = '';
-    _clearSlider();
+    _validatedOrder = null;
+    setMinAmount();
+    notifyListeners();
+  }
+
+  void fromChanged(BuildContext context, Websocket websocket, String? value) {
+    _amountController.text = '';
+    _receiveController.text = '';
+    clearSlider();
     if (value == null) return;
-    setState(() => _fromAsset = value);
+    _fromAsset = value;
     _genAssets(_markets);
-    _amountUpdate(force: true, timerSeconds: 0);
-    _setMinAmount();
+    setMinAmount();
+    _amountUpdate(context, websocket, force: true, timerSeconds: 0);
+    notifyListeners();
   }
 
-  void _toChanged(String? value) {
-    _clearSlider();
+  void toChanged(BuildContext context, Websocket websocket, String? value) {
+    _amountController.text = '';
+    _receiveController.text = '';
+    clearSlider();
     if (value == null) return;
-    setState(() => _toAsset = value);
-    _amountUpdate(force: true, timerSeconds: 0);
-    _setMinAmount();
+    _toAsset = value;
+    setMinAmount();
+    _amountUpdate(context, websocket, force: true, timerSeconds: 0);
+    notifyListeners();
   }
 
-  void _setMinAmount() async {
+  void setMinAmount() async {
     var tryMarket = _checkMarket(_fromAsset, _toAsset);
     if (tryMarket == null) return;
     var marketMin = await _marketMin(tryMarket.market);
     if (marketMin.error != null) return;
-    setState(() => _minAmount =
-        assetFormat(_fromAsset, assetAmountToUser(_fromAsset, marketMin.min)));
+    _minAmount =
+        assetFormat(_fromAsset, assetAmountToUser(_fromAsset, marketMin.min));
+    notifyListeners();
   }
 
-  void _setProcessing(FieldUpdated field) {
+  void setProcessing(FieldUpdated field) {
     if (field == FieldUpdated.amount) _receiveController.text = '';
     if (field == FieldUpdated.receive) _amountController.text = '';
-    setState(() {
-      _validatedOrder = null;
-      _calculating = true;
-    });
+    _calculating = true;
+    _validatedOrder = null;
+    notifyListeners();
   }
 
-  void _amountChanged(String? value) {
-    _amountUpdate();
-    setState(() => _sliderSelected = AmountSliderSelected.none);
+  void amountChanged(BuildContext context, Websocket websocket, String? value) {
+    _amountUpdate(context, websocket);
+    clearSlider();
   }
 
-  void _amountUpdate({bool force = false, int timerSeconds = 1}) {
+  void _amountUpdate(BuildContext context, Websocket websocket,
+      {bool force = false, int timerSeconds = 1}) {
     // cancel any running timer
     _updateTimer?.cancel();
     // check we actually want to start the timer
@@ -215,19 +185,23 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
             _amountController.text == _lastAmount)) return;
     _lastAmount = _amountController.text;
     // in the mean time update the state
-    _setProcessing(FieldUpdated.amount);
+    setProcessing(FieldUpdated.amount);
     // start the quote timer
     _updateTimer = Timer(Duration(seconds: timerSeconds), () async {
-      await _updateQuote(FieldUpdated.amount);
-      setState(() => _calculating = false);
+      await _updateQuote(context, websocket, FieldUpdated.amount);
+      _calculating = false;
+      notifyListeners();
     });
   }
 
-  void _recieveChanged(String? value) {
-    _receiveUpdate();
+  void recieveChanged(
+      BuildContext context, Websocket websocket, String? value) {
+    _receiveUpdate(context, websocket);
+    clearSlider();
   }
 
-  void _receiveUpdate({bool force = false}) {
+  void _receiveUpdate(BuildContext context, Websocket websocket,
+      {bool force = false, int timerSeconds = 1}) {
     // cancel any running timer
     _updateTimer?.cancel();
     // check we actually want to start the timer
@@ -236,194 +210,13 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
             _receiveController.text == _lastReceive)) return;
     _lastReceive = _receiveController.text;
     // in the mean time update the state
-    _setProcessing(FieldUpdated.receive);
+    setProcessing(FieldUpdated.receive);
     // start the quote timer
-    _updateTimer = Timer(Duration(seconds: 2), () async {
-      await _updateQuote(FieldUpdated.receive);
-      setState(() => _calculating = false);
+    _updateTimer = Timer(Duration(seconds: timerSeconds), () async {
+      await _updateQuote(context, websocket, FieldUpdated.receive);
+      _calculating = false;
+      notifyListeners();
     });
-  }
-
-  Future<AmountTooHighChoice> _amountTooHigh(
-      BeBalance bal, Decimal amount) async {
-    var res = await showDialog<AmountTooHighChoice>(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-              title: const Text('Not enough funds for order'),
-              content: Text(
-                  'Your current balance is ${assetFormatWithUnitToUser(bal.asset, bal.available)}, but you have tried to convert ${assetFormatWithUnitToUser(bal.asset, amount)}.\n\nWhat would you like to do?'),
-              actions: [
-                BronzeRoundedButton(
-                    () => Navigator.of(context)
-                        .pop(AmountTooHighChoice.gotoDeposit),
-                    ZapOnSurface,
-                    ZapSurface,
-                    null,
-                    'Deposit More Funds',
-                    fwdArrow: true,
-                    width: cfg.ButtonWidth,
-                    height: cfg.ButtonHeight),
-                BronzeRoundedButton(
-                    () => Navigator.of(context).pop(AmountTooHighChoice.adjust),
-                    ZapOnSurface,
-                    ZapSurface,
-                    null,
-                    'Adjust Amount to Balance',
-                    fwdArrow: true,
-                    width: cfg.ButtonWidth,
-                    height: cfg.ButtonHeight),
-              ]);
-        });
-    if (res == null) return AmountTooHighChoice.none;
-    return res;
-  }
-
-  Future<void> _makeDeposit() async {
-    showAlertDialog(context, 'querying..');
-    var res = await beAssets();
-    Navigator.pop(context);
-    res.when(
-        (assets) => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    DepositSelectScreen(assets, widget.websocket))),
-        error: (err) => snackMsg(context, 'failed to query deposits',
-            category: MessageCategory.Warning));
-  }
-
-  Future<void> _updateQuote(FieldUpdated field) async {
-    // unfocus text input
-    unfocusText();
-    // init local values
-    var fromAsset = _fromAsset;
-    var toAsset = _toAsset;
-    var sourceController = _amountController;
-    var targetController = _receiveController;
-    if (field == FieldUpdated.receive) {
-      sourceController = _receiveController;
-      targetController = _amountController;
-    }
-    // get entered value
-    if (sourceController.text.isEmpty) return;
-    var tryValue = Decimal.tryParse(sourceController.text.trim());
-    // check value is valid
-    if (tryValue == null || tryValue <= Decimal.zero) {
-      snackMsg(context, 'invalid amount', category: MessageCategory.Warning);
-      return;
-    }
-    var value = tryValue;
-    // convert value unit
-    if (field == FieldUpdated.receive)
-      value = assetAmountFromUser(toAsset, value);
-    else
-      value = assetAmountFromUser(fromAsset, value);
-    // get user balance
-    var balanceResult = await beBalances();
-    var continueResult = await balanceResult.when((balances) async {
-      if (field == FieldUpdated.receive) return true;
-      for (var bal in balances)
-        if (bal.asset == fromAsset && bal.available < value) {
-          var res = await _amountTooHigh(bal, value);
-          switch (res) {
-            case AmountTooHighChoice.adjust:
-              value = bal.available;
-              _amountController.text =
-                  assetAmountToUser(_fromAsset, bal.available).toString();
-              snackMsg(context, 'adjusted amount to available balance',
-                  category: MessageCategory.Warning);
-              return true;
-            case AmountTooHighChoice.gotoDeposit:
-              _makeDeposit();
-              _clearInputs();
-              return false;
-            case AmountTooHighChoice.none:
-              _clearInputs();
-              return false;
-          }
-        }
-      // default case is to continue processing
-      return true;
-    }, error: (err) async {
-      log.severe('failed to get user balances $err');
-      return false;
-    });
-    if (!continueResult) return;
-    // check market is valid
-    MarketType? tryMarket = _checkMarket(_fromAsset, _toAsset);
-    if (tryMarket == null) {
-      snackMsg(context, 'invalid market', category: MessageCategory.Warning);
-      return;
-    }
-    var market = tryMarket.market;
-    var side = tryMarket.side;
-    // get market orderbook and quote
-    var res = await beOrderbook(market.symbol);
-    var quote = await res.when<QuoteTotalPrice?>((orderbook) {
-      switch (field) {
-        case FieldUpdated.amount:
-          switch (side) {
-            case BeMarketSide.bid:
-              return _bruteForceQuote(value, market, side, orderbook);
-            case BeMarketSide.ask:
-              return askQuoteAmount(market, orderbook, value);
-          }
-        case FieldUpdated.receive:
-          switch (side) {
-            case BeMarketSide.bid:
-              return bidQuoteAmount(market, orderbook, value);
-            case BeMarketSide.ask:
-              return _bruteForceQuote(value, market, side, orderbook);
-          }
-      }
-    }, error: (err) {
-      snackMsg(context, 'failed to get orderbook',
-          category: MessageCategory.Warning);
-      return null;
-    });
-    if (quote == null) return;
-    if (quote.errMsg != null) {
-      snackMsg(context, quote.errMsg!, category: MessageCategory.Warning);
-      return;
-    }
-    // double check amount with server
-    BeBrokerOrderResult res2 =
-        await beOrderValidate(market.symbol, side, quote.amountBaseAsset);
-    var validatedOrder =
-        res2.when<BeBrokerOrder?>((order) => order, error: (err) {
-      snackMsg(context, 'failed to validate order (${BeError.msg(err)})',
-          category: MessageCategory.Warning);
-      return null;
-    });
-    if (validatedOrder == null) return;
-    log.info(
-        '$side ${validatedOrder.baseAmount} ${validatedOrder.baseAsset}, ${validatedOrder.quoteAmount} ${validatedOrder.quoteAsset}');
-    // set amount
-    switch (side) {
-      case BeMarketSide.bid:
-        if (field == FieldUpdated.receive)
-          targetController.text = assetFormat(
-              fromAsset, assetAmountToUser(fromAsset, quote.amountQuoteAsset));
-        else
-          targetController.text = assetFormat(
-              toAsset, assetAmountToUser(toAsset, quote.amountBaseAsset));
-        break;
-      case BeMarketSide.ask:
-        if (field == FieldUpdated.receive)
-          targetController.text = assetFormat(
-              fromAsset, assetAmountToUser(fromAsset, quote.amountBaseAsset));
-        else
-          targetController.text = assetFormat(
-              toAsset, assetAmountToUser(toAsset, quote.amountQuoteAsset));
-        break;
-    }
-    _side = side;
-    _market = market;
-    _amount = quote.amountBaseAsset;
-    log.info(quote.toString(
-        baseAsset: market.baseAsset, quoteAsset: market.quoteAsset));
-    setState(() => _validatedOrder = validatedOrder);
   }
 
   QuoteTotalPrice? _bruteForceQuote(Decimal value, BeMarket market,
@@ -513,6 +306,189 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         estimate.errMsg);
   }
 
+  Future<void> _updateQuote(
+      BuildContext context, Websocket websocket, FieldUpdated field) async {
+    // unfocus text input
+    unfocusText();
+    // init local values
+    var fromAsset = _fromAsset;
+    var toAsset = _toAsset;
+    var sourceController = _amountController;
+    var targetController = _receiveController;
+    if (field == FieldUpdated.receive) {
+      sourceController = _receiveController;
+      targetController = _amountController;
+    }
+    // get entered value
+    if (sourceController.text.isEmpty) return;
+    var tryValue = Decimal.tryParse(sourceController.text.trim());
+    // check value is valid
+    if (tryValue == null || tryValue <= Decimal.zero) {
+      snackMsg(context, 'invalid amount', category: MessageCategory.Warning);
+      return;
+    }
+    var value = tryValue;
+    // convert value unit
+    if (field == FieldUpdated.receive)
+      value = assetAmountFromUser(toAsset, value);
+    else
+      value = assetAmountFromUser(fromAsset, value);
+    // get user balance
+    var balanceResult = await beBalances();
+    var continueResult = await balanceResult.when((balances) async {
+      if (field == FieldUpdated.receive) return true;
+      for (var bal in balances)
+        if (bal.asset == fromAsset && bal.available < value) {
+          var res = await _amountTooHigh(context, bal, value);
+          switch (res) {
+            case AmountTooHighChoice.adjust:
+              value = bal.available;
+              _amountController.text =
+                  assetAmountToUser(_fromAsset, bal.available).toString();
+              snackMsg(context, 'adjusted amount to available balance',
+                  category: MessageCategory.Warning);
+              return true;
+            case AmountTooHighChoice.gotoDeposit:
+              _makeDeposit(context, websocket);
+              clearInputs();
+              return false;
+            case AmountTooHighChoice.none:
+              clearInputs();
+              return false;
+          }
+        }
+      // default case is to continue processing
+      return true;
+    }, error: (err) async {
+      log.severe('failed to get user balances $err');
+      return false;
+    });
+    if (!continueResult) return;
+    // check market is valid
+    MarketType? tryMarket = _checkMarket(_fromAsset, _toAsset);
+    if (tryMarket == null) {
+      snackMsg(context, 'invalid market', category: MessageCategory.Warning);
+      return;
+    }
+    var market = tryMarket.market;
+    var side = tryMarket.side;
+    // get market orderbook and quote
+    var res = await beOrderbook(market.symbol);
+    var quote = await res.when<QuoteTotalPrice?>((orderbook) {
+      switch (field) {
+        case FieldUpdated.amount:
+          switch (side) {
+            case BeMarketSide.bid:
+              return _bruteForceQuote(value, market, side, orderbook);
+            case BeMarketSide.ask:
+              return askQuoteAmount(market, orderbook, value);
+          }
+        case FieldUpdated.receive:
+          switch (side) {
+            case BeMarketSide.bid:
+              return bidQuoteAmount(market, orderbook, value);
+            case BeMarketSide.ask:
+              return _bruteForceQuote(value, market, side, orderbook);
+          }
+      }
+    }, error: (err) {
+      snackMsg(context, 'failed to get orderbook',
+          category: MessageCategory.Warning);
+      return null;
+    });
+    if (quote == null) return;
+    if (quote.errMsg != null) {
+      snackMsg(context, quote.errMsg!, category: MessageCategory.Warning);
+      return;
+    }
+    // double check amount with server
+    BeBrokerOrderResult res2 =
+        await beOrderValidate(market.symbol, side, quote.amountBaseAsset);
+    var validatedOrder =
+        res2.when<BeBrokerOrder?>((order) => order, error: (err) {
+      snackMsg(context, 'failed to validate order (${BeError.msg(err)})',
+          category: MessageCategory.Warning);
+      return null;
+    });
+    if (validatedOrder == null) return;
+    log.info(
+        '$side ${validatedOrder.baseAmount} ${validatedOrder.baseAsset}, ${validatedOrder.quoteAmount} ${validatedOrder.quoteAsset}');
+    // set amount
+    switch (side) {
+      case BeMarketSide.bid:
+        if (field == FieldUpdated.receive)
+          targetController.text = assetFormat(
+              fromAsset, assetAmountToUser(fromAsset, quote.amountQuoteAsset));
+        else
+          targetController.text = assetFormat(
+              toAsset, assetAmountToUser(toAsset, quote.amountBaseAsset));
+        break;
+      case BeMarketSide.ask:
+        if (field == FieldUpdated.receive)
+          targetController.text = assetFormat(
+              fromAsset, assetAmountToUser(fromAsset, quote.amountBaseAsset));
+        else
+          targetController.text = assetFormat(
+              toAsset, assetAmountToUser(toAsset, quote.amountQuoteAsset));
+        break;
+    }
+    _side = side;
+    _market = market;
+    _amount = quote.amountBaseAsset;
+    log.info(quote.toString(
+        baseAsset: market.baseAsset, quoteAsset: market.quoteAsset));
+    _validatedOrder = validatedOrder;
+    notifyListeners();
+  }
+
+  Future<AmountTooHighChoice> _amountTooHigh(
+      BuildContext context, BeBalance bal, Decimal amount) async {
+    var res = await showDialog<AmountTooHighChoice>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              title: const Text('Not enough funds for order'),
+              content: Text(
+                  'Your current balance is ${assetFormatWithUnitToUser(bal.asset, bal.available)}, but you have tried to convert ${assetFormatWithUnitToUser(bal.asset, amount)}.\n\nWhat would you like to do?'),
+              actions: [
+                BronzeRoundedButton(
+                    () => Navigator.of(context)
+                        .pop(AmountTooHighChoice.gotoDeposit),
+                    ZapOnSurface,
+                    ZapSurface,
+                    null,
+                    'Deposit More Funds',
+                    fwdArrow: true,
+                    width: cfg.ButtonWidth,
+                    height: cfg.ButtonHeight),
+                BronzeRoundedButton(
+                    () => Navigator.of(context).pop(AmountTooHighChoice.adjust),
+                    ZapOnSurface,
+                    ZapSurface,
+                    null,
+                    'Adjust Amount to Balance',
+                    fwdArrow: true,
+                    width: cfg.ButtonWidth,
+                    height: cfg.ButtonHeight),
+              ]);
+        });
+    if (res == null) return AmountTooHighChoice.none;
+    return res;
+  }
+
+  Future<void> _makeDeposit(BuildContext context, Websocket websocket) async {
+    showAlertDialog(context, 'querying..');
+    var res = await beAssets();
+    Navigator.pop(context);
+    res.when(
+        (assets) => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DepositSelectScreen(assets, websocket))),
+        error: (err) => snackMsg(context, 'failed to query deposits',
+            category: MessageCategory.Warning));
+  }
+
   MarketType? _checkMarket(String fromAsset, String toAsset) {
     for (var item in _markets) {
       if ('$fromAsset-$toAsset' == item.symbol)
@@ -521,36 +497,6 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         return MarketType(item, BeMarketSide.bid);
     }
     return null;
-  }
-
-  void _submit() {
-    if (_validatedOrder != null) _exchange();
-  }
-
-  void _clearInputs() {
-    _minAmount = null;
-    _lastAmount = '';
-    _lastReceive = '';
-    _amountController.text = '';
-    _receiveController.text = '';
-    setState(() => _validatedOrder = null);
-    _setMinAmount();
-  }
-
-  void _exchange() async {
-    showAlertDialog(context, 'creating order..');
-    var res = await beOrderCreate(_market.symbol, _side, _amount);
-    Navigator.pop(context);
-    res.when((order) {
-      _clearInputs();
-      _clearSlider();
-      return Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => OrderScreen(order, widget.websocket)));
-    },
-        error: (err) => alert(
-            context, 'error', 'failed to create order (${BeError.msg(err)})'));
   }
 
   Future<MarketMin> _marketMin(BeMarket market) async {
@@ -580,7 +526,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     });
   }
 
-  Future<void> _setMin() async {
+  Future<void> setMin(BuildContext context, Websocket websocket) async {
     var tryMarket = _checkMarket(_fromAsset, _toAsset);
     if (tryMarket == null) {
       snackMsg(context, 'invalid market', category: MessageCategory.Warning);
@@ -590,39 +536,123 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     if (marketMin.error != null)
       snackMsg(context, marketMin.error!, category: MessageCategory.Warning);
     else
-      _setSliderValue(AmountSliderSelected.min, marketMin.min);
+      _setSliderValue(
+          context, websocket, AmountSliderSelected.min, marketMin.min);
   }
 
-  Future<void> _setHalf() async {
+  Future<void> setHalf(BuildContext context, Websocket websocket) async {
+    var res = await beBalances();
+    res.when((balances) {
+      for (var bal in balances)
+        if (bal.asset == _fromAsset)
+          _setSliderValue(context, websocket, AmountSliderSelected.half,
+              bal.available / Decimal.fromInt(2));
+    },
+        error: (err) => snackMsg(context, 'failed to get balances $err',
+            category: MessageCategory.Warning));
+  }
+
+  Future<void> setMax(BuildContext context, Websocket websocket) async {
     var res = await beBalances();
     res.when((balances) {
       for (var bal in balances)
         if (bal.asset == _fromAsset)
           _setSliderValue(
-              AmountSliderSelected.half, bal.available / Decimal.fromInt(2));
+              context, websocket, AmountSliderSelected.max, bal.available);
     },
         error: (err) => snackMsg(context, 'failed to get balances $err',
             category: MessageCategory.Warning));
   }
 
-  Future<void> _setMax() async {
-    var res = await beBalances();
-    res.when((balances) {
-      for (var bal in balances)
-        if (bal.asset == _fromAsset)
-          _setSliderValue(AmountSliderSelected.max, bal.available);
-    },
-        error: (err) => snackMsg(context, 'failed to get balances $err',
-            category: MessageCategory.Warning));
-  }
-
-  void _setSliderValue(AmountSliderSelected sliderSelected, Decimal value) {
-    _clearSlider();
-    setState(() => _sliderSelected = sliderSelected);
+  void _setSliderValue(BuildContext context, Websocket websocket,
+      AmountSliderSelected sliderSelected, Decimal value) {
+    clearSlider();
+    _sliderSelected = sliderSelected;
     var valueForUser = assetAmountToUser(_fromAsset, value);
     _amountController.text =
         ceil(valueForUser, scale: assetDecimals(_fromAsset)).toString();
-    _amountUpdate(timerSeconds: 0);
+    _amountUpdate(context, websocket, timerSeconds: 0);
+  }
+
+  void exchange(BuildContext context, Websocket websocket) async {
+    showAlertDialog(context, 'creating order..');
+    var res = await beOrderCreate(_market.symbol, _side, _amount);
+    Navigator.pop(context);
+    res.when((order) {
+      clearInputs();
+      clearSlider();
+      return Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => OrderScreen(order, websocket)));
+    },
+        error: (err) => alert(
+            context, 'error', 'failed to create order (${BeError.msg(err)})'));
+  }
+}
+
+class ExchangeWidget extends StatefulWidget {
+  final Websocket websocket;
+  final ExchangeModel model;
+
+  ExchangeWidget(this.websocket, this.model);
+
+  @override
+  State<ExchangeWidget> createState() => _ExchangeWidgetState(model);
+}
+
+class _ExchangeWidgetState extends State<ExchangeWidget> {
+  final ExchangeModel model;
+
+  _ExchangeWidgetState(this.model);
+
+  @override
+  void initState() {
+    super.initState();
+    widget.websocket.wsEvent.subscribe(_websocketEvent);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _initMarkets());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.websocket.wsEvent.unsubscribe(_websocketEvent);
+  }
+
+  void _initMarkets() {
+    widget.model.initMarkets().then((value) {
+      if (!value)
+        snackMsg(context, 'failed to get markets',
+            category: MessageCategory.Warning);
+    });
+  }
+
+  Widget _createSliderButton(AmountSliderSelected amount) {
+    var onPressed = amount == AmountSliderSelected.min
+        ? model.setMin
+        : (amount == AmountSliderSelected.half ? model.setHalf : model.setMax);
+    var amountName = amount == AmountSliderSelected.min
+        ? "MIN"
+        : (amount == AmountSliderSelected.half ? "HALF" : "MAX");
+    if (model._sliderSelected == amount) {
+      return Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: ZapPrimaryGradient,
+        ),
+        child: CircleButton(
+            amountName, () => onPressed(context, widget.websocket)),
+      );
+    } else
+      return CircleButton(
+          amountName, () => onPressed(context, widget.websocket));
+  }
+
+  void _websocketEvent(WsEventArgs? args) {}
+
+  void _submit() {
+    if (model._validatedOrder != null)
+      model.exchange(context, widget.websocket);
   }
 
   Widget _buildWidget() {
@@ -632,45 +662,48 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         width: inputWidth,
         child: RoundedEdgeBox(
             borderColor: ZapSurface,
-            gradient: assetGradient(_fromAsset),
+            gradient: assetGradient(model._fromAsset),
             child: DropdownButton<String>(
                 isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.transparent,
                 ),
-                items: _fromAssets
+                items: model._fromAssets
                     .map((e) => DropdownMenuItem<String>(
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [Text('  ' + e), assetLogo(e, size: 24)]),
                         value: e))
                     .toList(),
-                value: _fromAsset,
-                onChanged: _fromChanged)),
+                value: model._fromAsset,
+                onChanged: (val) =>
+                    model.fromChanged(context, widget.websocket, val))),
       ),
       VerticalSpacer(),
       SizedBox(
         width: inputWidth,
         child: BronzeValueInput(
-          controller: _amountController,
-          suffixText: assetUnit(_fromAsset),
-          labelText:
-              _minAmount == null ? 'Amount' : 'Amount (minimum $_minAmount)',
-          onChanged: _amountChanged,
+          controller: model._amountController,
+          suffixText: assetUnit(model._fromAsset),
+          labelText: model._minAmount == null
+              ? 'Amount'
+              : 'Amount (minimum ${model._minAmount})',
+          onChanged: (val) =>
+              model.amountChanged(context, widget.websocket, val),
           onFieldSubmitted: (_) => _submit(),
         ),
       ),
     ]);
     var arrow = Container(
         margin: EdgeInsets.all(10),
-        child: _calculating
+        child: model._calculating
             ? SizedBox(
                 width: 24, height: 24, child: CircularProgressIndicator())
             : Icon(Icons.arrow_forward, color: ZapPrimary, size: 24));
     var arrowDown = Container(
         margin: EdgeInsets.all(20),
-        child: _calculating
+        child: model._calculating
             ? SizedBox(
                 width: 24, height: 24, child: CircularProgressIndicator())
             : Icon(Icons.arrow_downward, color: ZapPrimary, size: 24));
@@ -679,31 +712,33 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         width: inputWidth,
         child: RoundedEdgeBox(
             borderColor: ZapSurface,
-            gradient: assetGradient(_toAsset),
+            gradient: assetGradient(model._toAsset),
             child: DropdownButton<String>(
                 isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.transparent,
                 ),
-                items: _toAssets
+                items: model._toAssets
                     .map((e) => DropdownMenuItem<String>(
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [Text('  ' + e), assetLogo(e, size: 24)]),
                         value: e))
                     .toList(),
-                value: _toAsset,
-                onChanged: _toChanged)),
+                value: model._toAsset,
+                onChanged: (val) =>
+                    model.toChanged(context, widget.websocket, val))),
       ),
       VerticalSpacer(),
       SizedBox(
         width: inputWidth,
         child: BronzeValueInput(
-          controller: _receiveController,
-          suffixText: assetUnit(_toAsset),
+          controller: model._receiveController,
+          suffixText: assetUnit(model._toAsset),
           labelText: 'Receive',
-          onChanged: _recieveChanged,
+          onChanged: (val) =>
+              model.recieveChanged(context, widget.websocket, val),
           onFieldSubmitted: (_) => _submit(),
         ),
       ),
@@ -749,7 +784,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
       }),
       VerticalSpacer(),
       Visibility(
-          visible: _validatedOrder != null,
+          visible: model._validatedOrder != null,
           maintainSize: true,
           maintainAnimation: true,
           maintainState: true,
@@ -758,12 +793,12 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    BronzeRoundedButton(_exchange, ZapOnPrimary, ZapPrimary,
+                    BronzeRoundedButton(_submit, ZapOnPrimary, ZapPrimary,
                         ZapPrimaryGradient, 'Create Order',
                         fwdArrow: true,
                         width: inputWidth,
                         height: cfg.ButtonHeight),
-                    OrderFees(_validatedOrder, centerText: true)
+                    OrderFees(model._validatedOrder, centerText: true)
                   ])))
     ]);
   }
@@ -773,13 +808,13 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
     return Padding(
         padding: EdgeInsets.symmetric(vertical: 30),
         child: Column(children: [
-          _failedMarkets
+          model._failedMarkets
               ? raisedButton(onPressed: _initMarkets, child: Text('Try Again'))
               : SizedBox(),
-          _markets.length == 0 && !_failedMarkets
+          model._markets.length == 0 && !model._failedMarkets
               ? CircularProgressIndicator()
               : SizedBox(),
-          _markets.length > 0 ? _buildWidget() : SizedBox(),
+          model._markets.length > 0 ? _buildWidget() : SizedBox(),
         ]));
   }
 }

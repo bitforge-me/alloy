@@ -48,9 +48,11 @@ void main() {
   log.info('Beryllium Server: ${cfg.server()}');
   log.info('Testnet: ${cfg.testnet()}');
   // run app
-  runApp(Phoenix(child: ChangeNotifierProvider(
-    create: (context) => PriceNotifier(MainAsset),
-    child: MyApp())));
+  runApp(Phoenix(
+      child: MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => PriceModel(MainAsset)),
+    ChangeNotifierProvider(create: (context) => ExchangeModel())
+  ], child: MyApp())));
 }
 
 class MyApp extends StatelessWidget {
@@ -134,7 +136,9 @@ class _MyHomePageState extends State<MyHomePage>
     // hide mobile keyboards
     unfocusText();
     // update exchange widget
-    setState(() {});
+    var model = context.read<ExchangeModel>();
+    model.clearSlider();
+    model.clearInputs();
   }
 
   List<String> _generateAlerts(UserInfo? info) {
@@ -208,7 +212,7 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   void _updateMainPrice() {
-    var pn = context.read<PriceNotifier>();
+    var pn = context.read<PriceModel>();
     pn.updatePrice();
     if (_mainPriceTimer == null)
       _mainPriceTimer =
@@ -362,13 +366,21 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   Widget _makeActionWidgets(BuildContext context) {
-    return Consumer<PriceNotifier>(builder: (context, pn, child) {
+    return Consumer<PriceModel>(builder: (context, pn, child) {
       var pw = BasicPriceWidget(pn);
-      var us = UnitSelectorMini(Btc, assetUnit(Btc), onSelect: _updateUnitWidget);
+      var us = UnitSelectorMini(Btc, _btcUnit, onSelect: _updateUnitWidget);
       if (pn.currentPrice() != null)
         return Row(children: [us, SizedBox(width: 10), pw]);
       return Padding(padding: EdgeInsets.only(right: 10), child: us);
     });
+  }
+
+  Widget _makeExchangeWidget(BuildContext context) {
+    return Consumer<ExchangeModel>(
+      builder: (context, ext, child) {
+        return ExchangeWidget(_websocket, ext);
+      },
+    );
   }
 
   Drawer _makeDrawer(BuildContext contex) {
@@ -601,7 +613,7 @@ class _MyHomePageState extends State<MyHomePage>
                       height:
                           constraints.maxWidth >= cfg.MaxColumnWidth ? 50 : 0),
                   // exchange widget
-                  _userInfo != null ? ExchangeWidget(_websocket) : SizedBox(),
+                  _makeExchangeWidget(context),
                   VerticalSpacer(
                       height:
                           constraints.maxWidth >= cfg.MaxColumnWidth ? 50 : 0),
