@@ -144,13 +144,13 @@ class PriceManager {
   }
 }
 
-class PriceNotifier with ChangeNotifier {
+class PriceModel with ChangeNotifier {
   final String _asset;
   CachedPrice? _price;
   bool _failedToGetPrice = false;
   late String _priceAsset;
 
-  PriceNotifier(this._asset) {
+  PriceModel(this._asset) {
     _priceAsset = assetUnitToAsset(assetPricesUnit);
     updatePrice();
   }
@@ -180,9 +180,9 @@ class PriceNotifier with ChangeNotifier {
 }
 
 class BasicPriceWidget extends StatelessWidget {
-  final PriceNotifier priceNotifier;
+  final PriceModel model;
   final bool small;
-  BasicPriceWidget(this.priceNotifier, {this.small = false});
+  BasicPriceWidget(this.model, {this.small = false});
 
   @override
   Widget build(BuildContext context) {
@@ -195,8 +195,7 @@ class BasicPriceWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text('1 BTC', style: textStyle),
-        Text('${priceNotifier.formattedPrice(Decimal.fromInt(1))}',
-            style: textStyle)
+        Text('${model.formattedPrice(Decimal.fromInt(1))}', style: textStyle)
       ],
     );
   }
