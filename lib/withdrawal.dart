@@ -648,7 +648,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                       SpacedVisibility(
                           !widget.asset.isCrypto,
                           BronzeFormInput(_recipientController,
-                              icon: Icon(Icons.person_outlined),
+                              icon: Icon(Icons.numbers),
                               labelText: 'Bank Account',
                               suffixIcon: IconButton(
                                   icon: Icon(Icons.alternate_email),
@@ -713,6 +713,9 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                                         },
                                         onFieldSubmitted: (_) =>
                                             _withdrawalCreate()),
+                                    SizedBox(height: 20),
+                                    Text('Account Holder Address',
+                                        style: TextStyle(fontSize: 16)),
                                     TextFormField(
                                         controller: _accountAddr01Controller,
                                         decoration: InputDecoration(
