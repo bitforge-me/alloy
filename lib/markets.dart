@@ -13,16 +13,22 @@ import 'quote.dart';
 import 'widgets.dart';
 
 class AddressBookScreen extends StatefulWidget {
-  final String asset;
+  final BeAsset asset;
   final List<BeAddressBookEntry> entries;
 
   AddressBookScreen(this.asset, this.entries);
 
   @override
-  State<AddressBookScreen> createState() => _AddressBookScreenState();
+  State<AddressBookScreen> createState() => _AddressBookScreenState(asset);
 }
 
 class _AddressBookScreenState extends State<AddressBookScreen> {
+  late final String addressBookName;
+
+  _AddressBookScreenState(BeAsset asset) {
+    addressBookName = asset.isCrypto ? 'Address Book' : 'Saved Bank Accounts';
+  }
+
   @override
   void initState() {
     super.initState();
@@ -44,8 +50,10 @@ class _AddressBookScreenState extends State<AddressBookScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text('Address Book - ${widget.asset}'),
-          actions: [assetLogo(widget.asset, margin: EdgeInsets.all(10))]),
+          title: Text('$addressBookName - ${widget.asset.symbol}'),
+          actions: [
+            assetLogo(widget.asset.symbol, margin: EdgeInsets.all(10))
+          ]),
       body: BitforgePage(
           child: ListView.builder(
               itemBuilder: _listItem, itemCount: widget.entries.length)),
