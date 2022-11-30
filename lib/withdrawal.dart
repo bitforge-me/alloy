@@ -388,9 +388,11 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
   }
 
   Future<void> _addressBook() async {
-    var asset = widget.asset.symbol;
-    showAlertDialog(context, 'querying address book..');
-    var res = await beAddressBook(asset);
+    var addrBookName =
+        widget.asset.isCrypto ? 'address book' : 'saved bank accounts';
+    var asset = widget.asset;
+    showAlertDialog(context, 'querying $addrBookName..');
+    var res = await beAddressBook(asset.symbol);
     Navigator.pop(context);
     res.when((entries) async {
       var entry = await Navigator.push<BeAddressBookEntry?>(
@@ -406,7 +408,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
       _accountAddrCountryController.text = entry.accountAddrCountry ?? '';
     },
         error: (err) => alert(context, 'error',
-            'failed to get address book (${BeError.msg(err)})'));
+            'failed to get $addrBookName (${BeError.msg(err)})'));
   }
 
   void _updateSaveRecipient(bool? value) {
@@ -650,7 +652,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                               labelText: 'Bank Account',
                               suffixIcon: IconButton(
                                   icon: Icon(Icons.alternate_email),
-                                  tooltip: 'Address Book',
+                                  tooltip: 'Saved Bank Accounts',
                                   onPressed: _addressBook),
                               keyboardType: TextInputType.number,
                               validator: (value) {
