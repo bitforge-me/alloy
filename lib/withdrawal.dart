@@ -433,15 +433,12 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
       var amount = Decimal.tryParse(_amountController.text);
       if (amount != null)
         amount = assetAmountFromUser(widget.asset.symbol, amount);
+      var recipient = _cleanRecipient(_recipientController.text);
       var userOk = await Navigator.push(
           context,
           MaterialPageRoute<bool>(
-              builder: (context) => WithdrawalCheckScreen(
-                  _testnet,
-                  widget.asset,
-                  widget.l2Network,
-                  amount,
-                  _recipientController.text.trim())));
+              builder: (context) => WithdrawalCheckScreen(_testnet,
+                  widget.asset, widget.l2Network, amount, recipient)));
       if (userOk == null || !userOk) return;
       // ask two factor code
       String? tfCode = null;
@@ -465,7 +462,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                 ? assetAmountFromUser(
                     widget.asset.symbol, Decimal.parse(_amountController.text))
                 : Decimal.zero,
-            _recipientController.text.trim(),
+            recipient,
             _saveRecipient,
             _recipientDescriptionController.text,
             tfCode);
@@ -485,7 +482,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
         var res = await beFiatWithdrawalCreate(
             widget.asset.symbol,
             Decimal.parse(_amountController.text),
-            _recipientController.text,
+            recipient,
             _recipientDescriptionController.text,
             _accountNameController.text,
             _accountAddr01Controller.text,
@@ -509,14 +506,18 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
 
   void _scanRecipient() async {
     var data = await QrScan.scan(context);
-    if (data != null)
-      _recipientController.text = assetStripUriPrefix(
-          widget.asset.symbol, widget.l2Network?.symbol, data);
+    if (data != null) _recipientController.text = data;
   }
 
   void _setMax() {
     _amountController.text =
         assetAmountToUser(widget.asset.symbol, _max).toString();
+  }
+
+  String _cleanRecipient(String value) {
+    value = value.trim();
+    return assetStripUriPrefix(
+        widget.asset.symbol, widget.l2Network?.symbol, value);
   }
 
   @override
@@ -615,6 +616,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                               validator: (value) {
                                 if (value == null || value.isEmpty)
                                   return 'Please enter a value';
+                                value = _cleanRecipient(value);
                                 var res = addressValidate(
                                     widget.asset.symbol, _testnet, value);
                                 if (!res.result) return res.reason;
@@ -633,7 +635,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                             validator: (value) {
                               if (value == null || value.isEmpty)
                                 return 'Please enter a value';
-                              value = value.trim();
+                              value = _cleanRecipient(value);
                               var res = l2RecipientValidate(
                                   widget.l2Network!.symbol, _testnet, value);
                               if (!res.result) return res.reason;
@@ -654,6 +656,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                               validator: (value) {
                                 if (value == null || value.isEmpty)
                                   return 'Please enter a value';
+                                value = _cleanRecipient(value);
                                 var res = bankValidate(value);
                                 if (!res.result) return res.reason;
                                 return null;
