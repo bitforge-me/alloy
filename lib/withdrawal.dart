@@ -368,18 +368,27 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
   @override
   void initState() {
     super.initState();
-    var bal =
-        assetFormatWithUnitToUser(widget.asset.symbol, widget.availableBalance);
     var withdrawAsset = widget.l2Network ?? widget.asset;
     if (withdrawAsset.withdrawFeeFixed) {
       var fee = assetFormatWithUnitToUser(
           widget.asset.symbol, withdrawAsset.withdrawFee);
-      _availableBalance = 'Available: $bal. Withdrawal fee: $fee';
+      var maxWithdraw = widget.availableBalance - withdrawAsset.withdrawFee;
+      if (maxWithdraw < Decimal.zero) maxWithdraw = Decimal.zero;
+      var maxWithdrawStr =
+          assetFormatWithUnitToUser(widget.asset.symbol, maxWithdraw);
+      _availableBalance =
+          'Available to withdraw: $maxWithdrawStr\nWithdrawal fee: $fee';
       if (widget.availableBalance > withdrawAsset.withdrawFee)
         _max = widget.availableBalance - withdrawAsset.withdrawFee;
     } else {
       var feePercent = withdrawAsset.withdrawFee * Decimal.fromInt(100);
-      _availableBalance = 'Available: $bal. Withdrawal fee: $feePercent%';
+      var maxWithdraw =
+          widget.availableBalance / (Decimal.one + withdrawAsset.withdrawFee);
+      var maxWithdrawRounded = roundAt(maxWithdraw, widget.asset.decimals);
+      var maxWithdrawStr =
+          assetFormatWithUnitToUser(widget.asset.symbol, maxWithdrawRounded);
+      _availableBalance =
+          'Available to withdraw: $maxWithdrawStr\nWithdrawal fee: $feePercent%';
       if (widget.availableBalance > Decimal.zero)
         _max = widget.availableBalance -
             widget.availableBalance * withdrawAsset.withdrawFee;
