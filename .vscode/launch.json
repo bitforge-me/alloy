@@ -9,7 +9,13 @@
             "request": "launch",
             "type": "dart",
             // use specific port so apps 'localstorage' is consistent
-            "args": ["--web-port", "8686"]
+            "args": ["-d", "chrome", "--web-port", "8686"]
+        },
+        {
+            "name": "alloy (win)",
+            "request": "launch",
+            "type": "dart",
+            "args": ["-d", "windows"]
         },
         {
             "name": "alloy (profile mode)",
