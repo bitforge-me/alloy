@@ -195,11 +195,12 @@ class _MyHomePageState extends State<MyHomePage>
         _userInfo = userInfo;
         _alerts = _generateAlerts(userInfo);
       });
-      // if we got the user info try for the balances
+      // if we got the user info try for everything that relies on having a valid api key
       if (userInfo != null) {
         _updateBalances();
         _updateMainPrice();
         _updateUnitWidget(Btc, assetUnit(Btc));
+        context.read<ExchangeModel>().initMarkets();
       }
     } else
       _startLogin(false, false);
