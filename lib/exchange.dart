@@ -207,6 +207,7 @@ class ExchangeModel extends ChangeNotifier {
     if (!force &&
         (_receiveController.text.isEmpty ||
             _receiveController.text == _lastReceive)) return;
+    _lastAmount = '';
     _lastReceive = _receiveController.text;
     // in the mean time update the state
     setProcessing(FieldUpdated.receive);
