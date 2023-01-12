@@ -157,8 +157,7 @@ class ExchangeModel extends ChangeNotifier {
     if (tryMarket == null) return;
     var marketMin = await _marketMin(tryMarket.market);
     if (marketMin.error != null) return;
-    _minAmount =
-        assetFormat(_fromAsset, assetAmountToUser(_fromAsset, marketMin.min));
+    _minAmount = assetFormatToUser(_fromAsset, marketMin.min);
     notifyListeners();
   }
 
@@ -417,19 +416,23 @@ class ExchangeModel extends ChangeNotifier {
     switch (side) {
       case BeMarketSide.bid:
         if (field == FieldUpdated.receive)
-          targetController.text = assetFormat(
-              fromAsset, assetAmountToUser(fromAsset, quote.amountQuoteAsset));
+          targetController.text = assetFormatToUser(
+              fromAsset, quote.amountQuoteAsset,
+              noGroupSeperator: true);
         else
-          targetController.text = assetFormat(
-              toAsset, assetAmountToUser(toAsset, quote.amountBaseAsset));
+          targetController.text = assetFormatToUser(
+              toAsset, quote.amountBaseAsset,
+              noGroupSeperator: true);
         break;
       case BeMarketSide.ask:
         if (field == FieldUpdated.receive)
-          targetController.text = assetFormat(
-              fromAsset, assetAmountToUser(fromAsset, quote.amountBaseAsset));
+          targetController.text = assetFormatToUser(
+              fromAsset, quote.amountBaseAsset,
+              noGroupSeperator: true);
         else
-          targetController.text = assetFormat(
-              toAsset, assetAmountToUser(toAsset, quote.amountQuoteAsset));
+          targetController.text = assetFormatToUser(
+              toAsset, quote.amountQuoteAsset,
+              noGroupSeperator: true);
         break;
     }
     _side = side;

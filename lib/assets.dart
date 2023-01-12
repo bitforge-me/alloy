@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:decimal/decimal.dart';
+import 'package:intl/intl.dart';
 
 import 'beryllium.dart';
 import 'prefs.dart';
@@ -180,21 +181,33 @@ bool assetIsCrypto(String asset) {
   return false;
 }
 
-String assetFormatUnit(String asset, String unit, Decimal amount) {
+String assetFormatUnit(String asset, String unit, Decimal amount,
+    {bool noGroupSeperator = false}) {
   amount = assetAmountToUnit(asset, unit, amount);
-  var decimals = assetDecimals(unit);
-  if (decimals <= 0) return amount.round().toString();
-  return amount.toStringAsFixed(decimals);
+  return _assetFormat(unit, amount, noGroupSeperator: noGroupSeperator);
 }
 
-String assetFormat(String symbol, Decimal amount) {
+String _assetFormat(String symbol, Decimal amount,
+    {bool noGroupSeperator = false}) {
   var decimals = assetDecimals(assetUnit(symbol));
-  if (decimals <= 0) return amount.round().toString();
-  return amount.toStringAsFixed(decimals);
+  if (noGroupSeperator) {
+    var decimals = assetDecimals(assetUnit(symbol));
+    if (decimals <= 0) return amount.round().toString();
+    return amount.toStringAsFixed(decimals);
+  }
+  if (decimals <= 0) return NumberFormat().format(amount.round().toInt());
+  var num = amount.toDouble();
+  var fmt = '#,##0.' + '0' * decimals;
+  return NumberFormat(fmt).format(num);
+}
+
+String assetFormatToUser(String symbol, Decimal amount,
+    {bool noGroupSeperator = false}) {
+  return '${_assetFormat(symbol, assetAmountToUser(symbol, amount), noGroupSeperator: noGroupSeperator)}';
 }
 
 String _assetFormatWithUnit(String symbol, Decimal amount) {
-  return '${assetFormat(symbol, amount)} ${assetUnit(symbol)}';
+  return '${_assetFormat(symbol, amount)} ${assetUnit(symbol)}';
 }
 
 String assetFormatWithUnitToUser(String symbol, Decimal amount) {
