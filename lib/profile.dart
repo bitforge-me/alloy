@@ -145,7 +145,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _resetPassword() async {
-    if (!await askYesNo(
+    if (!await bitforgeAskYesNo(
         context, 'Are you sure you want to reset your password?')) return;
     showAlertDialog(context, 'requesting password reset..');
     var result = await beUserResetPassword();
