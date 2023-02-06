@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:alloy/units.dart';
 import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
 import 'package:logging/logging.dart';
 import 'package:flutter/services.dart';
+import 'package:jiffy/jiffy.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/widgets.dart';
@@ -22,6 +22,7 @@ import 'snack.dart';
 import 'widgets.dart';
 import 'config.dart';
 import 'qrscan.dart';
+import 'units.dart';
 
 final log = Logger('Withdrawal');
 
@@ -270,13 +271,17 @@ class WithdrawalCheckScreen extends StatefulWidget {
 
 class _WithdrawalCheckScreenState extends State<WithdrawalCheckScreen> {
   var _extractedAmount = -Decimal.one;
+  DateTime? _extractedExpiry;
 
   @override
   void initState() {
     if (widget.amount == null && widget.l2Network != null) {
       var res = l2RecipientValidate(
           widget.l2Network!.symbol, widget.testnet, widget.recipient);
-      if (res.result && res.amount != null) _extractedAmount = res.amount!;
+      if (res.result) {
+        if (res.amount != null) _extractedAmount = res.amount!;
+        if (res.expiry != null) _extractedExpiry = res.expiry!;
+      }
     }
     super.initState();
   }
@@ -314,6 +319,11 @@ class _WithdrawalCheckScreenState extends State<WithdrawalCheckScreen> {
                             widget.amount != null
                                 ? widget.amount!
                                 : _extractedAmount)),
+                    ListTile(
+                        title: Text('Expiry'),
+                        subtitle: Text(_extractedExpiry != null
+                            ? '$_extractedExpiry (${Jiffy(_extractedExpiry).fromNow()})'
+                            : '-')),
                     ListTile(
                         title: Text('Recipient'),
                         subtitle: Text(shortenStr(widget.recipient)))

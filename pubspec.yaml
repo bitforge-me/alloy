@@ -19,6 +19,7 @@ dependencies:
   flutter_phoenix: ^1.0.0
   bs58check: ^1.0.2
   bech32: ^0.2.1
+  bolt11_decoder: ^1.0.1
   web3dart: ^2.2.0
   url_launcher: ^6.0.9
   socket_io_client: ^2.0.0-beta.4-nullsafety.0
@@ -46,6 +47,7 @@ dependencies:
       ref: bbc3d8f3
     #path: ../zapdart
   carousel_slider: ^4.1.1
+  jiffy: ^5.0.0
 
 dev_dependencies:
   build_runner: ^2.3.2
