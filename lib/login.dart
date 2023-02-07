@@ -96,7 +96,7 @@ Future<void> _loginErrorAlert(BuildContext context, BeError error) async {
 }
 
 Future<Acct?> _beLogin(BuildContext context, AccountLogin login,
-    {bool silent: false}) async {
+    {bool silent = false}) async {
   var devName = await deviceName();
   var result =
       await beApiKeyCreate(login.email, login.password, devName, login.tfCode);
@@ -135,7 +135,7 @@ class BronzeRequestApiKeyFormState extends State<BronzeRequestApiKeyForm> {
 
   Future<Acct?> _beApiKeyClaim(
       BuildContext context, AccountRequestApiKey req, String token,
-      {silent: false}) async {
+      {silent = false}) async {
     var result = await beApiKeyClaim(token);
     return await result.when<Future<Acct?>>((apikey) async {
       // write api key
