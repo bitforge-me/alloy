@@ -1,4 +1,4 @@
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
@@ -24,8 +24,8 @@ String vs(String? s) {
 
 Future<void> urlLaunch(String? url, {Function(String? url)? cantLaunch}) async {
   if (url == null) return;
-  if (await canLaunch(url))
-    await launch(url);
+  if (await canLaunchUrlString(url))
+    await launchUrlString(url);
   else if (cantLaunch != null) cantLaunch(url);
 }
 
