@@ -891,6 +891,18 @@ class BeRemitPaymentMethodsResult with _$BeRemitPaymentMethodsResult {
   }
 }
 
+enum BeRemitStatus {
+  unknown,
+  created,
+  funded,
+  pending,
+  failed,
+  refunding,
+  refunded,
+  completed,
+  expired
+}
+
 @JsonSerializable()
 class BeRemit {
   final DateTime date;
@@ -906,7 +918,8 @@ class BeRemit {
   final String paymentMethodCode;
   @JsonKey(name: 'payment_method_name')
   final String paymentMethodName;
-  final String status;
+  @JsonKey(unknownEnumValue: BeRemitStatus.unknown)
+  final BeRemitStatus status;
 
   BeRemit(this.date, this.token, this.provider, this.referenceId, this.category,
       this.paymentMethodCode, this.paymentMethodName, this.status);
@@ -951,7 +964,8 @@ typedef BeRemitRates = Map<String, Map<String, double>>;
 class BeRemitInvoice {
   @JsonKey(name: 'ref_id')
   final String referenceId;
-  final String status;
+  @JsonKey(unknownEnumValue: BeRemitStatus.unknown)
+  final BeRemitStatus status;
   final String bolt11;
   final BeRemitAmount sender;
   final BeRemitRecipientAmount recipient;
@@ -1433,6 +1447,13 @@ Future<BeRemitInvoiceResult> beRemitInvoicePay(
   var result = await post(
       "remit_invoice_pay", {"ref_id": refId, "tf_code": tfCode},
       authRequired: true);
+  return result.when((content) => BeRemitInvoiceResult.parse(content),
+      error: (err) => BeRemitInvoiceResult.error(err));
+}
+
+Future<BeRemitInvoiceResult> beRemitInvoiceRefund(String refId) async {
+  var result =
+      await post("remit_invoice_refund", {"ref_id": refId}, authRequired: true);
   return result.when((content) => BeRemitInvoiceResult.parse(content),
       error: (err) => BeRemitInvoiceResult.error(err));
 }

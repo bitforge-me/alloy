@@ -222,9 +222,8 @@ class _RemitFormScreenState extends State<RemitFormScreen> {
                   null)));
       if (userOk == null || !userOk) return;
       // create invoice
-      var amountInt = (amount * Decimal.fromInt(100000000))
-          .toInt(); //TODO - do these conversions server side?
-      var currency = 'SAT'; //TODO - keep this server side?
+      var amountInt = assetAmountToUnit(Btc, Sats, amount).toInt();
+      var currency = 'SAT';
       showAlertDialog(context, 'creating invoice..');
       var res = await beRemitInvoiceCreate(
           _paymentMethodCategory,
@@ -298,6 +297,7 @@ class _RemitFormScreenState extends State<RemitFormScreen> {
   void _setMax() {
     _amountController.text =
         assetAmountToUser(widget.asset.symbol, _max).toString();
+    _inputChanged(_amountController.text);
   }
 
   List<DropdownMenuItem<BePaymentMethod>> _paymentMethodItems() {

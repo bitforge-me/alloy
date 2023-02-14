@@ -893,10 +893,12 @@ class _CryptoWithdrawalDetailScreenState
           Visibility(
               visible: _withdrawal.remit != null,
               child: ListTile(
-                  subtitle: TextButton(
-                      onPressed: _showRemit,
-                      child: Text('Remit Status',
-                          style: TextStyle(color: ZapWarning))))),
+                  title: Text('Assocated Remit Status'),
+                  subtitle: Row(children: [
+                    Text('${_withdrawal.remit?.status.name}'),
+                    TextButton(
+                        onPressed: _showRemit, child: Text('(Show Detail)'))
+                  ]))),
           VerticalSpacer(),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,

@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:logging/logging.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:universal_html/html.dart' as html;
-import 'package:decimal/decimal.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'dart:async';
 import 'package:provider/provider.dart';
@@ -278,7 +277,7 @@ class _MyHomePageState extends State<MyHomePage>
       var bolt11 = json['bolt11'];
       var description = json['description'];
       var sats = json['amount_sat'];
-      var amount = Decimal.fromInt(sats) / Decimal.fromInt(100000000);
+      var amount = assetAmountFromUnit(Btc, Sats, sats);
       Navigator.push(
           context,
           MaterialPageRoute(

@@ -12,6 +12,7 @@ import 'cryptocurrency.dart';
 import 'widgets.dart';
 import 'config.dart';
 import 'units.dart';
+import 'snack.dart';
 
 final log = Logger('RemitStatus');
 
@@ -52,13 +53,15 @@ class RemitCheckScreen extends StatefulWidget {
 class _RemitCheckScreenState extends State<RemitCheckScreen> {
   var _extractedAmount = -Decimal.one;
   DateTime? _extractedExpiry;
+  BeRemitInvoice? _invoice;
 
   @override
   void initState() {
+    _invoice = widget.invoice;
     _extractedAmount = widget.amount;
-    if (widget.invoice != null && widget.l2Network != null) {
+    if (_invoice != null && widget.l2Network != null) {
       var res = l2RecipientValidate(
-          widget.l2Network!, widget.testnet, widget.invoice!.bolt11);
+          widget.l2Network!, widget.testnet, _invoice!.bolt11);
       if (res.result) {
         if (res.amount != null) _extractedAmount = res.amount!;
         if (res.expiry != null) _extractedExpiry = res.expiry!;
@@ -75,10 +78,25 @@ class _RemitCheckScreenState extends State<RemitCheckScreen> {
     Navigator.pop(context, true);
   }
 
+  Future<void> _refund() async {
+    assert(_invoice != null);
+    showAlertDialog(context, 'refunding invoice..');
+    var res = await beRemitInvoiceRefund(_invoice!.referenceId);
+    Navigator.pop(context);
+    var invoice = res.when((remit, invoice, withdrawal) {
+      setState(() => _invoice = invoice);
+      snackMsg(context, 'refund in process');
+    }, error: (err) {
+      alert(context, 'error', 'failed to refund invoice (${BeError.msg(err)})');
+      return null;
+    });
+    if (invoice == null) return;
+  }
+
   Widget? _fees() {
-    assert(widget.invoice != null);
+    assert(_invoice != null);
     var feeWidgets = <Widget>[];
-    for (var fee in widget.invoice!.fees.entries) {
+    for (var fee in _invoice!.fees.entries) {
       feeWidgets
           .add(Text('${fee.key}: ${fee.value.amount} ${fee.value.currency}'));
     }
@@ -130,6 +148,7 @@ class _RemitCheckScreenState extends State<RemitCheckScreen> {
           ],
         ),
         body: BitforgePage(
+            scrollChild: true,
             child: Container(
                 padding: EdgeInsets.all(10),
                 child: Column(children: [
@@ -161,21 +180,28 @@ class _RemitCheckScreenState extends State<RemitCheckScreen> {
                             title: Text('Description'),
                             subtitle: Text('${widget.description}'))
                         : SizedBox(),
-                    widget.invoice != null
+                    _invoice != null
                         ? ListTile(
                             title: Text('Amount to Receive'),
                             subtitle: Text(
-                                '${widget.invoice!.recipient.amount} ${widget.invoice!.recipient.currency}'))
+                                '${_invoice!.recipient.amount} ${_invoice!.recipient.currency}'))
                         : SizedBox(),
-                    widget.invoice != null
+                    _invoice != null
                         ? ListTile(title: Text('Fees'), subtitle: _fees())
                         : SizedBox(),
-                    widget.invoice != null
+                    _invoice != null
                         ? ListTile(
                             title: Text('Status'),
-                            subtitle: Text(widget.invoice!.status))
+                            subtitle: Text(_invoice!.status.name))
                         : SizedBox(),
-                    widget.invoice != null
+                    _invoice != null && _invoice!.status == BeRemitStatus.failed
+                        ? ListTile(
+                            title: Text('Refund'),
+                            subtitle: TextButton(
+                                onPressed: _refund,
+                                child: Text('Refund to your account')))
+                        : SizedBox(),
+                    _invoice != null
                         ? ListTile(
                             title: Text('Expiry'),
                             subtitle: Text(_extractedExpiry != null
@@ -215,8 +241,8 @@ Future<void> remitStatus(
     return null;
   });
   if (invoice == null) return;
-  var amount = (Decimal.fromInt(invoice.sender.amount) /
-      Decimal.fromInt(100000000)); //TODO - do these conversions server side?
+  var amount =
+      assetAmountFromUnit(Btc, Sats, Decimal.fromInt(invoice.sender.amount));
   await Navigator.push(
       context,
       MaterialPageRoute<bool>(
