@@ -22,7 +22,7 @@ const MonospaceFont = 'RobotoMono';
 const _DefaultTestnet = true;
 
 // beryllium settings
-const String _BeServerUrl = 'https://be-test.bitforge.me/';
+const String _BeServerUrl = 'https://be-dan.bitforge.me/';
 
 class BeLocationOverride {
   final String? altLocation;
