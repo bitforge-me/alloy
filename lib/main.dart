@@ -33,6 +33,7 @@ import 'assets.dart';
 import 'event.dart';
 import 'widgets.dart';
 import 'autobuy.dart';
+import 'remit.dart';
 
 final log = Logger('Main');
 final routeObserver = RouteObserver<Route>();
@@ -294,6 +295,13 @@ class _MyHomePageState extends State<MyHomePage>
       await urlLaunch(cfg.SupportUrl);
   }
 
+  Future<void> _remit() async {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => RemitSelectScreen(_websocket, _userInfo)));
+  }
+
   Future<void> _legal() async {
     await urlLaunch(cfg.LegalUrl);
   }
@@ -439,6 +447,10 @@ class _MyHomePageState extends State<MyHomePage>
           leading: Icon(Icons.contact_support),
           title: const Text('Support'),
           onTap: _support),
+      ListTile(
+          leading: Icon(Icons.arrow_circle_right),
+          title: const Text('Remit'),
+          onTap: _remit),
       ListTile(
           leading: Icon(Icons.gavel),
           title: const Text('Legal'),

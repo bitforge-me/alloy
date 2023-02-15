@@ -181,6 +181,9 @@ BeBalanceUpdate _$BeBalanceUpdateFromJson(Map<String, dynamic> json) =>
       json['status'] as String,
       json['txid'] as String?,
       json['payment_url'] as String?,
+      json['remit'] == null
+          ? null
+          : BeRemit.fromJson(json['remit'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$BeBalanceUpdateToJson(BeBalanceUpdate instance) =>
@@ -197,6 +200,7 @@ Map<String, dynamic> _$BeBalanceUpdateToJson(BeBalanceUpdate instance) =>
       'status': instance.status,
       'txid': instance.txid,
       'payment_url': instance.paymentUrl,
+      'remit': instance.remit,
     };
 
 BeFiatAccountNumber _$BeFiatAccountNumberFromJson(Map<String, dynamic> json) =>
@@ -284,3 +288,114 @@ const _$BeOrderStatusEnumMap = {
   BeOrderStatus.failed: 'failed',
   BeOrderStatus.cancelled: 'cancelled',
 };
+
+BePaymentMethod _$BePaymentMethodFromJson(Map<String, dynamic> json) =>
+    BePaymentMethod(
+      json['code'] as String,
+      json['name'] as String,
+    );
+
+Map<String, dynamic> _$BePaymentMethodToJson(BePaymentMethod instance) =>
+    <String, dynamic>{
+      'code': instance.code,
+      'name': instance.name,
+    };
+
+BeRemit _$BeRemitFromJson(Map<String, dynamic> json) => BeRemit(
+      DateTime.parse(json['date'] as String),
+      json['token'] as String,
+      json['provider'] as String,
+      json['reference_id'] as String,
+      $enumDecode(
+          _$BePaymentMethodCategoryEnumMap, json['payment_method_category'],
+          unknownValue: BePaymentMethodCategory.unknown),
+      json['payment_method_code'] as String,
+      json['payment_method_name'] as String,
+      json['status'] as String,
+    );
+
+Map<String, dynamic> _$BeRemitToJson(BeRemit instance) => <String, dynamic>{
+      'date': instance.date.toIso8601String(),
+      'token': instance.token,
+      'provider': instance.provider,
+      'reference_id': instance.referenceId,
+      'payment_method_category':
+          _$BePaymentMethodCategoryEnumMap[instance.category]!,
+      'payment_method_code': instance.paymentMethodCode,
+      'payment_method_name': instance.paymentMethodName,
+      'status': instance.status,
+    };
+
+const _$BePaymentMethodCategoryEnumMap = {
+  BePaymentMethodCategory.unknown: 'unknown',
+  BePaymentMethodCategory.mobileMoney: 'mobileMoney',
+  BePaymentMethodCategory.bank: 'bank',
+};
+
+BeRemitAmount _$BeRemitAmountFromJson(Map<String, dynamic> json) =>
+    BeRemitAmount(
+      json['amount'] as int,
+      json['currency'] as String,
+    );
+
+Map<String, dynamic> _$BeRemitAmountToJson(BeRemitAmount instance) =>
+    <String, dynamic>{
+      'amount': instance.amount,
+      'currency': instance.currency,
+    };
+
+BeRemitRecipientAmount _$BeRemitRecipientAmountFromJson(
+        Map<String, dynamic> json) =>
+    BeRemitRecipientAmount(
+      json['name'] as String,
+      json['account_number'] as String?,
+      json['mobile_number'] as String?,
+      json['amount'] as int,
+      json['currency'] as String,
+    );
+
+Map<String, dynamic> _$BeRemitRecipientAmountToJson(
+        BeRemitRecipientAmount instance) =>
+    <String, dynamic>{
+      'amount': instance.amount,
+      'currency': instance.currency,
+      'name': instance.name,
+      'account_number': instance.accountNumber,
+      'mobile_number': instance.mobileNumber,
+    };
+
+BeRemitInvoice _$BeRemitInvoiceFromJson(Map<String, dynamic> json) =>
+    BeRemitInvoice(
+      json['ref_id'] as String,
+      json['status'] as String,
+      json['bolt11'] as String,
+      BeRemitAmount.fromJson(json['sender'] as Map<String, dynamic>),
+      BeRemitRecipientAmount.fromJson(
+          json['recipient'] as Map<String, dynamic>),
+      (json['rates'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(
+            k,
+            (e as Map<String, dynamic>).map(
+              (k, e) => MapEntry(k, (e as num).toDouble()),
+            )),
+      ),
+      (json['fees'] as Map<String, dynamic>).map(
+        (k, e) =>
+            MapEntry(k, BeRemitAmount.fromJson(e as Map<String, dynamic>)),
+      ),
+      DateTime.parse(json['created_at'] as String),
+      DateTime.parse(json['updated_at'] as String),
+    );
+
+Map<String, dynamic> _$BeRemitInvoiceToJson(BeRemitInvoice instance) =>
+    <String, dynamic>{
+      'ref_id': instance.referenceId,
+      'status': instance.status,
+      'bolt11': instance.bolt11,
+      'sender': instance.sender,
+      'recipient': instance.recipient,
+      'rates': instance.rates,
+      'fees': instance.fees,
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
+    };

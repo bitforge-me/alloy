@@ -23,6 +23,7 @@ import 'widgets.dart';
 import 'config.dart';
 import 'qrscan.dart';
 import 'units.dart';
+import 'remit_status.dart';
 
 final log = Logger('Withdrawal');
 
@@ -834,6 +835,13 @@ class _CryptoWithdrawalDetailScreenState
     snackMsg(context, 'copied recipient');
   }
 
+  void _showRemit() {
+    BeRemit remit = _withdrawal.remit!;
+    var pm = BePaymentMethod(remit.paymentMethodCode, remit.paymentMethodName);
+    remitStatus(context, remit.referenceId, remit.category, pm, _testnet,
+        _withdrawal.asset, _withdrawal.l2Network);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -882,6 +890,13 @@ class _CryptoWithdrawalDetailScreenState
                   subtitle: Text(
                       'Check email for withdrawal confirmation link!',
                       style: TextStyle(color: ZapWarning)))),
+          Visibility(
+              visible: _withdrawal.remit != null,
+              child: ListTile(
+                  subtitle: TextButton(
+                      onPressed: _showRemit,
+                      child: Text('Remit Status',
+                          style: TextStyle(color: ZapWarning))))),
           VerticalSpacer(),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,
