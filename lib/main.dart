@@ -37,6 +37,8 @@ import 'remit.dart';
 final log = Logger('Main');
 final routeObserver = RouteObserver<Route>();
 
+enum MainFunction { trade, remit }
+
 void main() {
   // setup logging
   Logger.root.level = Level.INFO;
@@ -98,6 +100,7 @@ class _MyHomePageState extends State<MyHomePage>
   final CarouselController _balanceCarouselController = CarouselController();
   Timer? _mainPriceTimer;
   late String _btcUnit;
+  MainFunction _mainFunc = MainFunction.trade;
 
   _MyHomePageState() {
     _btcUnit = assetUnit(Btc);
@@ -294,13 +297,6 @@ class _MyHomePageState extends State<MyHomePage>
       await urlLaunch(cfg.SupportUrl);
   }
 
-  Future<void> _remit() async {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => RemitSelectScreen(_websocket, _userInfo)));
-  }
-
   Future<void> _legal() async {
     await urlLaunch(cfg.LegalUrl);
   }
@@ -447,10 +443,6 @@ class _MyHomePageState extends State<MyHomePage>
           title: const Text('Support'),
           onTap: _support),
       ListTile(
-          leading: Icon(Icons.arrow_circle_right),
-          title: const Text('Remit'),
-          onTap: _remit),
-      ListTile(
           leading: Icon(Icons.gavel),
           title: const Text('Legal'),
           onTap: _legal),
@@ -526,6 +518,18 @@ class _MyHomePageState extends State<MyHomePage>
             : SizedBox()
       ]);
     });
+  }
+
+  Widget _slider() {
+    return SliderBar<MainFunction>(
+        (v) => setState(() => _mainFunc = v),
+        _mainFunc,
+        [
+          SliderItem(MainFunction.trade, 'ORDER'),
+          SliderItem(MainFunction.remit, 'REMIT')
+        ],
+        alignment: MainAxisAlignment.spaceAround,
+        big: true);
   }
 
   void _onBottomNavBarTap(int index) {
@@ -626,8 +630,17 @@ class _MyHomePageState extends State<MyHomePage>
                   VerticalSpacer(
                       height:
                           constraints.maxWidth >= cfg.MaxColumnWidth ? 50 : 0),
-                  // exchange widget
-                  _makeExchangeWidget(context),
+                  // main function slider
+                  _slider(),
+                  SizedBox(
+                      height: 420,
+                      child: _mainFunc == MainFunction.trade
+                          ?
+                          // exchange widget
+                          _makeExchangeWidget(context)
+                          :
+                          // remit
+                          RemitSelectPage(_websocket, _userInfo)),
                   VerticalSpacer(
                       height:
                           constraints.maxWidth >= cfg.MaxColumnWidth ? 50 : 0),

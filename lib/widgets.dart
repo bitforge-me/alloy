@@ -16,9 +16,14 @@ class CircleButton extends StatelessWidget {
   final void Function() onPressed;
   final Color color;
   final double radius;
+  final double fontSize;
+  final double iconSize;
 
   CircleButton(this.text, this.onPressed,
-      {this.color = Colors.transparent, this.radius = 30.0});
+      {this.color = Colors.transparent,
+      this.radius = 30.0,
+      this.fontSize = 10.0,
+      this.iconSize = 32.0});
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +31,11 @@ class CircleButton extends StatelessWidget {
       radius: radius,
       backgroundColor: color,
       child: IconButton(
+        iconSize: iconSize,
         icon: Text(text,
             softWrap: false,
             style: TextStyle(
-                letterSpacing: 0.5, fontSize: 10.0, color: Colors.white)),
+                letterSpacing: 0.5, fontSize: fontSize, color: Colors.white)),
         onPressed: onPressed,
       ),
     );
@@ -582,5 +588,77 @@ class ListTx extends StatelessWidget {
               children: [amountWidget, Icon(icon, color: color, size: 14)])),
       Visibility(visible: last, child: Divider())
     ]);
+  }
+}
+
+class SliderItem<T> {
+  final T value;
+  final String text;
+
+  SliderItem(this.value, this.text);
+}
+
+class SliderButton<T> extends StatelessWidget {
+  final void Function(T) onPressed;
+  final SliderItem item;
+  final bool selected;
+  final bool big;
+
+  SliderButton(this.onPressed, this.item, this.selected, this.big);
+
+  @override
+  Widget build(BuildContext context) {
+    var radius = big ? 40.0 : 30.0;
+    var fontSize = big ? 12.0 : 10.0;
+    var iconSize = big ? 48.0 : 32.0;
+
+    if (selected) {
+      return Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: ZapPrimaryGradient,
+        ),
+        width: big ? 80 : 60,
+        child: CircleButton(item.text, () => onPressed(item.value),
+            radius: radius, fontSize: fontSize, iconSize: iconSize),
+      );
+    } else
+      return CircleButton(item.text, () => onPressed(item.value),
+          radius: radius, fontSize: fontSize, iconSize: iconSize);
+  }
+}
+
+class SliderBar<T> extends StatelessWidget {
+  final void Function(T)? onPressed;
+  final T? value;
+  final List<SliderItem<T>> items;
+  final MainAxisAlignment alignment;
+  final bool big;
+
+  SliderBar(this.onPressed, this.value, this.items,
+      {this.alignment = MainAxisAlignment.spaceBetween, this.big = false})
+      : super();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(40.0),
+        color: ZapSecondary,
+      ),
+      width: cfg.ButtonWidth,
+      height: cfg.ButtonHeight * (big ? 0.85 : 0.7),
+      child: Row(
+        mainAxisAlignment: alignment,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: items
+            .map((e) => SliderButton<T>(
+                (v) => onPressed != null ? onPressed!(v) : null,
+                e,
+                e.value == value,
+                big))
+            .toList(),
+      ),
+    );
   }
 }

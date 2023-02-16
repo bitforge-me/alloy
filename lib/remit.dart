@@ -20,17 +20,17 @@ import 'withdrawal.dart';
 
 final log = Logger('Remit');
 
-class RemitSelectScreen extends StatefulWidget {
+class RemitSelectPage extends StatefulWidget {
   final Websocket websocket;
   final UserInfo? userInfo;
 
-  RemitSelectScreen(this.websocket, this.userInfo);
+  RemitSelectPage(this.websocket, this.userInfo);
 
   @override
-  State<RemitSelectScreen> createState() => _RemitSelectScreenState();
+  State<RemitSelectPage> createState() => _RemitSelectPageState();
 }
 
-class _RemitSelectScreenState extends State<RemitSelectScreen> {
+class _RemitSelectPageState extends State<RemitSelectPage> {
   Future<void> _remitTap() async {
     showAlertDialog(context, 'querying..');
     var resBal = await beBalance(Btc);
@@ -90,23 +90,17 @@ class _RemitSelectScreenState extends State<RemitSelectScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Remit'),
-      ),
-      body: BitforgePage(
-          child: ListView(children: [
-        Padding(
-            padding: EdgeInsets.all(50),
-            child: Text(
-                'Send funds directly to your family and friends bank accounts abroad using our remittance partners')),
-        ListTile(
-          title: Text('Pouch.ph - Phillipines'),
-          leading: _remitLogo(),
-          onTap: _remitTap,
-        )
-      ])),
-    );
+    return ListView(children: [
+      Padding(
+          padding: EdgeInsets.all(50),
+          child: Text(
+              'Send funds directly to your family and friends bank accounts abroad using our remittance partners')),
+      ListTile(
+        title: Text('Pouch.ph - Phillipines'),
+        leading: _remitLogo(),
+        onTap: _remitTap,
+      )
+    ]);
   }
 }
 
@@ -160,7 +154,7 @@ class _RemitFormScreenState extends State<RemitFormScreen> {
       var maxWithdrawStr =
           assetFormatWithUnitToUser(widget.asset.symbol, maxWithdraw);
       _availableBalance =
-          'Available to withdraw: $maxWithdrawStr\nWithdrawal fee: $fee';
+          'Available to remit: $maxWithdrawStr\nNetwork fee: $fee';
       if (widget.availableBalance > withdrawAsset.withdrawFee)
         _max = widget.availableBalance - withdrawAsset.withdrawFee;
     } else {
@@ -171,7 +165,7 @@ class _RemitFormScreenState extends State<RemitFormScreen> {
       var maxWithdrawStr =
           assetFormatWithUnitToUser(widget.asset.symbol, maxWithdrawRounded);
       _availableBalance =
-          'Available to withdraw: $maxWithdrawStr\nWithdrawal fee: $feePercent%';
+          'Available to remit: $maxWithdrawStr\nNetwork fee: $feePercent%';
       if (widget.availableBalance > Decimal.zero)
         _max = widget.availableBalance -
             widget.availableBalance * withdrawAsset.withdrawFee;
@@ -286,7 +280,6 @@ class _RemitFormScreenState extends State<RemitFormScreen> {
               MaterialPageRoute(
                   builder: (context) => CryptoWithdrawalDetailScreen(
                       withdrawal, widget.websocket)));
-          Navigator.pop(context, true);
         }
       },
           error: (err) => alert(
@@ -307,7 +300,11 @@ class _RemitFormScreenState extends State<RemitFormScreen> {
       if (pms != null)
         for (var pm in pms) {
           pmis.add(DropdownMenuItem<BePaymentMethod>(
-              child: Text(pm.name), value: pm));
+              child: SizedBox(
+                  width: ButtonWidth - 44,
+                  child:
+                      Text(pm.name, maxLines: 2, overflow: TextOverflow.fade)),
+              value: pm));
         }
     }
     return pmis;

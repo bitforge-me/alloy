@@ -24,7 +24,7 @@ enum FieldUpdated { amount, receive }
 
 enum AmountTooHighChoice { none, adjust, gotoDeposit }
 
-enum AmountSliderSelected { none, min, half, max }
+enum SliderAmount { none, min, half, max }
 
 class MarketType {
   BeMarket market;
@@ -54,7 +54,7 @@ class ExchangeModel extends ChangeNotifier {
   Decimal _amountFrom = Decimal.zero;
   Decimal _amountTo = Decimal.zero;
   String? _minAmount;
-  AmountSliderSelected _sliderSelected = AmountSliderSelected.none;
+  SliderAmount _sliderSelected = SliderAmount.none;
 
   Timer? _updateTimer;
   bool _calculating = false;
@@ -115,7 +115,7 @@ class ExchangeModel extends ChangeNotifier {
   }
 
   void clearSlider() {
-    _sliderSelected = AmountSliderSelected.none;
+    _sliderSelected = SliderAmount.none;
     notifyListeners();
   }
 
@@ -562,8 +562,7 @@ class ExchangeModel extends ChangeNotifier {
     if (marketMin.error != null)
       snackMsg(context, marketMin.error!, category: MessageCategory.Warning);
     else
-      _setSliderValue(
-          context, websocket, AmountSliderSelected.min, marketMin.min);
+      _setSliderValue(context, websocket, SliderAmount.min, marketMin.min);
   }
 
   Future<void> setHalf(BuildContext context, Websocket websocket) async {
@@ -571,7 +570,7 @@ class ExchangeModel extends ChangeNotifier {
     res.when((balances) {
       for (var bal in balances)
         if (bal.asset == _fromAsset)
-          _setSliderValue(context, websocket, AmountSliderSelected.half,
+          _setSliderValue(context, websocket, SliderAmount.half,
               bal.available / Decimal.fromInt(2));
     },
         error: (err) => snackMsg(context, 'failed to get balances $err',
@@ -583,15 +582,14 @@ class ExchangeModel extends ChangeNotifier {
     res.when((balances) {
       for (var bal in balances)
         if (bal.asset == _fromAsset)
-          _setSliderValue(
-              context, websocket, AmountSliderSelected.max, bal.available);
+          _setSliderValue(context, websocket, SliderAmount.max, bal.available);
     },
         error: (err) => snackMsg(context, 'failed to get balances $err',
             category: MessageCategory.Warning));
   }
 
   void _setSliderValue(BuildContext context, Websocket websocket,
-      AmountSliderSelected sliderSelected, Decimal value) {
+      SliderAmount sliderSelected, Decimal value) {
     clearSlider();
     _sliderSelected = sliderSelected;
     var valueForUser = assetAmountToUser(_fromAsset, value);
@@ -651,27 +649,6 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         snackMsg(context, 'failed to get markets',
             category: MessageCategory.Warning);
     });
-  }
-
-  Widget _createSliderButton(AmountSliderSelected amount) {
-    var onPressed = amount == AmountSliderSelected.min
-        ? model.setMin
-        : (amount == AmountSliderSelected.half ? model.setHalf : model.setMax);
-    var amountName = amount == AmountSliderSelected.min
-        ? "MIN"
-        : (amount == AmountSliderSelected.half ? "HALF" : "MAX");
-    if (model._sliderSelected == amount) {
-      return Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: ZapPrimaryGradient,
-        ),
-        child: CircleButton(
-            amountName, () => onPressed(context, widget.websocket)),
-      );
-    } else
-      return CircleButton(
-          amountName, () => onPressed(context, widget.websocket));
   }
 
   void _websocketEvent(WsEventArgs? args) {}
@@ -769,30 +746,32 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         ),
       ),
     ]);
-    var exchangeActions = Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(40.0),
-        color: ZapSecondary,
-      ),
-      width: cfg.ButtonWidth,
-      height: cfg.ButtonHeight * 0.7,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _createSliderButton(AmountSliderSelected.min),
-          _createSliderButton(AmountSliderSelected.half),
-          _createSliderButton(AmountSliderSelected.max),
-        ],
-      ),
-    );
+    var exchangeSlider = SliderBar<SliderAmount>((v) {
+      switch (v) {
+        case SliderAmount.none:
+          break;
+        case SliderAmount.min:
+          model.setMin(context, widget.websocket);
+          break;
+        case SliderAmount.half:
+          model.setHalf(context, widget.websocket);
+          break;
+        case SliderAmount.max:
+          model.setMax(context, widget.websocket);
+          break;
+      }
+    }, model._sliderSelected, [
+      SliderItem(SliderAmount.min, 'MIN'),
+      SliderItem(SliderAmount.half, 'HALF'),
+      SliderItem(SliderAmount.max, 'MAX')
+    ]);
     return Column(children: [
       LayoutBuilder(builder: (context, constraints) {
         if (constraints.maxWidth < cfg.MaxColumnWidth)
           return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             from,
             SizedBox(height: 7.0),
-            exchangeActions,
+            exchangeSlider,
             arrowDown,
             to
           ]);
@@ -805,7 +784,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
             Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [SizedBox(width: 8.0), exchangeActions]),
+                children: [SizedBox(width: 8.0), exchangeSlider]),
           ]);
       }),
       VerticalSpacer(),
