@@ -51,7 +51,8 @@ class ExchangeModel extends ChangeNotifier {
   BeBrokerOrder? _validatedOrder = null;
   BeMarketSide _side = BeMarketSide.ask;
   BeMarket _market = BeMarket('', '', '', 0, '', Decimal.zero, '');
-  Decimal _amount = Decimal.zero;
+  Decimal _amountFrom = Decimal.zero;
+  Decimal _amountTo = Decimal.zero;
   String? _minAmount;
   AmountSliderSelected _sliderSelected = AmountSliderSelected.none;
 
@@ -120,6 +121,8 @@ class ExchangeModel extends ChangeNotifier {
 
   void clearInputs() {
     _minAmount = null;
+    _amountFrom = Decimal.zero;
+    _amountTo = Decimal.zero;
     _lastAmount = '';
     _lastReceive = '';
     _amountController.text = '';
@@ -167,6 +170,24 @@ class ExchangeModel extends ChangeNotifier {
     _calculating = true;
     _validatedOrder = null;
     notifyListeners();
+  }
+
+  void amountsRecalc() {
+    if (_side == BeMarketSide.ask) {
+      if (_amountFrom != Decimal.zero)
+        _amountController.text =
+            assetFormatToUser(_fromAsset, _amountFrom, noGroupSeperator: true);
+      if (_amountTo != Decimal.zero)
+        _receiveController.text =
+            assetFormatToUser(_toAsset, _amountTo, noGroupSeperator: true);
+    } else {
+      if (_amountFrom != Decimal.zero)
+        _amountController.text =
+            assetFormatToUser(_fromAsset, _amountTo, noGroupSeperator: true);
+      if (_amountTo != Decimal.zero)
+        _receiveController.text =
+            assetFormatToUser(_toAsset, _amountFrom, noGroupSeperator: true);
+    }
   }
 
   void amountChanged(BuildContext context, Websocket websocket, String? value) {
@@ -438,7 +459,8 @@ class ExchangeModel extends ChangeNotifier {
     }
     _side = side;
     _market = market;
-    _amount = quote.amountBaseAsset;
+    _amountFrom = quote.amountBaseAsset;
+    _amountTo = quote.amountQuoteAsset;
     log.info(quote.toString(
         baseAsset: market.baseAsset, quoteAsset: market.quoteAsset));
     _validatedOrder = validatedOrder;
@@ -580,7 +602,7 @@ class ExchangeModel extends ChangeNotifier {
 
   void exchange(BuildContext context, Websocket websocket) async {
     showAlertDialog(context, 'creating order..');
-    var res = await beOrderCreate(_market.symbol, _side, _amount);
+    var res = await beOrderCreate(_market.symbol, _side, _amountFrom);
     Navigator.pop(context);
     res.when((order) {
       clearInputs();

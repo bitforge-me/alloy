@@ -223,6 +223,8 @@ class _MyHomePageState extends State<MyHomePage>
   void _updateUnitWidget(symbol, unit) {
     assetUnitSet(symbol, unit);
     setState(() => _btcUnit = assetUnit(Btc));
+    context.read<ExchangeModel>().setMinAmount();
+    context.read<ExchangeModel>().amountsRecalc();
   }
 
   void _checkVersion(BeVersionResult res) {
