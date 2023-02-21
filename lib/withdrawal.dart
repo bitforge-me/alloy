@@ -598,7 +598,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                                 var userAmount = Decimal.tryParse(value.trim());
                                 if (userAmount == null) return 'Invalid value';
                                 if (userAmount <= Decimal.zero)
-                                  'Please return a value greater then 0';
+                                  return 'Please return a value greater then 0';
                                 var withdrawAsset =
                                     widget.l2Network ?? widget.asset;
                                 var sysAmount = assetAmountFromUser(

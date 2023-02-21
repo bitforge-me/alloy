@@ -154,7 +154,7 @@ class _DepositAmountScreenState extends State<DepositAmountScreen> {
                                       if (userAmount == null)
                                         return 'Invalid value';
                                       if (userAmount <= Decimal.zero)
-                                        'Please return a value greater then 0';
+                                        return 'Please return a value greater then 0';
                                       return null;
                                     },
                                     keyboardType:
