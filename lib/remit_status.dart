@@ -16,58 +16,56 @@ import 'snack.dart';
 
 final log = Logger('RemitStatus');
 
-enum RemitCheckType { creation, payment, status }
+enum RemitCheckType { CHECK, PAY, FINISH }
 
 class RemitCheckScreen extends StatefulWidget {
   final bool testnet;
-  final String asset;
-  final String? l2Network;
   final RemitCheckType type;
   final BePaymentMethodCategory category;
   final BePaymentMethod paymentMethod;
-  final String name;
-  final String? accountNumber;
-  final String? mobileNumber;
+  final BeRemitRecipientAmount recipient;
+  final String asset;
   final Decimal amount;
   final String? description;
   final BeRemitInvoice? invoice;
+  final String? convertedRemitAmount;
 
   RemitCheckScreen(
       this.testnet,
-      this.asset,
-      this.l2Network,
       this.type,
       this.category,
       this.paymentMethod,
-      this.name,
-      this.accountNumber,
-      this.mobileNumber,
+      this.recipient,
+      this.asset,
       this.amount,
       this.description,
-      this.invoice);
+      this.invoice,
+      this.convertedRemitAmount);
 
   @override
   State<RemitCheckScreen> createState() => _RemitCheckScreenState();
 }
 
 class _RemitCheckScreenState extends State<RemitCheckScreen> {
-  var _extractedAmount = -Decimal.one;
   DateTime? _extractedExpiry;
   BeRemitInvoice? _invoice;
 
   @override
   void initState() {
     _invoice = widget.invoice;
-    _extractedAmount = widget.amount;
-    if (_invoice != null && widget.l2Network != null) {
-      var res = l2RecipientValidate(
-          widget.l2Network!, widget.testnet, _invoice!.bolt11);
-      if (res.result) {
-        if (res.amount != null) _extractedAmount = res.amount!;
-        if (res.expiry != null) _extractedExpiry = res.expiry!;
+    if (_invoice != null) {
+      var res = l2RecipientValidate(BtcLn, widget.testnet, _invoice!.bolt11);
+      if (res.result && res.expiry != null) {
+        _extractedExpiry = res.expiry!;
       }
     }
     super.initState();
+  }
+
+  List<SliderItem<RemitCheckType>> _sliderItems() {
+    return RemitCheckType.values
+        .map((e) => SliderItem<RemitCheckType>(e, e.name))
+        .toList();
   }
 
   void _cancel() {
@@ -92,7 +90,7 @@ class _RemitCheckScreenState extends State<RemitCheckScreen> {
     });
     if (invoice == null) return;
   }
-
+  /*
   Widget? _fees() {
     assert(_invoice != null);
     var feeWidgets = <Widget>[];
@@ -102,36 +100,36 @@ class _RemitCheckScreenState extends State<RemitCheckScreen> {
     }
     return Row(children: feeWidgets);
   }
-
+  */
   String _titleText() {
     switch (widget.type) {
-      case RemitCheckType.creation:
+      case RemitCheckType.CHECK:
         return 'Create Remit Invoice';
-      case RemitCheckType.payment:
+      case RemitCheckType.PAY:
         return 'Pay Remit Invoice';
-      case RemitCheckType.status:
+      case RemitCheckType.FINISH:
         return 'Remit Invoice Status';
     }
   }
 
   String _okText() {
     switch (widget.type) {
-      case RemitCheckType.creation:
+      case RemitCheckType.CHECK:
         return 'Create';
-      case RemitCheckType.payment:
+      case RemitCheckType.PAY:
         return 'Pay';
-      case RemitCheckType.status:
+      case RemitCheckType.FINISH:
         return 'Close';
     }
   }
 
   String _cancelText() {
     switch (widget.type) {
-      case RemitCheckType.creation:
+      case RemitCheckType.CHECK:
         return 'Cancel';
-      case RemitCheckType.payment:
+      case RemitCheckType.PAY:
         return 'Cancel';
-      case RemitCheckType.status:
+      case RemitCheckType.FINISH:
         return 'Close';
     }
   }
@@ -141,11 +139,7 @@ class _RemitCheckScreenState extends State<RemitCheckScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text(_titleText()),
-          actions: [
-            assetLogo(
-                widget.l2Network != null ? widget.l2Network! : widget.asset,
-                margin: EdgeInsets.all(10))
-          ],
+          actions: [assetLogo(widget.asset, margin: EdgeInsets.all(10))],
         ),
         body: BitforgePage(
             scrollChild: true,
@@ -153,13 +147,15 @@ class _RemitCheckScreenState extends State<RemitCheckScreen> {
                 padding: EdgeInsets.all(10),
                 child: Column(children: [
                   ListView(shrinkWrap: true, children: [
+                    SliderBar<RemitCheckType>(null, widget.type, _sliderItems(),
+                        big: true),
                     ListTile(
                       title: Text('Payment Method'),
                       subtitle: Text(widget.paymentMethod.name),
                     ),
                     ListTile(
                       title: Text('Account Name'),
-                      subtitle: Text(widget.name),
+                      subtitle: Text(widget.recipient.name),
                     ),
                     ListTile(
                       title: Text(
@@ -168,13 +164,15 @@ class _RemitCheckScreenState extends State<RemitCheckScreen> {
                               : 'Mobile Number'),
                       subtitle: Text(
                           widget.category == BePaymentMethodCategory.bank
-                              ? '${widget.accountNumber}'
-                              : '${widget.mobileNumber}'),
+                              ? '${widget.recipient.accountNumber}'
+                              : '${widget.recipient.mobileNumber}'),
                     ),
                     ListTile(
                         title: Text('Amount to Send'),
-                        subtitle:
-                            PriceEquivalent(widget.asset, _extractedAmount)),
+                        subtitle: PriceEquivalent(widget.asset, widget.amount,
+                            post: widget.convertedRemitAmount != null
+                                ? '(converted to ${widget.convertedRemitAmount})'
+                                : null)),
                     widget.description != null
                         ? ListTile(
                             title: Text('Description'),
@@ -186,9 +184,11 @@ class _RemitCheckScreenState extends State<RemitCheckScreen> {
                             subtitle: Text(
                                 '${_invoice!.recipient.amount} ${_invoice!.recipient.currency}'))
                         : SizedBox(),
+                    /*
                     _invoice != null
                         ? ListTile(title: Text('Fees'), subtitle: _fees())
                         : SizedBox(),
+                    */
                     _invoice != null
                         ? ListTile(
                             title: Text('Status'),
@@ -212,7 +212,7 @@ class _RemitCheckScreenState extends State<RemitCheckScreen> {
                   Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        widget.type != RemitCheckType.status
+                        widget.type != RemitCheckType.FINISH
                             ? BronzeRoundedButton(_ok, ZapOnPrimary, ZapPrimary,
                                 ZapPrimaryGradient, _okText(),
                                 width: ButtonWidth, height: ButtonHeight)
@@ -231,8 +231,7 @@ Future<void> remitStatus(
     BePaymentMethodCategory category,
     BePaymentMethod paymentMethod,
     bool testnet,
-    String asset,
-    String? l2Network) async {
+    String asset) async {
   showAlertDialog(context, 'getting invoice..');
   var res = await beRemitInvoiceStatus(refId);
   Navigator.pop(context);
@@ -248,15 +247,13 @@ Future<void> remitStatus(
       MaterialPageRoute<bool>(
           builder: (context) => RemitCheckScreen(
               testnet,
-              asset,
-              l2Network,
-              RemitCheckType.status,
+              RemitCheckType.FINISH,
               category,
               paymentMethod,
-              invoice.recipient.name,
-              invoice.recipient.accountNumber,
-              invoice.recipient.mobileNumber,
+              invoice.recipient,
+              asset,
               amount,
               null,
-              invoice)));
+              invoice,
+              null)));
 }

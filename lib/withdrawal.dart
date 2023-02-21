@@ -839,7 +839,7 @@ class _CryptoWithdrawalDetailScreenState
     BeRemit remit = _withdrawal.remit!;
     var pm = BePaymentMethod(remit.paymentMethodCode, remit.paymentMethodName);
     remitStatus(context, remit.referenceId, remit.category, pm, _testnet,
-        _withdrawal.asset, _withdrawal.l2Network);
+        _withdrawal.asset);
   }
 
   @override

@@ -13,7 +13,7 @@ import 'units.dart';
 
 class CircleButton extends StatelessWidget {
   final String text;
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final Color color;
   final double radius;
   final double fontSize;
@@ -599,7 +599,7 @@ class SliderItem<T> {
 }
 
 class SliderButton<T> extends StatelessWidget {
-  final void Function(T) onPressed;
+  final void Function(T)? onPressed;
   final SliderItem item;
   final bool selected;
   final bool big;
@@ -611,7 +611,8 @@ class SliderButton<T> extends StatelessWidget {
     var radius = big ? 40.0 : 30.0;
     var fontSize = big ? 12.0 : 10.0;
     var iconSize = big ? 48.0 : 32.0;
-
+    var pressedFunc =
+        onPressed != null ? () => onPressed?.call(item.value) : null;
     if (selected) {
       return Container(
         decoration: BoxDecoration(
@@ -619,11 +620,11 @@ class SliderButton<T> extends StatelessWidget {
           gradient: ZapPrimaryGradient,
         ),
         width: big ? 80 : 60,
-        child: CircleButton(item.text, () => onPressed(item.value),
+        child: CircleButton(item.text, pressedFunc,
             radius: radius, fontSize: fontSize, iconSize: iconSize),
       );
     } else
-      return CircleButton(item.text, () => onPressed(item.value),
+      return CircleButton(item.text, pressedFunc,
           radius: radius, fontSize: fontSize, iconSize: iconSize);
   }
 }
@@ -652,11 +653,7 @@ class SliderBar<T> extends StatelessWidget {
         mainAxisAlignment: alignment,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: items
-            .map((e) => SliderButton<T>(
-                (v) => onPressed != null ? onPressed!(v) : null,
-                e,
-                e.value == value,
-                big))
+            .map((e) => SliderButton<T>(onPressed, e, e.value == value, big))
             .toList(),
       ),
     );
