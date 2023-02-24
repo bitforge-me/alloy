@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "alloy",
+            "name": "alloy (web)",
             "request": "launch",
             "type": "dart",
             // use specific port so apps 'localstorage' is consistent
@@ -16,6 +16,12 @@
             "request": "launch",
             "type": "dart",
             "args": ["-d", "windows"]
+        },
+        {
+            "name": "alloy (linux)",
+            "request": "launch",
+            "type": "dart",
+            "args": ["-d", "linux"]
         },
         {
             "name": "alloy (profile mode)",
