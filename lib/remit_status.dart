@@ -29,6 +29,7 @@ class RemitCheckScreen extends StatefulWidget {
   final String? description;
   final BeRemitInvoice? invoice;
   final String? convertedRemitAmount;
+  final String? alertText;
 
   RemitCheckScreen(
       this.testnet,
@@ -40,7 +41,8 @@ class RemitCheckScreen extends StatefulWidget {
       this.amount,
       this.description,
       this.invoice,
-      this.convertedRemitAmount);
+      this.convertedRemitAmount,
+      {this.alertText});
 
   @override
   State<RemitCheckScreen> createState() => _RemitCheckScreenState();
@@ -90,6 +92,7 @@ class _RemitCheckScreenState extends State<RemitCheckScreen> {
     });
     if (invoice == null) return;
   }
+
   /*
   Widget? _fees() {
     assert(_invoice != null);
@@ -207,6 +210,12 @@ class _RemitCheckScreenState extends State<RemitCheckScreen> {
                             subtitle: Text(_extractedExpiry != null
                                 ? '$_extractedExpiry (${Jiffy(_extractedExpiry).fromNow()})'
                                 : '-'))
+                        : SizedBox(),
+                    widget.alertText != null
+                        ? ListTile(
+                            title: Text('Alert'),
+                            subtitle: Text('${widget.alertText}',
+                                style: TextStyle(color: ZapWarning)))
                         : SizedBox(),
                   ]),
                   Column(

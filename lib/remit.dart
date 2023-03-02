@@ -16,7 +16,6 @@ import 'widgets.dart';
 import 'config.dart';
 import 'units.dart';
 import 'remit_status.dart';
-import 'withdrawal.dart';
 import 'quote.dart';
 import 'cryptocurrency.dart';
 
@@ -289,6 +288,8 @@ class _RemitFormScreenState extends State<RemitFormScreen> {
             assetFormatWithUnitToUser(orderQuote.baseAsset, remitAmount);
       }
       // ask user to confirm
+      var recipient = BeRemitRecipientAmount(_nameController.text,
+          _accountNumberController.text, _mobileNumberController.text, 0, '');
       var userOk = await Navigator.push(
           context,
           MaterialPageRoute<bool>(
@@ -297,12 +298,7 @@ class _RemitFormScreenState extends State<RemitFormScreen> {
                   RemitCheckType.CHECK,
                   _paymentMethodCategory,
                   _paymentMethod!,
-                  BeRemitRecipientAmount(
-                      _nameController.text,
-                      _accountNumberController.text,
-                      _mobileNumberController.text,
-                      0,
-                      ''),
+                  recipient,
                   _asset.symbol,
                   inputAmount,
                   _descriptionController.text,
@@ -347,49 +343,13 @@ class _RemitFormScreenState extends State<RemitFormScreen> {
                   RemitCheckType.PAY,
                   _paymentMethodCategory,
                   _paymentMethod!,
-                  BeRemitRecipientAmount(
-                      _nameController.text,
-                      _accountNumberController.text,
-                      _mobileNumberController.text,
-                      0,
-                      ''),
+                  recipient,
                   _asset.symbol,
                   inputAmount,
                   _descriptionController.text,
                   invoice,
                   convertedRemitAmount)));
       if (userOk == null || !userOk) return;
-      // create the order if necesary
-      BeBrokerOrder? order;
-      if (_asset.symbol != remitSymbol) {
-        assert(orderQuote != null);
-        if (orderQuote == null) return;
-        showAlertDialog(context, 'creating order..');
-        var resOrderCreate = await beOrderCreate(
-            orderQuote.market, orderQuote.side, orderQuote.baseAmount);
-        Navigator.pop(context);
-        order = resOrderCreate.when((order) => order, error: (err) {
-          snackMsg(context, 'failed to create order - ${BeError.msg(err)}',
-              category: MessageCategory.Warning);
-          return null;
-        });
-        if (order == null) return;
-        // check order matches quote
-        // check amount matches our selected input
-        if (orderQuote.quoteAmount != order.quoteAmount ||
-            orderQuote.baseAmount != order.baseAmount) {
-          snackMsg(context, 'failed to validate order',
-              category: MessageCategory.Warning);
-          return;
-        }
-        showAlertDialog(context, 'accepting order..');
-        var resOrderAccept = await beOrderAccept(order.token);
-        Navigator.pop(context);
-        resOrderAccept.when((order) => order, error: (err) {
-          snackMsg(context, 'failed to accept order - ${BeError.msg(err)}',
-              category: MessageCategory.Warning);
-        });
-      }
       // ask two factor code
       String? tfCode = null;
       if (widget.userInfo?.tfEnabled == true) {
@@ -403,20 +363,29 @@ class _RemitFormScreenState extends State<RemitFormScreen> {
             context, 'Enter your two factor code to make payment', '');
         if (tfCode == null || tfCode.isEmpty) return;
       }
-      // pay invoice
+      // action invoice
       showAlertDialog(context, 'paying invoice..');
-      var res2 = await beRemitInvoicePay(invoice.referenceId, tfCode);
+      var res2 = await beRemitInvoiceAccept(invoice.referenceId,
+          orderQuote?.market, orderQuote?.side, orderQuote?.baseAmount, tfCode);
       Navigator.pop(context);
       res2.when((remit, invoice, withdrawal) async {
-        if (withdrawal == null) {
-          alert(context, 'error', 'failed to pay invoice');
-        } else {
-          await Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => CryptoWithdrawalDetailScreen(
-                      withdrawal, widget.websocket)));
-        }
+        // show user final status
+        userOk = await Navigator.push(
+            context,
+            MaterialPageRoute<bool>(
+                builder: (context) => RemitCheckScreen(
+                    _testnet,
+                    RemitCheckType.FINISH,
+                    _paymentMethodCategory,
+                    _paymentMethod!,
+                    recipient,
+                    _asset.symbol,
+                    inputAmount,
+                    _descriptionController.text,
+                    invoice,
+                    convertedRemitAmount,
+                    alertText:
+                        'check email to approve remit confirmation before invoice expiry')));
       },
           error: (err) => alert(
               context, 'error', 'failed to pay invoice (${BeError.msg(err)})'));

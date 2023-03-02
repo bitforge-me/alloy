@@ -1442,10 +1442,17 @@ Future<BeRemitInvoiceResult> beRemitInvoiceStatus(String refId) async {
       error: (err) => BeRemitInvoiceResult.error(err));
 }
 
-Future<BeRemitInvoiceResult> beRemitInvoicePay(
-    String refId, String? tfCode) async {
+Future<BeRemitInvoiceResult> beRemitInvoiceAccept(String refId, String? market,
+    BeMarketSide? side, Decimal? amount, String? tfCode) async {
   var result = await post(
-      "remit_invoice_pay", {"ref_id": refId, "tf_code": tfCode},
+      "remit_invoice_accept",
+      {
+        "ref_id": refId,
+        "market": market,
+        "side": side?.name,
+        "amount_dec": amount?.toString(),
+        "tf_code": tfCode
+      },
       authRequired: true);
   return result.when((content) => BeRemitInvoiceResult.parse(content),
       error: (err) => BeRemitInvoiceResult.error(err));
