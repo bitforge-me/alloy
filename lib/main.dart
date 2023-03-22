@@ -7,6 +7,7 @@ import 'package:universal_html/html.dart' as html;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'dart:async';
 import 'package:provider/provider.dart';
+import 'package:decimal/decimal.dart';
 
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
@@ -280,7 +281,7 @@ class _MyHomePageState extends State<MyHomePage>
       var bolt11 = json['bolt11'];
       var description = json['description'];
       var sats = json['amount_sat'];
-      var amount = assetAmountFromUnit(Btc, Sats, sats);
+      var amount = assetAmountFromUnit(Btc, Sats, Decimal.fromInt(sats));
       Navigator.push(
           context,
           MaterialPageRoute(
