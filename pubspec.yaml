@@ -74,6 +74,7 @@ flutter:
     - assets/crypto_logos/
     - assets/deposit_methods/
     - assets/aplyid-logo.webp
+    - assets/pouch-logo.png
       # we need to package our fonts used by dart:google_fonts package or else the chosen fonts will fail to load in iOS Safari
     - google_fonts/
 

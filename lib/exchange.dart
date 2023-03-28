@@ -24,7 +24,7 @@ enum FieldUpdated { amount, receive }
 
 enum AmountTooHighChoice { none, adjust, gotoDeposit }
 
-enum AmountSliderSelected { none, min, half, max }
+enum SliderAmount { none, min, half, max }
 
 class MarketType {
   BeMarket market;
@@ -51,9 +51,10 @@ class ExchangeModel extends ChangeNotifier {
   BeBrokerOrder? _validatedOrder = null;
   BeMarketSide _side = BeMarketSide.ask;
   BeMarket _market = BeMarket('', '', '', 0, '', Decimal.zero, '');
-  Decimal _amount = Decimal.zero;
+  Decimal _amountFrom = Decimal.zero;
+  Decimal _amountTo = Decimal.zero;
   String? _minAmount;
-  AmountSliderSelected _sliderSelected = AmountSliderSelected.none;
+  SliderAmount _sliderSelected = SliderAmount.none;
 
   Timer? _updateTimer;
   bool _calculating = false;
@@ -114,12 +115,14 @@ class ExchangeModel extends ChangeNotifier {
   }
 
   void clearSlider() {
-    _sliderSelected = AmountSliderSelected.none;
+    _sliderSelected = SliderAmount.none;
     notifyListeners();
   }
 
   void clearInputs() {
     _minAmount = null;
+    _amountFrom = Decimal.zero;
+    _amountTo = Decimal.zero;
     _lastAmount = '';
     _lastReceive = '';
     _amountController.text = '';
@@ -167,6 +170,24 @@ class ExchangeModel extends ChangeNotifier {
     _calculating = true;
     _validatedOrder = null;
     notifyListeners();
+  }
+
+  void amountsRecalc() {
+    if (_side == BeMarketSide.ask) {
+      if (_amountFrom != Decimal.zero)
+        _amountController.text =
+            assetFormatToUser(_fromAsset, _amountFrom, noGroupSeperator: true);
+      if (_amountTo != Decimal.zero)
+        _receiveController.text =
+            assetFormatToUser(_toAsset, _amountTo, noGroupSeperator: true);
+    } else {
+      if (_amountFrom != Decimal.zero)
+        _amountController.text =
+            assetFormatToUser(_fromAsset, _amountTo, noGroupSeperator: true);
+      if (_amountTo != Decimal.zero)
+        _receiveController.text =
+            assetFormatToUser(_toAsset, _amountFrom, noGroupSeperator: true);
+    }
   }
 
   void amountChanged(BuildContext context, Websocket websocket, String? value) {
@@ -217,93 +238,6 @@ class ExchangeModel extends ChangeNotifier {
       _calculating = false;
       notifyListeners();
     });
-  }
-
-  QuoteTotalPrice? _bruteForceQuote(Decimal value, BeMarket market,
-      BeMarketSide side, BeOrderbook orderbook) {
-    // first do a basic estimate amount of quote asset we will need using the order book
-    var quoteAssetAmount = roundAt(value, assetDecimals(market.quoteAsset));
-    var estimate =
-        estimateFromQuoteAssetAmount(side, market, orderbook, quoteAssetAmount);
-    if (estimate.errMsg != null) {
-      // give user an idea of the estimate if we abort early
-      //if (estimate.amountBaseAsset != Decimal.zero)
-      //  targetController.text = assetFormat(toAsset,
-      //      assetAmountToUser(toAsset, estimate.amountBaseAsset));
-      return estimate;
-    }
-    // find the `smallestAmount` using the number of decimal places in the asset
-    var smallestAmount = Decimal.one /
-        power(Decimal.fromInt(10), assetDecimals(market.baseAsset));
-    // set an initial `adjustAmount` that we will adjust the estimate each loop
-    var adjustAmount = smallestAmount * Decimal.fromInt(100);
-    // create our first estimate input
-    var estInput =
-        roundAt(estimate.amountBaseAsset, assetDecimals(market.baseAsset));
-    // now create our first real estimate using the same method as the server
-    //   ie. walk the order book using a set amount of the base asset and increase the quote asset required by the fee percentage
-    if (side == BeMarketSide.ask)
-      estimate = askQuoteAmount(market, orderbook, estInput);
-    else
-      estimate = bidQuoteAmount(market, orderbook, estInput);
-    // now we loop as long as the server method estimate of the quote asset is not what we actually want to pay
-    //   note: it should start as larger and we reduce it each loop iteration
-    var n = 0;
-    while (
-        roundAt(estimate.amountQuoteAsset, assetDecimals(market.quoteAsset)) !=
-            quoteAssetAmount) {
-      // adjust estimate input
-      if (side == BeMarketSide.ask)
-        estInput += adjustAmount;
-      else
-        estInput -= adjustAmount;
-      estInput = roundAt(estInput, assetDecimals(market.baseAsset));
-      // generate new estimate
-      if (side == BeMarketSide.ask)
-        estimate = askQuoteAmount(market, orderbook, estInput);
-      else
-        estimate = bidQuoteAmount(market, orderbook, estInput);
-      if (estimate.errMsg != null) {
-        // give user an idea of the estimate if we abort early
-        //if (estimate.amountBaseAsset != Decimal.zero)
-        //  targetController.text = assetFormat(toAsset,
-        //      assetAmountToUser(toAsset, estimate.amountBaseAsset));
-        return estimate;
-      }
-      // if we overshoot we need to walk back the estimate input a bit
-      if (side == BeMarketSide.ask &&
-              estimate.amountQuoteAsset > quoteAssetAmount ||
-          side == BeMarketSide.bid &&
-              estimate.amountQuoteAsset < quoteAssetAmount) {
-        n = 0;
-        if (side == BeMarketSide.ask)
-          estInput -= adjustAmount *
-              Decimal.fromInt(
-                  2); // twice because we reduced it at the start of the loop
-        else
-          estInput += adjustAmount *
-              Decimal.fromInt(
-                  2); // twice because we reduced it at the start of the loop
-        // if the adjustAmount is greater then the smallestAmount then we need to make it a bit more fine grained
-        if (adjustAmount > smallestAmount) {
-          adjustAmount = adjustAmount / Decimal.fromInt(2);
-          if (adjustAmount < smallestAmount) adjustAmount = smallestAmount;
-        }
-        continue;
-      }
-      // we will short cut the loop by periodically increasing the adjustment amount
-      if (n > 10) {
-        n = 0;
-        adjustAmount = adjustAmount * Decimal.fromInt(10);
-      } else
-        n = n + 1;
-    }
-    return QuoteTotalPrice(
-        estimate.amountBaseAsset,
-        roundAt(estimate.amountQuoteAsset, assetDecimals(market.quoteAsset)),
-        estimate.feeQuoteAsset,
-        estimate.fixedFeeQuoteAsset,
-        estimate.errMsg);
   }
 
   Future<void> _updateQuote(
@@ -379,7 +313,7 @@ class ExchangeModel extends ChangeNotifier {
         case FieldUpdated.amount:
           switch (side) {
             case BeMarketSide.bid:
-              return _bruteForceQuote(value, market, side, orderbook);
+              return bruteForceQuote(value, market, side, orderbook);
             case BeMarketSide.ask:
               return askQuoteAmount(market, orderbook, value);
           }
@@ -388,7 +322,7 @@ class ExchangeModel extends ChangeNotifier {
             case BeMarketSide.bid:
               return bidQuoteAmount(market, orderbook, value);
             case BeMarketSide.ask:
-              return _bruteForceQuote(value, market, side, orderbook);
+              return bruteForceQuote(value, market, side, orderbook);
           }
       }
     }, error: (err) {
@@ -438,7 +372,8 @@ class ExchangeModel extends ChangeNotifier {
     }
     _side = side;
     _market = market;
-    _amount = quote.amountBaseAsset;
+    _amountFrom = quote.amountBaseAsset;
+    _amountTo = quote.amountQuoteAsset;
     log.info(quote.toString(
         baseAsset: market.baseAsset, quoteAsset: market.quoteAsset));
     _validatedOrder = validatedOrder;
@@ -540,8 +475,7 @@ class ExchangeModel extends ChangeNotifier {
     if (marketMin.error != null)
       snackMsg(context, marketMin.error!, category: MessageCategory.Warning);
     else
-      _setSliderValue(
-          context, websocket, AmountSliderSelected.min, marketMin.min);
+      _setSliderValue(context, websocket, SliderAmount.min, marketMin.min);
   }
 
   Future<void> setHalf(BuildContext context, Websocket websocket) async {
@@ -549,7 +483,7 @@ class ExchangeModel extends ChangeNotifier {
     res.when((balances) {
       for (var bal in balances)
         if (bal.asset == _fromAsset)
-          _setSliderValue(context, websocket, AmountSliderSelected.half,
+          _setSliderValue(context, websocket, SliderAmount.half,
               bal.available / Decimal.fromInt(2));
     },
         error: (err) => snackMsg(context, 'failed to get balances $err',
@@ -561,15 +495,14 @@ class ExchangeModel extends ChangeNotifier {
     res.when((balances) {
       for (var bal in balances)
         if (bal.asset == _fromAsset)
-          _setSliderValue(
-              context, websocket, AmountSliderSelected.max, bal.available);
+          _setSliderValue(context, websocket, SliderAmount.max, bal.available);
     },
         error: (err) => snackMsg(context, 'failed to get balances $err',
             category: MessageCategory.Warning));
   }
 
   void _setSliderValue(BuildContext context, Websocket websocket,
-      AmountSliderSelected sliderSelected, Decimal value) {
+      SliderAmount sliderSelected, Decimal value) {
     clearSlider();
     _sliderSelected = sliderSelected;
     var valueForUser = assetAmountToUser(_fromAsset, value);
@@ -580,7 +513,7 @@ class ExchangeModel extends ChangeNotifier {
 
   void exchange(BuildContext context, Websocket websocket) async {
     showAlertDialog(context, 'creating order..');
-    var res = await beOrderCreate(_market.symbol, _side, _amount);
+    var res = await beOrderCreate(_market.symbol, _side, _amountFrom);
     Navigator.pop(context);
     res.when((order) {
       clearInputs();
@@ -629,27 +562,6 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         snackMsg(context, 'failed to get markets',
             category: MessageCategory.Warning);
     });
-  }
-
-  Widget _createSliderButton(AmountSliderSelected amount) {
-    var onPressed = amount == AmountSliderSelected.min
-        ? model.setMin
-        : (amount == AmountSliderSelected.half ? model.setHalf : model.setMax);
-    var amountName = amount == AmountSliderSelected.min
-        ? "MIN"
-        : (amount == AmountSliderSelected.half ? "HALF" : "MAX");
-    if (model._sliderSelected == amount) {
-      return Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: ZapPrimaryGradient,
-        ),
-        child: CircleButton(
-            amountName, () => onPressed(context, widget.websocket)),
-      );
-    } else
-      return CircleButton(
-          amountName, () => onPressed(context, widget.websocket));
   }
 
   void _websocketEvent(WsEventArgs? args) {}
@@ -747,30 +659,32 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
         ),
       ),
     ]);
-    var exchangeActions = Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(40.0),
-        color: ZapSecondary,
-      ),
-      width: cfg.ButtonWidth,
-      height: cfg.ButtonHeight * 0.7,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _createSliderButton(AmountSliderSelected.min),
-          _createSliderButton(AmountSliderSelected.half),
-          _createSliderButton(AmountSliderSelected.max),
-        ],
-      ),
-    );
+    var exchangeSlider = SliderBar<SliderAmount>((v) {
+      switch (v) {
+        case SliderAmount.none:
+          break;
+        case SliderAmount.min:
+          model.setMin(context, widget.websocket);
+          break;
+        case SliderAmount.half:
+          model.setHalf(context, widget.websocket);
+          break;
+        case SliderAmount.max:
+          model.setMax(context, widget.websocket);
+          break;
+      }
+    }, model._sliderSelected, [
+      SliderItem(SliderAmount.min, 'MIN'),
+      SliderItem(SliderAmount.half, 'HALF'),
+      SliderItem(SliderAmount.max, 'MAX')
+    ]);
     return Column(children: [
       LayoutBuilder(builder: (context, constraints) {
         if (constraints.maxWidth < cfg.MaxColumnWidth)
           return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             from,
             SizedBox(height: 7.0),
-            exchangeActions,
+            exchangeSlider,
             arrowDown,
             to
           ]);
@@ -783,7 +697,7 @@ class _ExchangeWidgetState extends State<ExchangeWidget> {
             Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [SizedBox(width: 8.0), exchangeActions]),
+                children: [SizedBox(width: 8.0), exchangeSlider]),
           ]);
       }),
       VerticalSpacer(),

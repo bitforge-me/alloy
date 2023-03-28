@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'beryllium.dart';
 
@@ -3439,6 +3439,7 @@ class _$_BeAssetResult with DiagnosticableTreeMixin implements _BeAssetResult {
   final List<BeAsset> _assets;
   @override
   List<BeAsset> get assets {
+    if (_assets is EqualUnmodifiableListView) return _assets;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_assets);
   }
@@ -3800,6 +3801,7 @@ class _$_BeMarketResult
   final List<BeMarket> _markets;
   @override
   List<BeMarket> get markets {
+    if (_markets is EqualUnmodifiableListView) return _markets;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_markets);
   }
@@ -4525,6 +4527,7 @@ class _$_BeBalancesResult
   final List<BeBalance> _balances;
   @override
   List<BeBalance> get balances {
+    if (_balances is EqualUnmodifiableListView) return _balances;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_balances);
   }
@@ -6403,6 +6406,7 @@ class _$_BeDepositsResult
   final List<BeBalanceUpdate> _deposits;
   @override
   List<BeBalanceUpdate> get deposits {
+    if (_deposits is EqualUnmodifiableListView) return _deposits;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_deposits);
   }
@@ -7180,6 +7184,7 @@ class _$_BeWithdrawalsResult
   final List<BeBalanceUpdate> _withdrawals;
   @override
   List<BeBalanceUpdate> get withdrawals {
+    if (_withdrawals is EqualUnmodifiableListView) return _withdrawals;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_withdrawals);
   }
@@ -7578,6 +7583,7 @@ class _$_BeAddressBookResult
   final List<BeAddressBookEntry> _entries;
   @override
   List<BeAddressBookEntry> get entries {
+    if (_entries is EqualUnmodifiableListView) return _entries;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_entries);
   }
@@ -8327,6 +8333,7 @@ class _$_BeBrokerOrdersResult
   final List<BeBrokerOrder> _orders;
   @override
   List<BeBrokerOrder> get orders {
+    if (_orders is EqualUnmodifiableListView) return _orders;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_orders);
   }
@@ -8620,5 +8627,809 @@ abstract class _BeBrokerOrdersResultErr implements BeBrokerOrdersResult {
   BeError get err;
   @JsonKey(ignore: true)
   _$$_BeBrokerOrdersResultErrCopyWith<_$_BeBrokerOrdersResultErr>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$BeRemitPaymentMethodsResult {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            Map<BePaymentMethodCategory, List<BePaymentMethod>> paymentMethods)
+        $default, {
+    required TResult Function(BeError err) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            Map<BePaymentMethodCategory, List<BePaymentMethod>> paymentMethods)?
+        $default, {
+    TResult? Function(BeError err)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            Map<BePaymentMethodCategory, List<BePaymentMethod>> paymentMethods)?
+        $default, {
+    TResult Function(BeError err)? error,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_BeRemitPaymentMethodsResult value) $default, {
+    required TResult Function(_BeRemitPaymentMethodsResultErr value) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_BeRemitPaymentMethodsResult value)? $default, {
+    TResult? Function(_BeRemitPaymentMethodsResultErr value)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_BeRemitPaymentMethodsResult value)? $default, {
+    TResult Function(_BeRemitPaymentMethodsResultErr value)? error,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $BeRemitPaymentMethodsResultCopyWith<$Res> {
+  factory $BeRemitPaymentMethodsResultCopyWith(
+          BeRemitPaymentMethodsResult value,
+          $Res Function(BeRemitPaymentMethodsResult) then) =
+      _$BeRemitPaymentMethodsResultCopyWithImpl<$Res,
+          BeRemitPaymentMethodsResult>;
+}
+
+/// @nodoc
+class _$BeRemitPaymentMethodsResultCopyWithImpl<$Res,
+        $Val extends BeRemitPaymentMethodsResult>
+    implements $BeRemitPaymentMethodsResultCopyWith<$Res> {
+  _$BeRemitPaymentMethodsResultCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+}
+
+/// @nodoc
+abstract class _$$_BeRemitPaymentMethodsResultCopyWith<$Res> {
+  factory _$$_BeRemitPaymentMethodsResultCopyWith(
+          _$_BeRemitPaymentMethodsResult value,
+          $Res Function(_$_BeRemitPaymentMethodsResult) then) =
+      __$$_BeRemitPaymentMethodsResultCopyWithImpl<$Res>;
+  @useResult
+  $Res call(
+      {Map<BePaymentMethodCategory, List<BePaymentMethod>> paymentMethods});
+}
+
+/// @nodoc
+class __$$_BeRemitPaymentMethodsResultCopyWithImpl<$Res>
+    extends _$BeRemitPaymentMethodsResultCopyWithImpl<$Res,
+        _$_BeRemitPaymentMethodsResult>
+    implements _$$_BeRemitPaymentMethodsResultCopyWith<$Res> {
+  __$$_BeRemitPaymentMethodsResultCopyWithImpl(
+      _$_BeRemitPaymentMethodsResult _value,
+      $Res Function(_$_BeRemitPaymentMethodsResult) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? paymentMethods = null,
+  }) {
+    return _then(_$_BeRemitPaymentMethodsResult(
+      null == paymentMethods
+          ? _value._paymentMethods
+          : paymentMethods // ignore: cast_nullable_to_non_nullable
+              as Map<BePaymentMethodCategory, List<BePaymentMethod>>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_BeRemitPaymentMethodsResult
+    with DiagnosticableTreeMixin
+    implements _BeRemitPaymentMethodsResult {
+  const _$_BeRemitPaymentMethodsResult(
+      final Map<BePaymentMethodCategory, List<BePaymentMethod>> paymentMethods)
+      : _paymentMethods = paymentMethods;
+
+  final Map<BePaymentMethodCategory, List<BePaymentMethod>> _paymentMethods;
+  @override
+  Map<BePaymentMethodCategory, List<BePaymentMethod>> get paymentMethods {
+    if (_paymentMethods is EqualUnmodifiableMapView) return _paymentMethods;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_paymentMethods);
+  }
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'BeRemitPaymentMethodsResult(paymentMethods: $paymentMethods)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'BeRemitPaymentMethodsResult'))
+      ..add(DiagnosticsProperty('paymentMethods', paymentMethods));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_BeRemitPaymentMethodsResult &&
+            const DeepCollectionEquality()
+                .equals(other._paymentMethods, _paymentMethods));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_paymentMethods));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_BeRemitPaymentMethodsResultCopyWith<_$_BeRemitPaymentMethodsResult>
+      get copyWith => __$$_BeRemitPaymentMethodsResultCopyWithImpl<
+          _$_BeRemitPaymentMethodsResult>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            Map<BePaymentMethodCategory, List<BePaymentMethod>> paymentMethods)
+        $default, {
+    required TResult Function(BeError err) error,
+  }) {
+    return $default(paymentMethods);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            Map<BePaymentMethodCategory, List<BePaymentMethod>> paymentMethods)?
+        $default, {
+    TResult? Function(BeError err)? error,
+  }) {
+    return $default?.call(paymentMethods);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            Map<BePaymentMethodCategory, List<BePaymentMethod>> paymentMethods)?
+        $default, {
+    TResult Function(BeError err)? error,
+    required TResult orElse(),
+  }) {
+    if ($default != null) {
+      return $default(paymentMethods);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_BeRemitPaymentMethodsResult value) $default, {
+    required TResult Function(_BeRemitPaymentMethodsResultErr value) error,
+  }) {
+    return $default(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_BeRemitPaymentMethodsResult value)? $default, {
+    TResult? Function(_BeRemitPaymentMethodsResultErr value)? error,
+  }) {
+    return $default?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_BeRemitPaymentMethodsResult value)? $default, {
+    TResult Function(_BeRemitPaymentMethodsResultErr value)? error,
+    required TResult orElse(),
+  }) {
+    if ($default != null) {
+      return $default(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _BeRemitPaymentMethodsResult
+    implements BeRemitPaymentMethodsResult {
+  const factory _BeRemitPaymentMethodsResult(
+      final Map<BePaymentMethodCategory, List<BePaymentMethod>>
+          paymentMethods) = _$_BeRemitPaymentMethodsResult;
+
+  Map<BePaymentMethodCategory, List<BePaymentMethod>> get paymentMethods;
+  @JsonKey(ignore: true)
+  _$$_BeRemitPaymentMethodsResultCopyWith<_$_BeRemitPaymentMethodsResult>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$_BeRemitPaymentMethodsResultErrCopyWith<$Res> {
+  factory _$$_BeRemitPaymentMethodsResultErrCopyWith(
+          _$_BeRemitPaymentMethodsResultErr value,
+          $Res Function(_$_BeRemitPaymentMethodsResultErr) then) =
+      __$$_BeRemitPaymentMethodsResultErrCopyWithImpl<$Res>;
+  @useResult
+  $Res call({BeError err});
+
+  $BeErrorCopyWith<$Res> get err;
+}
+
+/// @nodoc
+class __$$_BeRemitPaymentMethodsResultErrCopyWithImpl<$Res>
+    extends _$BeRemitPaymentMethodsResultCopyWithImpl<$Res,
+        _$_BeRemitPaymentMethodsResultErr>
+    implements _$$_BeRemitPaymentMethodsResultErrCopyWith<$Res> {
+  __$$_BeRemitPaymentMethodsResultErrCopyWithImpl(
+      _$_BeRemitPaymentMethodsResultErr _value,
+      $Res Function(_$_BeRemitPaymentMethodsResultErr) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? err = null,
+  }) {
+    return _then(_$_BeRemitPaymentMethodsResultErr(
+      null == err
+          ? _value.err
+          : err // ignore: cast_nullable_to_non_nullable
+              as BeError,
+    ));
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
+      return _then(_value.copyWith(err: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$_BeRemitPaymentMethodsResultErr
+    with DiagnosticableTreeMixin
+    implements _BeRemitPaymentMethodsResultErr {
+  const _$_BeRemitPaymentMethodsResultErr(this.err);
+
+  @override
+  final BeError err;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'BeRemitPaymentMethodsResult.error(err: $err)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'BeRemitPaymentMethodsResult.error'))
+      ..add(DiagnosticsProperty('err', err));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_BeRemitPaymentMethodsResultErr &&
+            (identical(other.err, err) || other.err == err));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, err);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_BeRemitPaymentMethodsResultErrCopyWith<_$_BeRemitPaymentMethodsResultErr>
+      get copyWith => __$$_BeRemitPaymentMethodsResultErrCopyWithImpl<
+          _$_BeRemitPaymentMethodsResultErr>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            Map<BePaymentMethodCategory, List<BePaymentMethod>> paymentMethods)
+        $default, {
+    required TResult Function(BeError err) error,
+  }) {
+    return error(err);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            Map<BePaymentMethodCategory, List<BePaymentMethod>> paymentMethods)?
+        $default, {
+    TResult? Function(BeError err)? error,
+  }) {
+    return error?.call(err);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            Map<BePaymentMethodCategory, List<BePaymentMethod>> paymentMethods)?
+        $default, {
+    TResult Function(BeError err)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(err);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_BeRemitPaymentMethodsResult value) $default, {
+    required TResult Function(_BeRemitPaymentMethodsResultErr value) error,
+  }) {
+    return error(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_BeRemitPaymentMethodsResult value)? $default, {
+    TResult? Function(_BeRemitPaymentMethodsResultErr value)? error,
+  }) {
+    return error?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_BeRemitPaymentMethodsResult value)? $default, {
+    TResult Function(_BeRemitPaymentMethodsResultErr value)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _BeRemitPaymentMethodsResultErr
+    implements BeRemitPaymentMethodsResult {
+  const factory _BeRemitPaymentMethodsResultErr(final BeError err) =
+      _$_BeRemitPaymentMethodsResultErr;
+
+  BeError get err;
+  @JsonKey(ignore: true)
+  _$$_BeRemitPaymentMethodsResultErrCopyWith<_$_BeRemitPaymentMethodsResultErr>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$BeRemitInvoiceResult {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            BeRemit remit, BeRemitInvoice invoice, BeBalanceUpdate? withdrawal)
+        $default, {
+    required TResult Function(BeError err) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            BeRemit remit, BeRemitInvoice invoice, BeBalanceUpdate? withdrawal)?
+        $default, {
+    TResult? Function(BeError err)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            BeRemit remit, BeRemitInvoice invoice, BeBalanceUpdate? withdrawal)?
+        $default, {
+    TResult Function(BeError err)? error,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_BeRemitInvoiceResult value) $default, {
+    required TResult Function(_BeRemitInvoiceResultErr value) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_BeRemitInvoiceResult value)? $default, {
+    TResult? Function(_BeRemitInvoiceResultErr value)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_BeRemitInvoiceResult value)? $default, {
+    TResult Function(_BeRemitInvoiceResultErr value)? error,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $BeRemitInvoiceResultCopyWith<$Res> {
+  factory $BeRemitInvoiceResultCopyWith(BeRemitInvoiceResult value,
+          $Res Function(BeRemitInvoiceResult) then) =
+      _$BeRemitInvoiceResultCopyWithImpl<$Res, BeRemitInvoiceResult>;
+}
+
+/// @nodoc
+class _$BeRemitInvoiceResultCopyWithImpl<$Res,
+        $Val extends BeRemitInvoiceResult>
+    implements $BeRemitInvoiceResultCopyWith<$Res> {
+  _$BeRemitInvoiceResultCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+}
+
+/// @nodoc
+abstract class _$$_BeRemitInvoiceResultCopyWith<$Res> {
+  factory _$$_BeRemitInvoiceResultCopyWith(_$_BeRemitInvoiceResult value,
+          $Res Function(_$_BeRemitInvoiceResult) then) =
+      __$$_BeRemitInvoiceResultCopyWithImpl<$Res>;
+  @useResult
+  $Res call(
+      {BeRemit remit, BeRemitInvoice invoice, BeBalanceUpdate? withdrawal});
+}
+
+/// @nodoc
+class __$$_BeRemitInvoiceResultCopyWithImpl<$Res>
+    extends _$BeRemitInvoiceResultCopyWithImpl<$Res, _$_BeRemitInvoiceResult>
+    implements _$$_BeRemitInvoiceResultCopyWith<$Res> {
+  __$$_BeRemitInvoiceResultCopyWithImpl(_$_BeRemitInvoiceResult _value,
+      $Res Function(_$_BeRemitInvoiceResult) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? remit = null,
+    Object? invoice = null,
+    Object? withdrawal = freezed,
+  }) {
+    return _then(_$_BeRemitInvoiceResult(
+      null == remit
+          ? _value.remit
+          : remit // ignore: cast_nullable_to_non_nullable
+              as BeRemit,
+      null == invoice
+          ? _value.invoice
+          : invoice // ignore: cast_nullable_to_non_nullable
+              as BeRemitInvoice,
+      freezed == withdrawal
+          ? _value.withdrawal
+          : withdrawal // ignore: cast_nullable_to_non_nullable
+              as BeBalanceUpdate?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_BeRemitInvoiceResult
+    with DiagnosticableTreeMixin
+    implements _BeRemitInvoiceResult {
+  const _$_BeRemitInvoiceResult(this.remit, this.invoice, this.withdrawal);
+
+  @override
+  final BeRemit remit;
+  @override
+  final BeRemitInvoice invoice;
+  @override
+  final BeBalanceUpdate? withdrawal;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'BeRemitInvoiceResult(remit: $remit, invoice: $invoice, withdrawal: $withdrawal)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'BeRemitInvoiceResult'))
+      ..add(DiagnosticsProperty('remit', remit))
+      ..add(DiagnosticsProperty('invoice', invoice))
+      ..add(DiagnosticsProperty('withdrawal', withdrawal));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_BeRemitInvoiceResult &&
+            (identical(other.remit, remit) || other.remit == remit) &&
+            (identical(other.invoice, invoice) || other.invoice == invoice) &&
+            (identical(other.withdrawal, withdrawal) ||
+                other.withdrawal == withdrawal));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, remit, invoice, withdrawal);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_BeRemitInvoiceResultCopyWith<_$_BeRemitInvoiceResult> get copyWith =>
+      __$$_BeRemitInvoiceResultCopyWithImpl<_$_BeRemitInvoiceResult>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            BeRemit remit, BeRemitInvoice invoice, BeBalanceUpdate? withdrawal)
+        $default, {
+    required TResult Function(BeError err) error,
+  }) {
+    return $default(remit, invoice, withdrawal);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            BeRemit remit, BeRemitInvoice invoice, BeBalanceUpdate? withdrawal)?
+        $default, {
+    TResult? Function(BeError err)? error,
+  }) {
+    return $default?.call(remit, invoice, withdrawal);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            BeRemit remit, BeRemitInvoice invoice, BeBalanceUpdate? withdrawal)?
+        $default, {
+    TResult Function(BeError err)? error,
+    required TResult orElse(),
+  }) {
+    if ($default != null) {
+      return $default(remit, invoice, withdrawal);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_BeRemitInvoiceResult value) $default, {
+    required TResult Function(_BeRemitInvoiceResultErr value) error,
+  }) {
+    return $default(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_BeRemitInvoiceResult value)? $default, {
+    TResult? Function(_BeRemitInvoiceResultErr value)? error,
+  }) {
+    return $default?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_BeRemitInvoiceResult value)? $default, {
+    TResult Function(_BeRemitInvoiceResultErr value)? error,
+    required TResult orElse(),
+  }) {
+    if ($default != null) {
+      return $default(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _BeRemitInvoiceResult implements BeRemitInvoiceResult {
+  const factory _BeRemitInvoiceResult(
+      final BeRemit remit,
+      final BeRemitInvoice invoice,
+      final BeBalanceUpdate? withdrawal) = _$_BeRemitInvoiceResult;
+
+  BeRemit get remit;
+  BeRemitInvoice get invoice;
+  BeBalanceUpdate? get withdrawal;
+  @JsonKey(ignore: true)
+  _$$_BeRemitInvoiceResultCopyWith<_$_BeRemitInvoiceResult> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$_BeRemitInvoiceResultErrCopyWith<$Res> {
+  factory _$$_BeRemitInvoiceResultErrCopyWith(_$_BeRemitInvoiceResultErr value,
+          $Res Function(_$_BeRemitInvoiceResultErr) then) =
+      __$$_BeRemitInvoiceResultErrCopyWithImpl<$Res>;
+  @useResult
+  $Res call({BeError err});
+
+  $BeErrorCopyWith<$Res> get err;
+}
+
+/// @nodoc
+class __$$_BeRemitInvoiceResultErrCopyWithImpl<$Res>
+    extends _$BeRemitInvoiceResultCopyWithImpl<$Res, _$_BeRemitInvoiceResultErr>
+    implements _$$_BeRemitInvoiceResultErrCopyWith<$Res> {
+  __$$_BeRemitInvoiceResultErrCopyWithImpl(_$_BeRemitInvoiceResultErr _value,
+      $Res Function(_$_BeRemitInvoiceResultErr) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? err = null,
+  }) {
+    return _then(_$_BeRemitInvoiceResultErr(
+      null == err
+          ? _value.err
+          : err // ignore: cast_nullable_to_non_nullable
+              as BeError,
+    ));
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $BeErrorCopyWith<$Res> get err {
+    return $BeErrorCopyWith<$Res>(_value.err, (value) {
+      return _then(_value.copyWith(err: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$_BeRemitInvoiceResultErr
+    with DiagnosticableTreeMixin
+    implements _BeRemitInvoiceResultErr {
+  const _$_BeRemitInvoiceResultErr(this.err);
+
+  @override
+  final BeError err;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'BeRemitInvoiceResult.error(err: $err)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'BeRemitInvoiceResult.error'))
+      ..add(DiagnosticsProperty('err', err));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_BeRemitInvoiceResultErr &&
+            (identical(other.err, err) || other.err == err));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, err);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_BeRemitInvoiceResultErrCopyWith<_$_BeRemitInvoiceResultErr>
+      get copyWith =>
+          __$$_BeRemitInvoiceResultErrCopyWithImpl<_$_BeRemitInvoiceResultErr>(
+              this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(
+            BeRemit remit, BeRemitInvoice invoice, BeBalanceUpdate? withdrawal)
+        $default, {
+    required TResult Function(BeError err) error,
+  }) {
+    return error(err);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(
+            BeRemit remit, BeRemitInvoice invoice, BeBalanceUpdate? withdrawal)?
+        $default, {
+    TResult? Function(BeError err)? error,
+  }) {
+    return error?.call(err);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(
+            BeRemit remit, BeRemitInvoice invoice, BeBalanceUpdate? withdrawal)?
+        $default, {
+    TResult Function(BeError err)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(err);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_BeRemitInvoiceResult value) $default, {
+    required TResult Function(_BeRemitInvoiceResultErr value) error,
+  }) {
+    return error(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_BeRemitInvoiceResult value)? $default, {
+    TResult? Function(_BeRemitInvoiceResultErr value)? error,
+  }) {
+    return error?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_BeRemitInvoiceResult value)? $default, {
+    TResult Function(_BeRemitInvoiceResultErr value)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _BeRemitInvoiceResultErr implements BeRemitInvoiceResult {
+  const factory _BeRemitInvoiceResultErr(final BeError err) =
+      _$_BeRemitInvoiceResultErr;
+
+  BeError get err;
+  @JsonKey(ignore: true)
+  _$$_BeRemitInvoiceResultErrCopyWith<_$_BeRemitInvoiceResultErr>
       get copyWith => throw _privateConstructorUsedError;
 }

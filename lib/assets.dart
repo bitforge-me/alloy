@@ -317,21 +317,16 @@ Decimal assetAmountToUnit(String symbol, String unit, Decimal amount) {
   return -Decimal.one;
 }
 
-Decimal assetAmountToUser(String symbol, Decimal amount) {
-  return assetAmountToUnit(symbol, assetUnit(symbol), amount);
-}
-
-Decimal assetAmountFromUser(String symbol, Decimal amount) {
+Decimal assetAmountFromUnit(String symbol, String unit, Decimal amount) {
   switch (symbol) {
     case Nzd:
-      if (assetUnit(symbol) == Cents) return amount / Decimal.fromInt(100);
+      if (unit == Cents) return amount / Decimal.fromInt(100);
       return amount;
     case Btc:
-      if (assetUnit(symbol) == Sats) return amount / Decimal.fromInt(100000000);
+      if (unit == Sats) return amount / Decimal.fromInt(100000000);
       return amount;
     case Eth:
-      if (assetUnit(symbol) == Gwei)
-        return amount / Decimal.fromInt(1000000000);
+      if (unit == Gwei) return amount / Decimal.fromInt(1000000000);
       return amount;
     case Usdt:
     case Usdc:
@@ -341,6 +336,14 @@ Decimal assetAmountFromUser(String symbol, Decimal amount) {
       return amount;
   }
   return -Decimal.one;
+}
+
+Decimal assetAmountToUser(String symbol, Decimal amount) {
+  return assetAmountToUnit(symbol, assetUnit(symbol), amount);
+}
+
+Decimal assetAmountFromUser(String symbol, Decimal amount) {
+  return assetAmountFromUnit(symbol, assetUnit(symbol), amount);
 }
 
 String? addressBlockExplorer(String symbol, bool testnet, String address) {

@@ -4,10 +4,10 @@ import 'dart:convert';
 import 'package:logging/logging.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:universal_html/html.dart' as html;
-import 'package:decimal/decimal.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'dart:async';
 import 'package:provider/provider.dart';
+import 'package:decimal/decimal.dart';
 
 import 'package:zapdart/colors.dart';
 import 'package:zapdart/widgets.dart';
@@ -33,9 +33,12 @@ import 'assets.dart';
 import 'event.dart';
 import 'widgets.dart';
 import 'autobuy.dart';
+import 'remit.dart';
 
 final log = Logger('Main');
 final routeObserver = RouteObserver<Route>();
+
+enum MainFunction { trade, remit }
 
 void main() {
   // setup logging
@@ -98,6 +101,7 @@ class _MyHomePageState extends State<MyHomePage>
   final CarouselController _balanceCarouselController = CarouselController();
   Timer? _mainPriceTimer;
   late String _btcUnit;
+  MainFunction _mainFunc = MainFunction.trade;
 
   _MyHomePageState() {
     _btcUnit = assetUnit(Btc);
@@ -223,6 +227,8 @@ class _MyHomePageState extends State<MyHomePage>
   void _updateUnitWidget(symbol, unit) {
     assetUnitSet(symbol, unit);
     setState(() => _btcUnit = assetUnit(Btc));
+    context.read<ExchangeModel>().setMinAmount();
+    context.read<ExchangeModel>().amountsRecalc();
   }
 
   void _checkVersion(BeVersionResult res) {
@@ -275,7 +281,7 @@ class _MyHomePageState extends State<MyHomePage>
       var bolt11 = json['bolt11'];
       var description = json['description'];
       var sats = json['amount_sat'];
-      var amount = Decimal.fromInt(sats) / Decimal.fromInt(100000000);
+      var amount = assetAmountFromUnit(Btc, Sats, Decimal.fromInt(sats));
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -515,6 +521,18 @@ class _MyHomePageState extends State<MyHomePage>
     });
   }
 
+  Widget _slider() {
+    return SliderBar<MainFunction>(
+        (v) => setState(() => _mainFunc = v),
+        _mainFunc,
+        [
+          SliderItem(MainFunction.trade, 'ORDER'),
+          SliderItem(MainFunction.remit, 'REMIT')
+        ],
+        alignment: MainAxisAlignment.spaceAround,
+        big: true);
+  }
+
   void _onBottomNavBarTap(int index) {
     switch (index) {
       case 0:
@@ -613,8 +631,17 @@ class _MyHomePageState extends State<MyHomePage>
                   VerticalSpacer(
                       height:
                           constraints.maxWidth >= cfg.MaxColumnWidth ? 50 : 0),
-                  // exchange widget
-                  _makeExchangeWidget(context),
+                  // main function slider
+                  _slider(),
+                  SizedBox(
+                      height: 420,
+                      child: _mainFunc == MainFunction.trade
+                          ?
+                          // exchange widget
+                          _makeExchangeWidget(context)
+                          :
+                          // remit
+                          RemitSelectPage(_websocket, _userInfo)),
                   VerticalSpacer(
                       height:
                           constraints.maxWidth >= cfg.MaxColumnWidth ? 50 : 0),

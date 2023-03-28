@@ -269,8 +269,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
           title: Text('Order History'),
         ),
         body: BitforgePage(
-            child: ListView.builder(
-                itemBuilder: _listItem, itemCount: _orders.length)),
+            child: _orders.length == 0
+                ? Container(
+                    margin: EdgeInsets.all(20),
+                    child: Center(child: Text('No orders')))
+                : ListView.builder(
+                    itemBuilder: _listItem, itemCount: _orders.length)),
         /*
         floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.add), onPressed: _actionButtonTap),

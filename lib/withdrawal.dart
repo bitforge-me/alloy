@@ -23,6 +23,7 @@ import 'widgets.dart';
 import 'config.dart';
 import 'qrscan.dart';
 import 'units.dart';
+import 'remit_status.dart';
 
 final log = Logger('Withdrawal');
 
@@ -598,7 +599,7 @@ class _WithdrawalFormScreenState extends State<WithdrawalFormScreen> {
                                 var userAmount = Decimal.tryParse(value.trim());
                                 if (userAmount == null) return 'Invalid value';
                                 if (userAmount <= Decimal.zero)
-                                  'Please return a value greater then 0';
+                                  return 'Please return a value greater then 0';
                                 var withdrawAsset =
                                     widget.l2Network ?? widget.asset;
                                 var sysAmount = assetAmountFromUser(
@@ -834,6 +835,13 @@ class _CryptoWithdrawalDetailScreenState
     snackMsg(context, 'copied recipient');
   }
 
+  void _showRemit() {
+    BeRemit remit = _withdrawal.remit!;
+    var pm = BePaymentMethod(remit.paymentMethodCode, remit.paymentMethodName);
+    remitStatus(context, remit.referenceId, remit.category, pm, _testnet,
+        _withdrawal.asset);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -882,6 +890,15 @@ class _CryptoWithdrawalDetailScreenState
                   subtitle: Text(
                       'Check email for withdrawal confirmation link!',
                       style: TextStyle(color: ZapWarning)))),
+          Visibility(
+              visible: _withdrawal.remit != null,
+              child: ListTile(
+                  title: Text('Assocated Remit Status'),
+                  subtitle: Row(children: [
+                    Text('${_withdrawal.remit?.status.name}'),
+                    TextButton(
+                        onPressed: _showRemit, child: Text('(Show Detail)'))
+                  ]))),
           VerticalSpacer(),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             BronzeRoundedButton(() => Navigator.of(context).pop(), Colors.white,

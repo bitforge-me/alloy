@@ -544,6 +544,7 @@ class BeBalanceUpdate {
   final String? txid;
   @JsonKey(name: 'payment_url')
   final String? paymentUrl;
+  final BeRemit? remit;
 
   BeBalanceUpdate(
       this.token,
@@ -557,7 +558,8 @@ class BeBalanceUpdate {
       this.recipient,
       this.status,
       this.txid,
-      this.paymentUrl);
+      this.paymentUrl,
+      this.remit);
   factory BeBalanceUpdate.fromJson(Map<String, dynamic> json) =>
       _$BeBalanceUpdateFromJson(json);
   Map<String, dynamic> toJson() => _$BeBalanceUpdateToJson(this);
@@ -839,6 +841,169 @@ class BeBrokerOrdersResult with _$BeBrokerOrdersResult {
       return BeBrokerOrdersResult(orderList, offset, limit, total);
     } catch (_) {
       return BeBrokerOrdersResult.error(BeError.format());
+    }
+  }
+}
+
+@JsonSerializable()
+class BePaymentMethod {
+  final String code;
+  final String name;
+
+  BePaymentMethod(this.code, this.name);
+
+  factory BePaymentMethod.fromJson(Map<String, dynamic> json) =>
+      _$BePaymentMethodFromJson(json);
+  Map<String, dynamic> toJson() => _$BePaymentMethodToJson(this);
+}
+
+enum BePaymentMethodCategory {
+  unknown,
+  mobileMoney,
+  bank,
+}
+
+typedef BePaymentMethods = Map<BePaymentMethodCategory, List<BePaymentMethod>>;
+
+@freezed
+class BeRemitPaymentMethodsResult with _$BeRemitPaymentMethodsResult {
+  const factory BeRemitPaymentMethodsResult(BePaymentMethods paymentMethods) =
+      _BeRemitPaymentMethodsResult;
+  const factory BeRemitPaymentMethodsResult.error(BeError err) =
+      _BeRemitPaymentMethodsResultErr;
+
+  static BeRemitPaymentMethodsResult parse(String data) {
+    try {
+      var json = jsonDecode(data);
+      BePaymentMethods pms = {};
+      var methods = json['methods'];
+      for (var key in methods.keys) {
+        var category = BePaymentMethodCategory.values.byName(key);
+        pms[category] = [];
+        for (var pm in methods[key]) {
+          pms[category]?.add(BePaymentMethod.fromJson(pm));
+        }
+      }
+      return BeRemitPaymentMethodsResult(pms);
+    } catch (_) {
+      return BeRemitPaymentMethodsResult.error(BeError.format());
+    }
+  }
+}
+
+enum BeRemitStatus {
+  unknown,
+  created,
+  funded,
+  pending,
+  failed,
+  refunding,
+  refunded,
+  completed,
+  expired
+}
+
+@JsonSerializable()
+class BeRemit {
+  final DateTime date;
+  final String token;
+  final String provider;
+  @JsonKey(name: 'reference_id')
+  final String referenceId;
+  @JsonKey(
+      name: 'payment_method_category',
+      unknownEnumValue: BePaymentMethodCategory.unknown)
+  final BePaymentMethodCategory category;
+  @JsonKey(name: 'payment_method_code')
+  final String paymentMethodCode;
+  @JsonKey(name: 'payment_method_name')
+  final String paymentMethodName;
+  @JsonKey(unknownEnumValue: BeRemitStatus.unknown)
+  final BeRemitStatus status;
+
+  BeRemit(this.date, this.token, this.provider, this.referenceId, this.category,
+      this.paymentMethodCode, this.paymentMethodName, this.status);
+
+  factory BeRemit.fromJson(Map<String, dynamic> json) =>
+      _$BeRemitFromJson(json);
+  Map<String, dynamic> toJson() => _$BeRemitToJson(this);
+}
+
+@JsonSerializable()
+class BeRemitAmount {
+  final int amount;
+  final String currency;
+
+  BeRemitAmount(this.amount, this.currency);
+
+  factory BeRemitAmount.fromJson(Map<String, dynamic> json) =>
+      _$BeRemitAmountFromJson(json);
+  Map<String, dynamic> toJson() => _$BeRemitAmountToJson(this);
+}
+
+@JsonSerializable()
+class BeRemitRecipientAmount extends BeRemitAmount {
+  final String name;
+  @JsonKey(name: 'account_number')
+  final String? accountNumber;
+  @JsonKey(name: 'mobile_number')
+  final String? mobileNumber;
+
+  BeRemitRecipientAmount(this.name, this.accountNumber, this.mobileNumber,
+      int amount, String currency)
+      : super(amount, currency);
+
+  factory BeRemitRecipientAmount.fromJson(Map<String, dynamic> json) =>
+      _$BeRemitRecipientAmountFromJson(json);
+  Map<String, dynamic> toJson() => _$BeRemitRecipientAmountToJson(this);
+}
+
+typedef BeRemitRates = Map<String, Map<String, double>>;
+
+@JsonSerializable()
+class BeRemitInvoice {
+  @JsonKey(name: 'ref_id')
+  final String referenceId;
+  @JsonKey(unknownEnumValue: BeRemitStatus.unknown)
+  final BeRemitStatus status;
+  final String bolt11;
+  final BeRemitAmount sender;
+  final BeRemitRecipientAmount recipient;
+  final BeRemitRates rates;
+  final Map<String, BeRemitAmount> fees;
+  @JsonKey(name: 'created_at')
+  final DateTime createdAt;
+  @JsonKey(name: 'updated_at')
+  final DateTime updatedAt;
+
+  BeRemitInvoice(this.referenceId, this.status, this.bolt11, this.sender,
+      this.recipient, this.rates, this.fees, this.createdAt, this.updatedAt);
+
+  factory BeRemitInvoice.fromJson(Map<String, dynamic> json) =>
+      _$BeRemitInvoiceFromJson(json);
+  Map<String, dynamic> toJson() => _$BeRemitInvoiceToJson(this);
+}
+
+@freezed
+class BeRemitInvoiceResult with _$BeRemitInvoiceResult {
+  const factory BeRemitInvoiceResult(
+          BeRemit remit, BeRemitInvoice invoice, BeBalanceUpdate? withdrawal) =
+      _BeRemitInvoiceResult;
+  const factory BeRemitInvoiceResult.error(BeError err) =
+      _BeRemitInvoiceResultErr;
+
+  static BeRemitInvoiceResult parse(String data) {
+    try {
+      var json = jsonDecode(data);
+      var remit = BeRemit.fromJson(json['remit']);
+      var invoice = BeRemitInvoice.fromJson(json['invoice']);
+      var withdrawal = null;
+      if ((json as Map).containsKey('withdrawal')) {
+        withdrawal = BeBalanceUpdate.fromJson(json['withdrawal']);
+      }
+      return BeRemitInvoiceResult(remit, invoice, withdrawal);
+    } catch (_) {
+      return BeRemitInvoiceResult.error(BeError.format());
     }
   }
 }
@@ -1235,4 +1400,67 @@ Future<BeBrokerOrdersResult> beOrderList(int offset, int limit) async {
       authRequired: true);
   return result.when((content) => BeBrokerOrdersResult.parse(content),
       error: (err) => BeBrokerOrdersResult.error(err));
+}
+
+Future<BeRemitPaymentMethodsResult> beRemitPaymentMethods() async {
+  var result = await post("remit_payment_methods", {}, authRequired: true);
+  return result.when((content) => BeRemitPaymentMethodsResult.parse(content),
+      error: (err) => BeRemitPaymentMethodsResult.error(err));
+}
+
+Future<BeRemitInvoiceResult> beRemitInvoiceCreate(
+    BePaymentMethodCategory category,
+    BePaymentMethod paymentMethod,
+    String name,
+    String? accountNumber,
+    String? mobileNumber,
+    String currency,
+    int amount,
+    String description) async {
+  var result = await post(
+      "remit_invoice_create",
+      {
+        "payment_method_category": category.name,
+        "payment_method_code": paymentMethod.code,
+        "payment_method_name": paymentMethod.name,
+        "name": name,
+        "account_number": accountNumber,
+        "mobile_number": mobileNumber,
+        "currency": currency,
+        "amount": amount,
+        "description": description
+      },
+      authRequired: true);
+  return result.when((content) => BeRemitInvoiceResult.parse(content),
+      error: (err) => BeRemitInvoiceResult.error(err));
+}
+
+Future<BeRemitInvoiceResult> beRemitInvoiceStatus(String refId) async {
+  var result =
+      await post("remit_invoice_status", {"ref_id": refId}, authRequired: true);
+  return result.when((content) => BeRemitInvoiceResult.parse(content),
+      error: (err) => BeRemitInvoiceResult.error(err));
+}
+
+Future<BeRemitInvoiceResult> beRemitInvoiceAccept(String refId, String? market,
+    BeMarketSide? side, Decimal? amount, String? tfCode) async {
+  var result = await post(
+      "remit_invoice_accept",
+      {
+        "ref_id": refId,
+        "market": market,
+        "side": side?.name,
+        "amount_dec": amount?.toString(),
+        "tf_code": tfCode
+      },
+      authRequired: true);
+  return result.when((content) => BeRemitInvoiceResult.parse(content),
+      error: (err) => BeRemitInvoiceResult.error(err));
+}
+
+Future<BeRemitInvoiceResult> beRemitInvoiceRefund(String refId) async {
+  var result =
+      await post("remit_invoice_refund", {"ref_id": refId}, authRequired: true);
+  return result.when((content) => BeRemitInvoiceResult.parse(content),
+      error: (err) => BeRemitInvoiceResult.error(err));
 }
