@@ -1,6 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'dart:convert';
+import 'package:logging/logging.dart';
 
 import 'package:zapdart/utils.dart';
 import 'package:zapdart/colors.dart';
@@ -13,6 +14,9 @@ import 'snack.dart';
 import 'paginator.dart';
 import 'widgets.dart';
 import 'config.dart' as cfg;
+import 'utils.dart';
+
+final log = Logger('Beryllium');
 
 class OrderFees extends StatelessWidget {
   final BeBrokerOrder? order;
@@ -223,6 +227,36 @@ class _OrdersScreenState extends State<OrdersScreen> {
     }
   }
 
+  Future<void> _download() async {
+    var offset = 0;
+    var limit = 200;
+    List<BeBrokerOrder> totalOrders = [];
+    // get all orders
+    showAlertDialog(context, 'querying..');
+    var res = await beOrderList(offset, limit);
+    while (true) {
+      var finished = res.when<bool>((orders, os, lm, total) {
+        totalOrders += orders;
+        offset += orders.length;
+        return offset >= total;
+      }, error: (err) {
+        alert(context, 'error', 'failed to query orders (${BeError.msg(err)})');
+        return true;
+      });
+      if (finished) break;
+      res = await beOrderList(offset, limit);
+    }
+    Navigator.pop(context);
+    // make csv
+    var csv = 'token, date, market, side, amount, price, status\n';
+    for (var order in totalOrders) {
+      csv +=
+          '${order.token}, ${order.date}, ${order.market}, ${order.side.name}, ${order.baseAmount} ${order.baseAsset}, ${order.quoteAmount} ${order.quoteAsset}, ${order.status.name}\n';
+    }
+    // save
+    saveCsvFile(context, 'bitforge_orders', csv);
+  }
+
   Future<void> _orderTap(BeBrokerOrder order) async {
     Navigator.push(
         context,
@@ -267,6 +301,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Order History'),
+          actions: [
+            IconButton(onPressed: _download, icon: Icon(Icons.download))
+          ],
         ),
         body: BitforgePage(
             child: _orders.length == 0

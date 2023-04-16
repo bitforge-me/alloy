@@ -89,6 +89,37 @@ class _DepositsScreenState extends State<DepositsScreen> {
             context, 'error', 'failed to get deposits (${BeError.msg(err)})'));
   }
 
+  Future<void> _download() async {
+    var offset = 0;
+    var limit = 200;
+    List<BeBalanceUpdate> totalDeposits = [];
+    // get all orders
+    showAlertDialog(context, 'querying..');
+    var res = await beDepositsAll(offset, limit);
+    while (true) {
+      var finished = res.when<bool>((deposits, os, lm, total) {
+        totalDeposits += deposits;
+        offset += deposits.length;
+        return offset >= total;
+      }, error: (err) {
+        alert(
+            context, 'error', 'failed to query deposits (${BeError.msg(err)})');
+        return true;
+      });
+      if (finished) break;
+      res = await beDepositsAll(offset, limit);
+    }
+    Navigator.pop(context);
+    // make csv
+    var csv = 'token, date, asset, amount, fee, recipient, status\n';
+    for (var deposit in totalDeposits) {
+      csv +=
+          '${deposit.token}, ${deposit.date}, ${deposit.asset}, ${deposit.amount}, ${deposit.fee}, ${deposit.recipient}, ${deposit.status}\n';
+    }
+    // save
+    saveCsvFile(context, 'bitforge_deposits', csv);
+  }
+
   Future<void> _depositTap(BeBalanceUpdate deposit) async {
     if (assetIsCrypto(deposit.asset))
       Navigator.push(
@@ -140,6 +171,9 @@ class _DepositsScreenState extends State<DepositsScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Deposits'),
+          actions: [
+            IconButton(onPressed: _download, icon: Icon(Icons.download))
+          ],
         ),
         body: BitforgePage(
             child: Column(
