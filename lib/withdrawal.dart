@@ -97,6 +97,37 @@ class _WithdrawalsScreenState extends State<WithdrawalsScreen> {
             'failed to get withdrawals (${BeError.msg(err)})'));
   }
 
+  Future<void> _download() async {
+    var offset = 0;
+    var limit = 200;
+    List<BeBalanceUpdate> totalWithdrawals = [];
+    // get all orders
+    showAlertDialog(context, 'querying..');
+    var res = await beWithdrawalsAll(offset, limit);
+    while (true) {
+      var finished = res.when<bool>((withdrawals, os, lm, total) {
+        totalWithdrawals += withdrawals;
+        offset += withdrawals.length;
+        return offset >= total;
+      }, error: (err) {
+        alert(context, 'error',
+            'failed to query withdrawals (${BeError.msg(err)})');
+        return true;
+      });
+      if (finished) break;
+      res = await beWithdrawalsAll(offset, limit);
+    }
+    Navigator.pop(context);
+    // make csv
+    var csv = 'token, date, asset, amount, fee, recipient, status\n';
+    for (var withdrawal in totalWithdrawals) {
+      csv +=
+          '${withdrawal.token}, ${withdrawal.date}, ${withdrawal.asset}, ${withdrawal.amount}, ${withdrawal.fee}, ${withdrawal.recipient}, ${withdrawal.status}\n';
+    }
+    // save
+    saveCsvFile(context, 'bitforge_withdrawals', csv);
+  }
+
   Future<void> _withdrawalTap(BeBalanceUpdate withdrawal) async {
     if (assetIsCrypto(withdrawal.asset))
       Navigator.push(
@@ -149,6 +180,7 @@ class _WithdrawalsScreenState extends State<WithdrawalsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Withdrawals'),
+        actions: [IconButton(onPressed: _download, icon: Icon(Icons.download))],
       ),
       body: BitforgePage(
           child:

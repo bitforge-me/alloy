@@ -393,6 +393,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.4"
+  file_saver:
+    dependency: "direct main"
+    description:
+      name: file_saver
+      sha256: "0de62b766ebbd491466b160909fce9f30d2c0b2ba9e062871dbda2e677e5b33b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
   fixnum:
     dependency: transitive
     description:
