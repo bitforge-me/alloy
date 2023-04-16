@@ -512,8 +512,12 @@ class ExchangeModel extends ChangeNotifier {
   }
 
   void exchange(BuildContext context, Websocket websocket) async {
+    //TODO: make showing alert dialogs not zero out the exchange fields!!!
+    var symbol = _market.symbol;
+    var side = _side;
+    var amountFrom = _amountFrom;
     showAlertDialog(context, 'creating order..');
-    var res = await beOrderCreate(_market.symbol, _side, _amountFrom);
+    var res = await beOrderCreate(symbol, side, amountFrom);
     Navigator.pop(context);
     res.when((order) {
       clearInputs();
