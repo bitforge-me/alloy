@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter_svg/flutter_svg.dart';
+//import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:universal_html/html.dart' as html;
@@ -28,6 +28,17 @@ class TwoFactorEnableScreen extends StatefulWidget {
 class _TwoFactorEnableScreenState extends State<TwoFactorEnableScreen> {
   final formKey = GlobalKey<FormState>();
   final txtController = new TextEditingController();
+  String? svgData;
+
+  @override
+  void initState() {
+    super.initState();
+    try {
+      // dart io libs no longer can do openUrl on a data uri :((((
+      svgData = UriData.parse(widget.setup.imageUrl).contentAsString();
+    } on FormatException {}
+    ;
+  }
 
   void _submit() {
     var cs = formKey.currentState;
@@ -68,7 +79,13 @@ class _TwoFactorEnableScreenState extends State<TwoFactorEnableScreen> {
                     children: [
                       Container(
                           color: Colors.white,
-                          child: SvgPicture.network(widget.setup.image)),
+                          child: Image.memory(
+                              base64Decode(widget.setup.imagePngBase64))),
+                      /* SvgPicture is having trouble handling the QR code svg for now :((((
+                          child: svgData != null
+                              ? SvgPicture.string(svgData!)
+                              : SvgPicture.network(widget.setup.imageUrl)),
+                          */
                       ListTile(
                           title: Text('Key'),
                           subtitle: Text(widget.setup.key,
@@ -258,7 +275,8 @@ class _SecurityScreenState extends State<SecurityScreen> {
             MaterialPageRoute(builder: (context) {
           // remove dashes ('-') from key as some apps cant process the key otherwise
           var setup = BeTwoFactorSetup(
-              twoFactor.setup!.image,
+              twoFactor.setup!.imageUrl,
+              twoFactor.setup!.imagePngBase64,
               twoFactor.setup!.key.replaceAll(RegExp('-'), ''),
               twoFactor.setup!.issuer,
               twoFactor.setup!.username);

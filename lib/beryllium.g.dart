@@ -58,6 +58,7 @@ const _$BeRoleEnumMap = {
 BeTwoFactorSetup _$BeTwoFactorSetupFromJson(Map<String, dynamic> json) =>
     BeTwoFactorSetup(
       json['image'] as String,
+      json['image_png_base64'] as String,
       json['key'] as String,
       json['issuer'] as String,
       json['username'] as String,
@@ -65,7 +66,8 @@ BeTwoFactorSetup _$BeTwoFactorSetupFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$BeTwoFactorSetupToJson(BeTwoFactorSetup instance) =>
     <String, dynamic>{
-      'image': instance.image,
+      'image': instance.imageUrl,
+      'image_png_base64': instance.imagePngBase64,
       'key': instance.key,
       'issuer': instance.issuer,
       'username': instance.username,

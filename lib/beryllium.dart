@@ -274,12 +274,16 @@ class BeKycRequestCreateResult with _$BeKycRequestCreateResult {
 
 @JsonSerializable()
 class BeTwoFactorSetup {
-  final String image;
+  @JsonKey(name: 'image')
+  final String imageUrl;
+  @JsonKey(name: 'image_png_base64')
+  final String imagePngBase64;
   final String key;
   final String issuer;
   final String username;
 
-  BeTwoFactorSetup(this.image, this.key, this.issuer, this.username);
+  BeTwoFactorSetup(
+      this.imageUrl, this.imagePngBase64, this.key, this.issuer, this.username);
 
   factory BeTwoFactorSetup.fromJson(Map<String, dynamic> json) =>
       _$BeTwoFactorSetupFromJson(json);
