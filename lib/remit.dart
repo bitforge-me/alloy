@@ -284,6 +284,7 @@ class _RemitFormScreenState extends State<RemitFormScreen> {
         // use order amount minus withdrawal fee
         remitAmount =
             _maxWithdrawal(orderQuote.baseAmount, widget.l2Network.withdrawFee);
+        remitAmount = roundAt(remitAmount, assetDecimals(orderQuote.baseAsset));
         convertedRemitAmount =
             assetFormatWithUnitToUser(orderQuote.baseAsset, remitAmount);
       }
@@ -307,6 +308,7 @@ class _RemitFormScreenState extends State<RemitFormScreen> {
       if (userOk == null || !userOk) return;
       // create invoice
       var remitAmountInt = assetAmountToUnit(Btc, Sats, remitAmount).toInt();
+
       var currency = 'SAT';
       showAlertDialog(context, 'creating invoice..');
       var res = await beRemitInvoiceCreate(
