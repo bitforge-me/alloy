@@ -67,8 +67,8 @@ class MyApp extends StatelessWidget {
         brightness: ZapBrightness,
         scaffoldBackgroundColor: ZapBackground,
         appBarTheme: AppBarTheme(centerTitle: true, color: ZapSecondary),
-        // ignore: deprecated_member_use
-        accentColor: ZapPrimary,
+        colorScheme: ColorScheme.fromSwatch(
+            accentColor: ZapPrimary, brightness: ZapBrightness),
         // create text theme with the correct 'brightness' (eg light or dark)
         textTheme:
             ZapTextThemer(ThemeData(brightness: ZapBrightness).textTheme));
