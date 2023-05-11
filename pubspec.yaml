@@ -44,7 +44,7 @@ dependencies:
   zapdart:
     git:
       url: https://github.com/zap-me/zapdart.git
-      ref:  def61cd7
+      ref:  20465774ada5d1a5016069c87e4dfbdaba3ab49c
     #path: ../zapdart
   carousel_slider: ^4.1.1
   jiffy: ^5.0.0
