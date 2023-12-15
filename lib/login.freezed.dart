@@ -81,25 +81,25 @@ class _$LoginChoiceCopyWithImpl<$Res, $Val extends LoginChoice>
 }
 
 /// @nodoc
-abstract class _$$LCDoLoginCopyWith<$Res> {
-  factory _$$LCDoLoginCopyWith(
-          _$LCDoLogin value, $Res Function(_$LCDoLogin) then) =
-      __$$LCDoLoginCopyWithImpl<$Res>;
+abstract class _$$LCDoLoginImplCopyWith<$Res> {
+  factory _$$LCDoLoginImplCopyWith(
+          _$LCDoLoginImpl value, $Res Function(_$LCDoLoginImpl) then) =
+      __$$LCDoLoginImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$LCDoLoginCopyWithImpl<$Res>
-    extends _$LoginChoiceCopyWithImpl<$Res, _$LCDoLogin>
-    implements _$$LCDoLoginCopyWith<$Res> {
-  __$$LCDoLoginCopyWithImpl(
-      _$LCDoLogin _value, $Res Function(_$LCDoLogin) _then)
+class __$$LCDoLoginImplCopyWithImpl<$Res>
+    extends _$LoginChoiceCopyWithImpl<$Res, _$LCDoLoginImpl>
+    implements _$$LCDoLoginImplCopyWith<$Res> {
+  __$$LCDoLoginImplCopyWithImpl(
+      _$LCDoLoginImpl _value, $Res Function(_$LCDoLoginImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LCDoLogin implements LCDoLogin {
-  const _$LCDoLogin();
+class _$LCDoLoginImpl implements LCDoLogin {
+  const _$LCDoLoginImpl();
 
   @override
   String toString() {
@@ -107,9 +107,9 @@ class _$LCDoLogin implements LCDoLogin {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LCDoLogin);
+        (other.runtimeType == runtimeType && other is _$LCDoLoginImpl);
   }
 
   @override
@@ -185,29 +185,29 @@ class _$LCDoLogin implements LCDoLogin {
 }
 
 abstract class LCDoLogin implements LoginChoice {
-  const factory LCDoLogin() = _$LCDoLogin;
+  const factory LCDoLogin() = _$LCDoLoginImpl;
 }
 
 /// @nodoc
-abstract class _$$LCDoRegistrationCopyWith<$Res> {
-  factory _$$LCDoRegistrationCopyWith(
-          _$LCDoRegistration value, $Res Function(_$LCDoRegistration) then) =
-      __$$LCDoRegistrationCopyWithImpl<$Res>;
+abstract class _$$LCDoRegistrationImplCopyWith<$Res> {
+  factory _$$LCDoRegistrationImplCopyWith(_$LCDoRegistrationImpl value,
+          $Res Function(_$LCDoRegistrationImpl) then) =
+      __$$LCDoRegistrationImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$LCDoRegistrationCopyWithImpl<$Res>
-    extends _$LoginChoiceCopyWithImpl<$Res, _$LCDoRegistration>
-    implements _$$LCDoRegistrationCopyWith<$Res> {
-  __$$LCDoRegistrationCopyWithImpl(
-      _$LCDoRegistration _value, $Res Function(_$LCDoRegistration) _then)
+class __$$LCDoRegistrationImplCopyWithImpl<$Res>
+    extends _$LoginChoiceCopyWithImpl<$Res, _$LCDoRegistrationImpl>
+    implements _$$LCDoRegistrationImplCopyWith<$Res> {
+  __$$LCDoRegistrationImplCopyWithImpl(_$LCDoRegistrationImpl _value,
+      $Res Function(_$LCDoRegistrationImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LCDoRegistration implements LCDoRegistration {
-  const _$LCDoRegistration();
+class _$LCDoRegistrationImpl implements LCDoRegistration {
+  const _$LCDoRegistrationImpl();
 
   @override
   String toString() {
@@ -215,9 +215,9 @@ class _$LCDoRegistration implements LCDoRegistration {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LCDoRegistration);
+        (other.runtimeType == runtimeType && other is _$LCDoRegistrationImpl);
   }
 
   @override
@@ -293,29 +293,29 @@ class _$LCDoRegistration implements LCDoRegistration {
 }
 
 abstract class LCDoRegistration implements LoginChoice {
-  const factory LCDoRegistration() = _$LCDoRegistration;
+  const factory LCDoRegistration() = _$LCDoRegistrationImpl;
 }
 
 /// @nodoc
-abstract class _$$LCDApiKeyRequestCopyWith<$Res> {
-  factory _$$LCDApiKeyRequestCopyWith(
-          _$LCDApiKeyRequest value, $Res Function(_$LCDApiKeyRequest) then) =
-      __$$LCDApiKeyRequestCopyWithImpl<$Res>;
+abstract class _$$LCDApiKeyRequestImplCopyWith<$Res> {
+  factory _$$LCDApiKeyRequestImplCopyWith(_$LCDApiKeyRequestImpl value,
+          $Res Function(_$LCDApiKeyRequestImpl) then) =
+      __$$LCDApiKeyRequestImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$LCDApiKeyRequestCopyWithImpl<$Res>
-    extends _$LoginChoiceCopyWithImpl<$Res, _$LCDApiKeyRequest>
-    implements _$$LCDApiKeyRequestCopyWith<$Res> {
-  __$$LCDApiKeyRequestCopyWithImpl(
-      _$LCDApiKeyRequest _value, $Res Function(_$LCDApiKeyRequest) _then)
+class __$$LCDApiKeyRequestImplCopyWithImpl<$Res>
+    extends _$LoginChoiceCopyWithImpl<$Res, _$LCDApiKeyRequestImpl>
+    implements _$$LCDApiKeyRequestImplCopyWith<$Res> {
+  __$$LCDApiKeyRequestImplCopyWithImpl(_$LCDApiKeyRequestImpl _value,
+      $Res Function(_$LCDApiKeyRequestImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LCDApiKeyRequest implements LCDApiKeyRequest {
-  const _$LCDApiKeyRequest();
+class _$LCDApiKeyRequestImpl implements LCDApiKeyRequest {
+  const _$LCDApiKeyRequestImpl();
 
   @override
   String toString() {
@@ -323,9 +323,9 @@ class _$LCDApiKeyRequest implements LCDApiKeyRequest {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LCDApiKeyRequest);
+        (other.runtimeType == runtimeType && other is _$LCDApiKeyRequestImpl);
   }
 
   @override
@@ -401,7 +401,7 @@ class _$LCDApiKeyRequest implements LCDApiKeyRequest {
 }
 
 abstract class LCDApiKeyRequest implements LoginChoice {
-  const factory LCDApiKeyRequest() = _$LCDApiKeyRequest;
+  const factory LCDApiKeyRequest() = _$LCDApiKeyRequestImpl;
 }
 
 /// @nodoc
@@ -483,10 +483,10 @@ class _$LoginResultCopyWithImpl<$Res, $Val extends LoginResult>
 }
 
 /// @nodoc
-abstract class _$$LRChooseCopyWith<$Res> {
-  factory _$$LRChooseCopyWith(
-          _$LRChoose value, $Res Function(_$LRChoose) then) =
-      __$$LRChooseCopyWithImpl<$Res>;
+abstract class _$$LRChooseImplCopyWith<$Res> {
+  factory _$$LRChooseImplCopyWith(
+          _$LRChooseImpl value, $Res Function(_$LRChooseImpl) then) =
+      __$$LRChooseImplCopyWithImpl<$Res>;
   @useResult
   $Res call({LoginChoice choice});
 
@@ -494,10 +494,11 @@ abstract class _$$LRChooseCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$LRChooseCopyWithImpl<$Res>
-    extends _$LoginResultCopyWithImpl<$Res, _$LRChoose>
-    implements _$$LRChooseCopyWith<$Res> {
-  __$$LRChooseCopyWithImpl(_$LRChoose _value, $Res Function(_$LRChoose) _then)
+class __$$LRChooseImplCopyWithImpl<$Res>
+    extends _$LoginResultCopyWithImpl<$Res, _$LRChooseImpl>
+    implements _$$LRChooseImplCopyWith<$Res> {
+  __$$LRChooseImplCopyWithImpl(
+      _$LRChooseImpl _value, $Res Function(_$LRChooseImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -505,7 +506,7 @@ class __$$LRChooseCopyWithImpl<$Res>
   $Res call({
     Object? choice = null,
   }) {
-    return _then(_$LRChoose(
+    return _then(_$LRChooseImpl(
       null == choice
           ? _value.choice
           : choice // ignore: cast_nullable_to_non_nullable
@@ -524,8 +525,8 @@ class __$$LRChooseCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LRChoose implements LRChoose {
-  const _$LRChoose(this.choice);
+class _$LRChooseImpl implements LRChoose {
+  const _$LRChooseImpl(this.choice);
 
   @override
   final LoginChoice choice;
@@ -536,10 +537,10 @@ class _$LRChoose implements LRChoose {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LRChoose &&
+            other is _$LRChooseImpl &&
             (identical(other.choice, choice) || other.choice == choice));
   }
 
@@ -549,8 +550,8 @@ class _$LRChoose implements LRChoose {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$LRChooseCopyWith<_$LRChoose> get copyWith =>
-      __$$LRChooseCopyWithImpl<_$LRChoose>(this, _$identity);
+  _$$LRChooseImplCopyWith<_$LRChooseImpl> get copyWith =>
+      __$$LRChooseImplCopyWithImpl<_$LRChooseImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -634,27 +635,29 @@ class _$LRChoose implements LRChoose {
 }
 
 abstract class LRChoose implements LoginResult {
-  const factory LRChoose(final LoginChoice choice) = _$LRChoose;
+  const factory LRChoose(final LoginChoice choice) = _$LRChooseImpl;
 
   LoginChoice get choice;
   @JsonKey(ignore: true)
-  _$$LRChooseCopyWith<_$LRChoose> get copyWith =>
+  _$$LRChooseImplCopyWith<_$LRChooseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$LRAcctCopyWith<$Res> {
-  factory _$$LRAcctCopyWith(_$LRAcct value, $Res Function(_$LRAcct) then) =
-      __$$LRAcctCopyWithImpl<$Res>;
+abstract class _$$LRAcctImplCopyWith<$Res> {
+  factory _$$LRAcctImplCopyWith(
+          _$LRAcctImpl value, $Res Function(_$LRAcctImpl) then) =
+      __$$LRAcctImplCopyWithImpl<$Res>;
   @useResult
   $Res call({Acct acct});
 }
 
 /// @nodoc
-class __$$LRAcctCopyWithImpl<$Res>
-    extends _$LoginResultCopyWithImpl<$Res, _$LRAcct>
-    implements _$$LRAcctCopyWith<$Res> {
-  __$$LRAcctCopyWithImpl(_$LRAcct _value, $Res Function(_$LRAcct) _then)
+class __$$LRAcctImplCopyWithImpl<$Res>
+    extends _$LoginResultCopyWithImpl<$Res, _$LRAcctImpl>
+    implements _$$LRAcctImplCopyWith<$Res> {
+  __$$LRAcctImplCopyWithImpl(
+      _$LRAcctImpl _value, $Res Function(_$LRAcctImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -662,7 +665,7 @@ class __$$LRAcctCopyWithImpl<$Res>
   $Res call({
     Object? acct = null,
   }) {
-    return _then(_$LRAcct(
+    return _then(_$LRAcctImpl(
       null == acct
           ? _value.acct
           : acct // ignore: cast_nullable_to_non_nullable
@@ -673,8 +676,8 @@ class __$$LRAcctCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LRAcct implements LRAcct {
-  const _$LRAcct(this.acct);
+class _$LRAcctImpl implements LRAcct {
+  const _$LRAcctImpl(this.acct);
 
   @override
   final Acct acct;
@@ -685,10 +688,10 @@ class _$LRAcct implements LRAcct {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LRAcct &&
+            other is _$LRAcctImpl &&
             (identical(other.acct, acct) || other.acct == acct));
   }
 
@@ -698,8 +701,8 @@ class _$LRAcct implements LRAcct {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$LRAcctCopyWith<_$LRAcct> get copyWith =>
-      __$$LRAcctCopyWithImpl<_$LRAcct>(this, _$identity);
+  _$$LRAcctImplCopyWith<_$LRAcctImpl> get copyWith =>
+      __$$LRAcctImplCopyWithImpl<_$LRAcctImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -783,32 +786,34 @@ class _$LRAcct implements LRAcct {
 }
 
 abstract class LRAcct implements LoginResult {
-  const factory LRAcct(final Acct acct) = _$LRAcct;
+  const factory LRAcct(final Acct acct) = _$LRAcctImpl;
 
   Acct get acct;
   @JsonKey(ignore: true)
-  _$$LRAcctCopyWith<_$LRAcct> get copyWith =>
+  _$$LRAcctImplCopyWith<_$LRAcctImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$LRResetCopyWith<$Res> {
-  factory _$$LRResetCopyWith(_$LRReset value, $Res Function(_$LRReset) then) =
-      __$$LRResetCopyWithImpl<$Res>;
+abstract class _$$LRResetImplCopyWith<$Res> {
+  factory _$$LRResetImplCopyWith(
+          _$LRResetImpl value, $Res Function(_$LRResetImpl) then) =
+      __$$LRResetImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$LRResetCopyWithImpl<$Res>
-    extends _$LoginResultCopyWithImpl<$Res, _$LRReset>
-    implements _$$LRResetCopyWith<$Res> {
-  __$$LRResetCopyWithImpl(_$LRReset _value, $Res Function(_$LRReset) _then)
+class __$$LRResetImplCopyWithImpl<$Res>
+    extends _$LoginResultCopyWithImpl<$Res, _$LRResetImpl>
+    implements _$$LRResetImplCopyWith<$Res> {
+  __$$LRResetImplCopyWithImpl(
+      _$LRResetImpl _value, $Res Function(_$LRResetImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LRReset implements LRReset {
-  const _$LRReset();
+class _$LRResetImpl implements LRReset {
+  const _$LRResetImpl();
 
   @override
   String toString() {
@@ -816,9 +821,9 @@ class _$LRReset implements LRReset {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LRReset);
+        (other.runtimeType == runtimeType && other is _$LRResetImpl);
   }
 
   @override
@@ -906,27 +911,29 @@ class _$LRReset implements LRReset {
 }
 
 abstract class LRReset implements LoginResult {
-  const factory LRReset() = _$LRReset;
+  const factory LRReset() = _$LRResetImpl;
 }
 
 /// @nodoc
-abstract class _$$LRRetryCopyWith<$Res> {
-  factory _$$LRRetryCopyWith(_$LRRetry value, $Res Function(_$LRRetry) then) =
-      __$$LRRetryCopyWithImpl<$Res>;
+abstract class _$$LRRetryImplCopyWith<$Res> {
+  factory _$$LRRetryImplCopyWith(
+          _$LRRetryImpl value, $Res Function(_$LRRetryImpl) then) =
+      __$$LRRetryImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$LRRetryCopyWithImpl<$Res>
-    extends _$LoginResultCopyWithImpl<$Res, _$LRRetry>
-    implements _$$LRRetryCopyWith<$Res> {
-  __$$LRRetryCopyWithImpl(_$LRRetry _value, $Res Function(_$LRRetry) _then)
+class __$$LRRetryImplCopyWithImpl<$Res>
+    extends _$LoginResultCopyWithImpl<$Res, _$LRRetryImpl>
+    implements _$$LRRetryImplCopyWith<$Res> {
+  __$$LRRetryImplCopyWithImpl(
+      _$LRRetryImpl _value, $Res Function(_$LRRetryImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LRRetry implements LRRetry {
-  const _$LRRetry();
+class _$LRRetryImpl implements LRRetry {
+  const _$LRRetryImpl();
 
   @override
   String toString() {
@@ -934,9 +941,9 @@ class _$LRRetry implements LRRetry {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LRRetry);
+        (other.runtimeType == runtimeType && other is _$LRRetryImpl);
   }
 
   @override
@@ -1024,29 +1031,29 @@ class _$LRRetry implements LRRetry {
 }
 
 abstract class LRRetry implements LoginResult {
-  const factory LRRetry() = _$LRRetry;
+  const factory LRRetry() = _$LRRetryImpl;
 }
 
 /// @nodoc
-abstract class _$$LRNothingCopyWith<$Res> {
-  factory _$$LRNothingCopyWith(
-          _$LRNothing value, $Res Function(_$LRNothing) then) =
-      __$$LRNothingCopyWithImpl<$Res>;
+abstract class _$$LRNothingImplCopyWith<$Res> {
+  factory _$$LRNothingImplCopyWith(
+          _$LRNothingImpl value, $Res Function(_$LRNothingImpl) then) =
+      __$$LRNothingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$LRNothingCopyWithImpl<$Res>
-    extends _$LoginResultCopyWithImpl<$Res, _$LRNothing>
-    implements _$$LRNothingCopyWith<$Res> {
-  __$$LRNothingCopyWithImpl(
-      _$LRNothing _value, $Res Function(_$LRNothing) _then)
+class __$$LRNothingImplCopyWithImpl<$Res>
+    extends _$LoginResultCopyWithImpl<$Res, _$LRNothingImpl>
+    implements _$$LRNothingImplCopyWith<$Res> {
+  __$$LRNothingImplCopyWithImpl(
+      _$LRNothingImpl _value, $Res Function(_$LRNothingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LRNothing implements LRNothing {
-  const _$LRNothing();
+class _$LRNothingImpl implements LRNothing {
+  const _$LRNothingImpl();
 
   @override
   String toString() {
@@ -1054,9 +1061,9 @@ class _$LRNothing implements LRNothing {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LRNothing);
+        (other.runtimeType == runtimeType && other is _$LRNothingImpl);
   }
 
   @override
@@ -1144,5 +1151,5 @@ class _$LRNothing implements LRNothing {
 }
 
 abstract class LRNothing implements LoginResult {
-  const factory LRNothing() = _$LRNothing;
+  const factory LRNothing() = _$LRNothingImpl;
 }

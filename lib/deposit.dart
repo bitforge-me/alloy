@@ -450,9 +450,10 @@ class _CryptoDepositDetailScreenState extends State<CryptoDepositDetailScreen> {
           ListTile(title: Text('Date'), subtitle: Text('${_deposit.date}')),
           ListTile(
               title: Center(
-                  child: QrImage(
+                  child: QrImageView(
             backgroundColor: Colors.transparent,
-            foregroundColor: Colors.white,
+            eyeStyle: QrEyeStyle(color: Colors.white),
+            dataModuleStyle: QrDataModuleStyle(color: Colors.white),
             data: '${_deposit.recipient}',
             version: QrVersions.auto,
             size: 300.0,
@@ -527,9 +528,10 @@ class _CryptoDepositNewScreenState extends State<CryptoDepositNewScreen> {
                           AlertDrawer(() {}, ['${widget.asset.depositInstr}'])),
                   Container(
                       child: Center(
-                          child: QrImage(
+                          child: QrImageView(
                         backgroundColor: Colors.transparent,
-                        foregroundColor: Colors.white,
+                        eyeStyle: QrEyeStyle(color: Colors.white),
+                        dataModuleStyle: QrDataModuleStyle(color: Colors.white),
                         data: '${widget.recipient}',
                         version: QrVersions.auto,
                         size: 300.0,

@@ -6,7 +6,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.19.0 <3.0.0"
+  sdk: ">=2.19.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -29,7 +29,7 @@ dependencies:
   freezed_annotation: ^2.2.0
   logging: ^1.0.2
   universal_html: ^2.0.8
-  qr_flutter: ^4.0.0
+  qr_flutter: ^4.1.0
   rxdart: ^0.27.4
   intl: ^0.17.0
   synchronized: ^3.0.0+2
@@ -44,7 +44,7 @@ dependencies:
   zapdart:
     git:
       url: https://github.com/zap-me/zapdart.git
-      ref:  def61cd7
+      ref:  9e337d7
     #path: ../zapdart
   carousel_slider: ^4.1.1
   jiffy: ^5.0.0

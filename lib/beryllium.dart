@@ -750,10 +750,10 @@ enum BeOrderStatus {
 
 extension EnumEx on String {
   BeMarketSide toEnumSide() =>
-      BeMarketSide.values.firstWhere((d) => describeEnum(d) == toLowerCase());
+      BeMarketSide.values.firstWhere((d) => d.name == toLowerCase());
 
   BeOrderStatus toEnumStatus() =>
-      BeOrderStatus.values.firstWhere((d) => describeEnum(d) == toLowerCase());
+      BeOrderStatus.values.firstWhere((d) => d.name == toLowerCase());
 }
 
 @JsonSerializable()
@@ -1359,13 +1359,8 @@ Future<BeAddressBookResult> beAddressBook(String asset) async {
 
 Future<BeBrokerOrderResult> beOrderValidate(
     String market, BeMarketSide side, Decimal amount) async {
-  var result = await post(
-      "broker_order_validate",
-      {
-        "market": market,
-        "side": describeEnum(side),
-        "amount_dec": amount.toString()
-      },
+  var result = await post("broker_order_validate",
+      {"market": market, "side": side.name, "amount_dec": amount.toString()},
       authRequired: true);
   return result.when((content) => BeBrokerOrderResult.parse(content),
       error: (err) => BeBrokerOrderResult.error(err));
@@ -1373,13 +1368,8 @@ Future<BeBrokerOrderResult> beOrderValidate(
 
 Future<BeBrokerOrderResult> beOrderCreate(
     String market, BeMarketSide side, Decimal amount) async {
-  var result = await post(
-      "broker_order_create",
-      {
-        "market": market,
-        "side": describeEnum(side),
-        "amount_dec": amount.toString()
-      },
+  var result = await post("broker_order_create",
+      {"market": market, "side": side.name, "amount_dec": amount.toString()},
       authRequired: true);
   return result.when((content) => BeBrokerOrderResult.parse(content),
       error: (err) => BeBrokerOrderResult.error(err));
