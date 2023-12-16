@@ -383,15 +383,13 @@ class BeMarket {
   @JsonKey(name: 'quote_asset')
   final String quoteAsset;
   final int precision;
-  final String status;
   @JsonKey(
       name: 'min_trade', fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal minTrade;
-  final String message;
 
   BeMarket(this.symbol, this.baseAsset, this.quoteAsset, this.precision,
-      this.status, this.minTrade, this.message);
-  factory BeMarket.empty() => BeMarket('', '', '', 0, '', Decimal.zero, '');
+      this.minTrade);
+  factory BeMarket.empty() => BeMarket('', '', '', 0, Decimal.zero);
   factory BeMarket.fromJson(Map<String, dynamic> json) =>
       _$BeMarketFromJson(json);
   Map<String, dynamic> toJson() => _$BeMarketToJson(this);
