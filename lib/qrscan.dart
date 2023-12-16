@@ -25,7 +25,8 @@ class _QrScanState extends State<QrScan> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    return PopScope(
+      canPop: true,
       child: Scaffold(
         appBar: AppBar(
           actions: [
@@ -45,10 +46,9 @@ class _QrScanState extends State<QrScan> {
                 },
                 controller: controller)),
       ),
-      onWillPop: () {
+      onPopInvoked: (_) {
         stopped = true;
         controller.stop();
-        return Future<bool>.value(true);
       },
     );
   }

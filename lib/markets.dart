@@ -239,7 +239,6 @@ class _MarketScreenState extends State<MarketScreen> {
     return ListTile(
         title: Text('${market.symbol}'),
         leading: assetLogo(market.baseAsset),
-        subtitle: Text('status: ${market.status}'),
         onTap: () => _marketTap(market));
   }
 

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 
 import 'package:zapdart/utils.dart';
@@ -84,7 +83,7 @@ class _OrderScreenState extends State<OrderScreen> {
       if (_order.token == newOrder.token) {
         setState(() => _order = newOrder);
         snackMsg(context,
-            'broker order updated ${newOrder.token} - ${describeEnum(newOrder.status).toUpperCase()}');
+            'broker order updated ${newOrder.token} - ${newOrder.status.name.toUpperCase()}');
       }
     }
   }
@@ -133,7 +132,7 @@ class _OrderScreenState extends State<OrderScreen> {
               : SizedBox(),
           ListTile(
               title: Text('Status'),
-              subtitle: Text('${describeEnum(_order.status).toUpperCase()}')),
+              subtitle: Text('${_order.status.name.toUpperCase()}')),
           Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -211,7 +210,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         setState(() => _orders = orders);
       }
       snackMsg(context,
-          'broker order created ${newOrder.token} - ${describeEnum(newOrder.status).toUpperCase()}');
+          'broker order created ${newOrder.token} - ${newOrder.status.name.toUpperCase()}');
     }
     if (args.event == WebsocketEvent.brokerOrderUpdate) {
       var updatedOrder = BeBrokerOrder.fromJson(jsonDecode(args.msg));
@@ -269,7 +268,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     var content = Row(children: [
       assetLogo(order.baseAsset),
       SizedBox(width: 5),
-      Text(describeEnum(order.status).toUpperCase())
+      Text(order.status.name.toUpperCase())
     ]);
     return ListTx(
         () => _orderTap(order),

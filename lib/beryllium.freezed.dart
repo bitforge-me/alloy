@@ -80,23 +80,25 @@ class _$BeErrorCopyWithImpl<$Res, $Val extends BeError>
 }
 
 /// @nodoc
-abstract class _$$NetworkCopyWith<$Res> {
-  factory _$$NetworkCopyWith(_$Network value, $Res Function(_$Network) then) =
-      __$$NetworkCopyWithImpl<$Res>;
+abstract class _$$NetworkImplCopyWith<$Res> {
+  factory _$$NetworkImplCopyWith(
+          _$NetworkImpl value, $Res Function(_$NetworkImpl) then) =
+      __$$NetworkImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$NetworkCopyWithImpl<$Res>
-    extends _$BeErrorCopyWithImpl<$Res, _$Network>
-    implements _$$NetworkCopyWith<$Res> {
-  __$$NetworkCopyWithImpl(_$Network _value, $Res Function(_$Network) _then)
+class __$$NetworkImplCopyWithImpl<$Res>
+    extends _$BeErrorCopyWithImpl<$Res, _$NetworkImpl>
+    implements _$$NetworkImplCopyWith<$Res> {
+  __$$NetworkImplCopyWithImpl(
+      _$NetworkImpl _value, $Res Function(_$NetworkImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$Network with DiagnosticableTreeMixin implements Network {
-  const _$Network();
+class _$NetworkImpl with DiagnosticableTreeMixin implements Network {
+  const _$NetworkImpl();
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -110,9 +112,9 @@ class _$Network with DiagnosticableTreeMixin implements Network {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$Network);
+        (other.runtimeType == runtimeType && other is _$NetworkImpl);
   }
 
   @override
@@ -188,21 +190,23 @@ class _$Network with DiagnosticableTreeMixin implements Network {
 }
 
 abstract class Network implements BeError {
-  const factory Network() = _$Network;
+  const factory Network() = _$NetworkImpl;
 }
 
 /// @nodoc
-abstract class _$$AuthCopyWith<$Res> {
-  factory _$$AuthCopyWith(_$Auth value, $Res Function(_$Auth) then) =
-      __$$AuthCopyWithImpl<$Res>;
+abstract class _$$AuthImplCopyWith<$Res> {
+  factory _$$AuthImplCopyWith(
+          _$AuthImpl value, $Res Function(_$AuthImpl) then) =
+      __$$AuthImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String message});
 }
 
 /// @nodoc
-class __$$AuthCopyWithImpl<$Res> extends _$BeErrorCopyWithImpl<$Res, _$Auth>
-    implements _$$AuthCopyWith<$Res> {
-  __$$AuthCopyWithImpl(_$Auth _value, $Res Function(_$Auth) _then)
+class __$$AuthImplCopyWithImpl<$Res>
+    extends _$BeErrorCopyWithImpl<$Res, _$AuthImpl>
+    implements _$$AuthImplCopyWith<$Res> {
+  __$$AuthImplCopyWithImpl(_$AuthImpl _value, $Res Function(_$AuthImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -210,7 +214,7 @@ class __$$AuthCopyWithImpl<$Res> extends _$BeErrorCopyWithImpl<$Res, _$Auth>
   $Res call({
     Object? message = null,
   }) {
-    return _then(_$Auth(
+    return _then(_$AuthImpl(
       null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -221,8 +225,8 @@ class __$$AuthCopyWithImpl<$Res> extends _$BeErrorCopyWithImpl<$Res, _$Auth>
 
 /// @nodoc
 
-class _$Auth with DiagnosticableTreeMixin implements Auth {
-  const _$Auth(this.message);
+class _$AuthImpl with DiagnosticableTreeMixin implements Auth {
+  const _$AuthImpl(this.message);
 
   @override
   final String message;
@@ -241,10 +245,10 @@ class _$Auth with DiagnosticableTreeMixin implements Auth {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$Auth &&
+            other is _$AuthImpl &&
             (identical(other.message, message) || other.message == message));
   }
 
@@ -254,8 +258,8 @@ class _$Auth with DiagnosticableTreeMixin implements Auth {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$AuthCopyWith<_$Auth> get copyWith =>
-      __$$AuthCopyWithImpl<_$Auth>(this, _$identity);
+  _$$AuthImplCopyWith<_$AuthImpl> get copyWith =>
+      __$$AuthImplCopyWithImpl<_$AuthImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -327,30 +331,34 @@ class _$Auth with DiagnosticableTreeMixin implements Auth {
 }
 
 abstract class Auth implements BeError {
-  const factory Auth(final String message) = _$Auth;
+  const factory Auth(final String message) = _$AuthImpl;
 
   String get message;
   @JsonKey(ignore: true)
-  _$$AuthCopyWith<_$Auth> get copyWith => throw _privateConstructorUsedError;
+  _$$AuthImplCopyWith<_$AuthImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$FormatCopyWith<$Res> {
-  factory _$$FormatCopyWith(_$Format value, $Res Function(_$Format) then) =
-      __$$FormatCopyWithImpl<$Res>;
+abstract class _$$FormatImplCopyWith<$Res> {
+  factory _$$FormatImplCopyWith(
+          _$FormatImpl value, $Res Function(_$FormatImpl) then) =
+      __$$FormatImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$FormatCopyWithImpl<$Res> extends _$BeErrorCopyWithImpl<$Res, _$Format>
-    implements _$$FormatCopyWith<$Res> {
-  __$$FormatCopyWithImpl(_$Format _value, $Res Function(_$Format) _then)
+class __$$FormatImplCopyWithImpl<$Res>
+    extends _$BeErrorCopyWithImpl<$Res, _$FormatImpl>
+    implements _$$FormatImplCopyWith<$Res> {
+  __$$FormatImplCopyWithImpl(
+      _$FormatImpl _value, $Res Function(_$FormatImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$Format with DiagnosticableTreeMixin implements Format {
-  const _$Format();
+class _$FormatImpl with DiagnosticableTreeMixin implements Format {
+  const _$FormatImpl();
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -364,9 +372,9 @@ class _$Format with DiagnosticableTreeMixin implements Format {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$Format);
+        (other.runtimeType == runtimeType && other is _$FormatImpl);
   }
 
   @override
@@ -442,7 +450,7 @@ class _$Format with DiagnosticableTreeMixin implements Format {
 }
 
 abstract class Format implements BeError {
-  const factory Format() = _$Format;
+  const factory Format() = _$FormatImpl;
 }
 
 /// @nodoc
@@ -506,20 +514,20 @@ class _$ErrorResultCopyWithImpl<$Res, $Val extends ErrorResult>
 }
 
 /// @nodoc
-abstract class _$$_ErrorResultCopyWith<$Res> {
-  factory _$$_ErrorResultCopyWith(
-          _$_ErrorResult value, $Res Function(_$_ErrorResult) then) =
-      __$$_ErrorResultCopyWithImpl<$Res>;
+abstract class _$$ErrorResultImplCopyWith<$Res> {
+  factory _$$ErrorResultImplCopyWith(
+          _$ErrorResultImpl value, $Res Function(_$ErrorResultImpl) then) =
+      __$$ErrorResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String content});
 }
 
 /// @nodoc
-class __$$_ErrorResultCopyWithImpl<$Res>
-    extends _$ErrorResultCopyWithImpl<$Res, _$_ErrorResult>
-    implements _$$_ErrorResultCopyWith<$Res> {
-  __$$_ErrorResultCopyWithImpl(
-      _$_ErrorResult _value, $Res Function(_$_ErrorResult) _then)
+class __$$ErrorResultImplCopyWithImpl<$Res>
+    extends _$ErrorResultCopyWithImpl<$Res, _$ErrorResultImpl>
+    implements _$$ErrorResultImplCopyWith<$Res> {
+  __$$ErrorResultImplCopyWithImpl(
+      _$ErrorResultImpl _value, $Res Function(_$ErrorResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -527,7 +535,7 @@ class __$$_ErrorResultCopyWithImpl<$Res>
   $Res call({
     Object? content = null,
   }) {
-    return _then(_$_ErrorResult(
+    return _then(_$ErrorResultImpl(
       null == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
@@ -538,8 +546,8 @@ class __$$_ErrorResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ErrorResult with DiagnosticableTreeMixin implements _ErrorResult {
-  const _$_ErrorResult(this.content);
+class _$ErrorResultImpl with DiagnosticableTreeMixin implements _ErrorResult {
+  const _$ErrorResultImpl(this.content);
 
   @override
   final String content;
@@ -558,10 +566,10 @@ class _$_ErrorResult with DiagnosticableTreeMixin implements _ErrorResult {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ErrorResult &&
+            other is _$ErrorResultImpl &&
             (identical(other.content, content) || other.content == content));
   }
 
@@ -571,8 +579,8 @@ class _$_ErrorResult with DiagnosticableTreeMixin implements _ErrorResult {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ErrorResultCopyWith<_$_ErrorResult> get copyWith =>
-      __$$_ErrorResultCopyWithImpl<_$_ErrorResult>(this, _$identity);
+  _$$ErrorResultImplCopyWith<_$ErrorResultImpl> get copyWith =>
+      __$$ErrorResultImplCopyWithImpl<_$ErrorResultImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -638,19 +646,19 @@ class _$_ErrorResult with DiagnosticableTreeMixin implements _ErrorResult {
 }
 
 abstract class _ErrorResult implements ErrorResult {
-  const factory _ErrorResult(final String content) = _$_ErrorResult;
+  const factory _ErrorResult(final String content) = _$ErrorResultImpl;
 
   String get content;
   @JsonKey(ignore: true)
-  _$$_ErrorResultCopyWith<_$_ErrorResult> get copyWith =>
+  _$$ErrorResultImplCopyWith<_$ErrorResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_ErrorResultErrCopyWith<$Res> {
-  factory _$$_ErrorResultErrCopyWith(
-          _$_ErrorResultErr value, $Res Function(_$_ErrorResultErr) then) =
-      __$$_ErrorResultErrCopyWithImpl<$Res>;
+abstract class _$$ErrorResultErrImplCopyWith<$Res> {
+  factory _$$ErrorResultErrImplCopyWith(_$ErrorResultErrImpl value,
+          $Res Function(_$ErrorResultErrImpl) then) =
+      __$$ErrorResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -658,11 +666,11 @@ abstract class _$$_ErrorResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_ErrorResultErrCopyWithImpl<$Res>
-    extends _$ErrorResultCopyWithImpl<$Res, _$_ErrorResultErr>
-    implements _$$_ErrorResultErrCopyWith<$Res> {
-  __$$_ErrorResultErrCopyWithImpl(
-      _$_ErrorResultErr _value, $Res Function(_$_ErrorResultErr) _then)
+class __$$ErrorResultErrImplCopyWithImpl<$Res>
+    extends _$ErrorResultCopyWithImpl<$Res, _$ErrorResultErrImpl>
+    implements _$$ErrorResultErrImplCopyWith<$Res> {
+  __$$ErrorResultErrImplCopyWithImpl(
+      _$ErrorResultErrImpl _value, $Res Function(_$ErrorResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -670,7 +678,7 @@ class __$$_ErrorResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_ErrorResultErr(
+    return _then(_$ErrorResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -689,10 +697,10 @@ class __$$_ErrorResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_ErrorResultErr
+class _$ErrorResultErrImpl
     with DiagnosticableTreeMixin
     implements _ErrorResultErr {
-  const _$_ErrorResultErr(this.err);
+  const _$ErrorResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -711,10 +719,10 @@ class _$_ErrorResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ErrorResultErr &&
+            other is _$ErrorResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -724,8 +732,9 @@ class _$_ErrorResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ErrorResultErrCopyWith<_$_ErrorResultErr> get copyWith =>
-      __$$_ErrorResultErrCopyWithImpl<_$_ErrorResultErr>(this, _$identity);
+  _$$ErrorResultErrImplCopyWith<_$ErrorResultErrImpl> get copyWith =>
+      __$$ErrorResultErrImplCopyWithImpl<_$ErrorResultErrImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -791,11 +800,11 @@ class _$_ErrorResultErr
 }
 
 abstract class _ErrorResultErr implements ErrorResult {
-  const factory _ErrorResultErr(final BeError err) = _$_ErrorResultErr;
+  const factory _ErrorResultErr(final BeError err) = _$ErrorResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_ErrorResultErrCopyWith<_$_ErrorResultErr> get copyWith =>
+  _$$ErrorResultErrImplCopyWith<_$ErrorResultErrImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -860,20 +869,20 @@ class _$UserInfoResultCopyWithImpl<$Res, $Val extends UserInfoResult>
 }
 
 /// @nodoc
-abstract class _$$_UserInfoCopyWith<$Res> {
-  factory _$$_UserInfoCopyWith(
-          _$_UserInfo value, $Res Function(_$_UserInfo) then) =
-      __$$_UserInfoCopyWithImpl<$Res>;
+abstract class _$$UserInfoImplCopyWith<$Res> {
+  factory _$$UserInfoImplCopyWith(
+          _$UserInfoImpl value, $Res Function(_$UserInfoImpl) then) =
+      __$$UserInfoImplCopyWithImpl<$Res>;
   @useResult
   $Res call({UserInfo info});
 }
 
 /// @nodoc
-class __$$_UserInfoCopyWithImpl<$Res>
-    extends _$UserInfoResultCopyWithImpl<$Res, _$_UserInfo>
-    implements _$$_UserInfoCopyWith<$Res> {
-  __$$_UserInfoCopyWithImpl(
-      _$_UserInfo _value, $Res Function(_$_UserInfo) _then)
+class __$$UserInfoImplCopyWithImpl<$Res>
+    extends _$UserInfoResultCopyWithImpl<$Res, _$UserInfoImpl>
+    implements _$$UserInfoImplCopyWith<$Res> {
+  __$$UserInfoImplCopyWithImpl(
+      _$UserInfoImpl _value, $Res Function(_$UserInfoImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -881,7 +890,7 @@ class __$$_UserInfoCopyWithImpl<$Res>
   $Res call({
     Object? info = null,
   }) {
-    return _then(_$_UserInfo(
+    return _then(_$UserInfoImpl(
       null == info
           ? _value.info
           : info // ignore: cast_nullable_to_non_nullable
@@ -892,8 +901,8 @@ class __$$_UserInfoCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_UserInfo with DiagnosticableTreeMixin implements _UserInfo {
-  const _$_UserInfo(this.info);
+class _$UserInfoImpl with DiagnosticableTreeMixin implements _UserInfo {
+  const _$UserInfoImpl(this.info);
 
   @override
   final UserInfo info;
@@ -912,10 +921,10 @@ class _$_UserInfo with DiagnosticableTreeMixin implements _UserInfo {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_UserInfo &&
+            other is _$UserInfoImpl &&
             (identical(other.info, info) || other.info == info));
   }
 
@@ -925,8 +934,8 @@ class _$_UserInfo with DiagnosticableTreeMixin implements _UserInfo {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UserInfoCopyWith<_$_UserInfo> get copyWith =>
-      __$$_UserInfoCopyWithImpl<_$_UserInfo>(this, _$identity);
+  _$$UserInfoImplCopyWith<_$UserInfoImpl> get copyWith =>
+      __$$UserInfoImplCopyWithImpl<_$UserInfoImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -992,19 +1001,19 @@ class _$_UserInfo with DiagnosticableTreeMixin implements _UserInfo {
 }
 
 abstract class _UserInfo implements UserInfoResult {
-  const factory _UserInfo(final UserInfo info) = _$_UserInfo;
+  const factory _UserInfo(final UserInfo info) = _$UserInfoImpl;
 
   UserInfo get info;
   @JsonKey(ignore: true)
-  _$$_UserInfoCopyWith<_$_UserInfo> get copyWith =>
+  _$$UserInfoImplCopyWith<_$UserInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_UserInfoErrCopyWith<$Res> {
-  factory _$$_UserInfoErrCopyWith(
-          _$_UserInfoErr value, $Res Function(_$_UserInfoErr) then) =
-      __$$_UserInfoErrCopyWithImpl<$Res>;
+abstract class _$$UserInfoErrImplCopyWith<$Res> {
+  factory _$$UserInfoErrImplCopyWith(
+          _$UserInfoErrImpl value, $Res Function(_$UserInfoErrImpl) then) =
+      __$$UserInfoErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -1012,11 +1021,11 @@ abstract class _$$_UserInfoErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_UserInfoErrCopyWithImpl<$Res>
-    extends _$UserInfoResultCopyWithImpl<$Res, _$_UserInfoErr>
-    implements _$$_UserInfoErrCopyWith<$Res> {
-  __$$_UserInfoErrCopyWithImpl(
-      _$_UserInfoErr _value, $Res Function(_$_UserInfoErr) _then)
+class __$$UserInfoErrImplCopyWithImpl<$Res>
+    extends _$UserInfoResultCopyWithImpl<$Res, _$UserInfoErrImpl>
+    implements _$$UserInfoErrImplCopyWith<$Res> {
+  __$$UserInfoErrImplCopyWithImpl(
+      _$UserInfoErrImpl _value, $Res Function(_$UserInfoErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1024,7 +1033,7 @@ class __$$_UserInfoErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_UserInfoErr(
+    return _then(_$UserInfoErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -1043,8 +1052,8 @@ class __$$_UserInfoErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_UserInfoErr with DiagnosticableTreeMixin implements _UserInfoErr {
-  const _$_UserInfoErr(this.err);
+class _$UserInfoErrImpl with DiagnosticableTreeMixin implements _UserInfoErr {
+  const _$UserInfoErrImpl(this.err);
 
   @override
   final BeError err;
@@ -1063,10 +1072,10 @@ class _$_UserInfoErr with DiagnosticableTreeMixin implements _UserInfoErr {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_UserInfoErr &&
+            other is _$UserInfoErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -1076,8 +1085,8 @@ class _$_UserInfoErr with DiagnosticableTreeMixin implements _UserInfoErr {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UserInfoErrCopyWith<_$_UserInfoErr> get copyWith =>
-      __$$_UserInfoErrCopyWithImpl<_$_UserInfoErr>(this, _$identity);
+  _$$UserInfoErrImplCopyWith<_$UserInfoErrImpl> get copyWith =>
+      __$$UserInfoErrImplCopyWithImpl<_$UserInfoErrImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1143,11 +1152,11 @@ class _$_UserInfoErr with DiagnosticableTreeMixin implements _UserInfoErr {
 }
 
 abstract class _UserInfoErr implements UserInfoResult {
-  const factory _UserInfoErr(final BeError err) = _$_UserInfoErr;
+  const factory _UserInfoErr(final BeError err) = _$UserInfoErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_UserInfoErrCopyWith<_$_UserInfoErr> get copyWith =>
+  _$$UserInfoErrImplCopyWith<_$UserInfoErrImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1213,22 +1222,23 @@ class _$BeTwoFactorEnabledResultCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_BeTwoFactorEnabledResultCopyWith<$Res> {
-  factory _$$_BeTwoFactorEnabledResultCopyWith(
-          _$_BeTwoFactorEnabledResult value,
-          $Res Function(_$_BeTwoFactorEnabledResult) then) =
-      __$$_BeTwoFactorEnabledResultCopyWithImpl<$Res>;
+abstract class _$$BeTwoFactorEnabledResultImplCopyWith<$Res> {
+  factory _$$BeTwoFactorEnabledResultImplCopyWith(
+          _$BeTwoFactorEnabledResultImpl value,
+          $Res Function(_$BeTwoFactorEnabledResultImpl) then) =
+      __$$BeTwoFactorEnabledResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({bool enabled});
 }
 
 /// @nodoc
-class __$$_BeTwoFactorEnabledResultCopyWithImpl<$Res>
+class __$$BeTwoFactorEnabledResultImplCopyWithImpl<$Res>
     extends _$BeTwoFactorEnabledResultCopyWithImpl<$Res,
-        _$_BeTwoFactorEnabledResult>
-    implements _$$_BeTwoFactorEnabledResultCopyWith<$Res> {
-  __$$_BeTwoFactorEnabledResultCopyWithImpl(_$_BeTwoFactorEnabledResult _value,
-      $Res Function(_$_BeTwoFactorEnabledResult) _then)
+        _$BeTwoFactorEnabledResultImpl>
+    implements _$$BeTwoFactorEnabledResultImplCopyWith<$Res> {
+  __$$BeTwoFactorEnabledResultImplCopyWithImpl(
+      _$BeTwoFactorEnabledResultImpl _value,
+      $Res Function(_$BeTwoFactorEnabledResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1236,7 +1246,7 @@ class __$$_BeTwoFactorEnabledResultCopyWithImpl<$Res>
   $Res call({
     Object? enabled = null,
   }) {
-    return _then(_$_BeTwoFactorEnabledResult(
+    return _then(_$BeTwoFactorEnabledResultImpl(
       null == enabled
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
@@ -1247,10 +1257,10 @@ class __$$_BeTwoFactorEnabledResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeTwoFactorEnabledResult
+class _$BeTwoFactorEnabledResultImpl
     with DiagnosticableTreeMixin
     implements _BeTwoFactorEnabledResult {
-  const _$_BeTwoFactorEnabledResult(this.enabled);
+  const _$BeTwoFactorEnabledResultImpl(this.enabled);
 
   @override
   final bool enabled;
@@ -1269,10 +1279,10 @@ class _$_BeTwoFactorEnabledResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeTwoFactorEnabledResult &&
+            other is _$BeTwoFactorEnabledResultImpl &&
             (identical(other.enabled, enabled) || other.enabled == enabled));
   }
 
@@ -1282,9 +1292,9 @@ class _$_BeTwoFactorEnabledResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeTwoFactorEnabledResultCopyWith<_$_BeTwoFactorEnabledResult>
-      get copyWith => __$$_BeTwoFactorEnabledResultCopyWithImpl<
-          _$_BeTwoFactorEnabledResult>(this, _$identity);
+  _$$BeTwoFactorEnabledResultImplCopyWith<_$BeTwoFactorEnabledResultImpl>
+      get copyWith => __$$BeTwoFactorEnabledResultImplCopyWithImpl<
+          _$BeTwoFactorEnabledResultImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1351,20 +1361,20 @@ class _$_BeTwoFactorEnabledResult
 
 abstract class _BeTwoFactorEnabledResult implements BeTwoFactorEnabledResult {
   const factory _BeTwoFactorEnabledResult(final bool enabled) =
-      _$_BeTwoFactorEnabledResult;
+      _$BeTwoFactorEnabledResultImpl;
 
   bool get enabled;
   @JsonKey(ignore: true)
-  _$$_BeTwoFactorEnabledResultCopyWith<_$_BeTwoFactorEnabledResult>
+  _$$BeTwoFactorEnabledResultImplCopyWith<_$BeTwoFactorEnabledResultImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeTwoFactorEnabledResultErrCopyWith<$Res> {
-  factory _$$_BeTwoFactorEnabledResultErrCopyWith(
-          _$_BeTwoFactorEnabledResultErr value,
-          $Res Function(_$_BeTwoFactorEnabledResultErr) then) =
-      __$$_BeTwoFactorEnabledResultErrCopyWithImpl<$Res>;
+abstract class _$$BeTwoFactorEnabledResultErrImplCopyWith<$Res> {
+  factory _$$BeTwoFactorEnabledResultErrImplCopyWith(
+          _$BeTwoFactorEnabledResultErrImpl value,
+          $Res Function(_$BeTwoFactorEnabledResultErrImpl) then) =
+      __$$BeTwoFactorEnabledResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -1372,13 +1382,13 @@ abstract class _$$_BeTwoFactorEnabledResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeTwoFactorEnabledResultErrCopyWithImpl<$Res>
+class __$$BeTwoFactorEnabledResultErrImplCopyWithImpl<$Res>
     extends _$BeTwoFactorEnabledResultCopyWithImpl<$Res,
-        _$_BeTwoFactorEnabledResultErr>
-    implements _$$_BeTwoFactorEnabledResultErrCopyWith<$Res> {
-  __$$_BeTwoFactorEnabledResultErrCopyWithImpl(
-      _$_BeTwoFactorEnabledResultErr _value,
-      $Res Function(_$_BeTwoFactorEnabledResultErr) _then)
+        _$BeTwoFactorEnabledResultErrImpl>
+    implements _$$BeTwoFactorEnabledResultErrImplCopyWith<$Res> {
+  __$$BeTwoFactorEnabledResultErrImplCopyWithImpl(
+      _$BeTwoFactorEnabledResultErrImpl _value,
+      $Res Function(_$BeTwoFactorEnabledResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1386,7 +1396,7 @@ class __$$_BeTwoFactorEnabledResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeTwoFactorEnabledResultErr(
+    return _then(_$BeTwoFactorEnabledResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -1405,10 +1415,10 @@ class __$$_BeTwoFactorEnabledResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeTwoFactorEnabledResultErr
+class _$BeTwoFactorEnabledResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeTwoFactorEnabledResultErr {
-  const _$_BeTwoFactorEnabledResultErr(this.err);
+  const _$BeTwoFactorEnabledResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -1427,10 +1437,10 @@ class _$_BeTwoFactorEnabledResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeTwoFactorEnabledResultErr &&
+            other is _$BeTwoFactorEnabledResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -1440,9 +1450,9 @@ class _$_BeTwoFactorEnabledResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeTwoFactorEnabledResultErrCopyWith<_$_BeTwoFactorEnabledResultErr>
-      get copyWith => __$$_BeTwoFactorEnabledResultErrCopyWithImpl<
-          _$_BeTwoFactorEnabledResultErr>(this, _$identity);
+  _$$BeTwoFactorEnabledResultErrImplCopyWith<_$BeTwoFactorEnabledResultErrImpl>
+      get copyWith => __$$BeTwoFactorEnabledResultErrImplCopyWithImpl<
+          _$BeTwoFactorEnabledResultErrImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1510,11 +1520,11 @@ class _$_BeTwoFactorEnabledResultErr
 abstract class _BeTwoFactorEnabledResultErr
     implements BeTwoFactorEnabledResult {
   const factory _BeTwoFactorEnabledResultErr(final BeError err) =
-      _$_BeTwoFactorEnabledResultErr;
+      _$BeTwoFactorEnabledResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeTwoFactorEnabledResultErrCopyWith<_$_BeTwoFactorEnabledResultErr>
+  _$$BeTwoFactorEnabledResultErrImplCopyWith<_$BeTwoFactorEnabledResultErrImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -1579,20 +1589,20 @@ class _$BeVersionResultCopyWithImpl<$Res, $Val extends BeVersionResult>
 }
 
 /// @nodoc
-abstract class _$$_BeVersionResultCopyWith<$Res> {
-  factory _$$_BeVersionResultCopyWith(
-          _$_BeVersionResult value, $Res Function(_$_BeVersionResult) then) =
-      __$$_BeVersionResultCopyWithImpl<$Res>;
+abstract class _$$BeVersionResultImplCopyWith<$Res> {
+  factory _$$BeVersionResultImplCopyWith(_$BeVersionResultImpl value,
+          $Res Function(_$BeVersionResultImpl) then) =
+      __$$BeVersionResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({int serverVersion, int clientVersionDeployed});
 }
 
 /// @nodoc
-class __$$_BeVersionResultCopyWithImpl<$Res>
-    extends _$BeVersionResultCopyWithImpl<$Res, _$_BeVersionResult>
-    implements _$$_BeVersionResultCopyWith<$Res> {
-  __$$_BeVersionResultCopyWithImpl(
-      _$_BeVersionResult _value, $Res Function(_$_BeVersionResult) _then)
+class __$$BeVersionResultImplCopyWithImpl<$Res>
+    extends _$BeVersionResultCopyWithImpl<$Res, _$BeVersionResultImpl>
+    implements _$$BeVersionResultImplCopyWith<$Res> {
+  __$$BeVersionResultImplCopyWithImpl(
+      _$BeVersionResultImpl _value, $Res Function(_$BeVersionResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1601,7 +1611,7 @@ class __$$_BeVersionResultCopyWithImpl<$Res>
     Object? serverVersion = null,
     Object? clientVersionDeployed = null,
   }) {
-    return _then(_$_BeVersionResult(
+    return _then(_$BeVersionResultImpl(
       null == serverVersion
           ? _value.serverVersion
           : serverVersion // ignore: cast_nullable_to_non_nullable
@@ -1616,10 +1626,10 @@ class __$$_BeVersionResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeVersionResult
+class _$BeVersionResultImpl
     with DiagnosticableTreeMixin
     implements _BeVersionResult {
-  const _$_BeVersionResult(this.serverVersion, this.clientVersionDeployed);
+  const _$BeVersionResultImpl(this.serverVersion, this.clientVersionDeployed);
 
   @override
   final int serverVersion;
@@ -1642,10 +1652,10 @@ class _$_BeVersionResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeVersionResult &&
+            other is _$BeVersionResultImpl &&
             (identical(other.serverVersion, serverVersion) ||
                 other.serverVersion == serverVersion) &&
             (identical(other.clientVersionDeployed, clientVersionDeployed) ||
@@ -1659,8 +1669,9 @@ class _$_BeVersionResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeVersionResultCopyWith<_$_BeVersionResult> get copyWith =>
-      __$$_BeVersionResultCopyWithImpl<_$_BeVersionResult>(this, _$identity);
+  _$$BeVersionResultImplCopyWith<_$BeVersionResultImpl> get copyWith =>
+      __$$BeVersionResultImplCopyWithImpl<_$BeVersionResultImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1728,20 +1739,20 @@ class _$_BeVersionResult
 abstract class _BeVersionResult implements BeVersionResult {
   const factory _BeVersionResult(
           final int serverVersion, final int clientVersionDeployed) =
-      _$_BeVersionResult;
+      _$BeVersionResultImpl;
 
   int get serverVersion;
   int get clientVersionDeployed;
   @JsonKey(ignore: true)
-  _$$_BeVersionResultCopyWith<_$_BeVersionResult> get copyWith =>
+  _$$BeVersionResultImplCopyWith<_$BeVersionResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeVersionResultErrCopyWith<$Res> {
-  factory _$$_BeVersionResultErrCopyWith(_$_BeVersionResultErr value,
-          $Res Function(_$_BeVersionResultErr) then) =
-      __$$_BeVersionResultErrCopyWithImpl<$Res>;
+abstract class _$$BeVersionResultErrImplCopyWith<$Res> {
+  factory _$$BeVersionResultErrImplCopyWith(_$BeVersionResultErrImpl value,
+          $Res Function(_$BeVersionResultErrImpl) then) =
+      __$$BeVersionResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -1749,11 +1760,11 @@ abstract class _$$_BeVersionResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeVersionResultErrCopyWithImpl<$Res>
-    extends _$BeVersionResultCopyWithImpl<$Res, _$_BeVersionResultErr>
-    implements _$$_BeVersionResultErrCopyWith<$Res> {
-  __$$_BeVersionResultErrCopyWithImpl(
-      _$_BeVersionResultErr _value, $Res Function(_$_BeVersionResultErr) _then)
+class __$$BeVersionResultErrImplCopyWithImpl<$Res>
+    extends _$BeVersionResultCopyWithImpl<$Res, _$BeVersionResultErrImpl>
+    implements _$$BeVersionResultErrImplCopyWith<$Res> {
+  __$$BeVersionResultErrImplCopyWithImpl(_$BeVersionResultErrImpl _value,
+      $Res Function(_$BeVersionResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1761,7 +1772,7 @@ class __$$_BeVersionResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeVersionResultErr(
+    return _then(_$BeVersionResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -1780,10 +1791,10 @@ class __$$_BeVersionResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeVersionResultErr
+class _$BeVersionResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeVersionResultErr {
-  const _$_BeVersionResultErr(this.err);
+  const _$BeVersionResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -1802,10 +1813,10 @@ class _$_BeVersionResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeVersionResultErr &&
+            other is _$BeVersionResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -1815,8 +1826,8 @@ class _$_BeVersionResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeVersionResultErrCopyWith<_$_BeVersionResultErr> get copyWith =>
-      __$$_BeVersionResultErrCopyWithImpl<_$_BeVersionResultErr>(
+  _$$BeVersionResultErrImplCopyWith<_$BeVersionResultErrImpl> get copyWith =>
+      __$$BeVersionResultErrImplCopyWithImpl<_$BeVersionResultErrImpl>(
           this, _$identity);
 
   @override
@@ -1883,11 +1894,12 @@ class _$_BeVersionResultErr
 }
 
 abstract class _BeVersionResultErr implements BeVersionResult {
-  const factory _BeVersionResultErr(final BeError err) = _$_BeVersionResultErr;
+  const factory _BeVersionResultErr(final BeError err) =
+      _$BeVersionResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeVersionResultErrCopyWith<_$_BeVersionResultErr> get copyWith =>
+  _$$BeVersionResultErrImplCopyWith<_$BeVersionResultErrImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1952,20 +1964,20 @@ class _$BeApiKeyResultCopyWithImpl<$Res, $Val extends BeApiKeyResult>
 }
 
 /// @nodoc
-abstract class _$$_BeApiKeyResultCopyWith<$Res> {
-  factory _$$_BeApiKeyResultCopyWith(
-          _$_BeApiKeyResult value, $Res Function(_$_BeApiKeyResult) then) =
-      __$$_BeApiKeyResultCopyWithImpl<$Res>;
+abstract class _$$BeApiKeyResultImplCopyWith<$Res> {
+  factory _$$BeApiKeyResultImplCopyWith(_$BeApiKeyResultImpl value,
+          $Res Function(_$BeApiKeyResultImpl) then) =
+      __$$BeApiKeyResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeApiKey apikey});
 }
 
 /// @nodoc
-class __$$_BeApiKeyResultCopyWithImpl<$Res>
-    extends _$BeApiKeyResultCopyWithImpl<$Res, _$_BeApiKeyResult>
-    implements _$$_BeApiKeyResultCopyWith<$Res> {
-  __$$_BeApiKeyResultCopyWithImpl(
-      _$_BeApiKeyResult _value, $Res Function(_$_BeApiKeyResult) _then)
+class __$$BeApiKeyResultImplCopyWithImpl<$Res>
+    extends _$BeApiKeyResultCopyWithImpl<$Res, _$BeApiKeyResultImpl>
+    implements _$$BeApiKeyResultImplCopyWith<$Res> {
+  __$$BeApiKeyResultImplCopyWithImpl(
+      _$BeApiKeyResultImpl _value, $Res Function(_$BeApiKeyResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1973,7 +1985,7 @@ class __$$_BeApiKeyResultCopyWithImpl<$Res>
   $Res call({
     Object? apikey = null,
   }) {
-    return _then(_$_BeApiKeyResult(
+    return _then(_$BeApiKeyResultImpl(
       null == apikey
           ? _value.apikey
           : apikey // ignore: cast_nullable_to_non_nullable
@@ -1984,10 +1996,10 @@ class __$$_BeApiKeyResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeApiKeyResult
+class _$BeApiKeyResultImpl
     with DiagnosticableTreeMixin
     implements _BeApiKeyResult {
-  const _$_BeApiKeyResult(this.apikey);
+  const _$BeApiKeyResultImpl(this.apikey);
 
   @override
   final BeApiKey apikey;
@@ -2006,10 +2018,10 @@ class _$_BeApiKeyResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeApiKeyResult &&
+            other is _$BeApiKeyResultImpl &&
             (identical(other.apikey, apikey) || other.apikey == apikey));
   }
 
@@ -2019,8 +2031,9 @@ class _$_BeApiKeyResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeApiKeyResultCopyWith<_$_BeApiKeyResult> get copyWith =>
-      __$$_BeApiKeyResultCopyWithImpl<_$_BeApiKeyResult>(this, _$identity);
+  _$$BeApiKeyResultImplCopyWith<_$BeApiKeyResultImpl> get copyWith =>
+      __$$BeApiKeyResultImplCopyWithImpl<_$BeApiKeyResultImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -2086,19 +2099,19 @@ class _$_BeApiKeyResult
 }
 
 abstract class _BeApiKeyResult implements BeApiKeyResult {
-  const factory _BeApiKeyResult(final BeApiKey apikey) = _$_BeApiKeyResult;
+  const factory _BeApiKeyResult(final BeApiKey apikey) = _$BeApiKeyResultImpl;
 
   BeApiKey get apikey;
   @JsonKey(ignore: true)
-  _$$_BeApiKeyResultCopyWith<_$_BeApiKeyResult> get copyWith =>
+  _$$BeApiKeyResultImplCopyWith<_$BeApiKeyResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeApiKeyResultErrCopyWith<$Res> {
-  factory _$$_BeApiKeyResultErrCopyWith(_$_BeApiKeyResultErr value,
-          $Res Function(_$_BeApiKeyResultErr) then) =
-      __$$_BeApiKeyResultErrCopyWithImpl<$Res>;
+abstract class _$$BeApiKeyResultErrImplCopyWith<$Res> {
+  factory _$$BeApiKeyResultErrImplCopyWith(_$BeApiKeyResultErrImpl value,
+          $Res Function(_$BeApiKeyResultErrImpl) then) =
+      __$$BeApiKeyResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -2106,11 +2119,11 @@ abstract class _$$_BeApiKeyResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeApiKeyResultErrCopyWithImpl<$Res>
-    extends _$BeApiKeyResultCopyWithImpl<$Res, _$_BeApiKeyResultErr>
-    implements _$$_BeApiKeyResultErrCopyWith<$Res> {
-  __$$_BeApiKeyResultErrCopyWithImpl(
-      _$_BeApiKeyResultErr _value, $Res Function(_$_BeApiKeyResultErr) _then)
+class __$$BeApiKeyResultErrImplCopyWithImpl<$Res>
+    extends _$BeApiKeyResultCopyWithImpl<$Res, _$BeApiKeyResultErrImpl>
+    implements _$$BeApiKeyResultErrImplCopyWith<$Res> {
+  __$$BeApiKeyResultErrImplCopyWithImpl(_$BeApiKeyResultErrImpl _value,
+      $Res Function(_$BeApiKeyResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -2118,7 +2131,7 @@ class __$$_BeApiKeyResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeApiKeyResultErr(
+    return _then(_$BeApiKeyResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -2137,10 +2150,10 @@ class __$$_BeApiKeyResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeApiKeyResultErr
+class _$BeApiKeyResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeApiKeyResultErr {
-  const _$_BeApiKeyResultErr(this.err);
+  const _$BeApiKeyResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -2159,10 +2172,10 @@ class _$_BeApiKeyResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeApiKeyResultErr &&
+            other is _$BeApiKeyResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -2172,8 +2185,8 @@ class _$_BeApiKeyResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeApiKeyResultErrCopyWith<_$_BeApiKeyResultErr> get copyWith =>
-      __$$_BeApiKeyResultErrCopyWithImpl<_$_BeApiKeyResultErr>(
+  _$$BeApiKeyResultErrImplCopyWith<_$BeApiKeyResultErrImpl> get copyWith =>
+      __$$BeApiKeyResultErrImplCopyWithImpl<_$BeApiKeyResultErrImpl>(
           this, _$identity);
 
   @override
@@ -2240,11 +2253,11 @@ class _$_BeApiKeyResultErr
 }
 
 abstract class _BeApiKeyResultErr implements BeApiKeyResult {
-  const factory _BeApiKeyResultErr(final BeError err) = _$_BeApiKeyResultErr;
+  const factory _BeApiKeyResultErr(final BeError err) = _$BeApiKeyResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeApiKeyResultErrCopyWith<_$_BeApiKeyResultErr> get copyWith =>
+  _$$BeApiKeyResultErrImplCopyWith<_$BeApiKeyResultErrImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -2310,20 +2323,22 @@ class _$BeApiKeyRequestResultCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_BeApiKeyRequestResultCopyWith<$Res> {
-  factory _$$_BeApiKeyRequestResultCopyWith(_$_BeApiKeyRequestResult value,
-          $Res Function(_$_BeApiKeyRequestResult) then) =
-      __$$_BeApiKeyRequestResultCopyWithImpl<$Res>;
+abstract class _$$BeApiKeyRequestResultImplCopyWith<$Res> {
+  factory _$$BeApiKeyRequestResultImplCopyWith(
+          _$BeApiKeyRequestResultImpl value,
+          $Res Function(_$BeApiKeyRequestResultImpl) then) =
+      __$$BeApiKeyRequestResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String token});
 }
 
 /// @nodoc
-class __$$_BeApiKeyRequestResultCopyWithImpl<$Res>
-    extends _$BeApiKeyRequestResultCopyWithImpl<$Res, _$_BeApiKeyRequestResult>
-    implements _$$_BeApiKeyRequestResultCopyWith<$Res> {
-  __$$_BeApiKeyRequestResultCopyWithImpl(_$_BeApiKeyRequestResult _value,
-      $Res Function(_$_BeApiKeyRequestResult) _then)
+class __$$BeApiKeyRequestResultImplCopyWithImpl<$Res>
+    extends _$BeApiKeyRequestResultCopyWithImpl<$Res,
+        _$BeApiKeyRequestResultImpl>
+    implements _$$BeApiKeyRequestResultImplCopyWith<$Res> {
+  __$$BeApiKeyRequestResultImplCopyWithImpl(_$BeApiKeyRequestResultImpl _value,
+      $Res Function(_$BeApiKeyRequestResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -2331,7 +2346,7 @@ class __$$_BeApiKeyRequestResultCopyWithImpl<$Res>
   $Res call({
     Object? token = null,
   }) {
-    return _then(_$_BeApiKeyRequestResult(
+    return _then(_$BeApiKeyRequestResultImpl(
       null == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
@@ -2342,10 +2357,10 @@ class __$$_BeApiKeyRequestResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeApiKeyRequestResult
+class _$BeApiKeyRequestResultImpl
     with DiagnosticableTreeMixin
     implements _BeApiKeyRequestResult {
-  const _$_BeApiKeyRequestResult(this.token);
+  const _$BeApiKeyRequestResultImpl(this.token);
 
   @override
   final String token;
@@ -2364,10 +2379,10 @@ class _$_BeApiKeyRequestResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeApiKeyRequestResult &&
+            other is _$BeApiKeyRequestResultImpl &&
             (identical(other.token, token) || other.token == token));
   }
 
@@ -2377,9 +2392,9 @@ class _$_BeApiKeyRequestResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeApiKeyRequestResultCopyWith<_$_BeApiKeyRequestResult> get copyWith =>
-      __$$_BeApiKeyRequestResultCopyWithImpl<_$_BeApiKeyRequestResult>(
-          this, _$identity);
+  _$$BeApiKeyRequestResultImplCopyWith<_$BeApiKeyRequestResultImpl>
+      get copyWith => __$$BeApiKeyRequestResultImplCopyWithImpl<
+          _$BeApiKeyRequestResultImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -2446,20 +2461,20 @@ class _$_BeApiKeyRequestResult
 
 abstract class _BeApiKeyRequestResult implements BeApiKeyRequestResult {
   const factory _BeApiKeyRequestResult(final String token) =
-      _$_BeApiKeyRequestResult;
+      _$BeApiKeyRequestResultImpl;
 
   String get token;
   @JsonKey(ignore: true)
-  _$$_BeApiKeyRequestResultCopyWith<_$_BeApiKeyRequestResult> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$BeApiKeyRequestResultImplCopyWith<_$BeApiKeyRequestResultImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeApiKeyRequestResulttErrCopyWith<$Res> {
-  factory _$$_BeApiKeyRequestResulttErrCopyWith(
-          _$_BeApiKeyRequestResulttErr value,
-          $Res Function(_$_BeApiKeyRequestResulttErr) then) =
-      __$$_BeApiKeyRequestResulttErrCopyWithImpl<$Res>;
+abstract class _$$BeApiKeyRequestResulttErrImplCopyWith<$Res> {
+  factory _$$BeApiKeyRequestResulttErrImplCopyWith(
+          _$BeApiKeyRequestResulttErrImpl value,
+          $Res Function(_$BeApiKeyRequestResulttErrImpl) then) =
+      __$$BeApiKeyRequestResulttErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -2467,13 +2482,13 @@ abstract class _$$_BeApiKeyRequestResulttErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeApiKeyRequestResulttErrCopyWithImpl<$Res>
+class __$$BeApiKeyRequestResulttErrImplCopyWithImpl<$Res>
     extends _$BeApiKeyRequestResultCopyWithImpl<$Res,
-        _$_BeApiKeyRequestResulttErr>
-    implements _$$_BeApiKeyRequestResulttErrCopyWith<$Res> {
-  __$$_BeApiKeyRequestResulttErrCopyWithImpl(
-      _$_BeApiKeyRequestResulttErr _value,
-      $Res Function(_$_BeApiKeyRequestResulttErr) _then)
+        _$BeApiKeyRequestResulttErrImpl>
+    implements _$$BeApiKeyRequestResulttErrImplCopyWith<$Res> {
+  __$$BeApiKeyRequestResulttErrImplCopyWithImpl(
+      _$BeApiKeyRequestResulttErrImpl _value,
+      $Res Function(_$BeApiKeyRequestResulttErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -2481,7 +2496,7 @@ class __$$_BeApiKeyRequestResulttErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeApiKeyRequestResulttErr(
+    return _then(_$BeApiKeyRequestResulttErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -2500,10 +2515,10 @@ class __$$_BeApiKeyRequestResulttErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeApiKeyRequestResulttErr
+class _$BeApiKeyRequestResulttErrImpl
     with DiagnosticableTreeMixin
     implements _BeApiKeyRequestResulttErr {
-  const _$_BeApiKeyRequestResulttErr(this.err);
+  const _$BeApiKeyRequestResulttErrImpl(this.err);
 
   @override
   final BeError err;
@@ -2522,10 +2537,10 @@ class _$_BeApiKeyRequestResulttErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeApiKeyRequestResulttErr &&
+            other is _$BeApiKeyRequestResulttErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -2535,9 +2550,9 @@ class _$_BeApiKeyRequestResulttErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeApiKeyRequestResulttErrCopyWith<_$_BeApiKeyRequestResulttErr>
-      get copyWith => __$$_BeApiKeyRequestResulttErrCopyWithImpl<
-          _$_BeApiKeyRequestResulttErr>(this, _$identity);
+  _$$BeApiKeyRequestResulttErrImplCopyWith<_$BeApiKeyRequestResulttErrImpl>
+      get copyWith => __$$BeApiKeyRequestResulttErrImplCopyWithImpl<
+          _$BeApiKeyRequestResulttErrImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -2604,11 +2619,11 @@ class _$_BeApiKeyRequestResulttErr
 
 abstract class _BeApiKeyRequestResulttErr implements BeApiKeyRequestResult {
   const factory _BeApiKeyRequestResulttErr(final BeError err) =
-      _$_BeApiKeyRequestResulttErr;
+      _$BeApiKeyRequestResulttErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeApiKeyRequestResulttErrCopyWith<_$_BeApiKeyRequestResulttErr>
+  _$$BeApiKeyRequestResulttErrImplCopyWith<_$BeApiKeyRequestResulttErrImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -2674,22 +2689,23 @@ class _$BeKycRequestCreateResultCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_BeKycRequestCreateResultCopyWith<$Res> {
-  factory _$$_BeKycRequestCreateResultCopyWith(
-          _$_BeKycRequestCreateResult value,
-          $Res Function(_$_BeKycRequestCreateResult) then) =
-      __$$_BeKycRequestCreateResultCopyWithImpl<$Res>;
+abstract class _$$BeKycRequestCreateResultImplCopyWith<$Res> {
+  factory _$$BeKycRequestCreateResultImplCopyWith(
+          _$BeKycRequestCreateResultImpl value,
+          $Res Function(_$BeKycRequestCreateResultImpl) then) =
+      __$$BeKycRequestCreateResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String kycUrl});
 }
 
 /// @nodoc
-class __$$_BeKycRequestCreateResultCopyWithImpl<$Res>
+class __$$BeKycRequestCreateResultImplCopyWithImpl<$Res>
     extends _$BeKycRequestCreateResultCopyWithImpl<$Res,
-        _$_BeKycRequestCreateResult>
-    implements _$$_BeKycRequestCreateResultCopyWith<$Res> {
-  __$$_BeKycRequestCreateResultCopyWithImpl(_$_BeKycRequestCreateResult _value,
-      $Res Function(_$_BeKycRequestCreateResult) _then)
+        _$BeKycRequestCreateResultImpl>
+    implements _$$BeKycRequestCreateResultImplCopyWith<$Res> {
+  __$$BeKycRequestCreateResultImplCopyWithImpl(
+      _$BeKycRequestCreateResultImpl _value,
+      $Res Function(_$BeKycRequestCreateResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -2697,7 +2713,7 @@ class __$$_BeKycRequestCreateResultCopyWithImpl<$Res>
   $Res call({
     Object? kycUrl = null,
   }) {
-    return _then(_$_BeKycRequestCreateResult(
+    return _then(_$BeKycRequestCreateResultImpl(
       null == kycUrl
           ? _value.kycUrl
           : kycUrl // ignore: cast_nullable_to_non_nullable
@@ -2708,10 +2724,10 @@ class __$$_BeKycRequestCreateResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeKycRequestCreateResult
+class _$BeKycRequestCreateResultImpl
     with DiagnosticableTreeMixin
     implements _BeKycRequestCreateResult {
-  const _$_BeKycRequestCreateResult(this.kycUrl);
+  const _$BeKycRequestCreateResultImpl(this.kycUrl);
 
   @override
   final String kycUrl;
@@ -2730,10 +2746,10 @@ class _$_BeKycRequestCreateResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeKycRequestCreateResult &&
+            other is _$BeKycRequestCreateResultImpl &&
             (identical(other.kycUrl, kycUrl) || other.kycUrl == kycUrl));
   }
 
@@ -2743,9 +2759,9 @@ class _$_BeKycRequestCreateResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeKycRequestCreateResultCopyWith<_$_BeKycRequestCreateResult>
-      get copyWith => __$$_BeKycRequestCreateResultCopyWithImpl<
-          _$_BeKycRequestCreateResult>(this, _$identity);
+  _$$BeKycRequestCreateResultImplCopyWith<_$BeKycRequestCreateResultImpl>
+      get copyWith => __$$BeKycRequestCreateResultImplCopyWithImpl<
+          _$BeKycRequestCreateResultImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -2812,20 +2828,20 @@ class _$_BeKycRequestCreateResult
 
 abstract class _BeKycRequestCreateResult implements BeKycRequestCreateResult {
   const factory _BeKycRequestCreateResult(final String kycUrl) =
-      _$_BeKycRequestCreateResult;
+      _$BeKycRequestCreateResultImpl;
 
   String get kycUrl;
   @JsonKey(ignore: true)
-  _$$_BeKycRequestCreateResultCopyWith<_$_BeKycRequestCreateResult>
+  _$$BeKycRequestCreateResultImplCopyWith<_$BeKycRequestCreateResultImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeKycRequestCreateResultErrCopyWith<$Res> {
-  factory _$$_BeKycRequestCreateResultErrCopyWith(
-          _$_BeKycRequestCreateResultErr value,
-          $Res Function(_$_BeKycRequestCreateResultErr) then) =
-      __$$_BeKycRequestCreateResultErrCopyWithImpl<$Res>;
+abstract class _$$BeKycRequestCreateResultErrImplCopyWith<$Res> {
+  factory _$$BeKycRequestCreateResultErrImplCopyWith(
+          _$BeKycRequestCreateResultErrImpl value,
+          $Res Function(_$BeKycRequestCreateResultErrImpl) then) =
+      __$$BeKycRequestCreateResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -2833,13 +2849,13 @@ abstract class _$$_BeKycRequestCreateResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeKycRequestCreateResultErrCopyWithImpl<$Res>
+class __$$BeKycRequestCreateResultErrImplCopyWithImpl<$Res>
     extends _$BeKycRequestCreateResultCopyWithImpl<$Res,
-        _$_BeKycRequestCreateResultErr>
-    implements _$$_BeKycRequestCreateResultErrCopyWith<$Res> {
-  __$$_BeKycRequestCreateResultErrCopyWithImpl(
-      _$_BeKycRequestCreateResultErr _value,
-      $Res Function(_$_BeKycRequestCreateResultErr) _then)
+        _$BeKycRequestCreateResultErrImpl>
+    implements _$$BeKycRequestCreateResultErrImplCopyWith<$Res> {
+  __$$BeKycRequestCreateResultErrImplCopyWithImpl(
+      _$BeKycRequestCreateResultErrImpl _value,
+      $Res Function(_$BeKycRequestCreateResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -2847,7 +2863,7 @@ class __$$_BeKycRequestCreateResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeKycRequestCreateResultErr(
+    return _then(_$BeKycRequestCreateResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -2866,10 +2882,10 @@ class __$$_BeKycRequestCreateResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeKycRequestCreateResultErr
+class _$BeKycRequestCreateResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeKycRequestCreateResultErr {
-  const _$_BeKycRequestCreateResultErr(this.err);
+  const _$BeKycRequestCreateResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -2888,10 +2904,10 @@ class _$_BeKycRequestCreateResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeKycRequestCreateResultErr &&
+            other is _$BeKycRequestCreateResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -2901,9 +2917,9 @@ class _$_BeKycRequestCreateResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeKycRequestCreateResultErrCopyWith<_$_BeKycRequestCreateResultErr>
-      get copyWith => __$$_BeKycRequestCreateResultErrCopyWithImpl<
-          _$_BeKycRequestCreateResultErr>(this, _$identity);
+  _$$BeKycRequestCreateResultErrImplCopyWith<_$BeKycRequestCreateResultErrImpl>
+      get copyWith => __$$BeKycRequestCreateResultErrImplCopyWithImpl<
+          _$BeKycRequestCreateResultErrImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -2971,11 +2987,11 @@ class _$_BeKycRequestCreateResultErr
 abstract class _BeKycRequestCreateResultErr
     implements BeKycRequestCreateResult {
   const factory _BeKycRequestCreateResultErr(final BeError err) =
-      _$_BeKycRequestCreateResultErr;
+      _$BeKycRequestCreateResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeKycRequestCreateResultErrCopyWith<_$_BeKycRequestCreateResultErr>
+  _$$BeKycRequestCreateResultErrImplCopyWith<_$BeKycRequestCreateResultErrImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -3040,20 +3056,20 @@ class _$BeTwoFactorResultCopyWithImpl<$Res, $Val extends BeTwoFactorResult>
 }
 
 /// @nodoc
-abstract class _$$_BeTwoFactorResultCopyWith<$Res> {
-  factory _$$_BeTwoFactorResultCopyWith(_$_BeTwoFactorResult value,
-          $Res Function(_$_BeTwoFactorResult) then) =
-      __$$_BeTwoFactorResultCopyWithImpl<$Res>;
+abstract class _$$BeTwoFactorResultImplCopyWith<$Res> {
+  factory _$$BeTwoFactorResultImplCopyWith(_$BeTwoFactorResultImpl value,
+          $Res Function(_$BeTwoFactorResultImpl) then) =
+      __$$BeTwoFactorResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeTwoFactor twoFactor});
 }
 
 /// @nodoc
-class __$$_BeTwoFactorResultCopyWithImpl<$Res>
-    extends _$BeTwoFactorResultCopyWithImpl<$Res, _$_BeTwoFactorResult>
-    implements _$$_BeTwoFactorResultCopyWith<$Res> {
-  __$$_BeTwoFactorResultCopyWithImpl(
-      _$_BeTwoFactorResult _value, $Res Function(_$_BeTwoFactorResult) _then)
+class __$$BeTwoFactorResultImplCopyWithImpl<$Res>
+    extends _$BeTwoFactorResultCopyWithImpl<$Res, _$BeTwoFactorResultImpl>
+    implements _$$BeTwoFactorResultImplCopyWith<$Res> {
+  __$$BeTwoFactorResultImplCopyWithImpl(_$BeTwoFactorResultImpl _value,
+      $Res Function(_$BeTwoFactorResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -3061,7 +3077,7 @@ class __$$_BeTwoFactorResultCopyWithImpl<$Res>
   $Res call({
     Object? twoFactor = null,
   }) {
-    return _then(_$_BeTwoFactorResult(
+    return _then(_$BeTwoFactorResultImpl(
       null == twoFactor
           ? _value.twoFactor
           : twoFactor // ignore: cast_nullable_to_non_nullable
@@ -3072,10 +3088,10 @@ class __$$_BeTwoFactorResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeTwoFactorResult
+class _$BeTwoFactorResultImpl
     with DiagnosticableTreeMixin
     implements _BeTwoFactorResult {
-  const _$_BeTwoFactorResult(this.twoFactor);
+  const _$BeTwoFactorResultImpl(this.twoFactor);
 
   @override
   final BeTwoFactor twoFactor;
@@ -3094,10 +3110,10 @@ class _$_BeTwoFactorResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeTwoFactorResult &&
+            other is _$BeTwoFactorResultImpl &&
             (identical(other.twoFactor, twoFactor) ||
                 other.twoFactor == twoFactor));
   }
@@ -3108,8 +3124,8 @@ class _$_BeTwoFactorResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeTwoFactorResultCopyWith<_$_BeTwoFactorResult> get copyWith =>
-      __$$_BeTwoFactorResultCopyWithImpl<_$_BeTwoFactorResult>(
+  _$$BeTwoFactorResultImplCopyWith<_$BeTwoFactorResultImpl> get copyWith =>
+      __$$BeTwoFactorResultImplCopyWithImpl<_$BeTwoFactorResultImpl>(
           this, _$identity);
 
   @override
@@ -3177,19 +3193,19 @@ class _$_BeTwoFactorResult
 
 abstract class _BeTwoFactorResult implements BeTwoFactorResult {
   const factory _BeTwoFactorResult(final BeTwoFactor twoFactor) =
-      _$_BeTwoFactorResult;
+      _$BeTwoFactorResultImpl;
 
   BeTwoFactor get twoFactor;
   @JsonKey(ignore: true)
-  _$$_BeTwoFactorResultCopyWith<_$_BeTwoFactorResult> get copyWith =>
+  _$$BeTwoFactorResultImplCopyWith<_$BeTwoFactorResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeTwoFactorResultErrCopyWith<$Res> {
-  factory _$$_BeTwoFactorResultErrCopyWith(_$_BeTwoFactorResultErr value,
-          $Res Function(_$_BeTwoFactorResultErr) then) =
-      __$$_BeTwoFactorResultErrCopyWithImpl<$Res>;
+abstract class _$$BeTwoFactorResultErrImplCopyWith<$Res> {
+  factory _$$BeTwoFactorResultErrImplCopyWith(_$BeTwoFactorResultErrImpl value,
+          $Res Function(_$BeTwoFactorResultErrImpl) then) =
+      __$$BeTwoFactorResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -3197,11 +3213,11 @@ abstract class _$$_BeTwoFactorResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeTwoFactorResultErrCopyWithImpl<$Res>
-    extends _$BeTwoFactorResultCopyWithImpl<$Res, _$_BeTwoFactorResultErr>
-    implements _$$_BeTwoFactorResultErrCopyWith<$Res> {
-  __$$_BeTwoFactorResultErrCopyWithImpl(_$_BeTwoFactorResultErr _value,
-      $Res Function(_$_BeTwoFactorResultErr) _then)
+class __$$BeTwoFactorResultErrImplCopyWithImpl<$Res>
+    extends _$BeTwoFactorResultCopyWithImpl<$Res, _$BeTwoFactorResultErrImpl>
+    implements _$$BeTwoFactorResultErrImplCopyWith<$Res> {
+  __$$BeTwoFactorResultErrImplCopyWithImpl(_$BeTwoFactorResultErrImpl _value,
+      $Res Function(_$BeTwoFactorResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -3209,7 +3225,7 @@ class __$$_BeTwoFactorResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeTwoFactorResultErr(
+    return _then(_$BeTwoFactorResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -3228,10 +3244,10 @@ class __$$_BeTwoFactorResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeTwoFactorResultErr
+class _$BeTwoFactorResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeTwoFactorResultErr {
-  const _$_BeTwoFactorResultErr(this.err);
+  const _$BeTwoFactorResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -3250,10 +3266,10 @@ class _$_BeTwoFactorResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeTwoFactorResultErr &&
+            other is _$BeTwoFactorResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -3263,9 +3279,10 @@ class _$_BeTwoFactorResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeTwoFactorResultErrCopyWith<_$_BeTwoFactorResultErr> get copyWith =>
-      __$$_BeTwoFactorResultErrCopyWithImpl<_$_BeTwoFactorResultErr>(
-          this, _$identity);
+  _$$BeTwoFactorResultErrImplCopyWith<_$BeTwoFactorResultErrImpl>
+      get copyWith =>
+          __$$BeTwoFactorResultErrImplCopyWithImpl<_$BeTwoFactorResultErrImpl>(
+              this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -3332,12 +3349,12 @@ class _$_BeTwoFactorResultErr
 
 abstract class _BeTwoFactorResultErr implements BeTwoFactorResult {
   const factory _BeTwoFactorResultErr(final BeError err) =
-      _$_BeTwoFactorResultErr;
+      _$BeTwoFactorResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeTwoFactorResultErrCopyWith<_$_BeTwoFactorResultErr> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$BeTwoFactorResultErrImplCopyWith<_$BeTwoFactorResultErrImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -3401,20 +3418,20 @@ class _$BeAssetResultCopyWithImpl<$Res, $Val extends BeAssetResult>
 }
 
 /// @nodoc
-abstract class _$$_BeAssetResultCopyWith<$Res> {
-  factory _$$_BeAssetResultCopyWith(
-          _$_BeAssetResult value, $Res Function(_$_BeAssetResult) then) =
-      __$$_BeAssetResultCopyWithImpl<$Res>;
+abstract class _$$BeAssetResultImplCopyWith<$Res> {
+  factory _$$BeAssetResultImplCopyWith(
+          _$BeAssetResultImpl value, $Res Function(_$BeAssetResultImpl) then) =
+      __$$BeAssetResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<BeAsset> assets});
 }
 
 /// @nodoc
-class __$$_BeAssetResultCopyWithImpl<$Res>
-    extends _$BeAssetResultCopyWithImpl<$Res, _$_BeAssetResult>
-    implements _$$_BeAssetResultCopyWith<$Res> {
-  __$$_BeAssetResultCopyWithImpl(
-      _$_BeAssetResult _value, $Res Function(_$_BeAssetResult) _then)
+class __$$BeAssetResultImplCopyWithImpl<$Res>
+    extends _$BeAssetResultCopyWithImpl<$Res, _$BeAssetResultImpl>
+    implements _$$BeAssetResultImplCopyWith<$Res> {
+  __$$BeAssetResultImplCopyWithImpl(
+      _$BeAssetResultImpl _value, $Res Function(_$BeAssetResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -3422,7 +3439,7 @@ class __$$_BeAssetResultCopyWithImpl<$Res>
   $Res call({
     Object? assets = null,
   }) {
-    return _then(_$_BeAssetResult(
+    return _then(_$BeAssetResultImpl(
       null == assets
           ? _value._assets
           : assets // ignore: cast_nullable_to_non_nullable
@@ -3433,8 +3450,10 @@ class __$$_BeAssetResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeAssetResult with DiagnosticableTreeMixin implements _BeAssetResult {
-  const _$_BeAssetResult(final List<BeAsset> assets) : _assets = assets;
+class _$BeAssetResultImpl
+    with DiagnosticableTreeMixin
+    implements _BeAssetResult {
+  const _$BeAssetResultImpl(final List<BeAsset> assets) : _assets = assets;
 
   final List<BeAsset> _assets;
   @override
@@ -3458,10 +3477,10 @@ class _$_BeAssetResult with DiagnosticableTreeMixin implements _BeAssetResult {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeAssetResult &&
+            other is _$BeAssetResultImpl &&
             const DeepCollectionEquality().equals(other._assets, _assets));
   }
 
@@ -3472,8 +3491,8 @@ class _$_BeAssetResult with DiagnosticableTreeMixin implements _BeAssetResult {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeAssetResultCopyWith<_$_BeAssetResult> get copyWith =>
-      __$$_BeAssetResultCopyWithImpl<_$_BeAssetResult>(this, _$identity);
+  _$$BeAssetResultImplCopyWith<_$BeAssetResultImpl> get copyWith =>
+      __$$BeAssetResultImplCopyWithImpl<_$BeAssetResultImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -3539,19 +3558,20 @@ class _$_BeAssetResult with DiagnosticableTreeMixin implements _BeAssetResult {
 }
 
 abstract class _BeAssetResult implements BeAssetResult {
-  const factory _BeAssetResult(final List<BeAsset> assets) = _$_BeAssetResult;
+  const factory _BeAssetResult(final List<BeAsset> assets) =
+      _$BeAssetResultImpl;
 
   List<BeAsset> get assets;
   @JsonKey(ignore: true)
-  _$$_BeAssetResultCopyWith<_$_BeAssetResult> get copyWith =>
+  _$$BeAssetResultImplCopyWith<_$BeAssetResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeAssetResultErrCopyWith<$Res> {
-  factory _$$_BeAssetResultErrCopyWith(
-          _$_BeAssetResultErr value, $Res Function(_$_BeAssetResultErr) then) =
-      __$$_BeAssetResultErrCopyWithImpl<$Res>;
+abstract class _$$BeAssetResultErrImplCopyWith<$Res> {
+  factory _$$BeAssetResultErrImplCopyWith(_$BeAssetResultErrImpl value,
+          $Res Function(_$BeAssetResultErrImpl) then) =
+      __$$BeAssetResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -3559,11 +3579,11 @@ abstract class _$$_BeAssetResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeAssetResultErrCopyWithImpl<$Res>
-    extends _$BeAssetResultCopyWithImpl<$Res, _$_BeAssetResultErr>
-    implements _$$_BeAssetResultErrCopyWith<$Res> {
-  __$$_BeAssetResultErrCopyWithImpl(
-      _$_BeAssetResultErr _value, $Res Function(_$_BeAssetResultErr) _then)
+class __$$BeAssetResultErrImplCopyWithImpl<$Res>
+    extends _$BeAssetResultCopyWithImpl<$Res, _$BeAssetResultErrImpl>
+    implements _$$BeAssetResultErrImplCopyWith<$Res> {
+  __$$BeAssetResultErrImplCopyWithImpl(_$BeAssetResultErrImpl _value,
+      $Res Function(_$BeAssetResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -3571,7 +3591,7 @@ class __$$_BeAssetResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeAssetResultErr(
+    return _then(_$BeAssetResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -3590,10 +3610,10 @@ class __$$_BeAssetResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeAssetResultErr
+class _$BeAssetResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeAssetResultErr {
-  const _$_BeAssetResultErr(this.err);
+  const _$BeAssetResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -3612,10 +3632,10 @@ class _$_BeAssetResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeAssetResultErr &&
+            other is _$BeAssetResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -3625,8 +3645,9 @@ class _$_BeAssetResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeAssetResultErrCopyWith<_$_BeAssetResultErr> get copyWith =>
-      __$$_BeAssetResultErrCopyWithImpl<_$_BeAssetResultErr>(this, _$identity);
+  _$$BeAssetResultErrImplCopyWith<_$BeAssetResultErrImpl> get copyWith =>
+      __$$BeAssetResultErrImplCopyWithImpl<_$BeAssetResultErrImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -3692,11 +3713,11 @@ class _$_BeAssetResultErr
 }
 
 abstract class _BeAssetResultErr implements BeAssetResult {
-  const factory _BeAssetResultErr(final BeError err) = _$_BeAssetResultErr;
+  const factory _BeAssetResultErr(final BeError err) = _$BeAssetResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeAssetResultErrCopyWith<_$_BeAssetResultErr> get copyWith =>
+  _$$BeAssetResultErrImplCopyWith<_$BeAssetResultErrImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -3761,20 +3782,20 @@ class _$BeMarketResultCopyWithImpl<$Res, $Val extends BeMarketResult>
 }
 
 /// @nodoc
-abstract class _$$_BeMarketResultCopyWith<$Res> {
-  factory _$$_BeMarketResultCopyWith(
-          _$_BeMarketResult value, $Res Function(_$_BeMarketResult) then) =
-      __$$_BeMarketResultCopyWithImpl<$Res>;
+abstract class _$$BeMarketResultImplCopyWith<$Res> {
+  factory _$$BeMarketResultImplCopyWith(_$BeMarketResultImpl value,
+          $Res Function(_$BeMarketResultImpl) then) =
+      __$$BeMarketResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<BeMarket> markets});
 }
 
 /// @nodoc
-class __$$_BeMarketResultCopyWithImpl<$Res>
-    extends _$BeMarketResultCopyWithImpl<$Res, _$_BeMarketResult>
-    implements _$$_BeMarketResultCopyWith<$Res> {
-  __$$_BeMarketResultCopyWithImpl(
-      _$_BeMarketResult _value, $Res Function(_$_BeMarketResult) _then)
+class __$$BeMarketResultImplCopyWithImpl<$Res>
+    extends _$BeMarketResultCopyWithImpl<$Res, _$BeMarketResultImpl>
+    implements _$$BeMarketResultImplCopyWith<$Res> {
+  __$$BeMarketResultImplCopyWithImpl(
+      _$BeMarketResultImpl _value, $Res Function(_$BeMarketResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -3782,7 +3803,7 @@ class __$$_BeMarketResultCopyWithImpl<$Res>
   $Res call({
     Object? markets = null,
   }) {
-    return _then(_$_BeMarketResult(
+    return _then(_$BeMarketResultImpl(
       null == markets
           ? _value._markets
           : markets // ignore: cast_nullable_to_non_nullable
@@ -3793,10 +3814,10 @@ class __$$_BeMarketResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeMarketResult
+class _$BeMarketResultImpl
     with DiagnosticableTreeMixin
     implements _BeMarketResult {
-  const _$_BeMarketResult(final List<BeMarket> markets) : _markets = markets;
+  const _$BeMarketResultImpl(final List<BeMarket> markets) : _markets = markets;
 
   final List<BeMarket> _markets;
   @override
@@ -3820,10 +3841,10 @@ class _$_BeMarketResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeMarketResult &&
+            other is _$BeMarketResultImpl &&
             const DeepCollectionEquality().equals(other._markets, _markets));
   }
 
@@ -3834,8 +3855,9 @@ class _$_BeMarketResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeMarketResultCopyWith<_$_BeMarketResult> get copyWith =>
-      __$$_BeMarketResultCopyWithImpl<_$_BeMarketResult>(this, _$identity);
+  _$$BeMarketResultImplCopyWith<_$BeMarketResultImpl> get copyWith =>
+      __$$BeMarketResultImplCopyWithImpl<_$BeMarketResultImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -3902,19 +3924,19 @@ class _$_BeMarketResult
 
 abstract class _BeMarketResult implements BeMarketResult {
   const factory _BeMarketResult(final List<BeMarket> markets) =
-      _$_BeMarketResult;
+      _$BeMarketResultImpl;
 
   List<BeMarket> get markets;
   @JsonKey(ignore: true)
-  _$$_BeMarketResultCopyWith<_$_BeMarketResult> get copyWith =>
+  _$$BeMarketResultImplCopyWith<_$BeMarketResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeMarketResultErrCopyWith<$Res> {
-  factory _$$_BeMarketResultErrCopyWith(_$_BeMarketResultErr value,
-          $Res Function(_$_BeMarketResultErr) then) =
-      __$$_BeMarketResultErrCopyWithImpl<$Res>;
+abstract class _$$BeMarketResultErrImplCopyWith<$Res> {
+  factory _$$BeMarketResultErrImplCopyWith(_$BeMarketResultErrImpl value,
+          $Res Function(_$BeMarketResultErrImpl) then) =
+      __$$BeMarketResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -3922,11 +3944,11 @@ abstract class _$$_BeMarketResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeMarketResultErrCopyWithImpl<$Res>
-    extends _$BeMarketResultCopyWithImpl<$Res, _$_BeMarketResultErr>
-    implements _$$_BeMarketResultErrCopyWith<$Res> {
-  __$$_BeMarketResultErrCopyWithImpl(
-      _$_BeMarketResultErr _value, $Res Function(_$_BeMarketResultErr) _then)
+class __$$BeMarketResultErrImplCopyWithImpl<$Res>
+    extends _$BeMarketResultCopyWithImpl<$Res, _$BeMarketResultErrImpl>
+    implements _$$BeMarketResultErrImplCopyWith<$Res> {
+  __$$BeMarketResultErrImplCopyWithImpl(_$BeMarketResultErrImpl _value,
+      $Res Function(_$BeMarketResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -3934,7 +3956,7 @@ class __$$_BeMarketResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeMarketResultErr(
+    return _then(_$BeMarketResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -3953,10 +3975,10 @@ class __$$_BeMarketResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeMarketResultErr
+class _$BeMarketResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeMarketResultErr {
-  const _$_BeMarketResultErr(this.err);
+  const _$BeMarketResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -3975,10 +3997,10 @@ class _$_BeMarketResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeMarketResultErr &&
+            other is _$BeMarketResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -3988,8 +4010,8 @@ class _$_BeMarketResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeMarketResultErrCopyWith<_$_BeMarketResultErr> get copyWith =>
-      __$$_BeMarketResultErrCopyWithImpl<_$_BeMarketResultErr>(
+  _$$BeMarketResultErrImplCopyWith<_$BeMarketResultErrImpl> get copyWith =>
+      __$$BeMarketResultErrImplCopyWithImpl<_$BeMarketResultErrImpl>(
           this, _$identity);
 
   @override
@@ -4056,11 +4078,11 @@ class _$_BeMarketResultErr
 }
 
 abstract class _BeMarketResultErr implements BeMarketResult {
-  const factory _BeMarketResultErr(final BeError err) = _$_BeMarketResultErr;
+  const factory _BeMarketResultErr(final BeError err) = _$BeMarketResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeMarketResultErrCopyWith<_$_BeMarketResultErr> get copyWith =>
+  _$$BeMarketResultErrImplCopyWith<_$BeMarketResultErrImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -4125,20 +4147,20 @@ class _$BeOrderbookResultCopyWithImpl<$Res, $Val extends BeOrderbookResult>
 }
 
 /// @nodoc
-abstract class _$$_BeOrderbookResultCopyWith<$Res> {
-  factory _$$_BeOrderbookResultCopyWith(_$_BeOrderbookResult value,
-          $Res Function(_$_BeOrderbookResult) then) =
-      __$$_BeOrderbookResultCopyWithImpl<$Res>;
+abstract class _$$BeOrderbookResultImplCopyWith<$Res> {
+  factory _$$BeOrderbookResultImplCopyWith(_$BeOrderbookResultImpl value,
+          $Res Function(_$BeOrderbookResultImpl) then) =
+      __$$BeOrderbookResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeOrderbook orderbook});
 }
 
 /// @nodoc
-class __$$_BeOrderbookResultCopyWithImpl<$Res>
-    extends _$BeOrderbookResultCopyWithImpl<$Res, _$_BeOrderbookResult>
-    implements _$$_BeOrderbookResultCopyWith<$Res> {
-  __$$_BeOrderbookResultCopyWithImpl(
-      _$_BeOrderbookResult _value, $Res Function(_$_BeOrderbookResult) _then)
+class __$$BeOrderbookResultImplCopyWithImpl<$Res>
+    extends _$BeOrderbookResultCopyWithImpl<$Res, _$BeOrderbookResultImpl>
+    implements _$$BeOrderbookResultImplCopyWith<$Res> {
+  __$$BeOrderbookResultImplCopyWithImpl(_$BeOrderbookResultImpl _value,
+      $Res Function(_$BeOrderbookResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -4146,7 +4168,7 @@ class __$$_BeOrderbookResultCopyWithImpl<$Res>
   $Res call({
     Object? orderbook = null,
   }) {
-    return _then(_$_BeOrderbookResult(
+    return _then(_$BeOrderbookResultImpl(
       null == orderbook
           ? _value.orderbook
           : orderbook // ignore: cast_nullable_to_non_nullable
@@ -4157,10 +4179,10 @@ class __$$_BeOrderbookResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeOrderbookResult
+class _$BeOrderbookResultImpl
     with DiagnosticableTreeMixin
     implements _BeOrderbookResult {
-  const _$_BeOrderbookResult(this.orderbook);
+  const _$BeOrderbookResultImpl(this.orderbook);
 
   @override
   final BeOrderbook orderbook;
@@ -4179,10 +4201,10 @@ class _$_BeOrderbookResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeOrderbookResult &&
+            other is _$BeOrderbookResultImpl &&
             (identical(other.orderbook, orderbook) ||
                 other.orderbook == orderbook));
   }
@@ -4193,8 +4215,8 @@ class _$_BeOrderbookResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeOrderbookResultCopyWith<_$_BeOrderbookResult> get copyWith =>
-      __$$_BeOrderbookResultCopyWithImpl<_$_BeOrderbookResult>(
+  _$$BeOrderbookResultImplCopyWith<_$BeOrderbookResultImpl> get copyWith =>
+      __$$BeOrderbookResultImplCopyWithImpl<_$BeOrderbookResultImpl>(
           this, _$identity);
 
   @override
@@ -4262,19 +4284,19 @@ class _$_BeOrderbookResult
 
 abstract class _BeOrderbookResult implements BeOrderbookResult {
   const factory _BeOrderbookResult(final BeOrderbook orderbook) =
-      _$_BeOrderbookResult;
+      _$BeOrderbookResultImpl;
 
   BeOrderbook get orderbook;
   @JsonKey(ignore: true)
-  _$$_BeOrderbookResultCopyWith<_$_BeOrderbookResult> get copyWith =>
+  _$$BeOrderbookResultImplCopyWith<_$BeOrderbookResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeOrderbookResultErrCopyWith<$Res> {
-  factory _$$_BeOrderbookResultErrCopyWith(_$_BeOrderbookResultErr value,
-          $Res Function(_$_BeOrderbookResultErr) then) =
-      __$$_BeOrderbookResultErrCopyWithImpl<$Res>;
+abstract class _$$BeOrderbookResultErrImplCopyWith<$Res> {
+  factory _$$BeOrderbookResultErrImplCopyWith(_$BeOrderbookResultErrImpl value,
+          $Res Function(_$BeOrderbookResultErrImpl) then) =
+      __$$BeOrderbookResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -4282,11 +4304,11 @@ abstract class _$$_BeOrderbookResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeOrderbookResultErrCopyWithImpl<$Res>
-    extends _$BeOrderbookResultCopyWithImpl<$Res, _$_BeOrderbookResultErr>
-    implements _$$_BeOrderbookResultErrCopyWith<$Res> {
-  __$$_BeOrderbookResultErrCopyWithImpl(_$_BeOrderbookResultErr _value,
-      $Res Function(_$_BeOrderbookResultErr) _then)
+class __$$BeOrderbookResultErrImplCopyWithImpl<$Res>
+    extends _$BeOrderbookResultCopyWithImpl<$Res, _$BeOrderbookResultErrImpl>
+    implements _$$BeOrderbookResultErrImplCopyWith<$Res> {
+  __$$BeOrderbookResultErrImplCopyWithImpl(_$BeOrderbookResultErrImpl _value,
+      $Res Function(_$BeOrderbookResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -4294,7 +4316,7 @@ class __$$_BeOrderbookResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeOrderbookResultErr(
+    return _then(_$BeOrderbookResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -4313,10 +4335,10 @@ class __$$_BeOrderbookResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeOrderbookResultErr
+class _$BeOrderbookResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeOrderbookResultErr {
-  const _$_BeOrderbookResultErr(this.err);
+  const _$BeOrderbookResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -4335,10 +4357,10 @@ class _$_BeOrderbookResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeOrderbookResultErr &&
+            other is _$BeOrderbookResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -4348,9 +4370,10 @@ class _$_BeOrderbookResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeOrderbookResultErrCopyWith<_$_BeOrderbookResultErr> get copyWith =>
-      __$$_BeOrderbookResultErrCopyWithImpl<_$_BeOrderbookResultErr>(
-          this, _$identity);
+  _$$BeOrderbookResultErrImplCopyWith<_$BeOrderbookResultErrImpl>
+      get copyWith =>
+          __$$BeOrderbookResultErrImplCopyWithImpl<_$BeOrderbookResultErrImpl>(
+              this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -4417,12 +4440,12 @@ class _$_BeOrderbookResultErr
 
 abstract class _BeOrderbookResultErr implements BeOrderbookResult {
   const factory _BeOrderbookResultErr(final BeError err) =
-      _$_BeOrderbookResultErr;
+      _$BeOrderbookResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeOrderbookResultErrCopyWith<_$_BeOrderbookResultErr> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$BeOrderbookResultErrImplCopyWith<_$BeOrderbookResultErrImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -4486,20 +4509,20 @@ class _$BeBalancesResultCopyWithImpl<$Res, $Val extends BeBalancesResult>
 }
 
 /// @nodoc
-abstract class _$$_BeBalancesResultCopyWith<$Res> {
-  factory _$$_BeBalancesResultCopyWith(
-          _$_BeBalancesResult value, $Res Function(_$_BeBalancesResult) then) =
-      __$$_BeBalancesResultCopyWithImpl<$Res>;
+abstract class _$$BeBalancesResultImplCopyWith<$Res> {
+  factory _$$BeBalancesResultImplCopyWith(_$BeBalancesResultImpl value,
+          $Res Function(_$BeBalancesResultImpl) then) =
+      __$$BeBalancesResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<BeBalance> balances});
 }
 
 /// @nodoc
-class __$$_BeBalancesResultCopyWithImpl<$Res>
-    extends _$BeBalancesResultCopyWithImpl<$Res, _$_BeBalancesResult>
-    implements _$$_BeBalancesResultCopyWith<$Res> {
-  __$$_BeBalancesResultCopyWithImpl(
-      _$_BeBalancesResult _value, $Res Function(_$_BeBalancesResult) _then)
+class __$$BeBalancesResultImplCopyWithImpl<$Res>
+    extends _$BeBalancesResultCopyWithImpl<$Res, _$BeBalancesResultImpl>
+    implements _$$BeBalancesResultImplCopyWith<$Res> {
+  __$$BeBalancesResultImplCopyWithImpl(_$BeBalancesResultImpl _value,
+      $Res Function(_$BeBalancesResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -4507,7 +4530,7 @@ class __$$_BeBalancesResultCopyWithImpl<$Res>
   $Res call({
     Object? balances = null,
   }) {
-    return _then(_$_BeBalancesResult(
+    return _then(_$BeBalancesResultImpl(
       null == balances
           ? _value._balances
           : balances // ignore: cast_nullable_to_non_nullable
@@ -4518,10 +4541,10 @@ class __$$_BeBalancesResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeBalancesResult
+class _$BeBalancesResultImpl
     with DiagnosticableTreeMixin
     implements _BeBalancesResult {
-  const _$_BeBalancesResult(final List<BeBalance> balances)
+  const _$BeBalancesResultImpl(final List<BeBalance> balances)
       : _balances = balances;
 
   final List<BeBalance> _balances;
@@ -4546,10 +4569,10 @@ class _$_BeBalancesResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeBalancesResult &&
+            other is _$BeBalancesResultImpl &&
             const DeepCollectionEquality().equals(other._balances, _balances));
   }
 
@@ -4560,8 +4583,9 @@ class _$_BeBalancesResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeBalancesResultCopyWith<_$_BeBalancesResult> get copyWith =>
-      __$$_BeBalancesResultCopyWithImpl<_$_BeBalancesResult>(this, _$identity);
+  _$$BeBalancesResultImplCopyWith<_$BeBalancesResultImpl> get copyWith =>
+      __$$BeBalancesResultImplCopyWithImpl<_$BeBalancesResultImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -4628,19 +4652,19 @@ class _$_BeBalancesResult
 
 abstract class _BeBalancesResult implements BeBalancesResult {
   const factory _BeBalancesResult(final List<BeBalance> balances) =
-      _$_BeBalancesResult;
+      _$BeBalancesResultImpl;
 
   List<BeBalance> get balances;
   @JsonKey(ignore: true)
-  _$$_BeBalancesResultCopyWith<_$_BeBalancesResult> get copyWith =>
+  _$$BeBalancesResultImplCopyWith<_$BeBalancesResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeBalancesResultErrCopyWith<$Res> {
-  factory _$$_BeBalancesResultErrCopyWith(_$_BeBalancesResultErr value,
-          $Res Function(_$_BeBalancesResultErr) then) =
-      __$$_BeBalancesResultErrCopyWithImpl<$Res>;
+abstract class _$$BeBalancesResultErrImplCopyWith<$Res> {
+  factory _$$BeBalancesResultErrImplCopyWith(_$BeBalancesResultErrImpl value,
+          $Res Function(_$BeBalancesResultErrImpl) then) =
+      __$$BeBalancesResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -4648,11 +4672,11 @@ abstract class _$$_BeBalancesResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeBalancesResultErrCopyWithImpl<$Res>
-    extends _$BeBalancesResultCopyWithImpl<$Res, _$_BeBalancesResultErr>
-    implements _$$_BeBalancesResultErrCopyWith<$Res> {
-  __$$_BeBalancesResultErrCopyWithImpl(_$_BeBalancesResultErr _value,
-      $Res Function(_$_BeBalancesResultErr) _then)
+class __$$BeBalancesResultErrImplCopyWithImpl<$Res>
+    extends _$BeBalancesResultCopyWithImpl<$Res, _$BeBalancesResultErrImpl>
+    implements _$$BeBalancesResultErrImplCopyWith<$Res> {
+  __$$BeBalancesResultErrImplCopyWithImpl(_$BeBalancesResultErrImpl _value,
+      $Res Function(_$BeBalancesResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -4660,7 +4684,7 @@ class __$$_BeBalancesResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeBalancesResultErr(
+    return _then(_$BeBalancesResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -4679,10 +4703,10 @@ class __$$_BeBalancesResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeBalancesResultErr
+class _$BeBalancesResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeBalancesResultErr {
-  const _$_BeBalancesResultErr(this.err);
+  const _$BeBalancesResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -4701,10 +4725,10 @@ class _$_BeBalancesResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeBalancesResultErr &&
+            other is _$BeBalancesResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -4714,8 +4738,8 @@ class _$_BeBalancesResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeBalancesResultErrCopyWith<_$_BeBalancesResultErr> get copyWith =>
-      __$$_BeBalancesResultErrCopyWithImpl<_$_BeBalancesResultErr>(
+  _$$BeBalancesResultErrImplCopyWith<_$BeBalancesResultErrImpl> get copyWith =>
+      __$$BeBalancesResultErrImplCopyWithImpl<_$BeBalancesResultErrImpl>(
           this, _$identity);
 
   @override
@@ -4783,11 +4807,11 @@ class _$_BeBalancesResultErr
 
 abstract class _BeBalancesResultErr implements BeBalancesResult {
   const factory _BeBalancesResultErr(final BeError err) =
-      _$_BeBalancesResultErr;
+      _$BeBalancesResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeBalancesResultErrCopyWith<_$_BeBalancesResultErr> get copyWith =>
+  _$$BeBalancesResultErrImplCopyWith<_$BeBalancesResultErrImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -4852,20 +4876,20 @@ class _$BeBalanceResultCopyWithImpl<$Res, $Val extends BeBalanceResult>
 }
 
 /// @nodoc
-abstract class _$$_BeBalanceResultCopyWith<$Res> {
-  factory _$$_BeBalanceResultCopyWith(
-          _$_BeBalanceResult value, $Res Function(_$_BeBalanceResult) then) =
-      __$$_BeBalanceResultCopyWithImpl<$Res>;
+abstract class _$$BeBalanceResultImplCopyWith<$Res> {
+  factory _$$BeBalanceResultImplCopyWith(_$BeBalanceResultImpl value,
+          $Res Function(_$BeBalanceResultImpl) then) =
+      __$$BeBalanceResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeBalance? balance});
 }
 
 /// @nodoc
-class __$$_BeBalanceResultCopyWithImpl<$Res>
-    extends _$BeBalanceResultCopyWithImpl<$Res, _$_BeBalanceResult>
-    implements _$$_BeBalanceResultCopyWith<$Res> {
-  __$$_BeBalanceResultCopyWithImpl(
-      _$_BeBalanceResult _value, $Res Function(_$_BeBalanceResult) _then)
+class __$$BeBalanceResultImplCopyWithImpl<$Res>
+    extends _$BeBalanceResultCopyWithImpl<$Res, _$BeBalanceResultImpl>
+    implements _$$BeBalanceResultImplCopyWith<$Res> {
+  __$$BeBalanceResultImplCopyWithImpl(
+      _$BeBalanceResultImpl _value, $Res Function(_$BeBalanceResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -4873,7 +4897,7 @@ class __$$_BeBalanceResultCopyWithImpl<$Res>
   $Res call({
     Object? balance = freezed,
   }) {
-    return _then(_$_BeBalanceResult(
+    return _then(_$BeBalanceResultImpl(
       freezed == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
@@ -4884,10 +4908,10 @@ class __$$_BeBalanceResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeBalanceResult
+class _$BeBalanceResultImpl
     with DiagnosticableTreeMixin
     implements _BeBalanceResult {
-  const _$_BeBalanceResult(this.balance);
+  const _$BeBalanceResultImpl(this.balance);
 
   @override
   final BeBalance? balance;
@@ -4906,10 +4930,10 @@ class _$_BeBalanceResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeBalanceResult &&
+            other is _$BeBalanceResultImpl &&
             (identical(other.balance, balance) || other.balance == balance));
   }
 
@@ -4919,8 +4943,9 @@ class _$_BeBalanceResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeBalanceResultCopyWith<_$_BeBalanceResult> get copyWith =>
-      __$$_BeBalanceResultCopyWithImpl<_$_BeBalanceResult>(this, _$identity);
+  _$$BeBalanceResultImplCopyWith<_$BeBalanceResultImpl> get copyWith =>
+      __$$BeBalanceResultImplCopyWithImpl<_$BeBalanceResultImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -4986,19 +5011,20 @@ class _$_BeBalanceResult
 }
 
 abstract class _BeBalanceResult implements BeBalanceResult {
-  const factory _BeBalanceResult(final BeBalance? balance) = _$_BeBalanceResult;
+  const factory _BeBalanceResult(final BeBalance? balance) =
+      _$BeBalanceResultImpl;
 
   BeBalance? get balance;
   @JsonKey(ignore: true)
-  _$$_BeBalanceResultCopyWith<_$_BeBalanceResult> get copyWith =>
+  _$$BeBalanceResultImplCopyWith<_$BeBalanceResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeBalanceResultErrCopyWith<$Res> {
-  factory _$$_BeBalanceResultErrCopyWith(_$_BeBalanceResultErr value,
-          $Res Function(_$_BeBalanceResultErr) then) =
-      __$$_BeBalanceResultErrCopyWithImpl<$Res>;
+abstract class _$$BeBalanceResultErrImplCopyWith<$Res> {
+  factory _$$BeBalanceResultErrImplCopyWith(_$BeBalanceResultErrImpl value,
+          $Res Function(_$BeBalanceResultErrImpl) then) =
+      __$$BeBalanceResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -5006,11 +5032,11 @@ abstract class _$$_BeBalanceResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeBalanceResultErrCopyWithImpl<$Res>
-    extends _$BeBalanceResultCopyWithImpl<$Res, _$_BeBalanceResultErr>
-    implements _$$_BeBalanceResultErrCopyWith<$Res> {
-  __$$_BeBalanceResultErrCopyWithImpl(
-      _$_BeBalanceResultErr _value, $Res Function(_$_BeBalanceResultErr) _then)
+class __$$BeBalanceResultErrImplCopyWithImpl<$Res>
+    extends _$BeBalanceResultCopyWithImpl<$Res, _$BeBalanceResultErrImpl>
+    implements _$$BeBalanceResultErrImplCopyWith<$Res> {
+  __$$BeBalanceResultErrImplCopyWithImpl(_$BeBalanceResultErrImpl _value,
+      $Res Function(_$BeBalanceResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -5018,7 +5044,7 @@ class __$$_BeBalanceResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeBalanceResultErr(
+    return _then(_$BeBalanceResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -5037,10 +5063,10 @@ class __$$_BeBalanceResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeBalanceResultErr
+class _$BeBalanceResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeBalanceResultErr {
-  const _$_BeBalanceResultErr(this.err);
+  const _$BeBalanceResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -5059,10 +5085,10 @@ class _$_BeBalanceResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeBalanceResultErr &&
+            other is _$BeBalanceResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -5072,8 +5098,8 @@ class _$_BeBalanceResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeBalanceResultErrCopyWith<_$_BeBalanceResultErr> get copyWith =>
-      __$$_BeBalanceResultErrCopyWithImpl<_$_BeBalanceResultErr>(
+  _$$BeBalanceResultErrImplCopyWith<_$BeBalanceResultErrImpl> get copyWith =>
+      __$$BeBalanceResultErrImplCopyWithImpl<_$BeBalanceResultErrImpl>(
           this, _$identity);
 
   @override
@@ -5140,11 +5166,12 @@ class _$_BeBalanceResultErr
 }
 
 abstract class _BeBalanceResultErr implements BeBalanceResult {
-  const factory _BeBalanceResultErr(final BeError err) = _$_BeBalanceResultErr;
+  const factory _BeBalanceResultErr(final BeError err) =
+      _$BeBalanceResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeBalanceResultErrCopyWith<_$_BeBalanceResultErr> get copyWith =>
+  _$$BeBalanceResultErrImplCopyWith<_$BeBalanceResultErrImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -5215,23 +5242,23 @@ class _$BeCryptoDepositRecipientResultCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_BeCryptoDepositRecipientResultCopyWith<$Res> {
-  factory _$$_BeCryptoDepositRecipientResultCopyWith(
-          _$_BeCryptoDepositRecipientResult value,
-          $Res Function(_$_BeCryptoDepositRecipientResult) then) =
-      __$$_BeCryptoDepositRecipientResultCopyWithImpl<$Res>;
+abstract class _$$BeCryptoDepositRecipientResultImplCopyWith<$Res> {
+  factory _$$BeCryptoDepositRecipientResultImplCopyWith(
+          _$BeCryptoDepositRecipientResultImpl value,
+          $Res Function(_$BeCryptoDepositRecipientResultImpl) then) =
+      __$$BeCryptoDepositRecipientResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String recipient, String asset, String? l2Network});
 }
 
 /// @nodoc
-class __$$_BeCryptoDepositRecipientResultCopyWithImpl<$Res>
+class __$$BeCryptoDepositRecipientResultImplCopyWithImpl<$Res>
     extends _$BeCryptoDepositRecipientResultCopyWithImpl<$Res,
-        _$_BeCryptoDepositRecipientResult>
-    implements _$$_BeCryptoDepositRecipientResultCopyWith<$Res> {
-  __$$_BeCryptoDepositRecipientResultCopyWithImpl(
-      _$_BeCryptoDepositRecipientResult _value,
-      $Res Function(_$_BeCryptoDepositRecipientResult) _then)
+        _$BeCryptoDepositRecipientResultImpl>
+    implements _$$BeCryptoDepositRecipientResultImplCopyWith<$Res> {
+  __$$BeCryptoDepositRecipientResultImplCopyWithImpl(
+      _$BeCryptoDepositRecipientResultImpl _value,
+      $Res Function(_$BeCryptoDepositRecipientResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -5241,7 +5268,7 @@ class __$$_BeCryptoDepositRecipientResultCopyWithImpl<$Res>
     Object? asset = null,
     Object? l2Network = freezed,
   }) {
-    return _then(_$_BeCryptoDepositRecipientResult(
+    return _then(_$BeCryptoDepositRecipientResultImpl(
       null == recipient
           ? _value.recipient
           : recipient // ignore: cast_nullable_to_non_nullable
@@ -5260,10 +5287,10 @@ class __$$_BeCryptoDepositRecipientResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeCryptoDepositRecipientResult
+class _$BeCryptoDepositRecipientResultImpl
     with DiagnosticableTreeMixin
     implements _BeCryptoDepositRecipientResult {
-  const _$_BeCryptoDepositRecipientResult(
+  const _$BeCryptoDepositRecipientResultImpl(
       this.recipient, this.asset, this.l2Network);
 
   @override
@@ -5289,10 +5316,10 @@ class _$_BeCryptoDepositRecipientResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeCryptoDepositRecipientResult &&
+            other is _$BeCryptoDepositRecipientResultImpl &&
             (identical(other.recipient, recipient) ||
                 other.recipient == recipient) &&
             (identical(other.asset, asset) || other.asset == asset) &&
@@ -5306,9 +5333,10 @@ class _$_BeCryptoDepositRecipientResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeCryptoDepositRecipientResultCopyWith<_$_BeCryptoDepositRecipientResult>
-      get copyWith => __$$_BeCryptoDepositRecipientResultCopyWithImpl<
-          _$_BeCryptoDepositRecipientResult>(this, _$identity);
+  _$$BeCryptoDepositRecipientResultImplCopyWith<
+          _$BeCryptoDepositRecipientResultImpl>
+      get copyWith => __$$BeCryptoDepositRecipientResultImplCopyWithImpl<
+          _$BeCryptoDepositRecipientResultImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -5380,22 +5408,23 @@ abstract class _BeCryptoDepositRecipientResult
     implements BeCryptoDepositRecipientResult {
   const factory _BeCryptoDepositRecipientResult(
           final String recipient, final String asset, final String? l2Network) =
-      _$_BeCryptoDepositRecipientResult;
+      _$BeCryptoDepositRecipientResultImpl;
 
   String get recipient;
   String get asset;
   String? get l2Network;
   @JsonKey(ignore: true)
-  _$$_BeCryptoDepositRecipientResultCopyWith<_$_BeCryptoDepositRecipientResult>
+  _$$BeCryptoDepositRecipientResultImplCopyWith<
+          _$BeCryptoDepositRecipientResultImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeCryptoDepositRecipientResultErrCopyWith<$Res> {
-  factory _$$_BeCryptoDepositRecipientResultErrCopyWith(
-          _$_BeCryptoDepositRecipientResultErr value,
-          $Res Function(_$_BeCryptoDepositRecipientResultErr) then) =
-      __$$_BeCryptoDepositRecipientResultErrCopyWithImpl<$Res>;
+abstract class _$$BeCryptoDepositRecipientResultErrImplCopyWith<$Res> {
+  factory _$$BeCryptoDepositRecipientResultErrImplCopyWith(
+          _$BeCryptoDepositRecipientResultErrImpl value,
+          $Res Function(_$BeCryptoDepositRecipientResultErrImpl) then) =
+      __$$BeCryptoDepositRecipientResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -5403,13 +5432,13 @@ abstract class _$$_BeCryptoDepositRecipientResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeCryptoDepositRecipientResultErrCopyWithImpl<$Res>
+class __$$BeCryptoDepositRecipientResultErrImplCopyWithImpl<$Res>
     extends _$BeCryptoDepositRecipientResultCopyWithImpl<$Res,
-        _$_BeCryptoDepositRecipientResultErr>
-    implements _$$_BeCryptoDepositRecipientResultErrCopyWith<$Res> {
-  __$$_BeCryptoDepositRecipientResultErrCopyWithImpl(
-      _$_BeCryptoDepositRecipientResultErr _value,
-      $Res Function(_$_BeCryptoDepositRecipientResultErr) _then)
+        _$BeCryptoDepositRecipientResultErrImpl>
+    implements _$$BeCryptoDepositRecipientResultErrImplCopyWith<$Res> {
+  __$$BeCryptoDepositRecipientResultErrImplCopyWithImpl(
+      _$BeCryptoDepositRecipientResultErrImpl _value,
+      $Res Function(_$BeCryptoDepositRecipientResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -5417,7 +5446,7 @@ class __$$_BeCryptoDepositRecipientResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeCryptoDepositRecipientResultErr(
+    return _then(_$BeCryptoDepositRecipientResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -5436,10 +5465,10 @@ class __$$_BeCryptoDepositRecipientResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeCryptoDepositRecipientResultErr
+class _$BeCryptoDepositRecipientResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeCryptoDepositRecipientResultErr {
-  const _$_BeCryptoDepositRecipientResultErr(this.err);
+  const _$BeCryptoDepositRecipientResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -5458,10 +5487,10 @@ class _$_BeCryptoDepositRecipientResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeCryptoDepositRecipientResultErr &&
+            other is _$BeCryptoDepositRecipientResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -5471,10 +5500,10 @@ class _$_BeCryptoDepositRecipientResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeCryptoDepositRecipientResultErrCopyWith<
-          _$_BeCryptoDepositRecipientResultErr>
-      get copyWith => __$$_BeCryptoDepositRecipientResultErrCopyWithImpl<
-          _$_BeCryptoDepositRecipientResultErr>(this, _$identity);
+  _$$BeCryptoDepositRecipientResultErrImplCopyWith<
+          _$BeCryptoDepositRecipientResultErrImpl>
+      get copyWith => __$$BeCryptoDepositRecipientResultErrImplCopyWithImpl<
+          _$BeCryptoDepositRecipientResultErrImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -5545,12 +5574,12 @@ class _$_BeCryptoDepositRecipientResultErr
 abstract class _BeCryptoDepositRecipientResultErr
     implements BeCryptoDepositRecipientResult {
   const factory _BeCryptoDepositRecipientResultErr(final BeError err) =
-      _$_BeCryptoDepositRecipientResultErr;
+      _$BeCryptoDepositRecipientResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeCryptoDepositRecipientResultErrCopyWith<
-          _$_BeCryptoDepositRecipientResultErr>
+  _$$BeCryptoDepositRecipientResultErrImplCopyWith<
+          _$BeCryptoDepositRecipientResultErrImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -5616,23 +5645,23 @@ class _$BeFiatAccountNumberResultCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_BeFiatAccountNumberResultCopyWith<$Res> {
-  factory _$$_BeFiatAccountNumberResultCopyWith(
-          _$_BeFiatAccountNumberResult value,
-          $Res Function(_$_BeFiatAccountNumberResult) then) =
-      __$$_BeFiatAccountNumberResultCopyWithImpl<$Res>;
+abstract class _$$BeFiatAccountNumberResultImplCopyWith<$Res> {
+  factory _$$BeFiatAccountNumberResultImplCopyWith(
+          _$BeFiatAccountNumberResultImpl value,
+          $Res Function(_$BeFiatAccountNumberResultImpl) then) =
+      __$$BeFiatAccountNumberResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeFiatAccountNumber accountNumber});
 }
 
 /// @nodoc
-class __$$_BeFiatAccountNumberResultCopyWithImpl<$Res>
+class __$$BeFiatAccountNumberResultImplCopyWithImpl<$Res>
     extends _$BeFiatAccountNumberResultCopyWithImpl<$Res,
-        _$_BeFiatAccountNumberResult>
-    implements _$$_BeFiatAccountNumberResultCopyWith<$Res> {
-  __$$_BeFiatAccountNumberResultCopyWithImpl(
-      _$_BeFiatAccountNumberResult _value,
-      $Res Function(_$_BeFiatAccountNumberResult) _then)
+        _$BeFiatAccountNumberResultImpl>
+    implements _$$BeFiatAccountNumberResultImplCopyWith<$Res> {
+  __$$BeFiatAccountNumberResultImplCopyWithImpl(
+      _$BeFiatAccountNumberResultImpl _value,
+      $Res Function(_$BeFiatAccountNumberResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -5640,7 +5669,7 @@ class __$$_BeFiatAccountNumberResultCopyWithImpl<$Res>
   $Res call({
     Object? accountNumber = null,
   }) {
-    return _then(_$_BeFiatAccountNumberResult(
+    return _then(_$BeFiatAccountNumberResultImpl(
       null == accountNumber
           ? _value.accountNumber
           : accountNumber // ignore: cast_nullable_to_non_nullable
@@ -5651,10 +5680,10 @@ class __$$_BeFiatAccountNumberResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeFiatAccountNumberResult
+class _$BeFiatAccountNumberResultImpl
     with DiagnosticableTreeMixin
     implements _BeFiatAccountNumberResult {
-  const _$_BeFiatAccountNumberResult(this.accountNumber);
+  const _$BeFiatAccountNumberResultImpl(this.accountNumber);
 
   @override
   final BeFiatAccountNumber accountNumber;
@@ -5673,10 +5702,10 @@ class _$_BeFiatAccountNumberResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeFiatAccountNumberResult &&
+            other is _$BeFiatAccountNumberResultImpl &&
             (identical(other.accountNumber, accountNumber) ||
                 other.accountNumber == accountNumber));
   }
@@ -5687,9 +5716,9 @@ class _$_BeFiatAccountNumberResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeFiatAccountNumberResultCopyWith<_$_BeFiatAccountNumberResult>
-      get copyWith => __$$_BeFiatAccountNumberResultCopyWithImpl<
-          _$_BeFiatAccountNumberResult>(this, _$identity);
+  _$$BeFiatAccountNumberResultImplCopyWith<_$BeFiatAccountNumberResultImpl>
+      get copyWith => __$$BeFiatAccountNumberResultImplCopyWithImpl<
+          _$BeFiatAccountNumberResultImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -5756,20 +5785,21 @@ class _$_BeFiatAccountNumberResult
 
 abstract class _BeFiatAccountNumberResult implements BeFiatAccountNumberResult {
   const factory _BeFiatAccountNumberResult(
-      final BeFiatAccountNumber accountNumber) = _$_BeFiatAccountNumberResult;
+          final BeFiatAccountNumber accountNumber) =
+      _$BeFiatAccountNumberResultImpl;
 
   BeFiatAccountNumber get accountNumber;
   @JsonKey(ignore: true)
-  _$$_BeFiatAccountNumberResultCopyWith<_$_BeFiatAccountNumberResult>
+  _$$BeFiatAccountNumberResultImplCopyWith<_$BeFiatAccountNumberResultImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeFiatAccountNumberResultErrCopyWith<$Res> {
-  factory _$$_BeFiatAccountNumberResultErrCopyWith(
-          _$_BeFiatAccountNumberResultErr value,
-          $Res Function(_$_BeFiatAccountNumberResultErr) then) =
-      __$$_BeFiatAccountNumberResultErrCopyWithImpl<$Res>;
+abstract class _$$BeFiatAccountNumberResultErrImplCopyWith<$Res> {
+  factory _$$BeFiatAccountNumberResultErrImplCopyWith(
+          _$BeFiatAccountNumberResultErrImpl value,
+          $Res Function(_$BeFiatAccountNumberResultErrImpl) then) =
+      __$$BeFiatAccountNumberResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -5777,13 +5807,13 @@ abstract class _$$_BeFiatAccountNumberResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeFiatAccountNumberResultErrCopyWithImpl<$Res>
+class __$$BeFiatAccountNumberResultErrImplCopyWithImpl<$Res>
     extends _$BeFiatAccountNumberResultCopyWithImpl<$Res,
-        _$_BeFiatAccountNumberResultErr>
-    implements _$$_BeFiatAccountNumberResultErrCopyWith<$Res> {
-  __$$_BeFiatAccountNumberResultErrCopyWithImpl(
-      _$_BeFiatAccountNumberResultErr _value,
-      $Res Function(_$_BeFiatAccountNumberResultErr) _then)
+        _$BeFiatAccountNumberResultErrImpl>
+    implements _$$BeFiatAccountNumberResultErrImplCopyWith<$Res> {
+  __$$BeFiatAccountNumberResultErrImplCopyWithImpl(
+      _$BeFiatAccountNumberResultErrImpl _value,
+      $Res Function(_$BeFiatAccountNumberResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -5791,7 +5821,7 @@ class __$$_BeFiatAccountNumberResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeFiatAccountNumberResultErr(
+    return _then(_$BeFiatAccountNumberResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -5810,10 +5840,10 @@ class __$$_BeFiatAccountNumberResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeFiatAccountNumberResultErr
+class _$BeFiatAccountNumberResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeFiatAccountNumberResultErr {
-  const _$_BeFiatAccountNumberResultErr(this.err);
+  const _$BeFiatAccountNumberResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -5832,10 +5862,10 @@ class _$_BeFiatAccountNumberResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeFiatAccountNumberResultErr &&
+            other is _$BeFiatAccountNumberResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -5845,9 +5875,10 @@ class _$_BeFiatAccountNumberResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeFiatAccountNumberResultErrCopyWith<_$_BeFiatAccountNumberResultErr>
-      get copyWith => __$$_BeFiatAccountNumberResultErrCopyWithImpl<
-          _$_BeFiatAccountNumberResultErr>(this, _$identity);
+  _$$BeFiatAccountNumberResultErrImplCopyWith<
+          _$BeFiatAccountNumberResultErrImpl>
+      get copyWith => __$$BeFiatAccountNumberResultErrImplCopyWithImpl<
+          _$BeFiatAccountNumberResultErrImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -5915,11 +5946,12 @@ class _$_BeFiatAccountNumberResultErr
 abstract class _BeFiatAccountNumberResultErr
     implements BeFiatAccountNumberResult {
   const factory _BeFiatAccountNumberResultErr(final BeError err) =
-      _$_BeFiatAccountNumberResultErr;
+      _$BeFiatAccountNumberResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeFiatAccountNumberResultErrCopyWith<_$_BeFiatAccountNumberResultErr>
+  _$$BeFiatAccountNumberResultErrImplCopyWith<
+          _$BeFiatAccountNumberResultErrImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -5984,20 +6016,20 @@ class _$BeDepositResultCopyWithImpl<$Res, $Val extends BeDepositResult>
 }
 
 /// @nodoc
-abstract class _$$_BeDepositResultCopyWith<$Res> {
-  factory _$$_BeDepositResultCopyWith(
-          _$_BeDepositResult value, $Res Function(_$_BeDepositResult) then) =
-      __$$_BeDepositResultCopyWithImpl<$Res>;
+abstract class _$$BeDepositResultImplCopyWith<$Res> {
+  factory _$$BeDepositResultImplCopyWith(_$BeDepositResultImpl value,
+          $Res Function(_$BeDepositResultImpl) then) =
+      __$$BeDepositResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeBalanceUpdate deposit});
 }
 
 /// @nodoc
-class __$$_BeDepositResultCopyWithImpl<$Res>
-    extends _$BeDepositResultCopyWithImpl<$Res, _$_BeDepositResult>
-    implements _$$_BeDepositResultCopyWith<$Res> {
-  __$$_BeDepositResultCopyWithImpl(
-      _$_BeDepositResult _value, $Res Function(_$_BeDepositResult) _then)
+class __$$BeDepositResultImplCopyWithImpl<$Res>
+    extends _$BeDepositResultCopyWithImpl<$Res, _$BeDepositResultImpl>
+    implements _$$BeDepositResultImplCopyWith<$Res> {
+  __$$BeDepositResultImplCopyWithImpl(
+      _$BeDepositResultImpl _value, $Res Function(_$BeDepositResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -6005,7 +6037,7 @@ class __$$_BeDepositResultCopyWithImpl<$Res>
   $Res call({
     Object? deposit = null,
   }) {
-    return _then(_$_BeDepositResult(
+    return _then(_$BeDepositResultImpl(
       null == deposit
           ? _value.deposit
           : deposit // ignore: cast_nullable_to_non_nullable
@@ -6016,10 +6048,10 @@ class __$$_BeDepositResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeDepositResult
+class _$BeDepositResultImpl
     with DiagnosticableTreeMixin
     implements _BeDepositResult {
-  const _$_BeDepositResult(this.deposit);
+  const _$BeDepositResultImpl(this.deposit);
 
   @override
   final BeBalanceUpdate deposit;
@@ -6038,10 +6070,10 @@ class _$_BeDepositResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeDepositResult &&
+            other is _$BeDepositResultImpl &&
             (identical(other.deposit, deposit) || other.deposit == deposit));
   }
 
@@ -6051,8 +6083,9 @@ class _$_BeDepositResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeDepositResultCopyWith<_$_BeDepositResult> get copyWith =>
-      __$$_BeDepositResultCopyWithImpl<_$_BeDepositResult>(this, _$identity);
+  _$$BeDepositResultImplCopyWith<_$BeDepositResultImpl> get copyWith =>
+      __$$BeDepositResultImplCopyWithImpl<_$BeDepositResultImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -6119,19 +6152,20 @@ class _$_BeDepositResult
 
 abstract class _BeDepositResult implements BeDepositResult {
   const factory _BeDepositResult(final BeBalanceUpdate deposit) =
-      _$_BeDepositResult;
+      _$BeDepositResultImpl;
 
   BeBalanceUpdate get deposit;
   @JsonKey(ignore: true)
-  _$$_BeDepositResultCopyWith<_$_BeDepositResult> get copyWith =>
+  _$$BeDepositResultImplCopyWith<_$BeDepositResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeFiatDepositResultErrCopyWith<$Res> {
-  factory _$$_BeFiatDepositResultErrCopyWith(_$_BeFiatDepositResultErr value,
-          $Res Function(_$_BeFiatDepositResultErr) then) =
-      __$$_BeFiatDepositResultErrCopyWithImpl<$Res>;
+abstract class _$$BeFiatDepositResultErrImplCopyWith<$Res> {
+  factory _$$BeFiatDepositResultErrImplCopyWith(
+          _$BeFiatDepositResultErrImpl value,
+          $Res Function(_$BeFiatDepositResultErrImpl) then) =
+      __$$BeFiatDepositResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -6139,11 +6173,12 @@ abstract class _$$_BeFiatDepositResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeFiatDepositResultErrCopyWithImpl<$Res>
-    extends _$BeDepositResultCopyWithImpl<$Res, _$_BeFiatDepositResultErr>
-    implements _$$_BeFiatDepositResultErrCopyWith<$Res> {
-  __$$_BeFiatDepositResultErrCopyWithImpl(_$_BeFiatDepositResultErr _value,
-      $Res Function(_$_BeFiatDepositResultErr) _then)
+class __$$BeFiatDepositResultErrImplCopyWithImpl<$Res>
+    extends _$BeDepositResultCopyWithImpl<$Res, _$BeFiatDepositResultErrImpl>
+    implements _$$BeFiatDepositResultErrImplCopyWith<$Res> {
+  __$$BeFiatDepositResultErrImplCopyWithImpl(
+      _$BeFiatDepositResultErrImpl _value,
+      $Res Function(_$BeFiatDepositResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -6151,7 +6186,7 @@ class __$$_BeFiatDepositResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeFiatDepositResultErr(
+    return _then(_$BeFiatDepositResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -6170,10 +6205,10 @@ class __$$_BeFiatDepositResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeFiatDepositResultErr
+class _$BeFiatDepositResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeFiatDepositResultErr {
-  const _$_BeFiatDepositResultErr(this.err);
+  const _$BeFiatDepositResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -6192,10 +6227,10 @@ class _$_BeFiatDepositResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeFiatDepositResultErr &&
+            other is _$BeFiatDepositResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -6205,9 +6240,9 @@ class _$_BeFiatDepositResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeFiatDepositResultErrCopyWith<_$_BeFiatDepositResultErr> get copyWith =>
-      __$$_BeFiatDepositResultErrCopyWithImpl<_$_BeFiatDepositResultErr>(
-          this, _$identity);
+  _$$BeFiatDepositResultErrImplCopyWith<_$BeFiatDepositResultErrImpl>
+      get copyWith => __$$BeFiatDepositResultErrImplCopyWithImpl<
+          _$BeFiatDepositResultErrImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -6274,12 +6309,12 @@ class _$_BeFiatDepositResultErr
 
 abstract class _BeFiatDepositResultErr implements BeDepositResult {
   const factory _BeFiatDepositResultErr(final BeError err) =
-      _$_BeFiatDepositResultErr;
+      _$BeFiatDepositResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeFiatDepositResultErrCopyWith<_$_BeFiatDepositResultErr> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$BeFiatDepositResultErrImplCopyWith<_$BeFiatDepositResultErrImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -6349,20 +6384,20 @@ class _$BeDepositsResultCopyWithImpl<$Res, $Val extends BeDepositsResult>
 }
 
 /// @nodoc
-abstract class _$$_BeDepositsResultCopyWith<$Res> {
-  factory _$$_BeDepositsResultCopyWith(
-          _$_BeDepositsResult value, $Res Function(_$_BeDepositsResult) then) =
-      __$$_BeDepositsResultCopyWithImpl<$Res>;
+abstract class _$$BeDepositsResultImplCopyWith<$Res> {
+  factory _$$BeDepositsResultImplCopyWith(_$BeDepositsResultImpl value,
+          $Res Function(_$BeDepositsResultImpl) then) =
+      __$$BeDepositsResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<BeBalanceUpdate> deposits, int offset, int limit, int total});
 }
 
 /// @nodoc
-class __$$_BeDepositsResultCopyWithImpl<$Res>
-    extends _$BeDepositsResultCopyWithImpl<$Res, _$_BeDepositsResult>
-    implements _$$_BeDepositsResultCopyWith<$Res> {
-  __$$_BeDepositsResultCopyWithImpl(
-      _$_BeDepositsResult _value, $Res Function(_$_BeDepositsResult) _then)
+class __$$BeDepositsResultImplCopyWithImpl<$Res>
+    extends _$BeDepositsResultCopyWithImpl<$Res, _$BeDepositsResultImpl>
+    implements _$$BeDepositsResultImplCopyWith<$Res> {
+  __$$BeDepositsResultImplCopyWithImpl(_$BeDepositsResultImpl _value,
+      $Res Function(_$BeDepositsResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -6373,7 +6408,7 @@ class __$$_BeDepositsResultCopyWithImpl<$Res>
     Object? limit = null,
     Object? total = null,
   }) {
-    return _then(_$_BeDepositsResult(
+    return _then(_$BeDepositsResultImpl(
       null == deposits
           ? _value._deposits
           : deposits // ignore: cast_nullable_to_non_nullable
@@ -6396,10 +6431,10 @@ class __$$_BeDepositsResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeDepositsResult
+class _$BeDepositsResultImpl
     with DiagnosticableTreeMixin
     implements _BeDepositsResult {
-  const _$_BeDepositsResult(
+  const _$BeDepositsResultImpl(
       final List<BeBalanceUpdate> deposits, this.offset, this.limit, this.total)
       : _deposits = deposits;
 
@@ -6435,10 +6470,10 @@ class _$_BeDepositsResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeDepositsResult &&
+            other is _$BeDepositsResultImpl &&
             const DeepCollectionEquality().equals(other._deposits, _deposits) &&
             (identical(other.offset, offset) || other.offset == offset) &&
             (identical(other.limit, limit) || other.limit == limit) &&
@@ -6452,8 +6487,9 @@ class _$_BeDepositsResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeDepositsResultCopyWith<_$_BeDepositsResult> get copyWith =>
-      __$$_BeDepositsResultCopyWithImpl<_$_BeDepositsResult>(this, _$identity);
+  _$$BeDepositsResultImplCopyWith<_$BeDepositsResultImpl> get copyWith =>
+      __$$BeDepositsResultImplCopyWithImpl<_$BeDepositsResultImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -6525,23 +6561,26 @@ class _$_BeDepositsResult
 }
 
 abstract class _BeDepositsResult implements BeDepositsResult {
-  const factory _BeDepositsResult(final List<BeBalanceUpdate> deposits,
-      final int offset, final int limit, final int total) = _$_BeDepositsResult;
+  const factory _BeDepositsResult(
+      final List<BeBalanceUpdate> deposits,
+      final int offset,
+      final int limit,
+      final int total) = _$BeDepositsResultImpl;
 
   List<BeBalanceUpdate> get deposits;
   int get offset;
   int get limit;
   int get total;
   @JsonKey(ignore: true)
-  _$$_BeDepositsResultCopyWith<_$_BeDepositsResult> get copyWith =>
+  _$$BeDepositsResultImplCopyWith<_$BeDepositsResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeDepositsResultErrCopyWith<$Res> {
-  factory _$$_BeDepositsResultErrCopyWith(_$_BeDepositsResultErr value,
-          $Res Function(_$_BeDepositsResultErr) then) =
-      __$$_BeDepositsResultErrCopyWithImpl<$Res>;
+abstract class _$$BeDepositsResultErrImplCopyWith<$Res> {
+  factory _$$BeDepositsResultErrImplCopyWith(_$BeDepositsResultErrImpl value,
+          $Res Function(_$BeDepositsResultErrImpl) then) =
+      __$$BeDepositsResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -6549,11 +6588,11 @@ abstract class _$$_BeDepositsResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeDepositsResultErrCopyWithImpl<$Res>
-    extends _$BeDepositsResultCopyWithImpl<$Res, _$_BeDepositsResultErr>
-    implements _$$_BeDepositsResultErrCopyWith<$Res> {
-  __$$_BeDepositsResultErrCopyWithImpl(_$_BeDepositsResultErr _value,
-      $Res Function(_$_BeDepositsResultErr) _then)
+class __$$BeDepositsResultErrImplCopyWithImpl<$Res>
+    extends _$BeDepositsResultCopyWithImpl<$Res, _$BeDepositsResultErrImpl>
+    implements _$$BeDepositsResultErrImplCopyWith<$Res> {
+  __$$BeDepositsResultErrImplCopyWithImpl(_$BeDepositsResultErrImpl _value,
+      $Res Function(_$BeDepositsResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -6561,7 +6600,7 @@ class __$$_BeDepositsResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeDepositsResultErr(
+    return _then(_$BeDepositsResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -6580,10 +6619,10 @@ class __$$_BeDepositsResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeDepositsResultErr
+class _$BeDepositsResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeDepositsResultErr {
-  const _$_BeDepositsResultErr(this.err);
+  const _$BeDepositsResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -6602,10 +6641,10 @@ class _$_BeDepositsResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeDepositsResultErr &&
+            other is _$BeDepositsResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -6615,8 +6654,8 @@ class _$_BeDepositsResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeDepositsResultErrCopyWith<_$_BeDepositsResultErr> get copyWith =>
-      __$$_BeDepositsResultErrCopyWithImpl<_$_BeDepositsResultErr>(
+  _$$BeDepositsResultErrImplCopyWith<_$BeDepositsResultErrImpl> get copyWith =>
+      __$$BeDepositsResultErrImplCopyWithImpl<_$BeDepositsResultErrImpl>(
           this, _$identity);
 
   @override
@@ -6690,11 +6729,11 @@ class _$_BeDepositsResultErr
 
 abstract class _BeDepositsResultErr implements BeDepositsResult {
   const factory _BeDepositsResultErr(final BeError err) =
-      _$_BeDepositsResultErr;
+      _$BeDepositsResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeDepositsResultErrCopyWith<_$_BeDepositsResultErr> get copyWith =>
+  _$$BeDepositsResultErrImplCopyWith<_$BeDepositsResultErrImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -6759,20 +6798,20 @@ class _$BeWithdrawalResultCopyWithImpl<$Res, $Val extends BeWithdrawalResult>
 }
 
 /// @nodoc
-abstract class _$$_BeWithdrawalResultCopyWith<$Res> {
-  factory _$$_BeWithdrawalResultCopyWith(_$_BeWithdrawalResult value,
-          $Res Function(_$_BeWithdrawalResult) then) =
-      __$$_BeWithdrawalResultCopyWithImpl<$Res>;
+abstract class _$$BeWithdrawalResultImplCopyWith<$Res> {
+  factory _$$BeWithdrawalResultImplCopyWith(_$BeWithdrawalResultImpl value,
+          $Res Function(_$BeWithdrawalResultImpl) then) =
+      __$$BeWithdrawalResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeBalanceUpdate withdrawal});
 }
 
 /// @nodoc
-class __$$_BeWithdrawalResultCopyWithImpl<$Res>
-    extends _$BeWithdrawalResultCopyWithImpl<$Res, _$_BeWithdrawalResult>
-    implements _$$_BeWithdrawalResultCopyWith<$Res> {
-  __$$_BeWithdrawalResultCopyWithImpl(
-      _$_BeWithdrawalResult _value, $Res Function(_$_BeWithdrawalResult) _then)
+class __$$BeWithdrawalResultImplCopyWithImpl<$Res>
+    extends _$BeWithdrawalResultCopyWithImpl<$Res, _$BeWithdrawalResultImpl>
+    implements _$$BeWithdrawalResultImplCopyWith<$Res> {
+  __$$BeWithdrawalResultImplCopyWithImpl(_$BeWithdrawalResultImpl _value,
+      $Res Function(_$BeWithdrawalResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -6780,7 +6819,7 @@ class __$$_BeWithdrawalResultCopyWithImpl<$Res>
   $Res call({
     Object? withdrawal = null,
   }) {
-    return _then(_$_BeWithdrawalResult(
+    return _then(_$BeWithdrawalResultImpl(
       null == withdrawal
           ? _value.withdrawal
           : withdrawal // ignore: cast_nullable_to_non_nullable
@@ -6791,10 +6830,10 @@ class __$$_BeWithdrawalResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeWithdrawalResult
+class _$BeWithdrawalResultImpl
     with DiagnosticableTreeMixin
     implements _BeWithdrawalResult {
-  const _$_BeWithdrawalResult(this.withdrawal);
+  const _$BeWithdrawalResultImpl(this.withdrawal);
 
   @override
   final BeBalanceUpdate withdrawal;
@@ -6813,10 +6852,10 @@ class _$_BeWithdrawalResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeWithdrawalResult &&
+            other is _$BeWithdrawalResultImpl &&
             (identical(other.withdrawal, withdrawal) ||
                 other.withdrawal == withdrawal));
   }
@@ -6827,8 +6866,8 @@ class _$_BeWithdrawalResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeWithdrawalResultCopyWith<_$_BeWithdrawalResult> get copyWith =>
-      __$$_BeWithdrawalResultCopyWithImpl<_$_BeWithdrawalResult>(
+  _$$BeWithdrawalResultImplCopyWith<_$BeWithdrawalResultImpl> get copyWith =>
+      __$$BeWithdrawalResultImplCopyWithImpl<_$BeWithdrawalResultImpl>(
           this, _$identity);
 
   @override
@@ -6896,19 +6935,20 @@ class _$_BeWithdrawalResult
 
 abstract class _BeWithdrawalResult implements BeWithdrawalResult {
   const factory _BeWithdrawalResult(final BeBalanceUpdate withdrawal) =
-      _$_BeWithdrawalResult;
+      _$BeWithdrawalResultImpl;
 
   BeBalanceUpdate get withdrawal;
   @JsonKey(ignore: true)
-  _$$_BeWithdrawalResultCopyWith<_$_BeWithdrawalResult> get copyWith =>
+  _$$BeWithdrawalResultImplCopyWith<_$BeWithdrawalResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeWithdrawalResultErrCopyWith<$Res> {
-  factory _$$_BeWithdrawalResultErrCopyWith(_$_BeWithdrawalResultErr value,
-          $Res Function(_$_BeWithdrawalResultErr) then) =
-      __$$_BeWithdrawalResultErrCopyWithImpl<$Res>;
+abstract class _$$BeWithdrawalResultErrImplCopyWith<$Res> {
+  factory _$$BeWithdrawalResultErrImplCopyWith(
+          _$BeWithdrawalResultErrImpl value,
+          $Res Function(_$BeWithdrawalResultErrImpl) then) =
+      __$$BeWithdrawalResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -6916,11 +6956,11 @@ abstract class _$$_BeWithdrawalResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeWithdrawalResultErrCopyWithImpl<$Res>
-    extends _$BeWithdrawalResultCopyWithImpl<$Res, _$_BeWithdrawalResultErr>
-    implements _$$_BeWithdrawalResultErrCopyWith<$Res> {
-  __$$_BeWithdrawalResultErrCopyWithImpl(_$_BeWithdrawalResultErr _value,
-      $Res Function(_$_BeWithdrawalResultErr) _then)
+class __$$BeWithdrawalResultErrImplCopyWithImpl<$Res>
+    extends _$BeWithdrawalResultCopyWithImpl<$Res, _$BeWithdrawalResultErrImpl>
+    implements _$$BeWithdrawalResultErrImplCopyWith<$Res> {
+  __$$BeWithdrawalResultErrImplCopyWithImpl(_$BeWithdrawalResultErrImpl _value,
+      $Res Function(_$BeWithdrawalResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -6928,7 +6968,7 @@ class __$$_BeWithdrawalResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeWithdrawalResultErr(
+    return _then(_$BeWithdrawalResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -6947,10 +6987,10 @@ class __$$_BeWithdrawalResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeWithdrawalResultErr
+class _$BeWithdrawalResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeWithdrawalResultErr {
-  const _$_BeWithdrawalResultErr(this.err);
+  const _$BeWithdrawalResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -6969,10 +7009,10 @@ class _$_BeWithdrawalResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeWithdrawalResultErr &&
+            other is _$BeWithdrawalResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -6982,9 +7022,9 @@ class _$_BeWithdrawalResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeWithdrawalResultErrCopyWith<_$_BeWithdrawalResultErr> get copyWith =>
-      __$$_BeWithdrawalResultErrCopyWithImpl<_$_BeWithdrawalResultErr>(
-          this, _$identity);
+  _$$BeWithdrawalResultErrImplCopyWith<_$BeWithdrawalResultErrImpl>
+      get copyWith => __$$BeWithdrawalResultErrImplCopyWithImpl<
+          _$BeWithdrawalResultErrImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -7051,12 +7091,12 @@ class _$_BeWithdrawalResultErr
 
 abstract class _BeWithdrawalResultErr implements BeWithdrawalResult {
   const factory _BeWithdrawalResultErr(final BeError err) =
-      _$_BeWithdrawalResultErr;
+      _$BeWithdrawalResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeWithdrawalResultErrCopyWith<_$_BeWithdrawalResultErr> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$BeWithdrawalResultErrImplCopyWith<_$BeWithdrawalResultErrImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -7126,21 +7166,21 @@ class _$BeWithdrawalsResultCopyWithImpl<$Res, $Val extends BeWithdrawalsResult>
 }
 
 /// @nodoc
-abstract class _$$_BeWithdrawalsResultCopyWith<$Res> {
-  factory _$$_BeWithdrawalsResultCopyWith(_$_BeWithdrawalsResult value,
-          $Res Function(_$_BeWithdrawalsResult) then) =
-      __$$_BeWithdrawalsResultCopyWithImpl<$Res>;
+abstract class _$$BeWithdrawalsResultImplCopyWith<$Res> {
+  factory _$$BeWithdrawalsResultImplCopyWith(_$BeWithdrawalsResultImpl value,
+          $Res Function(_$BeWithdrawalsResultImpl) then) =
+      __$$BeWithdrawalsResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {List<BeBalanceUpdate> withdrawals, int offset, int limit, int total});
 }
 
 /// @nodoc
-class __$$_BeWithdrawalsResultCopyWithImpl<$Res>
-    extends _$BeWithdrawalsResultCopyWithImpl<$Res, _$_BeWithdrawalsResult>
-    implements _$$_BeWithdrawalsResultCopyWith<$Res> {
-  __$$_BeWithdrawalsResultCopyWithImpl(_$_BeWithdrawalsResult _value,
-      $Res Function(_$_BeWithdrawalsResult) _then)
+class __$$BeWithdrawalsResultImplCopyWithImpl<$Res>
+    extends _$BeWithdrawalsResultCopyWithImpl<$Res, _$BeWithdrawalsResultImpl>
+    implements _$$BeWithdrawalsResultImplCopyWith<$Res> {
+  __$$BeWithdrawalsResultImplCopyWithImpl(_$BeWithdrawalsResultImpl _value,
+      $Res Function(_$BeWithdrawalsResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -7151,7 +7191,7 @@ class __$$_BeWithdrawalsResultCopyWithImpl<$Res>
     Object? limit = null,
     Object? total = null,
   }) {
-    return _then(_$_BeWithdrawalsResult(
+    return _then(_$BeWithdrawalsResultImpl(
       null == withdrawals
           ? _value._withdrawals
           : withdrawals // ignore: cast_nullable_to_non_nullable
@@ -7174,10 +7214,10 @@ class __$$_BeWithdrawalsResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeWithdrawalsResult
+class _$BeWithdrawalsResultImpl
     with DiagnosticableTreeMixin
     implements _BeWithdrawalsResult {
-  const _$_BeWithdrawalsResult(final List<BeBalanceUpdate> withdrawals,
+  const _$BeWithdrawalsResultImpl(final List<BeBalanceUpdate> withdrawals,
       this.offset, this.limit, this.total)
       : _withdrawals = withdrawals;
 
@@ -7213,10 +7253,10 @@ class _$_BeWithdrawalsResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeWithdrawalsResult &&
+            other is _$BeWithdrawalsResultImpl &&
             const DeepCollectionEquality()
                 .equals(other._withdrawals, _withdrawals) &&
             (identical(other.offset, offset) || other.offset == offset) &&
@@ -7231,8 +7271,8 @@ class _$_BeWithdrawalsResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeWithdrawalsResultCopyWith<_$_BeWithdrawalsResult> get copyWith =>
-      __$$_BeWithdrawalsResultCopyWithImpl<_$_BeWithdrawalsResult>(
+  _$$BeWithdrawalsResultImplCopyWith<_$BeWithdrawalsResultImpl> get copyWith =>
+      __$$BeWithdrawalsResultImplCopyWithImpl<_$BeWithdrawalsResultImpl>(
           this, _$identity);
 
   @override
@@ -7309,22 +7349,23 @@ abstract class _BeWithdrawalsResult implements BeWithdrawalsResult {
       final List<BeBalanceUpdate> withdrawals,
       final int offset,
       final int limit,
-      final int total) = _$_BeWithdrawalsResult;
+      final int total) = _$BeWithdrawalsResultImpl;
 
   List<BeBalanceUpdate> get withdrawals;
   int get offset;
   int get limit;
   int get total;
   @JsonKey(ignore: true)
-  _$$_BeWithdrawalsResultCopyWith<_$_BeWithdrawalsResult> get copyWith =>
+  _$$BeWithdrawalsResultImplCopyWith<_$BeWithdrawalsResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeWithdrawalsResultErrCopyWith<$Res> {
-  factory _$$_BeWithdrawalsResultErrCopyWith(_$_BeWithdrawalsResultErr value,
-          $Res Function(_$_BeWithdrawalsResultErr) then) =
-      __$$_BeWithdrawalsResultErrCopyWithImpl<$Res>;
+abstract class _$$BeWithdrawalsResultErrImplCopyWith<$Res> {
+  factory _$$BeWithdrawalsResultErrImplCopyWith(
+          _$BeWithdrawalsResultErrImpl value,
+          $Res Function(_$BeWithdrawalsResultErrImpl) then) =
+      __$$BeWithdrawalsResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -7332,11 +7373,13 @@ abstract class _$$_BeWithdrawalsResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeWithdrawalsResultErrCopyWithImpl<$Res>
-    extends _$BeWithdrawalsResultCopyWithImpl<$Res, _$_BeWithdrawalsResultErr>
-    implements _$$_BeWithdrawalsResultErrCopyWith<$Res> {
-  __$$_BeWithdrawalsResultErrCopyWithImpl(_$_BeWithdrawalsResultErr _value,
-      $Res Function(_$_BeWithdrawalsResultErr) _then)
+class __$$BeWithdrawalsResultErrImplCopyWithImpl<$Res>
+    extends _$BeWithdrawalsResultCopyWithImpl<$Res,
+        _$BeWithdrawalsResultErrImpl>
+    implements _$$BeWithdrawalsResultErrImplCopyWith<$Res> {
+  __$$BeWithdrawalsResultErrImplCopyWithImpl(
+      _$BeWithdrawalsResultErrImpl _value,
+      $Res Function(_$BeWithdrawalsResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -7344,7 +7387,7 @@ class __$$_BeWithdrawalsResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeWithdrawalsResultErr(
+    return _then(_$BeWithdrawalsResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -7363,10 +7406,10 @@ class __$$_BeWithdrawalsResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeWithdrawalsResultErr
+class _$BeWithdrawalsResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeWithdrawalsResultErr {
-  const _$_BeWithdrawalsResultErr(this.err);
+  const _$BeWithdrawalsResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -7385,10 +7428,10 @@ class _$_BeWithdrawalsResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeWithdrawalsResultErr &&
+            other is _$BeWithdrawalsResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -7398,9 +7441,9 @@ class _$_BeWithdrawalsResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeWithdrawalsResultErrCopyWith<_$_BeWithdrawalsResultErr> get copyWith =>
-      __$$_BeWithdrawalsResultErrCopyWithImpl<_$_BeWithdrawalsResultErr>(
-          this, _$identity);
+  _$$BeWithdrawalsResultErrImplCopyWith<_$BeWithdrawalsResultErrImpl>
+      get copyWith => __$$BeWithdrawalsResultErrImplCopyWithImpl<
+          _$BeWithdrawalsResultErrImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -7473,12 +7516,12 @@ class _$_BeWithdrawalsResultErr
 
 abstract class _BeWithdrawalsResultErr implements BeWithdrawalsResult {
   const factory _BeWithdrawalsResultErr(final BeError err) =
-      _$_BeWithdrawalsResultErr;
+      _$BeWithdrawalsResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeWithdrawalsResultErrCopyWith<_$_BeWithdrawalsResultErr> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$BeWithdrawalsResultErrImplCopyWith<_$BeWithdrawalsResultErrImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -7542,20 +7585,20 @@ class _$BeAddressBookResultCopyWithImpl<$Res, $Val extends BeAddressBookResult>
 }
 
 /// @nodoc
-abstract class _$$_BeAddressBookResultCopyWith<$Res> {
-  factory _$$_BeAddressBookResultCopyWith(_$_BeAddressBookResult value,
-          $Res Function(_$_BeAddressBookResult) then) =
-      __$$_BeAddressBookResultCopyWithImpl<$Res>;
+abstract class _$$BeAddressBookResultImplCopyWith<$Res> {
+  factory _$$BeAddressBookResultImplCopyWith(_$BeAddressBookResultImpl value,
+          $Res Function(_$BeAddressBookResultImpl) then) =
+      __$$BeAddressBookResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<BeAddressBookEntry> entries});
 }
 
 /// @nodoc
-class __$$_BeAddressBookResultCopyWithImpl<$Res>
-    extends _$BeAddressBookResultCopyWithImpl<$Res, _$_BeAddressBookResult>
-    implements _$$_BeAddressBookResultCopyWith<$Res> {
-  __$$_BeAddressBookResultCopyWithImpl(_$_BeAddressBookResult _value,
-      $Res Function(_$_BeAddressBookResult) _then)
+class __$$BeAddressBookResultImplCopyWithImpl<$Res>
+    extends _$BeAddressBookResultCopyWithImpl<$Res, _$BeAddressBookResultImpl>
+    implements _$$BeAddressBookResultImplCopyWith<$Res> {
+  __$$BeAddressBookResultImplCopyWithImpl(_$BeAddressBookResultImpl _value,
+      $Res Function(_$BeAddressBookResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -7563,7 +7606,7 @@ class __$$_BeAddressBookResultCopyWithImpl<$Res>
   $Res call({
     Object? entries = null,
   }) {
-    return _then(_$_BeAddressBookResult(
+    return _then(_$BeAddressBookResultImpl(
       null == entries
           ? _value._entries
           : entries // ignore: cast_nullable_to_non_nullable
@@ -7574,10 +7617,10 @@ class __$$_BeAddressBookResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeAddressBookResult
+class _$BeAddressBookResultImpl
     with DiagnosticableTreeMixin
     implements _BeAddressBookResult {
-  const _$_BeAddressBookResult(final List<BeAddressBookEntry> entries)
+  const _$BeAddressBookResultImpl(final List<BeAddressBookEntry> entries)
       : _entries = entries;
 
   final List<BeAddressBookEntry> _entries;
@@ -7602,10 +7645,10 @@ class _$_BeAddressBookResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeAddressBookResult &&
+            other is _$BeAddressBookResultImpl &&
             const DeepCollectionEquality().equals(other._entries, _entries));
   }
 
@@ -7616,8 +7659,8 @@ class _$_BeAddressBookResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeAddressBookResultCopyWith<_$_BeAddressBookResult> get copyWith =>
-      __$$_BeAddressBookResultCopyWithImpl<_$_BeAddressBookResult>(
+  _$$BeAddressBookResultImplCopyWith<_$BeAddressBookResultImpl> get copyWith =>
+      __$$BeAddressBookResultImplCopyWithImpl<_$BeAddressBookResultImpl>(
           this, _$identity);
 
   @override
@@ -7685,19 +7728,20 @@ class _$_BeAddressBookResult
 
 abstract class _BeAddressBookResult implements BeAddressBookResult {
   const factory _BeAddressBookResult(final List<BeAddressBookEntry> entries) =
-      _$_BeAddressBookResult;
+      _$BeAddressBookResultImpl;
 
   List<BeAddressBookEntry> get entries;
   @JsonKey(ignore: true)
-  _$$_BeAddressBookResultCopyWith<_$_BeAddressBookResult> get copyWith =>
+  _$$BeAddressBookResultImplCopyWith<_$BeAddressBookResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeAddressBookResultErrCopyWith<$Res> {
-  factory _$$_BeAddressBookResultErrCopyWith(_$_BeAddressBookResultErr value,
-          $Res Function(_$_BeAddressBookResultErr) then) =
-      __$$_BeAddressBookResultErrCopyWithImpl<$Res>;
+abstract class _$$BeAddressBookResultErrImplCopyWith<$Res> {
+  factory _$$BeAddressBookResultErrImplCopyWith(
+          _$BeAddressBookResultErrImpl value,
+          $Res Function(_$BeAddressBookResultErrImpl) then) =
+      __$$BeAddressBookResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -7705,11 +7749,13 @@ abstract class _$$_BeAddressBookResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeAddressBookResultErrCopyWithImpl<$Res>
-    extends _$BeAddressBookResultCopyWithImpl<$Res, _$_BeAddressBookResultErr>
-    implements _$$_BeAddressBookResultErrCopyWith<$Res> {
-  __$$_BeAddressBookResultErrCopyWithImpl(_$_BeAddressBookResultErr _value,
-      $Res Function(_$_BeAddressBookResultErr) _then)
+class __$$BeAddressBookResultErrImplCopyWithImpl<$Res>
+    extends _$BeAddressBookResultCopyWithImpl<$Res,
+        _$BeAddressBookResultErrImpl>
+    implements _$$BeAddressBookResultErrImplCopyWith<$Res> {
+  __$$BeAddressBookResultErrImplCopyWithImpl(
+      _$BeAddressBookResultErrImpl _value,
+      $Res Function(_$BeAddressBookResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -7717,7 +7763,7 @@ class __$$_BeAddressBookResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeAddressBookResultErr(
+    return _then(_$BeAddressBookResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -7736,10 +7782,10 @@ class __$$_BeAddressBookResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeAddressBookResultErr
+class _$BeAddressBookResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeAddressBookResultErr {
-  const _$_BeAddressBookResultErr(this.err);
+  const _$BeAddressBookResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -7758,10 +7804,10 @@ class _$_BeAddressBookResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeAddressBookResultErr &&
+            other is _$BeAddressBookResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -7771,9 +7817,9 @@ class _$_BeAddressBookResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeAddressBookResultErrCopyWith<_$_BeAddressBookResultErr> get copyWith =>
-      __$$_BeAddressBookResultErrCopyWithImpl<_$_BeAddressBookResultErr>(
-          this, _$identity);
+  _$$BeAddressBookResultErrImplCopyWith<_$BeAddressBookResultErrImpl>
+      get copyWith => __$$BeAddressBookResultErrImplCopyWithImpl<
+          _$BeAddressBookResultErrImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -7840,12 +7886,12 @@ class _$_BeAddressBookResultErr
 
 abstract class _BeAddressBookResultErr implements BeAddressBookResult {
   const factory _BeAddressBookResultErr(final BeError err) =
-      _$_BeAddressBookResultErr;
+      _$BeAddressBookResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeAddressBookResultErrCopyWith<_$_BeAddressBookResultErr> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$BeAddressBookResultErrImplCopyWith<_$BeAddressBookResultErrImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -7909,20 +7955,20 @@ class _$BeBrokerOrderResultCopyWithImpl<$Res, $Val extends BeBrokerOrderResult>
 }
 
 /// @nodoc
-abstract class _$$_BeBrokerOrderResultCopyWith<$Res> {
-  factory _$$_BeBrokerOrderResultCopyWith(_$_BeBrokerOrderResult value,
-          $Res Function(_$_BeBrokerOrderResult) then) =
-      __$$_BeBrokerOrderResultCopyWithImpl<$Res>;
+abstract class _$$BeBrokerOrderResultImplCopyWith<$Res> {
+  factory _$$BeBrokerOrderResultImplCopyWith(_$BeBrokerOrderResultImpl value,
+          $Res Function(_$BeBrokerOrderResultImpl) then) =
+      __$$BeBrokerOrderResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeBrokerOrder order});
 }
 
 /// @nodoc
-class __$$_BeBrokerOrderResultCopyWithImpl<$Res>
-    extends _$BeBrokerOrderResultCopyWithImpl<$Res, _$_BeBrokerOrderResult>
-    implements _$$_BeBrokerOrderResultCopyWith<$Res> {
-  __$$_BeBrokerOrderResultCopyWithImpl(_$_BeBrokerOrderResult _value,
-      $Res Function(_$_BeBrokerOrderResult) _then)
+class __$$BeBrokerOrderResultImplCopyWithImpl<$Res>
+    extends _$BeBrokerOrderResultCopyWithImpl<$Res, _$BeBrokerOrderResultImpl>
+    implements _$$BeBrokerOrderResultImplCopyWith<$Res> {
+  __$$BeBrokerOrderResultImplCopyWithImpl(_$BeBrokerOrderResultImpl _value,
+      $Res Function(_$BeBrokerOrderResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -7930,7 +7976,7 @@ class __$$_BeBrokerOrderResultCopyWithImpl<$Res>
   $Res call({
     Object? order = null,
   }) {
-    return _then(_$_BeBrokerOrderResult(
+    return _then(_$BeBrokerOrderResultImpl(
       null == order
           ? _value.order
           : order // ignore: cast_nullable_to_non_nullable
@@ -7941,10 +7987,10 @@ class __$$_BeBrokerOrderResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeBrokerOrderResult
+class _$BeBrokerOrderResultImpl
     with DiagnosticableTreeMixin
     implements _BeBrokerOrderResult {
-  const _$_BeBrokerOrderResult(this.order);
+  const _$BeBrokerOrderResultImpl(this.order);
 
   @override
   final BeBrokerOrder order;
@@ -7963,10 +8009,10 @@ class _$_BeBrokerOrderResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeBrokerOrderResult &&
+            other is _$BeBrokerOrderResultImpl &&
             (identical(other.order, order) || other.order == order));
   }
 
@@ -7976,8 +8022,8 @@ class _$_BeBrokerOrderResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeBrokerOrderResultCopyWith<_$_BeBrokerOrderResult> get copyWith =>
-      __$$_BeBrokerOrderResultCopyWithImpl<_$_BeBrokerOrderResult>(
+  _$$BeBrokerOrderResultImplCopyWith<_$BeBrokerOrderResultImpl> get copyWith =>
+      __$$BeBrokerOrderResultImplCopyWithImpl<_$BeBrokerOrderResultImpl>(
           this, _$identity);
 
   @override
@@ -8045,19 +8091,20 @@ class _$_BeBrokerOrderResult
 
 abstract class _BeBrokerOrderResult implements BeBrokerOrderResult {
   const factory _BeBrokerOrderResult(final BeBrokerOrder order) =
-      _$_BeBrokerOrderResult;
+      _$BeBrokerOrderResultImpl;
 
   BeBrokerOrder get order;
   @JsonKey(ignore: true)
-  _$$_BeBrokerOrderResultCopyWith<_$_BeBrokerOrderResult> get copyWith =>
+  _$$BeBrokerOrderResultImplCopyWith<_$BeBrokerOrderResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeBrokerOrderResultErrCopyWith<$Res> {
-  factory _$$_BeBrokerOrderResultErrCopyWith(_$_BeBrokerOrderResultErr value,
-          $Res Function(_$_BeBrokerOrderResultErr) then) =
-      __$$_BeBrokerOrderResultErrCopyWithImpl<$Res>;
+abstract class _$$BeBrokerOrderResultErrImplCopyWith<$Res> {
+  factory _$$BeBrokerOrderResultErrImplCopyWith(
+          _$BeBrokerOrderResultErrImpl value,
+          $Res Function(_$BeBrokerOrderResultErrImpl) then) =
+      __$$BeBrokerOrderResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -8065,11 +8112,13 @@ abstract class _$$_BeBrokerOrderResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeBrokerOrderResultErrCopyWithImpl<$Res>
-    extends _$BeBrokerOrderResultCopyWithImpl<$Res, _$_BeBrokerOrderResultErr>
-    implements _$$_BeBrokerOrderResultErrCopyWith<$Res> {
-  __$$_BeBrokerOrderResultErrCopyWithImpl(_$_BeBrokerOrderResultErr _value,
-      $Res Function(_$_BeBrokerOrderResultErr) _then)
+class __$$BeBrokerOrderResultErrImplCopyWithImpl<$Res>
+    extends _$BeBrokerOrderResultCopyWithImpl<$Res,
+        _$BeBrokerOrderResultErrImpl>
+    implements _$$BeBrokerOrderResultErrImplCopyWith<$Res> {
+  __$$BeBrokerOrderResultErrImplCopyWithImpl(
+      _$BeBrokerOrderResultErrImpl _value,
+      $Res Function(_$BeBrokerOrderResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -8077,7 +8126,7 @@ class __$$_BeBrokerOrderResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeBrokerOrderResultErr(
+    return _then(_$BeBrokerOrderResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -8096,10 +8145,10 @@ class __$$_BeBrokerOrderResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeBrokerOrderResultErr
+class _$BeBrokerOrderResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeBrokerOrderResultErr {
-  const _$_BeBrokerOrderResultErr(this.err);
+  const _$BeBrokerOrderResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -8118,10 +8167,10 @@ class _$_BeBrokerOrderResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeBrokerOrderResultErr &&
+            other is _$BeBrokerOrderResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -8131,9 +8180,9 @@ class _$_BeBrokerOrderResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeBrokerOrderResultErrCopyWith<_$_BeBrokerOrderResultErr> get copyWith =>
-      __$$_BeBrokerOrderResultErrCopyWithImpl<_$_BeBrokerOrderResultErr>(
-          this, _$identity);
+  _$$BeBrokerOrderResultErrImplCopyWith<_$BeBrokerOrderResultErrImpl>
+      get copyWith => __$$BeBrokerOrderResultErrImplCopyWithImpl<
+          _$BeBrokerOrderResultErrImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -8200,12 +8249,12 @@ class _$_BeBrokerOrderResultErr
 
 abstract class _BeBrokerOrderResultErr implements BeBrokerOrderResult {
   const factory _BeBrokerOrderResultErr(final BeError err) =
-      _$_BeBrokerOrderResultErr;
+      _$BeBrokerOrderResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeBrokerOrderResultErrCopyWith<_$_BeBrokerOrderResultErr> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$BeBrokerOrderResultErrImplCopyWith<_$BeBrokerOrderResultErrImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -8276,20 +8325,20 @@ class _$BeBrokerOrdersResultCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_BeBrokerOrdersResultCopyWith<$Res> {
-  factory _$$_BeBrokerOrdersResultCopyWith(_$_BeBrokerOrdersResult value,
-          $Res Function(_$_BeBrokerOrdersResult) then) =
-      __$$_BeBrokerOrdersResultCopyWithImpl<$Res>;
+abstract class _$$BeBrokerOrdersResultImplCopyWith<$Res> {
+  factory _$$BeBrokerOrdersResultImplCopyWith(_$BeBrokerOrdersResultImpl value,
+          $Res Function(_$BeBrokerOrdersResultImpl) then) =
+      __$$BeBrokerOrdersResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<BeBrokerOrder> orders, int offset, int limit, int total});
 }
 
 /// @nodoc
-class __$$_BeBrokerOrdersResultCopyWithImpl<$Res>
-    extends _$BeBrokerOrdersResultCopyWithImpl<$Res, _$_BeBrokerOrdersResult>
-    implements _$$_BeBrokerOrdersResultCopyWith<$Res> {
-  __$$_BeBrokerOrdersResultCopyWithImpl(_$_BeBrokerOrdersResult _value,
-      $Res Function(_$_BeBrokerOrdersResult) _then)
+class __$$BeBrokerOrdersResultImplCopyWithImpl<$Res>
+    extends _$BeBrokerOrdersResultCopyWithImpl<$Res, _$BeBrokerOrdersResultImpl>
+    implements _$$BeBrokerOrdersResultImplCopyWith<$Res> {
+  __$$BeBrokerOrdersResultImplCopyWithImpl(_$BeBrokerOrdersResultImpl _value,
+      $Res Function(_$BeBrokerOrdersResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -8300,7 +8349,7 @@ class __$$_BeBrokerOrdersResultCopyWithImpl<$Res>
     Object? limit = null,
     Object? total = null,
   }) {
-    return _then(_$_BeBrokerOrdersResult(
+    return _then(_$BeBrokerOrdersResultImpl(
       null == orders
           ? _value._orders
           : orders // ignore: cast_nullable_to_non_nullable
@@ -8323,10 +8372,10 @@ class __$$_BeBrokerOrdersResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeBrokerOrdersResult
+class _$BeBrokerOrdersResultImpl
     with DiagnosticableTreeMixin
     implements _BeBrokerOrdersResult {
-  const _$_BeBrokerOrdersResult(
+  const _$BeBrokerOrdersResultImpl(
       final List<BeBrokerOrder> orders, this.offset, this.limit, this.total)
       : _orders = orders;
 
@@ -8362,10 +8411,10 @@ class _$_BeBrokerOrdersResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeBrokerOrdersResult &&
+            other is _$BeBrokerOrdersResultImpl &&
             const DeepCollectionEquality().equals(other._orders, _orders) &&
             (identical(other.offset, offset) || other.offset == offset) &&
             (identical(other.limit, limit) || other.limit == limit) &&
@@ -8379,9 +8428,10 @@ class _$_BeBrokerOrdersResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeBrokerOrdersResultCopyWith<_$_BeBrokerOrdersResult> get copyWith =>
-      __$$_BeBrokerOrdersResultCopyWithImpl<_$_BeBrokerOrdersResult>(
-          this, _$identity);
+  _$$BeBrokerOrdersResultImplCopyWith<_$BeBrokerOrdersResultImpl>
+      get copyWith =>
+          __$$BeBrokerOrdersResultImplCopyWithImpl<_$BeBrokerOrdersResultImpl>(
+              this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -8457,22 +8507,23 @@ abstract class _BeBrokerOrdersResult implements BeBrokerOrdersResult {
       final List<BeBrokerOrder> orders,
       final int offset,
       final int limit,
-      final int total) = _$_BeBrokerOrdersResult;
+      final int total) = _$BeBrokerOrdersResultImpl;
 
   List<BeBrokerOrder> get orders;
   int get offset;
   int get limit;
   int get total;
   @JsonKey(ignore: true)
-  _$$_BeBrokerOrdersResultCopyWith<_$_BeBrokerOrdersResult> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$BeBrokerOrdersResultImplCopyWith<_$BeBrokerOrdersResultImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeBrokerOrdersResultErrCopyWith<$Res> {
-  factory _$$_BeBrokerOrdersResultErrCopyWith(_$_BeBrokerOrdersResultErr value,
-          $Res Function(_$_BeBrokerOrdersResultErr) then) =
-      __$$_BeBrokerOrdersResultErrCopyWithImpl<$Res>;
+abstract class _$$BeBrokerOrdersResultErrImplCopyWith<$Res> {
+  factory _$$BeBrokerOrdersResultErrImplCopyWith(
+          _$BeBrokerOrdersResultErrImpl value,
+          $Res Function(_$BeBrokerOrdersResultErrImpl) then) =
+      __$$BeBrokerOrdersResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -8480,11 +8531,13 @@ abstract class _$$_BeBrokerOrdersResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeBrokerOrdersResultErrCopyWithImpl<$Res>
-    extends _$BeBrokerOrdersResultCopyWithImpl<$Res, _$_BeBrokerOrdersResultErr>
-    implements _$$_BeBrokerOrdersResultErrCopyWith<$Res> {
-  __$$_BeBrokerOrdersResultErrCopyWithImpl(_$_BeBrokerOrdersResultErr _value,
-      $Res Function(_$_BeBrokerOrdersResultErr) _then)
+class __$$BeBrokerOrdersResultErrImplCopyWithImpl<$Res>
+    extends _$BeBrokerOrdersResultCopyWithImpl<$Res,
+        _$BeBrokerOrdersResultErrImpl>
+    implements _$$BeBrokerOrdersResultErrImplCopyWith<$Res> {
+  __$$BeBrokerOrdersResultErrImplCopyWithImpl(
+      _$BeBrokerOrdersResultErrImpl _value,
+      $Res Function(_$BeBrokerOrdersResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -8492,7 +8545,7 @@ class __$$_BeBrokerOrdersResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeBrokerOrdersResultErr(
+    return _then(_$BeBrokerOrdersResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -8511,10 +8564,10 @@ class __$$_BeBrokerOrdersResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeBrokerOrdersResultErr
+class _$BeBrokerOrdersResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeBrokerOrdersResultErr {
-  const _$_BeBrokerOrdersResultErr(this.err);
+  const _$BeBrokerOrdersResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -8533,10 +8586,10 @@ class _$_BeBrokerOrdersResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeBrokerOrdersResultErr &&
+            other is _$BeBrokerOrdersResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -8546,10 +8599,9 @@ class _$_BeBrokerOrdersResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeBrokerOrdersResultErrCopyWith<_$_BeBrokerOrdersResultErr>
-      get copyWith =>
-          __$$_BeBrokerOrdersResultErrCopyWithImpl<_$_BeBrokerOrdersResultErr>(
-              this, _$identity);
+  _$$BeBrokerOrdersResultErrImplCopyWith<_$BeBrokerOrdersResultErrImpl>
+      get copyWith => __$$BeBrokerOrdersResultErrImplCopyWithImpl<
+          _$BeBrokerOrdersResultErrImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -8622,11 +8674,11 @@ class _$_BeBrokerOrdersResultErr
 
 abstract class _BeBrokerOrdersResultErr implements BeBrokerOrdersResult {
   const factory _BeBrokerOrdersResultErr(final BeError err) =
-      _$_BeBrokerOrdersResultErr;
+      _$BeBrokerOrdersResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeBrokerOrdersResultErrCopyWith<_$_BeBrokerOrdersResultErr>
+  _$$BeBrokerOrdersResultErrImplCopyWith<_$BeBrokerOrdersResultErrImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -8700,24 +8752,24 @@ class _$BeRemitPaymentMethodsResultCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_BeRemitPaymentMethodsResultCopyWith<$Res> {
-  factory _$$_BeRemitPaymentMethodsResultCopyWith(
-          _$_BeRemitPaymentMethodsResult value,
-          $Res Function(_$_BeRemitPaymentMethodsResult) then) =
-      __$$_BeRemitPaymentMethodsResultCopyWithImpl<$Res>;
+abstract class _$$BeRemitPaymentMethodsResultImplCopyWith<$Res> {
+  factory _$$BeRemitPaymentMethodsResultImplCopyWith(
+          _$BeRemitPaymentMethodsResultImpl value,
+          $Res Function(_$BeRemitPaymentMethodsResultImpl) then) =
+      __$$BeRemitPaymentMethodsResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {Map<BePaymentMethodCategory, List<BePaymentMethod>> paymentMethods});
 }
 
 /// @nodoc
-class __$$_BeRemitPaymentMethodsResultCopyWithImpl<$Res>
+class __$$BeRemitPaymentMethodsResultImplCopyWithImpl<$Res>
     extends _$BeRemitPaymentMethodsResultCopyWithImpl<$Res,
-        _$_BeRemitPaymentMethodsResult>
-    implements _$$_BeRemitPaymentMethodsResultCopyWith<$Res> {
-  __$$_BeRemitPaymentMethodsResultCopyWithImpl(
-      _$_BeRemitPaymentMethodsResult _value,
-      $Res Function(_$_BeRemitPaymentMethodsResult) _then)
+        _$BeRemitPaymentMethodsResultImpl>
+    implements _$$BeRemitPaymentMethodsResultImplCopyWith<$Res> {
+  __$$BeRemitPaymentMethodsResultImplCopyWithImpl(
+      _$BeRemitPaymentMethodsResultImpl _value,
+      $Res Function(_$BeRemitPaymentMethodsResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -8725,7 +8777,7 @@ class __$$_BeRemitPaymentMethodsResultCopyWithImpl<$Res>
   $Res call({
     Object? paymentMethods = null,
   }) {
-    return _then(_$_BeRemitPaymentMethodsResult(
+    return _then(_$BeRemitPaymentMethodsResultImpl(
       null == paymentMethods
           ? _value._paymentMethods
           : paymentMethods // ignore: cast_nullable_to_non_nullable
@@ -8736,10 +8788,10 @@ class __$$_BeRemitPaymentMethodsResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeRemitPaymentMethodsResult
+class _$BeRemitPaymentMethodsResultImpl
     with DiagnosticableTreeMixin
     implements _BeRemitPaymentMethodsResult {
-  const _$_BeRemitPaymentMethodsResult(
+  const _$BeRemitPaymentMethodsResultImpl(
       final Map<BePaymentMethodCategory, List<BePaymentMethod>> paymentMethods)
       : _paymentMethods = paymentMethods;
 
@@ -8765,10 +8817,10 @@ class _$_BeRemitPaymentMethodsResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeRemitPaymentMethodsResult &&
+            other is _$BeRemitPaymentMethodsResultImpl &&
             const DeepCollectionEquality()
                 .equals(other._paymentMethods, _paymentMethods));
   }
@@ -8780,9 +8832,9 @@ class _$_BeRemitPaymentMethodsResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeRemitPaymentMethodsResultCopyWith<_$_BeRemitPaymentMethodsResult>
-      get copyWith => __$$_BeRemitPaymentMethodsResultCopyWithImpl<
-          _$_BeRemitPaymentMethodsResult>(this, _$identity);
+  _$$BeRemitPaymentMethodsResultImplCopyWith<_$BeRemitPaymentMethodsResultImpl>
+      get copyWith => __$$BeRemitPaymentMethodsResultImplCopyWithImpl<
+          _$BeRemitPaymentMethodsResultImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -8857,20 +8909,20 @@ abstract class _BeRemitPaymentMethodsResult
     implements BeRemitPaymentMethodsResult {
   const factory _BeRemitPaymentMethodsResult(
       final Map<BePaymentMethodCategory, List<BePaymentMethod>>
-          paymentMethods) = _$_BeRemitPaymentMethodsResult;
+          paymentMethods) = _$BeRemitPaymentMethodsResultImpl;
 
   Map<BePaymentMethodCategory, List<BePaymentMethod>> get paymentMethods;
   @JsonKey(ignore: true)
-  _$$_BeRemitPaymentMethodsResultCopyWith<_$_BeRemitPaymentMethodsResult>
+  _$$BeRemitPaymentMethodsResultImplCopyWith<_$BeRemitPaymentMethodsResultImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeRemitPaymentMethodsResultErrCopyWith<$Res> {
-  factory _$$_BeRemitPaymentMethodsResultErrCopyWith(
-          _$_BeRemitPaymentMethodsResultErr value,
-          $Res Function(_$_BeRemitPaymentMethodsResultErr) then) =
-      __$$_BeRemitPaymentMethodsResultErrCopyWithImpl<$Res>;
+abstract class _$$BeRemitPaymentMethodsResultErrImplCopyWith<$Res> {
+  factory _$$BeRemitPaymentMethodsResultErrImplCopyWith(
+          _$BeRemitPaymentMethodsResultErrImpl value,
+          $Res Function(_$BeRemitPaymentMethodsResultErrImpl) then) =
+      __$$BeRemitPaymentMethodsResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -8878,13 +8930,13 @@ abstract class _$$_BeRemitPaymentMethodsResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeRemitPaymentMethodsResultErrCopyWithImpl<$Res>
+class __$$BeRemitPaymentMethodsResultErrImplCopyWithImpl<$Res>
     extends _$BeRemitPaymentMethodsResultCopyWithImpl<$Res,
-        _$_BeRemitPaymentMethodsResultErr>
-    implements _$$_BeRemitPaymentMethodsResultErrCopyWith<$Res> {
-  __$$_BeRemitPaymentMethodsResultErrCopyWithImpl(
-      _$_BeRemitPaymentMethodsResultErr _value,
-      $Res Function(_$_BeRemitPaymentMethodsResultErr) _then)
+        _$BeRemitPaymentMethodsResultErrImpl>
+    implements _$$BeRemitPaymentMethodsResultErrImplCopyWith<$Res> {
+  __$$BeRemitPaymentMethodsResultErrImplCopyWithImpl(
+      _$BeRemitPaymentMethodsResultErrImpl _value,
+      $Res Function(_$BeRemitPaymentMethodsResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -8892,7 +8944,7 @@ class __$$_BeRemitPaymentMethodsResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeRemitPaymentMethodsResultErr(
+    return _then(_$BeRemitPaymentMethodsResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -8911,10 +8963,10 @@ class __$$_BeRemitPaymentMethodsResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeRemitPaymentMethodsResultErr
+class _$BeRemitPaymentMethodsResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeRemitPaymentMethodsResultErr {
-  const _$_BeRemitPaymentMethodsResultErr(this.err);
+  const _$BeRemitPaymentMethodsResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -8933,10 +8985,10 @@ class _$_BeRemitPaymentMethodsResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeRemitPaymentMethodsResultErr &&
+            other is _$BeRemitPaymentMethodsResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -8946,9 +8998,10 @@ class _$_BeRemitPaymentMethodsResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeRemitPaymentMethodsResultErrCopyWith<_$_BeRemitPaymentMethodsResultErr>
-      get copyWith => __$$_BeRemitPaymentMethodsResultErrCopyWithImpl<
-          _$_BeRemitPaymentMethodsResultErr>(this, _$identity);
+  _$$BeRemitPaymentMethodsResultErrImplCopyWith<
+          _$BeRemitPaymentMethodsResultErrImpl>
+      get copyWith => __$$BeRemitPaymentMethodsResultErrImplCopyWithImpl<
+          _$BeRemitPaymentMethodsResultErrImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -9022,11 +9075,12 @@ class _$_BeRemitPaymentMethodsResultErr
 abstract class _BeRemitPaymentMethodsResultErr
     implements BeRemitPaymentMethodsResult {
   const factory _BeRemitPaymentMethodsResultErr(final BeError err) =
-      _$_BeRemitPaymentMethodsResultErr;
+      _$BeRemitPaymentMethodsResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeRemitPaymentMethodsResultErrCopyWith<_$_BeRemitPaymentMethodsResultErr>
+  _$$BeRemitPaymentMethodsResultErrImplCopyWith<
+          _$BeRemitPaymentMethodsResultErrImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -9098,21 +9152,21 @@ class _$BeRemitInvoiceResultCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_BeRemitInvoiceResultCopyWith<$Res> {
-  factory _$$_BeRemitInvoiceResultCopyWith(_$_BeRemitInvoiceResult value,
-          $Res Function(_$_BeRemitInvoiceResult) then) =
-      __$$_BeRemitInvoiceResultCopyWithImpl<$Res>;
+abstract class _$$BeRemitInvoiceResultImplCopyWith<$Res> {
+  factory _$$BeRemitInvoiceResultImplCopyWith(_$BeRemitInvoiceResultImpl value,
+          $Res Function(_$BeRemitInvoiceResultImpl) then) =
+      __$$BeRemitInvoiceResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {BeRemit remit, BeRemitInvoice invoice, BeBalanceUpdate? withdrawal});
 }
 
 /// @nodoc
-class __$$_BeRemitInvoiceResultCopyWithImpl<$Res>
-    extends _$BeRemitInvoiceResultCopyWithImpl<$Res, _$_BeRemitInvoiceResult>
-    implements _$$_BeRemitInvoiceResultCopyWith<$Res> {
-  __$$_BeRemitInvoiceResultCopyWithImpl(_$_BeRemitInvoiceResult _value,
-      $Res Function(_$_BeRemitInvoiceResult) _then)
+class __$$BeRemitInvoiceResultImplCopyWithImpl<$Res>
+    extends _$BeRemitInvoiceResultCopyWithImpl<$Res, _$BeRemitInvoiceResultImpl>
+    implements _$$BeRemitInvoiceResultImplCopyWith<$Res> {
+  __$$BeRemitInvoiceResultImplCopyWithImpl(_$BeRemitInvoiceResultImpl _value,
+      $Res Function(_$BeRemitInvoiceResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -9122,7 +9176,7 @@ class __$$_BeRemitInvoiceResultCopyWithImpl<$Res>
     Object? invoice = null,
     Object? withdrawal = freezed,
   }) {
-    return _then(_$_BeRemitInvoiceResult(
+    return _then(_$BeRemitInvoiceResultImpl(
       null == remit
           ? _value.remit
           : remit // ignore: cast_nullable_to_non_nullable
@@ -9141,10 +9195,10 @@ class __$$_BeRemitInvoiceResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeRemitInvoiceResult
+class _$BeRemitInvoiceResultImpl
     with DiagnosticableTreeMixin
     implements _BeRemitInvoiceResult {
-  const _$_BeRemitInvoiceResult(this.remit, this.invoice, this.withdrawal);
+  const _$BeRemitInvoiceResultImpl(this.remit, this.invoice, this.withdrawal);
 
   @override
   final BeRemit remit;
@@ -9169,10 +9223,10 @@ class _$_BeRemitInvoiceResult
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeRemitInvoiceResult &&
+            other is _$BeRemitInvoiceResultImpl &&
             (identical(other.remit, remit) || other.remit == remit) &&
             (identical(other.invoice, invoice) || other.invoice == invoice) &&
             (identical(other.withdrawal, withdrawal) ||
@@ -9185,9 +9239,10 @@ class _$_BeRemitInvoiceResult
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeRemitInvoiceResultCopyWith<_$_BeRemitInvoiceResult> get copyWith =>
-      __$$_BeRemitInvoiceResultCopyWithImpl<_$_BeRemitInvoiceResult>(
-          this, _$identity);
+  _$$BeRemitInvoiceResultImplCopyWith<_$BeRemitInvoiceResultImpl>
+      get copyWith =>
+          __$$BeRemitInvoiceResultImplCopyWithImpl<_$BeRemitInvoiceResultImpl>(
+              this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -9262,21 +9317,22 @@ abstract class _BeRemitInvoiceResult implements BeRemitInvoiceResult {
   const factory _BeRemitInvoiceResult(
       final BeRemit remit,
       final BeRemitInvoice invoice,
-      final BeBalanceUpdate? withdrawal) = _$_BeRemitInvoiceResult;
+      final BeBalanceUpdate? withdrawal) = _$BeRemitInvoiceResultImpl;
 
   BeRemit get remit;
   BeRemitInvoice get invoice;
   BeBalanceUpdate? get withdrawal;
   @JsonKey(ignore: true)
-  _$$_BeRemitInvoiceResultCopyWith<_$_BeRemitInvoiceResult> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$BeRemitInvoiceResultImplCopyWith<_$BeRemitInvoiceResultImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_BeRemitInvoiceResultErrCopyWith<$Res> {
-  factory _$$_BeRemitInvoiceResultErrCopyWith(_$_BeRemitInvoiceResultErr value,
-          $Res Function(_$_BeRemitInvoiceResultErr) then) =
-      __$$_BeRemitInvoiceResultErrCopyWithImpl<$Res>;
+abstract class _$$BeRemitInvoiceResultErrImplCopyWith<$Res> {
+  factory _$$BeRemitInvoiceResultErrImplCopyWith(
+          _$BeRemitInvoiceResultErrImpl value,
+          $Res Function(_$BeRemitInvoiceResultErrImpl) then) =
+      __$$BeRemitInvoiceResultErrImplCopyWithImpl<$Res>;
   @useResult
   $Res call({BeError err});
 
@@ -9284,11 +9340,13 @@ abstract class _$$_BeRemitInvoiceResultErrCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BeRemitInvoiceResultErrCopyWithImpl<$Res>
-    extends _$BeRemitInvoiceResultCopyWithImpl<$Res, _$_BeRemitInvoiceResultErr>
-    implements _$$_BeRemitInvoiceResultErrCopyWith<$Res> {
-  __$$_BeRemitInvoiceResultErrCopyWithImpl(_$_BeRemitInvoiceResultErr _value,
-      $Res Function(_$_BeRemitInvoiceResultErr) _then)
+class __$$BeRemitInvoiceResultErrImplCopyWithImpl<$Res>
+    extends _$BeRemitInvoiceResultCopyWithImpl<$Res,
+        _$BeRemitInvoiceResultErrImpl>
+    implements _$$BeRemitInvoiceResultErrImplCopyWith<$Res> {
+  __$$BeRemitInvoiceResultErrImplCopyWithImpl(
+      _$BeRemitInvoiceResultErrImpl _value,
+      $Res Function(_$BeRemitInvoiceResultErrImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -9296,7 +9354,7 @@ class __$$_BeRemitInvoiceResultErrCopyWithImpl<$Res>
   $Res call({
     Object? err = null,
   }) {
-    return _then(_$_BeRemitInvoiceResultErr(
+    return _then(_$BeRemitInvoiceResultErrImpl(
       null == err
           ? _value.err
           : err // ignore: cast_nullable_to_non_nullable
@@ -9315,10 +9373,10 @@ class __$$_BeRemitInvoiceResultErrCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_BeRemitInvoiceResultErr
+class _$BeRemitInvoiceResultErrImpl
     with DiagnosticableTreeMixin
     implements _BeRemitInvoiceResultErr {
-  const _$_BeRemitInvoiceResultErr(this.err);
+  const _$BeRemitInvoiceResultErrImpl(this.err);
 
   @override
   final BeError err;
@@ -9337,10 +9395,10 @@ class _$_BeRemitInvoiceResultErr
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BeRemitInvoiceResultErr &&
+            other is _$BeRemitInvoiceResultErrImpl &&
             (identical(other.err, err) || other.err == err));
   }
 
@@ -9350,10 +9408,9 @@ class _$_BeRemitInvoiceResultErr
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BeRemitInvoiceResultErrCopyWith<_$_BeRemitInvoiceResultErr>
-      get copyWith =>
-          __$$_BeRemitInvoiceResultErrCopyWithImpl<_$_BeRemitInvoiceResultErr>(
-              this, _$identity);
+  _$$BeRemitInvoiceResultErrImplCopyWith<_$BeRemitInvoiceResultErrImpl>
+      get copyWith => __$$BeRemitInvoiceResultErrImplCopyWithImpl<
+          _$BeRemitInvoiceResultErrImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -9426,10 +9483,10 @@ class _$_BeRemitInvoiceResultErr
 
 abstract class _BeRemitInvoiceResultErr implements BeRemitInvoiceResult {
   const factory _BeRemitInvoiceResultErr(final BeError err) =
-      _$_BeRemitInvoiceResultErr;
+      _$BeRemitInvoiceResultErrImpl;
 
   BeError get err;
   @JsonKey(ignore: true)
-  _$$_BeRemitInvoiceResultErrCopyWith<_$_BeRemitInvoiceResultErr>
+  _$$BeRemitInvoiceResultErrImplCopyWith<_$BeRemitInvoiceResultErrImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

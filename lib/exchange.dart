@@ -50,7 +50,7 @@ class ExchangeModel extends ChangeNotifier {
   List<String> _toAssets = [];
   BeBrokerOrder? _validatedOrder = null;
   BeMarketSide _side = BeMarketSide.ask;
-  BeMarket _market = BeMarket('', '', '', 0, '', Decimal.zero, '');
+  BeMarket _market = BeMarket('', '', '', 0, Decimal.zero);
   Decimal _amountFrom = Decimal.zero;
   Decimal _amountTo = Decimal.zero;
   String? _minAmount;

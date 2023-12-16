@@ -383,15 +383,13 @@ class BeMarket {
   @JsonKey(name: 'quote_asset')
   final String quoteAsset;
   final int precision;
-  final String status;
   @JsonKey(
       name: 'min_trade', fromJson: _decimalFromJson, toJson: _decimalToJson)
   final Decimal minTrade;
-  final String message;
 
   BeMarket(this.symbol, this.baseAsset, this.quoteAsset, this.precision,
-      this.status, this.minTrade, this.message);
-  factory BeMarket.empty() => BeMarket('', '', '', 0, '', Decimal.zero, '');
+      this.minTrade);
+  factory BeMarket.empty() => BeMarket('', '', '', 0, Decimal.zero);
   factory BeMarket.fromJson(Map<String, dynamic> json) =>
       _$BeMarketFromJson(json);
   Map<String, dynamic> toJson() => _$BeMarketToJson(this);
@@ -750,10 +748,10 @@ enum BeOrderStatus {
 
 extension EnumEx on String {
   BeMarketSide toEnumSide() =>
-      BeMarketSide.values.firstWhere((d) => describeEnum(d) == toLowerCase());
+      BeMarketSide.values.firstWhere((d) => d.name == toLowerCase());
 
   BeOrderStatus toEnumStatus() =>
-      BeOrderStatus.values.firstWhere((d) => describeEnum(d) == toLowerCase());
+      BeOrderStatus.values.firstWhere((d) => d.name == toLowerCase());
 }
 
 @JsonSerializable()
@@ -1359,13 +1357,8 @@ Future<BeAddressBookResult> beAddressBook(String asset) async {
 
 Future<BeBrokerOrderResult> beOrderValidate(
     String market, BeMarketSide side, Decimal amount) async {
-  var result = await post(
-      "broker_order_validate",
-      {
-        "market": market,
-        "side": describeEnum(side),
-        "amount_dec": amount.toString()
-      },
+  var result = await post("broker_order_validate",
+      {"market": market, "side": side.name, "amount_dec": amount.toString()},
       authRequired: true);
   return result.when((content) => BeBrokerOrderResult.parse(content),
       error: (err) => BeBrokerOrderResult.error(err));
@@ -1373,13 +1366,8 @@ Future<BeBrokerOrderResult> beOrderValidate(
 
 Future<BeBrokerOrderResult> beOrderCreate(
     String market, BeMarketSide side, Decimal amount) async {
-  var result = await post(
-      "broker_order_create",
-      {
-        "market": market,
-        "side": describeEnum(side),
-        "amount_dec": amount.toString()
-      },
+  var result = await post("broker_order_create",
+      {"market": market, "side": side.name, "amount_dec": amount.toString()},
       authRequired: true);
   return result.when((content) => BeBrokerOrderResult.parse(content),
       error: (err) => BeBrokerOrderResult.error(err));

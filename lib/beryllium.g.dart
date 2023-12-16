@@ -106,9 +106,7 @@ BeMarket _$BeMarketFromJson(Map<String, dynamic> json) => BeMarket(
       json['base_asset'] as String,
       json['quote_asset'] as String,
       json['precision'] as int,
-      json['status'] as String,
       _decimalFromJson(json['min_trade']),
-      json['message'] as String,
     );
 
 Map<String, dynamic> _$BeMarketToJson(BeMarket instance) => <String, dynamic>{
@@ -116,9 +114,7 @@ Map<String, dynamic> _$BeMarketToJson(BeMarket instance) => <String, dynamic>{
       'base_asset': instance.baseAsset,
       'quote_asset': instance.quoteAsset,
       'precision': instance.precision,
-      'status': instance.status,
       'min_trade': _decimalToJson(instance.minTrade),
-      'message': instance.message,
     };
 
 BeRate _$BeRateFromJson(Map<String, dynamic> json) => BeRate(
